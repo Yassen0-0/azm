@@ -1,0 +1,11 @@
+name: azm_tools
+description: Build-time scripts for Azm (catalog builder, checks). Not shipped.
+publish_to: "none"
+
+environment:
+  sdk: ^3.13.4
+dependencies:
+  crypto: ^3.0.7
+  sqlite3: ^3.6.0
+dev_dependencies:
+  lints: ^6.1.0

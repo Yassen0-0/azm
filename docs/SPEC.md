@@ -87,7 +87,7 @@ Each exercise in a workout shows a table of sets. Columns per set: **type · pre
   | pyramid stone block | 2,500 | حجر من الهرم 🗿 | pyramid stone block 🗿 |
   | elephant | 6,000 | فيل 🐘 | elephant 🐘 |
 
-  Pick the object whose count (`round(lifted / kg)`) falls between **1 and 20**, preferring the largest object that qualifies. If none qualifies (< 700 kg lifted), show no comparison. Above 20 elephants, show the elephant count anyway.
+  Pick the **smallest** object whose count (`round(lifted / kg)`) falls between **1 and 20**: cars first, then pyramid blocks, then elephants. This matches the example: 8,450 kg → 6 cars. If none qualifies (< 700 kg lifted), show no comparison. Above 20 elephants, show the elephant count anyway.
 - **History** shows the all-time lifted total, e.g. `شِلت لحد دلوقتي 1.2 مليون kg` / `Lifted so far: 1.2M kg`.
 
 ### 7. Onboarding (first run only, max 2 screens)

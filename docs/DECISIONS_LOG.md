@@ -90,3 +90,34 @@ Every assumption or judgment call made while building Azm, newest last. Format: 
   - The Android debug APK builds. `aapt2` shows `app.azm.gym`, `application-label:'Azm'` and `application-label-ar:'عزم'`, with `libsqlite3.so` bundled for each ABI.
   - The app ran on emulator `azm_api37` in Arabic (RTL, per-app locale) and in English (LTR). The first frame of the debug build on the GPU-less headless emulator took ~20 s (JIT + software rendering), which is not representative of a real device.
 - **2026-09-26 — iOS build NOT yet run.** The owner declined the `flutter build ios --simulator` command during Phase 2. The iOS project changes (bundle id, `InfoPlist.strings`, `knownRegions`) pass `plutil -lint` but are not build-verified. To verify: `source ./env.sh && cd app && flutter build ios --simulator --debug`.
+
+## Phase 3 — data layer (2026-09-26)
+
+- **2026-09-26 — CORRECTION: the Lifted comparison picks the SMALLEST qualifying object, not the largest.** The Phase 1 entry said "largest", but the brief's own example (8,450 kg → 6 cars) needs smallest-first (the largest-first rule would give 1 elephant). SPEC.md and `liftedComparison()` now go car → pyramid block → elephant.
+- **2026-09-26 — Arabic names: the "50 most common" list** was picked by hand from gym staples across chest (11), back (11), legs (10), shoulders (6), arms (10) and abs (2). The names use Egyptian gym usage (e.g. `منشار` for the one-arm dumbbell row, `رجل أمامي`/`رجل خلفي` for leg extension/curl, `تراي فرنساوي`, `فراشة`). All are `reviewed: false`. `0292` (one-arm bent-over row) was chosen over `0293` (two-dumbbell row) because "منشار" means the one-arm version. Aliases include English-in-Arabic-letters (`بنش برس`, `لانجز`) and one Latin alias (`RDL`). No aliases were added just for ة/ه or أ/ا spellings, because normalization already covers them.
+- **2026-09-26 — Program format:** `reps` is `[min, max]`, and `level` (beginner/intermediate) was added. The three programs use only exercises that have Arabic names (29 distinct). When copied into routines, `target_reps` = the range max (recorded in DATA.md for the routines feature).
+- **2026-09-26 — Catalog programs live in the catalog DB** (`catalog_programs`: id, sort, JSON `data`), not as a separate asset, so they are replaced atomically with the exercises on a version bump.
+- **2026-09-26 — Catalog versioning:** `data/catalog/catalog_version.json` = `{version, input_sha256}`. The hash covers the three input files plus `builderRevision` in the script, and the version bumps only when the hash changes. The app compares a tiny bundled `catalog_version.txt` first, so the 900 KB asset DB is only copied and read on the first launch or after an update.
+- **2026-09-26 — The bundled catalog (`app/assets/catalog/*`) is committed**, even though `data/catalog/catalog.sqlite` stays gitignored as the brief asks. Without it a fresh clone could not build until someone ran the tool. It is small (904 KB) and fully reproducible with `tools/build_catalog.sh`.
+- **2026-09-26 — Installer reads the asset DB with `package:sqlite3` and bulk-inserts through Drift** in one transaction, rather than `ATTACH` (SQLite refuses ATTACH inside a transaction, and this keeps the logic testable with in-memory data). It installs only when the bundled version is **newer** (or none is installed), so downgrading the app keeps the newer catalog.
+- **2026-09-26 — `tools/` is its own pure-Dart package** (`azm_tools`: `sqlite3`, `crypto`, `lints`). It imports `app/lib/core/utils/arabic_normalize.dart` by relative path, which is why that file must stay import-free. The `avoid_relative_lib_imports` lint is suppressed on that one line.
+- **2026-09-26 — Display names:** the dataset is lowercase, so `name_en` is Title Case with acronyms kept (EZ, POV, RDL, V.). Four names containing the `в°` encoding glitch are fixed to `°` at build time, and the raw data is untouched.
+- **2026-09-26 — Normalizer extras beyond the brief:** it also maps `ٱ` (alef wasla) → `ا`, removes invisible marks (ZWSP/ZWNJ/ZWJ/LRM/RLM/BOM) instead of treating them as spaces, and treats NBSP/Unicode spaces as whitespace.
+- **2026-09-26 — Drift details:**
+  - `SetType` is defined once in `core/utils/workout_math.dart` and stored via `textEnum`.
+  - The `clientDefault` helpers (`newUuid`, `utcNow`) must be public, because Drift copies them into the generated part file.
+  - `PRAGMA foreign_keys = ON` is set in `beforeOpen`.
+  - Extra index `workout_exercises(exercise_id)` for per-exercise history.
+  - Generated `app_database.g.dart` is committed.
+- **2026-09-26 — PR detection:** per workout and per PR type, only the single best eligible set (first on ties) can be the PR, and it must strictly beat all earlier workouts' best. `PrBests.fromSets` ignores warm-ups.
+- **2026-09-26 — Settings persistence implemented** (Phase 2 TODO). `locale`/`theme` are written to the `settings` table on every change and loaded in `main()` before the first frame. Tests use an in-memory store.
+- **2026-09-26 — Startup order:** open DB → install catalog if needed → load settings → `runApp`. On the first launch this runs behind the native splash. The measured on-device result: catalog v1 installed, 1,324 exercises, 50 Arabic, 3 programs, and the partial unique index present.
+- **2026-09-26 — MediaResolver config via `--dart-define`:**
+  - `AZM_MEDIA_BASE_URL` sets the media server. With no URL (the default), every exercise shows the fallback icon.
+  - A licence allow-list, `MediaConfig.licensedExerciseIds`, is empty until media is bought. It is owner-maintained, and any id not in it resolves to null.
+  - `AZM_MEDIA_ALLOW_ALL=true` bypasses the allow-list for dev only, and is ignored in release builds (`dart.vm.product`).
+  - URL layout: `images/<id>-<mediaId>.jpg`, `videos/<id>-<mediaId>.gif`, the same as `media/`.
+- **2026-09-26 — Dev media server** `tools/serve_media_dev.dart` (Dart `HttpServer`, since the portable Ruby 3.4 no longer bundles WEBrick). It serves only files matching `(images|videos)/NNNN-xxx.(jpg|gif)`, and path traversal and listing return 404 (smoke-tested). To make it reachable:
+  - Android **debug** manifest: `usesCleartextTraffic="true"`; release builds stay HTTPS-only.
+  - iOS: `NSAppTransportSecurity/NSAllowsLocalNetworking` (local-network hosts only).
+  - The main Android manifest gains `INTERNET` for production media from R2; Flutter's template only had it in debug.

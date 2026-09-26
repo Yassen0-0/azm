@@ -4,7 +4,7 @@ Hevy-style gym tracker for Android and iOS. Flutter, Arabic-first, fully bilingu
 
 This folder (the **ROOT**) is fully self-contained: code, data, design system, docs **and** every SDK and cache live inside it. It can be moved to another disk (see [Moving the folder](#moving-the-folder)).
 
-> Status: tooling, project folder and Flutter app skeleton ready (Phases 0–2). The data layer (Phase 3) is next. See [docs/PLAN.md](docs/PLAN.md).
+> Status: bootstrap complete (Phases 0–3): sandboxed tooling, docs, app skeleton, data layer. Feature work is next. See [docs/PLAN.md](docs/PLAN.md). See [docs/PLAN.md](docs/PLAN.md).
 
 **Start here:** [CLAUDE.md](CLAUDE.md) (rules) · [docs/SPEC.md](docs/SPEC.md) (what) · [docs/DESIGN.md](docs/DESIGN.md) (look) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) (how) · [docs/DATA.md](docs/DATA.md) (data) · [docs/LICENSES.md](docs/LICENSES.md) (**media is not ours**) · [docs/PLAN.md](docs/PLAN.md) (backlog) · [docs/DECISIONS_LOG.md](docs/DECISIONS_LOG.md) · [docs/ORIGINAL_BRIEF.md](docs/ORIGINAL_BRIEF.md)
 
@@ -92,8 +92,17 @@ What still lands in your real `~/Library` in this mode (Xcode is the allowed exc
 source ./env.sh && cd app && flutter run                # emulator (start it first: emulator -avd azm_api37 &) or simulator
 source ./env.sh && cd app && flutter test && flutter analyze
 tools/check_directionality.sh                           # fails on left/right layout APIs in app/lib/
+tools/build_catalog.sh                                  # rebuild the exercise catalog after editing data/
 ./ios_env flutter run -d <iphone-id>                    # physical iPhone (code signing)
 ```
+
+**Exercise media in dev** (see docs/LICENSES.md, media is not ours to ship):
+```sh
+source ./env.sh && (cd tools && dart run serve_media_dev.dart 8080)      # serves media/ on the LAN
+source ./env.sh && cd app && flutter run \
+  --dart-define=AZM_MEDIA_BASE_URL=http://10.0.2.2:8080 --dart-define=AZM_MEDIA_ALLOW_ALL=true
+```
+(`10.0.2.2` = the Mac from the Android emulator; use the Mac's LAN IP for a phone.) Without these defines every exercise shows the fallback icon, which is the default and the release behaviour until licensed media exists.
 
 ### Package versions (locked in `app/pubspec.lock`)
 
@@ -103,10 +112,12 @@ tools/check_directionality.sh                           # fails on left/right la
 | go_router | 18.0.1 | | flutter_local_notifications | 22.3.1 |
 | drift | 2.35.0 | | uuid | 4.6.0 |
 | drift_flutter | 0.3.1 | | path_provider | 2.1.6 |
-| sqlite3 (native via build hooks) | 3.6.0 | | flutter_localizations | SDK |
+| sqlite3 (direct dep; native lib via build hooks) | 3.6.0 | | flutter_localizations | SDK |
 | intl | 0.20.3 | | | |
 | *dev:* drift_dev | 2.35.0 | | *dev:* build_runner | 2.16.1 |
 | *dev:* flutter_lints | 6.0.0 | | | |
+
+Build tools (`tools/pubspec.yaml`, pure Dart): `sqlite3` 3.6.0, `crypto` 3.0.7, `lints` 6.1.0.
 
 `sqlite3_flutter_libs` (listed in the original brief) is **not** used: it is end-of-life, and since `sqlite3` 3.x the native SQLite library ships through Dart build hooks (see DECISIONS_LOG).
 

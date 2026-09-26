@@ -1,0 +1,626 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "id": "ppl",
+      "name": {
+        "ar": "دفع - سحب - رجل",
+        "en": "Push / Pull / Legs"
+      },
+      "description": {
+        "ar": "6 أيام في الأسبوع: دفع، سحب، رجل وتعيد تاني. للي بيتمرن بقاله فترة وعايز حجم أكبر.",
+        "en": "6 days a week: push, pull, legs, repeat. For lifters with some experience who want more volume."
+      },
+      "days_per_week": 6,
+      "level": "intermediate",
+      "routines": [
+        {
+          "id": "ppl_push",
+          "name": {
+            "ar": "دفع (صدر وكتف وتراي)",
+            "en": "Push (chest, shoulders, triceps)"
+          },
+          "exercises": [
+            {
+              "exercise_id": "0025",
+              "sets": 4,
+              "reps": [
+                6,
+                8
+              ],
+              "rest_seconds": 150
+            },
+            {
+              "exercise_id": "0314",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0405",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0334",
+              "sets": 3,
+              "reps": [
+                12,
+                15
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0201",
+              "sets": 3,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0060",
+              "sets": 3,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 90
+            }
+          ]
+        },
+        {
+          "id": "ppl_pull",
+          "name": {
+            "ar": "سحب (ضهر وباي)",
+            "en": "Pull (back, biceps)"
+          },
+          "exercises": [
+            {
+              "exercise_id": "0032",
+              "sets": 3,
+              "reps": [
+                5,
+                5
+              ],
+              "rest_seconds": 180
+            },
+            {
+              "exercise_id": "0198",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0292",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0861",
+              "sets": 3,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0203",
+              "sets": 3,
+              "reps": [
+                12,
+                15
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0031",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0313",
+              "sets": 3,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 60
+            }
+          ]
+        },
+        {
+          "id": "ppl_legs",
+          "name": {
+            "ar": "رجل",
+            "en": "Legs"
+          },
+          "exercises": [
+            {
+              "exercise_id": "0043",
+              "sets": 4,
+              "reps": [
+                6,
+                8
+              ],
+              "rest_seconds": 180
+            },
+            {
+              "exercise_id": "0085",
+              "sets": 3,
+              "reps": [
+                8,
+                10
+              ],
+              "rest_seconds": 150
+            },
+            {
+              "exercise_id": "0739",
+              "sets": 3,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0586",
+              "sets": 3,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0585",
+              "sets": 3,
+              "reps": [
+                12,
+                15
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0605",
+              "sets": 4,
+              "reps": [
+                12,
+                15
+              ],
+              "rest_seconds": 60
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "upper_lower",
+      "name": {
+        "ar": "علوي / سفلي",
+        "en": "Upper / Lower"
+      },
+      "description": {
+        "ar": "4 أيام في الأسبوع: علوي أ، سفلي أ، راحة، علوي ب، سفلي ب.",
+        "en": "4 days a week: Upper A, Lower A, rest, Upper B, Lower B."
+      },
+      "days_per_week": 4,
+      "level": "intermediate",
+      "routines": [
+        {
+          "id": "ul_upper_a",
+          "name": {
+            "ar": "علوي أ",
+            "en": "Upper A"
+          },
+          "exercises": [
+            {
+              "exercise_id": "0025",
+              "sets": 4,
+              "reps": [
+                6,
+                8
+              ],
+              "rest_seconds": 150
+            },
+            {
+              "exercise_id": "0027",
+              "sets": 4,
+              "reps": [
+                6,
+                8
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0405",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0198",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0294",
+              "sets": 2,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0201",
+              "sets": 2,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 60
+            }
+          ]
+        },
+        {
+          "id": "ul_lower_a",
+          "name": {
+            "ar": "سفلي أ",
+            "en": "Lower A"
+          },
+          "exercises": [
+            {
+              "exercise_id": "0043",
+              "sets": 4,
+              "reps": [
+                6,
+                8
+              ],
+              "rest_seconds": 180
+            },
+            {
+              "exercise_id": "0085",
+              "sets": 3,
+              "reps": [
+                8,
+                10
+              ],
+              "rest_seconds": 150
+            },
+            {
+              "exercise_id": "0739",
+              "sets": 3,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0586",
+              "sets": 3,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0605",
+              "sets": 4,
+              "reps": [
+                12,
+                15
+              ],
+              "rest_seconds": 60
+            }
+          ]
+        },
+        {
+          "id": "ul_upper_b",
+          "name": {
+            "ar": "علوي ب",
+            "en": "Upper B"
+          },
+          "exercises": [
+            {
+              "exercise_id": "0314",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0292",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0091",
+              "sets": 3,
+              "reps": [
+                6,
+                10
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0861",
+              "sets": 3,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0334",
+              "sets": 3,
+              "reps": [
+                12,
+                15
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0313",
+              "sets": 2,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0200",
+              "sets": 2,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 60
+            }
+          ]
+        },
+        {
+          "id": "ul_lower_b",
+          "name": {
+            "ar": "سفلي ب",
+            "en": "Lower B"
+          },
+          "exercises": [
+            {
+              "exercise_id": "0032",
+              "sets": 3,
+              "reps": [
+                5,
+                5
+              ],
+              "rest_seconds": 180
+            },
+            {
+              "exercise_id": "0410",
+              "sets": 3,
+              "reps": [
+                8,
+                10
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0743",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0585",
+              "sets": 3,
+              "reps": [
+                12,
+                15
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "1409",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0472",
+              "sets": 3,
+              "reps": [
+                10,
+                15
+              ],
+              "rest_seconds": 60
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "full_body_3x",
+      "name": {
+        "ar": "جسم كامل 3 أيام",
+        "en": "Full Body 3×/week"
+      },
+      "description": {
+        "ar": "3 أيام في الأسبوع بالتبادل بين أ و ب. أحسن بداية للمبتدئين.",
+        "en": "3 days a week alternating A and B. The best start for beginners."
+      },
+      "days_per_week": 3,
+      "level": "beginner",
+      "routines": [
+        {
+          "id": "fb_a",
+          "name": {
+            "ar": "جسم كامل أ",
+            "en": "Full Body A"
+          },
+          "exercises": [
+            {
+              "exercise_id": "0043",
+              "sets": 3,
+              "reps": [
+                6,
+                8
+              ],
+              "rest_seconds": 180
+            },
+            {
+              "exercise_id": "0025",
+              "sets": 3,
+              "reps": [
+                6,
+                8
+              ],
+              "rest_seconds": 150
+            },
+            {
+              "exercise_id": "0027",
+              "sets": 3,
+              "reps": [
+                8,
+                10
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0405",
+              "sets": 2,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0294",
+              "sets": 2,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0274",
+              "sets": 2,
+              "reps": [
+                15,
+                20
+              ],
+              "rest_seconds": 45
+            }
+          ]
+        },
+        {
+          "id": "fb_b",
+          "name": {
+            "ar": "جسم كامل ب",
+            "en": "Full Body B"
+          },
+          "exercises": [
+            {
+              "exercise_id": "0032",
+              "sets": 3,
+              "reps": [
+                5,
+                5
+              ],
+              "rest_seconds": 180
+            },
+            {
+              "exercise_id": "0314",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 120
+            },
+            {
+              "exercise_id": "0198",
+              "sets": 3,
+              "reps": [
+                8,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0336",
+              "sets": 2,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 90
+            },
+            {
+              "exercise_id": "0334",
+              "sets": 2,
+              "reps": [
+                12,
+                15
+              ],
+              "rest_seconds": 60
+            },
+            {
+              "exercise_id": "0201",
+              "sets": 2,
+              "reps": [
+                10,
+                12
+              ],
+              "rest_seconds": 60
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -8,14 +8,23 @@ Before finishing any task: `flutter test`, `flutter analyze`, the directionality
 
 ---
 
-## 0. Bootstrap (single agent, sequential; blocks everything below)
+## 0. Bootstrap — DONE (2026-09-26)
+
+All four bootstrap phases are complete; sections 1–10 below are the remaining work. What exists and can be built on:
+- **DB** `app/lib/core/db/`: `AppDatabase` (all tables, one-active-workout index, `readSetting`/`writeSetting`), `CatalogInstaller`, `CatalogRepository` (`search`, `exercise`, `exercisesByIds`, `programs`). Provider: `appDatabaseProvider`, `catalogRepositoryProvider`.
+- **Logic** `app/lib/core/utils/`: `normalizeForSearch`, `Units` (kg↔lb, keypad step), `liftedKg`, `epley1Rm`, `detectPrs`/`PrBests`, `liftedComparison`, `SetType`.
+- **Media** `app/lib/core/media/`: `MediaResolver` (+ `mediaResolverProvider`), `ExerciseThumbnail` (lists), `ExerciseAnimation` (detail only).
+- **Settings** `features/settings/data/app_settings.dart`: language + theme, persisted.
+- **Tools**: `tools/build_catalog.sh`, `tools/check_directionality.sh`, `tools/serve_media_dev.dart`, `tools/relocate.sh`.
+
+
 
 | Phase | Status | Owns |
 |---|---|---|
 | Phase 0: sandboxed tooling (`env.sh`, `.tooling/`) | [x] | `env.sh`, `ios_env`, `.tooling/` |
 | Phase 1: project folder, docs, data import, git | [x] | everything at ROOT |
 | **Phase 2: Flutter skeleton** | [x] (iOS build not yet run — see DECISIONS_LOG) | `app/**`, `tools/check_directionality.sh` |
-| **Phase 3: data layer** | [ ] | `app/lib/core/db/**`, `app/lib/core/utils/**`, `app/lib/core/media/**`, `tools/build_catalog.dart`, `data/ar/**` (first 50), `data/programs/**`, `data/catalog/**`, `app/test/**` |
+| **Phase 3: data layer** | [x] | `app/lib/core/db/**`, `app/lib/core/utils/**`, `app/lib/core/media/**`, `tools/build_catalog.dart`, `data/ar/**` (first 50), `data/programs/**`, `data/catalog/**`, `app/test/**` |
 
 Phase 2 acceptance: `flutter create` (org `app.azm.gym`, android+ios); deps pinned in README; Readex Pro the only font; gen-l10n with ar/en and the System/ع/EN setting; localized launcher name (`عزم`/`Azm`); theme ported with gym adaptations (dark default); `go_router` `StatefulShellRoute` with 3 tabs + glass tab bar + settings route; directionality check script; zero hard-coded strings.
 
@@ -39,6 +48,8 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [ ] Every edit persisted immediately; kill app mid-workout → reopen resumes exactly.
   - [ ] Minimize to ActiveWorkoutBar above the tab bar; tap restores.
   - [ ] RestTimerBar from end timestamp + scheduled notification; −15/+15/skip; haptic + sound at end; works in background and after app kill.
+  - [ ] Notification setup for `flutter_local_notifications` 22 (per its README): Android receivers in `AndroidManifest.xml`, `POST_NOTIFICATIONS` runtime permission (Android 13+), exact-alarm policy (`SCHEDULE_EXACT_ALARM` vs inexact; decide and log), iOS permission request, and localized notification text. Core-library desugaring is already enabled (Phase 2).
+  - [ ] Persist the running rest timer (`active_rest_ends_at`, `active_rest_notification_id` settings keys) so it survives app kill.
   - [ ] Finish → summary: duration, Lifted + comparison (car/pyramid block/elephant rule in SPEC), PRs with celebration, best set per exercise. Discard workout with confirmation.
   - [ ] Widget tests for SetRow states and keypad; unit tests for the timer's derived remaining time.
 
@@ -48,14 +59,14 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **Acceptance:**
   - [ ] Routine list (Workout tab section) and editor: name, notes, add exercises (multi-select picker), target sets (type, reps, optional weight), rest override, drag to reorder, delete.
   - [ ] Start routine in one tap → active workout prefilled.
-  - [ ] Ready programs list (from `programs.json` in the catalog) → "Add to my routines" copies them as editable routines, names in the app language.
+  - [ ] Ready programs list (`CatalogRepository.programs()`) → "Add to my routines" copies them as editable routines, names in the app language; `target_reps` = range max (DATA.md).
   - [ ] Onboarding hook: the program chosen in onboarding is copied on finish.
 
 ## 3. `app/lib/features/exercises/**` — Library, picker, detail
 
 - **Owns:** `app/lib/features/exercises/**`, `app/test/features/exercises/**`, `app/lib/core/widgets/{exercise_card,muscle_chips}.dart`
 - **Acceptance:**
-  - [ ] Library: search box (normalized, AR/slang/EN), MuscleChips (target/body-part), equipment filter sheet, list of ExerciseCards with thumbnails (fallback icon).
+  - [ ] Library: search box (normalized, AR/slang/EN), MuscleChips (target/body-part), equipment filter sheet, list of ExerciseCards with thumbnails (fallback icon). Use `CatalogRepository.search()` and `ExerciseThumbnail`; add ARB keys for body-part/target/equipment dataset keys (`muscle…`, `equipment…`).
   - [ ] Two names per row (primary = app language, secondary = the other); English-only exercises show just the English name.
   - [ ] Multi-select picker mode (used by workout + routines) returning ordered ids.
   - [ ] Detail: GIF (only here), attribution line, instructions (AR if present else EN), muscles, your history for this exercise, chart (best set / e1RM / volume), PRs.
@@ -74,16 +85,17 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 
 - **Owns:** `app/lib/features/settings/**`, `app/test/features/settings/**`
 - **Acceptance:**
-  - [ ] Settings: language (System/العربية/English), theme (dark/light), unit (kg/lb), default rest time, backup export/import, Licenses (MIT dataset + OFL font + Gym visual attribution when media is shown).
+  - [x] Language (System/العربية/English) + theme (dark/light), persisted (Phase 2/3).
+  - [ ] Unit (kg/lb), default rest time, backup export/import, Licenses page (MIT dataset + OFL font + Gym visual attribution when media is shown).
   - [ ] Onboarding (first run, ≤ 2 screens): unit; optional ready program.
   - [ ] Backup export via the share sheet (format in DATA.md); import with confirmation replaces user tables; round-trip test.
 
 ## 6. `data/ar/**` — Arabic names for the remaining exercises
 
 - **Owns:** `data/ar/exercise_names_ar.json` (append-only per batch; never rename existing keys)
-- **Goal:** Egyptian-gym Arabic name + slang aliases for all 1,324 exercises, in **batches of 100** ordered by likely usage (barbell/dumbbell/cable/machine staples first; stretches and rare equipment last). All new entries `reviewed: false`.
+- **Goal:** Egyptian-gym Arabic name + slang aliases for the remaining **1,274** exercises (50 done in Phase 3), in **batches of 100** ordered by likely usage (barbell/dumbbell/cable/machine staples first; stretches and rare equipment last). All new entries `reviewed: false`. After each batch run `tools/build_catalog.sh` (validates ids, bumps the catalog version, refreshes the app asset) and commit the updated asset + `catalog_version.json`.
 - **Acceptance per batch:** 100 new ids; each has `ar` + ≥ 0 aliases; ids validated by `build_catalog`; list the batch in the PR/commit message for native review.
-- [ ] Batch 1 (ids 51–150 by priority) … [ ] Batch 13 (final).
+- [ ] Batch 1 … [ ] Batch 13 (final). Start with the variants of the first 50 (incline/decline/smith/cable versions, other curls/rows/presses) so related exercises read consistently.
 - [ ] Owner review pass: flip `reviewed` to `true` after human review.
 - [ ] Later: `instructions_ar` translation (separate task, same batching).
 
@@ -101,8 +113,9 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **Owns:** `tools/**` (except files owned by bootstrap phases)
 - **Acceptance:**
   - [ ] `tools/upload_media_r2.dart`: uploads **only licensed** ids (allow-list file) to R2 using credentials from a gitignored `.env`; refuses to run on unlicensed ids; prints the base URL for `MediaResolver`. **Blocked until media is purchased** (LICENSES.md).
-  - [ ] `tools/serve_media_dev.sh`: local static server for `media/` bound to the LAN for device testing (dev only).
-  - [ ] CI-style `tools/check_all.sh`: analyze + test + directionality + catalog validation.
+  - [x] `tools/serve_media_dev.dart`: local static server for `media/` (dev only), done in Phase 3.
+  - [ ] CI-style `tools/check_all.sh`: `flutter analyze` + `flutter test` (app) + `dart analyze` (tools) + directionality + `build_catalog` (validation, and fail if the committed asset is stale).
+  - [ ] **Verify the iOS build** (not run yet: the owner declined it in Phase 2): `source ./env.sh && cd app && flutter build ios --simulator --debug`, then fix whatever it reports (Xcode project / InfoPlist.strings / pods-vs-SPM).
 
 ## 9. Crashlytics — `app/lib/core/crash/**` + Firebase config
 

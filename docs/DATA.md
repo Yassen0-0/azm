@@ -9,7 +9,9 @@
 | `data/raw/LICENSE`, `data/raw/NOTICE.md` | Dataset license (MIT for text/data) and media notice | never |
 | `data/ar/exercise_names_ar.json` | Arabic names + Egyptian gym slang aliases | humans / agents (reviewed flag) |
 | `data/programs/programs.json` | Ready-made routines | humans / agents |
-| `data/catalog/catalog.sqlite` | **Build output** of `tools/build_catalog.dart`, copied into app assets. Gitignored. | generated only |
+| `data/catalog/catalog.sqlite` | **Build output** of `tools/build_catalog.dart`. Gitignored. | generated only |
+| `data/catalog/catalog_version.json` | `{version, input_sha256}`: the version bumps only when the inputs change. Committed. | generated only |
+| `app/assets/catalog/catalog.sqlite` + `catalog_version.txt` | Copies bundled into the app. **Committed**, so a fresh clone builds without running the tool. | generated only |
 | `media/images`, `media/videos` | 1,324 thumbnails (JPEG 180×180) + 1,324 GIFs (180×180) | **dev only, gitignored**, see LICENSES.md |
 
 ### Raw dataset shape
@@ -45,7 +47,7 @@ Each record (all fields required):
 
 ## Data model (Drift, `app/lib/core/db/`)
 
-Timestamps are stored as UTC integer milliseconds (Drift `DateTime` stored as unix time). Weights are **kg** (`REAL`). JSON columns are TEXT holding JSON.
+Timestamps are **UTC**, stored as ISO-8601 text with milliseconds (Drift option `store_date_time_values_as_text`, see `app/build.yaml`). Weights are **kg** (`REAL`). JSON columns are TEXT holding JSON. Enums (`type`, `status`) are stored as their Dart enum name. Code: `app/lib/core/db/tables.dart`.
 
 ### Catalog tables (read-only in the app, replaced on version bump)
 
@@ -70,6 +72,13 @@ Timestamps are stored as UTC integer milliseconds (Drift `DateTime` stored as un
 | `media_id` | TEXT NOT NULL | used by `MediaResolver` (file stem `<id>-<media_id>`) |
 | `search_norm` | TEXT NOT NULL | normalized `name_en + name_ar + aliases_ar`, space-joined |
 
+**`catalog_programs`**
+| column | type | notes |
+|---|---|---|
+| `id` | TEXT PK | program id (`ppl`, `upper_lower`, `full_body_3x`) |
+| `sort` | INTEGER | display order |
+| `data` | TEXT (JSON) | the whole program object from `programs.json` |
+
 Muscle, body-part and equipment keys are localized through ARB (`muscle_pectorals`, `equipment_barbell`, …), not stored translated.
 
 ### User tables (never touched by catalog updates)
@@ -84,7 +93,7 @@ Muscle, body-part and equipment keys are localized through ARB (`muscle_pectoral
 | `workout_sets` | `id` uuid PK, `workout_exercise_id` → workout_exercises (cascade), `sort`, `type` (`normal`\|`warmup`\|`drop`\|`failure`), `weight_kg` REAL NOT NULL DEFAULT 0, `reps` INTEGER NOT NULL DEFAULT 0, `completed_at` NULL (null = not ✓) |
 | `settings` | `key` TEXT PK, `value` TEXT (JSON-encoded) |
 
-Settings keys: `locale` (`system`\|`ar`\|`en`), `theme` (`dark`\|`light`), `unit` (`kg`\|`lb`), `default_rest_seconds` (90), `onboarding_done` (bool), `active_rest_ends_at` (ms or null), `active_rest_notification_id`.
+Settings keys (values JSON-encoded): `locale` (`"system"`\|`"ar"`\|`"en"`, implemented), `theme` (`"dark"`\|`"light"`, implemented), `unit` (`"kg"`\|`"lb"`), `default_rest_seconds` (90), `onboarding_done` (bool), `active_rest_ends_at` (ISO UTC or null), `active_rest_notification_id`.
 
 **Why no FKs from user tables to `exercises`:** catalog tables are dropped and re-filled on a version bump. User history must survive, even for an exercise removed from a future catalog (the UI then shows "Unknown exercise" with the stored id).
 
@@ -96,10 +105,13 @@ data/raw/exercises.json ─┐
 data/ar/exercise_names_ar.json ─┘         (uses the shared normalizer)
 ```
 
-1. `build_catalog` reads both inputs, validates ids (every Arabic entry must reference an existing exercise id), builds rows, computes `search_norm`, and writes `catalog.sqlite` with the `catalog_meta.version`.
-2. **Version:** an integer stored in `data/catalog/VERSION` and incremented by the script when the content hash of the inputs changes. The hash is recorded next to it so rebuilds without changes don't bump it.
-3. The generated file is copied into `app/assets/catalog/`.
-4. **App on launch:** reads `catalog_meta.version` from its DB and compares it with the bundled asset. If the DB is missing or older, then in **one transaction** it `DELETE`s the catalog tables and bulk-inserts from the attached asset DB. User tables are untouched (covered by a unit test).
+Run: `tools/build_catalog.sh` (or `source ./env.sh && (cd tools && dart run build_catalog.dart)`). `tools/` is a small pure-Dart package (`sqlite3`, `crypto`) and imports the app's normalizer by relative path.
+
+1. `build_catalog` reads the three inputs and **validates** them: unique ids; every Arabic entry and every program exercise references an existing id; each Arabic entry has `ar`, `aliases` and `reviewed`. Any error fails the build.
+2. It builds rows: `name_en` = Title Case of the dataset name (acronyms kept: EZ, POV, RDL; the `в°` → `°` encoding glitch fixed), `instructions_en` = `instruction_steps.en`, `search_norm` = normalized `name_en + name_ar + aliases`.
+3. **Version:** `data/catalog/catalog_version.json` holds `{version, input_sha256}`. The hash covers the three input files + `builderRevision`, and the version is incremented only when it changes, so re-running is idempotent.
+4. It writes `data/catalog/catalog.sqlite` (tables `catalog_meta`, `exercises`, `catalog_programs`) and copies it plus `catalog_version.txt` into `app/assets/catalog/`.
+5. **App on launch** (`CatalogInstaller.installBundledIfNeeded`, before the first frame): reads the bundled `catalog_version.txt`. Only if the DB has no catalog or an older one, it copies the asset DB to a temp file, reads it, and in **one transaction** deletes and re-inserts `exercises`, `catalog_programs` and `catalog_meta`. User tables are never touched (unit test `catalog_update_test.dart` compares every user table before/after).
 
 ## Arabic search normalization
 
@@ -118,7 +130,7 @@ Steps, in order:
 
 Examples: `ضَغْطُ بارٍ` → `ضغط بار`; `رفرفة جانبي` → `رفرفه جانبي`; `Bench  Press` → `bench press`.
 
-**Matching:** the query is normalized and split into tokens. A row matches if **every** token is a substring of `search_norm` (SQL `LIKE '%tok%'` per token). Ranking: exact alias/name match > prefix match > substring match, then by name.
+**Matching** (`CatalogRepository.search`): the query is normalized and split into tokens. A row matches if **every** token is a substring of `search_norm` (SQL `LIKE '%tok%' ESCAPE '\'` per token; `%`/`_` in the query are literal). Ranking: exact alias/name match > prefix match > substring match, then English name. Optional filters: `target`, `equipment`.
 
 ## `data/ar/exercise_names_ar.json`
 
@@ -141,15 +153,16 @@ Examples: `ضَغْطُ بارٍ` → `ضغط بار`; `رفرفة جانبي` �
     "name": { "ar": "…", "en": "Push / Pull / Legs" },
     "description": { "ar": "…", "en": "…" },
     "days_per_week": 6,
+    "level": "intermediate",            // beginner | intermediate
     "routines": [{
       "id": "ppl_push",
       "name": { "ar": "…", "en": "Push" },
-      "exercises": [{ "exercise_id": "0025", "sets": 3, "reps": "8-12", "rest_seconds": 120 }]
+      "exercises": [{ "exercise_id": "0025", "sets": 4, "reps": [6, 8], "rest_seconds": 150 }]
     }]
   }]
 }
 ```
-Every `exercise_id` must exist in `exercises.json` (checked by `build_catalog`).
+`reps` is a `[min, max]` range (`[5, 5]` = exactly 5). Every `exercise_id` must exist in `exercises.json` (checked by `build_catalog`). All exercises used by the three programs have Arabic names. When a program is copied into the user's routines, each set's `target_reps` = the range **max** (the routines feature may show the full range from the program JSON).
 
 ## Backup format (export/import)
 

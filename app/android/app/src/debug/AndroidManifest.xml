@@ -4,4 +4,7 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- DEBUG ONLY: lets the app load exercise media from the local dev server
+         (tools/serve_media_dev.dart). Release builds keep cleartext disabled. -->
+    <application android:usesCleartextTraffic="true" />
 </manifest>

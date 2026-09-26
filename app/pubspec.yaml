@@ -21,6 +21,7 @@ dependencies:
   path_provider: ^2.1.6
   flutter_localizations:
     sdk: flutter
+  sqlite3: ^3.6.0
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +33,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true # gen-l10n (see l10n.yaml)
+
+  assets:
+    # Built by tools/build_catalog.dart — never edit by hand.
+    - assets/catalog/catalog.sqlite
+    - assets/catalog/catalog_version.txt
 
   fonts:
     # Readex Pro is the ONLY family (variable, wght 200-700). Drive the axis

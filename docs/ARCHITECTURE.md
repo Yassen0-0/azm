@@ -21,7 +21,7 @@ Exact package versions are recorded in `README.md` and locked by `app/pubspec.lo
 
 ```
 app/lib/
-  main.dart                bootstrap: ProviderScope, DB open, catalog check, router
+  main.dart                bootstrap: open DB → install bundled catalog if newer → load settings → runApp
   app.dart                 MaterialApp.router, themes, locale resolution
   core/
     theme/                 tokens (colors, type, spacing, radii, sizes, motion), ThemeData builders
@@ -69,6 +69,14 @@ app/lib/
 - **v1:** no backend. **Cloudflare R2 for media only.** Supabase is deliberately not used in v1: free projects pause when inactive and hard-stop on egress limits, which would break media for every user.
 - **v2:** **Supabase** (Postgres schema mirroring the Drift user tables, UUID ids make this straightforward) for auth, sync and coach ↔ client.
 - **Crash reports:** Firebase Crashlytics once the owner creates a Firebase project (TODO in PLAN.md).
+
+## Build-time tools (`tools/`)
+
+A separate pure-Dart package (`tools/pubspec.yaml`), never shipped:
+- `build_catalog.dart` (`tools/build_catalog.sh`): data/ → catalog.sqlite → app assets (DATA.md).
+- `check_directionality.sh`: bans left/right layout APIs in `app/lib/`.
+- `serve_media_dev.dart`: dev-only LAN server for `media/`.
+- `relocate.sh`: re-binds ROOT after a move.
 
 ## Build & run
 
