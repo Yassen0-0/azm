@@ -61,10 +61,12 @@ abstract final class AzmSize {
   static const double thumbnailList = 48;
   static const double thumbnailCard = 72;
 
-  /// Bottom space a scrollable page must leave so its last item clears the
-  /// floating tab bar (bar + lift + device inset).
+  /// Bottom space a tab page must leave so its last item clears the floating
+  /// tab bar. The shell Scaffold uses extendBody, so the body's bottom padding
+  /// already contains tab bar + lift + device inset + ActiveWorkoutBarSlot;
+  /// add one ladder step of breathing room.
   static double tabBarReserve(BuildContext context) =>
-      tabBarHeight + tabBarLift + MediaQuery.paddingOf(context).bottom + AzmSpace.xl;
+      MediaQuery.paddingOf(context).bottom + AzmSpace.xl;
 }
 
 /// Glass — the floating tab bar ONLY (the one blur in the app).

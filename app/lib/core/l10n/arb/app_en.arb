@@ -6,6 +6,7 @@
   "shellTabExercises": "Exercises",
   "shellOpenSettings": "Settings",
   "shellComingSoon": "This screen is still being built",
+  "commonBack": "Back",
   "settingsTitle": "Settings",
   "settingsLanguage": "Language",
   "settingsLanguageSystem": "Device language",
@@ -13,6 +14,5 @@
   "settingsLanguageEnglish": "English",
   "settingsTheme": "Appearance",
   "settingsThemeDark": "Dark",
-  "settingsThemeLight": "Light",
-  "commonBack": "Back"
+  "settingsThemeLight": "Light"
 }

@@ -1,0 +1,31 @@
+{
+  "@@locale": "ar",
+  "appName": "عزم",
+  "@appName": {
+    "description": "App name shown in the UI (launcher name is set natively)."
+  },
+  "shellTabWorkout": "تمرين",
+  "@shellTabWorkout": {
+    "description": "Bottom tab + screen title: workout home."
+  },
+  "shellTabHistory": "السجل",
+  "@shellTabHistory": {
+    "description": "Bottom tab + screen title: workout history."
+  },
+  "shellTabExercises": "التمارين",
+  "@shellTabExercises": {
+    "description": "Bottom tab + screen title: exercise library."
+  },
+  "shellOpenSettings": "الإعدادات",
+  "@shellOpenSettings": {
+    "description": "Tooltip / semantics label of the settings icon in the header."
+  },
+  "shellComingSoon": "الشاشة دي لسه بتتبني",
+  "@shellComingSoon": {
+    "description": "Placeholder body on screens not built yet."
+  },
+  "commonBack": "رجوع",
+  "@commonBack": {
+    "description": "Semantics label for a back button."
+  }
+}

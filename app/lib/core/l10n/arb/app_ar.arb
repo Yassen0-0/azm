@@ -1,36 +1,63 @@
 {
   "@@locale": "ar",
-
   "appName": "عزم",
-  "@appName": { "description": "App name shown in the UI (launcher name is set natively)." },
-
+  "@appName": {
+    "description": "App name shown in the UI (launcher name is set natively)."
+  },
   "shellTabWorkout": "تمرين",
-  "@shellTabWorkout": { "description": "Bottom tab + screen title: workout home." },
+  "@shellTabWorkout": {
+    "description": "Bottom tab + screen title: workout home."
+  },
   "shellTabHistory": "السجل",
-  "@shellTabHistory": { "description": "Bottom tab + screen title: workout history." },
+  "@shellTabHistory": {
+    "description": "Bottom tab + screen title: workout history."
+  },
   "shellTabExercises": "التمارين",
-  "@shellTabExercises": { "description": "Bottom tab + screen title: exercise library." },
+  "@shellTabExercises": {
+    "description": "Bottom tab + screen title: exercise library."
+  },
   "shellOpenSettings": "الإعدادات",
-  "@shellOpenSettings": { "description": "Tooltip / semantics label of the settings icon in the header." },
+  "@shellOpenSettings": {
+    "description": "Tooltip / semantics label of the settings icon in the header."
+  },
   "shellComingSoon": "الشاشة دي لسه بتتبني",
-  "@shellComingSoon": { "description": "Placeholder body on screens not built yet." },
-
-  "settingsTitle": "الإعدادات",
-  "@settingsTitle": { "description": "Settings screen title." },
-  "settingsLanguage": "اللغة",
-  "@settingsLanguage": { "description": "Settings group: app language." },
-  "settingsLanguageSystem": "لغة الجهاز",
-  "@settingsLanguageSystem": { "description": "Language option: follow the device language." },
-  "settingsLanguageArabic": "العربية",
-  "@settingsLanguageArabic": { "description": "Language option: Arabic (always written in Arabic)." },
-  "settingsLanguageEnglish": "English",
-  "@settingsLanguageEnglish": { "description": "Language option: English (always written in English)." },
-  "settingsTheme": "المظهر",
-  "@settingsTheme": { "description": "Settings group: light/dark theme." },
-  "settingsThemeDark": "داكن",
-  "@settingsThemeDark": { "description": "Theme option: dark (default)." },
-  "settingsThemeLight": "فاتح",
-  "@settingsThemeLight": { "description": "Theme option: light." },
+  "@shellComingSoon": {
+    "description": "Placeholder body on screens not built yet."
+  },
   "commonBack": "رجوع",
-  "@commonBack": { "description": "Semantics label for a back button." }
+  "@commonBack": {
+    "description": "Semantics label for a back button."
+  },
+  "settingsTitle": "الإعدادات",
+  "@settingsTitle": {
+    "description": "Settings screen title."
+  },
+  "settingsLanguage": "اللغة",
+  "@settingsLanguage": {
+    "description": "Settings group: app language."
+  },
+  "settingsLanguageSystem": "لغة الجهاز",
+  "@settingsLanguageSystem": {
+    "description": "Language option: follow the device language."
+  },
+  "settingsLanguageArabic": "العربية",
+  "@settingsLanguageArabic": {
+    "description": "Language option: Arabic (always written in Arabic)."
+  },
+  "settingsLanguageEnglish": "English",
+  "@settingsLanguageEnglish": {
+    "description": "Language option: English (always written in English)."
+  },
+  "settingsTheme": "المظهر",
+  "@settingsTheme": {
+    "description": "Settings group: light/dark theme."
+  },
+  "settingsThemeDark": "داكن",
+  "@settingsThemeDark": {
+    "description": "Theme option: dark (default)."
+  },
+  "settingsThemeLight": "فاتح",
+  "@settingsThemeLight": {
+    "description": "Theme option: light."
+  }
 }

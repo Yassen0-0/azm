@@ -10,18 +10,30 @@ This repo's root **is** the project root (`env.sh`, `docs/`, `app/`, … all liv
 - Anything that needs a global install (brew, sudo, global gem/npm) → **stop and ask the owner.**
 - Never modify shell profiles, global git config or system settings. Never run `git config --global`.
 
+## PLATFORM PARITY RULE (permanent)
+
+**Android and iOS are equal first-class targets.** The owner has no physical iPhone, so the **iOS Simulator is the iOS test device**.
+
+- A feature is **done only when it is built, launched and checked on BOTH the Android emulator AND the iOS Simulator**: same behavior, same layout, in **RTL (Arabic) and LTR (English)**.
+- **Proof:** a screenshot of **every screen** of the feature on both platforms, in both languages, in `docs/screenshots/<feature>/{android,ios}/`. Generate them with `tools/screenshots.sh <feature>`, which runs `app/integration_test/<feature>_screens_test.dart` (copy `shell_screens_test.dart`). Look at the images: the layout must match across platforms and mirror correctly between languages.
+- Anything that can only be verified on a **real iPhone** (haptics, real notification delivery and sound, background/lock-screen behavior, performance, camera, etc.) goes into `docs/DEVICE_TEST_CHECKLIST.md` for a tester with a real device. Do the same for anything that can't be verified on the Android emulator.
+- Devices: set **A** = AVD `azm_api37` (port 5554) + simulator "Azm iPhone A"; set **B** = AVD `azm_api37_b` (port 5556) + "Azm iPhone B". Each parallel window uses its own set (`AZM_DEVICE_SET=A|B`). Never create, erase or change the owner's other simulators.
+
 ## Before any task
 
 Read `docs/SPEC.md`, `docs/DESIGN.md`, `docs/ARCHITECTURE.md` (and `docs/DATA.md` for data work). Then find your task in `docs/PLAN.md`.
 
 ## Scope
 
-- Only touch files inside the paths **your task owns** (see `docs/PLAN.md`). Coordinate through the *Requests* section of `docs/PLAN.md`.
-- Shared files (`app/pubspec.yaml`, `app/lib/app.dart`, router, ARB files) get minimal, prefixed, additive edits.
+- Only touch files inside the paths **your task owns** (see `docs/PLAN.md`). Everything else is read-only for you. Need a change elsewhere (new route, DB column, dependency, core widget)? Add it to *Requests* in `docs/PLAN.md` and work around it.
+- **Frozen shared files** (owner or bootstrap agent only): `app/pubspec.yaml`, `app/lib/app.dart`, `app/lib/main.dart`, `app/lib/bootstrap.dart`, `app/lib/core/{router,db,theme,utils,media}/**`, `app/lib/core/l10n/*.dart`, `app/integration_test/screenshot_harness.dart`, `tools/**`, `env.sh`.
+- **Generated files** (`app/lib/core/l10n/arb/*`, `app/lib/core/l10n/gen/*`, `*.g.dart`, `app/assets/catalog/*`): never hand-edit. Regenerate them with the tools (`tools/gen_l10n.sh`, `dart run build_runner build`, `tools/build_catalog.sh`), including after a merge conflict.
+- **Parallel windows** work in separate git worktrees (`ROOT/.worktrees/<name>`, see `docs/PLAN.md` → *Parallel windows*). Never run builds for two windows in the same checkout.
 
 ## Code rules
 
-- **No hard-coded UI strings.** Everything goes through gen-l10n ARB in `app/lib/core/l10n/arb/` (`app_ar.arb` is the template + `app_en.arb`, always both); read strings with `context.l10n`.
+- **No hard-coded UI strings.** Add strings ONLY to your owner's fragment `app/lib/core/l10n/arb_src/<owner>/{ar,en}.arb` (keys prefixed with the owner name, e.g. `workoutStart`; Arabic carries the `@key` description), then run `tools/gen_l10n.sh`. **Never edit** `app/lib/core/l10n/arb/*.arb` or `gen/`: they are generated. Read strings with `context.l10n`.
+- Exercise names: use `context.namesOf(exercise)` (`core/l10n/exercise_names.dart`) for the primary/secondary names.
 - **No left/right.** Only `EdgeInsetsDirectional`, `AlignmentDirectional`, `start/end`, `PositionedDirectional`, `BorderRadiusDirectional`. `tools/check_directionality.sh` must pass.
 - **No new colours, sizes, radii, durations or text styles** outside `app/lib/core/theme/`. If you need one, add it to the theme and document it in `docs/DESIGN.md`.
 - **Western digits (0–9)** in both languages; tabular figures.
@@ -32,6 +44,8 @@ Read `docs/SPEC.md`, `docs/DESIGN.md`, `docs/ARCHITECTURE.md` (and `docs/DATA.md
 ## Before finishing
 
 - Run `flutter analyze`, `flutter test` and `tools/check_directionality.sh` (through `env.sh`). All must pass.
+- Run `tools/screenshots.sh <feature>` (both platforms), look at every image, and fix any difference between platforms or any RTL/LTR mirroring problem. Commit the screenshots.
+- Add real-device-only checks to `docs/DEVICE_TEST_CHECKLIST.md`.
 - Log every assumption in `docs/DECISIONS_LOG.md` (append, dated).
 - Update your task's status in `docs/PLAN.md`.
 

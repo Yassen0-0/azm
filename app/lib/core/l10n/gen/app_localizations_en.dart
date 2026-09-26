@@ -28,6 +28,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shellComingSoon => 'This screen is still being built';
 
   @override
+  String get commonBack => 'Back';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override
@@ -50,7 +53,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsThemeLight => 'Light';
-
-  @override
-  String get commonBack => 'Back';
 }

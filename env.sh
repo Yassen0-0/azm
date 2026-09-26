@@ -15,7 +15,18 @@ fi
 AZM_ROOT="$(cd "$(dirname "$_azm_src")" && pwd -P)"  # -P: canonical on-disk case
 unset _azm_src
 export AZM_ROOT
+# .tooling lives in the MAIN checkout. A git worktree at ROOT/.worktrees/<name>
+# (parallel windows, see docs/PLAN.md) shares it: search up to 3 levels.
 T="$AZM_ROOT/.tooling"
+_azm_up="$AZM_ROOT"
+for _ in 1 2 3; do
+  [ -d "$T" ] && break
+  _azm_up="$(dirname "$_azm_up")"
+  T="$_azm_up/.tooling"
+done
+unset _azm_up
+[ -d "$T" ] || echo "env.sh: WARNING no .tooling found above $AZM_ROOT" >&2
+export AZM_TOOLING="$T"
 
 # --- Drop inherited toolchain vars that may point outside ROOT -------------------
 unset JAVA_HOME JDK_HOME ANDROID_HOME ANDROID_SDK_ROOT ANDROID_NDK_HOME ANDROID_NDK_ROOT \

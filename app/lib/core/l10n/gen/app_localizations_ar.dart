@@ -28,6 +28,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get shellComingSoon => 'الشاشة دي لسه بتتبني';
 
   @override
+  String get commonBack => 'رجوع';
+
+  @override
   String get settingsTitle => 'الإعدادات';
 
   @override
@@ -50,7 +53,4 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsThemeLight => 'فاتح';
-
-  @override
-  String get commonBack => 'رجوع';
 }

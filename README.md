@@ -23,7 +23,8 @@ azm/                     ROOT = git repo root
   media/                 DEV ONLY 1,324 thumbnails + 1,324 GIFs (© Gym visual) — gitignored, never shipped
   brand/                 logo-concept-a.svg + icon export to-dos
   design/                theme.json, theme.css, ReadexPro.ttf (Ather design system, copied from inputs/)
-  tools/                 scripts (relocate.sh, build_catalog, checks, ...)
+  tools/                 scripts: build_catalog.sh, gen_l10n.sh, screenshots.sh, check_directionality.sh, serve_media_dev.dart, relocate.sh
+  docs/screenshots/      parity screenshots per feature (android + ios, ar + en)
   app/                   the Flutter project
   inputs/                original files as delivered — gitignored
   .tooling/              ALL SDKs, caches, temp — gitignored (~10 GB)
@@ -75,7 +76,7 @@ The redirected `HOME` hides your login keychain, Xcode accounts and provisioning
 
 Everything else (PATH, pub-cache, gems, CocoaPods, Gradle, Flutter settings, TMPDIR) stays inside ROOT. **Not needed** for Android or the iOS Simulator, which use plain `source ./env.sh && ...`.
 
-What still lands in your real `~/Library` in this mode (Xcode is the allowed exception): Xcode DerivedData/ModuleCache from `flutter build ios` (Flutter does not pass `-derivedDataPath`), and Xcode's own signing/SwiftPM caches.
+**Xcode's build cache always goes to the real home.** Every `flutter build ios` / `flutter run` on iOS, **including Simulator builds with plain `env.sh`**, writes Xcode's intermediates to your real `~/Library/Developer/Xcode/DerivedData/Runner-<hash>`: Xcode ignores the redirected `HOME` and Flutter does not pass `-derivedDataPath`. Redirecting it would need a global Xcode preference, which the sandbox rule forbids, so it is accepted as part of the Xcode exception. Simulators and their app data also live in Xcode's `~/Library/Developer/CoreSimulator`. Delete the `Runner-*` folder any time; Xcode rebuilds it.
 
 ## The app (`app/`)
 
@@ -96,6 +97,23 @@ tools/build_catalog.sh                                  # rebuild the exercise c
 ./ios_env flutter run -d <iphone-id>                    # physical iPhone (code signing)
 ```
 
+**Strings:** edit only `app/lib/core/l10n/arb_src/<owner>/{ar,en}.arb`, then run `tools/gen_l10n.sh`, which merges and validates the fragments into `arb/app_{ar,en}.arb` and runs gen-l10n.
+
+**Devices and parity screenshots** (CLAUDE.md → Platform Parity Rule):
+
+| Set | Android emulator | iOS Simulator (iPhone 17, iOS 27) |
+|---|---|---|
+| A | `azm_api37` (port 5554, serial `emulator-5554`) | "Azm iPhone A" (UDID `5461F8C3-84D7-4557-9390-1AEA69F2C976`, device language set to Arabic) |
+| B | `azm_api37_b` (port 5556, serial `emulator-5556`) | "Azm iPhone B" (UDID `F52E1627-6A1A-4A12-8B34-9F411CAF9063`) |
+
+```sh
+AZM_DEVICE_SET=A tools/screenshots.sh shell            # both platforms, ar + en → docs/screenshots/shell/
+AZM_DEVICE_SET=B tools/screenshots.sh workout ios      # one platform
+```
+`screenshots.sh` boots the set's emulator (headless) and simulator if they're not running, then runs `app/integration_test/<feature>_screens_test.dart` with `flutter drive`. The app language is forced by the test, so the device language doesn't matter. On a machine without these devices, recreate them: `avdmanager create avd -n azm_api37_b -k "system-images;android-37.0;google_apis_playstore;arm64-v8a" -d pixel_8` and `xcrun simctl create "Azm iPhone B" com.apple.CoreSimulator.SimDeviceType.iPhone-17 com.apple.CoreSimulator.SimRuntime.iOS-27-0`.
+
+**Parallel agent windows** use git worktrees inside ROOT (`.worktrees/<name>`, gitignored). `env.sh` in a worktree finds the shared `ROOT/.tooling` by itself. Setup and merge steps: docs/PLAN.md → *Parallel windows*.
+
 **Exercise media in dev** (see docs/LICENSES.md, media is not ours to ship):
 ```sh
 source ./env.sh && (cd tools && dart run serve_media_dev.dart 8080)      # serves media/ on the LAN
@@ -115,7 +133,7 @@ source ./env.sh && cd app && flutter run \
 | sqlite3 (direct dep; native lib via build hooks) | 3.6.0 | | flutter_localizations | SDK |
 | intl | 0.20.3 | | | |
 | *dev:* drift_dev | 2.35.0 | | *dev:* build_runner | 2.16.1 |
-| *dev:* flutter_lints | 6.0.0 | | | |
+| *dev:* flutter_lints | 6.0.0 | | *dev:* integration_test, flutter_driver | SDK |
 
 Build tools (`tools/pubspec.yaml`, pure Dart): `sqlite3` 3.6.0, `crypto` 3.0.7, `lints` 6.1.0.
 

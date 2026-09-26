@@ -1,5 +1,6 @@
 # ===== Azm sandbox & inputs (never committed) =====
 /.tooling/
+/.worktrees/
 /inputs/
 /media/
 /data/catalog/*.sqlite

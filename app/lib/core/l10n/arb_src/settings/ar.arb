@@ -1,0 +1,35 @@
+{
+  "@@locale": "ar",
+  "settingsTitle": "الإعدادات",
+  "@settingsTitle": {
+    "description": "Settings screen title."
+  },
+  "settingsLanguage": "اللغة",
+  "@settingsLanguage": {
+    "description": "Settings group: app language."
+  },
+  "settingsLanguageSystem": "لغة الجهاز",
+  "@settingsLanguageSystem": {
+    "description": "Language option: follow the device language."
+  },
+  "settingsLanguageArabic": "العربية",
+  "@settingsLanguageArabic": {
+    "description": "Language option: Arabic (always written in Arabic)."
+  },
+  "settingsLanguageEnglish": "English",
+  "@settingsLanguageEnglish": {
+    "description": "Language option: English (always written in English)."
+  },
+  "settingsTheme": "المظهر",
+  "@settingsTheme": {
+    "description": "Settings group: light/dark theme."
+  },
+  "settingsThemeDark": "داكن",
+  "@settingsThemeDark": {
+    "description": "Theme option: dark (default)."
+  },
+  "settingsThemeLight": "فاتح",
+  "@settingsThemeLight": {
+    "description": "Theme option: light."
+  }
+}

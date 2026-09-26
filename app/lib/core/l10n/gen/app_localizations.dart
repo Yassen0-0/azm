@@ -134,6 +134,12 @@ abstract class AppLocalizations {
   /// **'الشاشة دي لسه بتتبني'**
   String get shellComingSoon;
 
+  /// Semantics label for a back button.
+  ///
+  /// In ar, this message translates to:
+  /// **'رجوع'**
+  String get commonBack;
+
   /// Settings screen title.
   ///
   /// In ar, this message translates to:
@@ -181,12 +187,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'فاتح'**
   String get settingsThemeLight;
-
-  /// Semantics label for a back button.
-  ///
-  /// In ar, this message translates to:
-  /// **'رجوع'**
-  String get commonBack;
 }
 
 class _AppLocalizationsDelegate

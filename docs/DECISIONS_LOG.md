@@ -121,3 +121,33 @@ Every assumption or judgment call made while building Azm, newest last. Format: 
   - Android **debug** manifest: `usesCleartextTraffic="true"`; release builds stay HTTPS-only.
   - iOS: `NSAppTransportSecurity/NSAllowsLocalNetworking` (local-network hosts only).
   - The main Android manifest gains `INTERNET` for production media from R2; Flutter's template only had it in debug.
+
+## Owner review + iOS verification + parallel-window prep (2026-09-26)
+
+- **2026-09-26 — Owner corrections to the Arabic names:**
+  - 0095 alias `شرج` removed;
+  - 0033 alias `بنش مقلوب` removed;
+  - 1326 Chin-Up renamed to `عقلة مقلوب` with aliases `تشين اب`, `عقلة عكسي` (`عقلة ضيق` removed);
+  - 0274 alias `طحن` removed.
+
+  All 50 names are now `reviewed: true`. Catalog rebuilt as **v2**. Tests assert the new chin-up names and that the removed aliases no longer match.
+- **2026-09-26 — PLATFORM PARITY RULE adopted (owner).** It is permanent and lives in CLAUDE.md. The iOS Simulator is the iOS test device, and a feature is done only when every screen is verified and screenshotted on both platforms in ar + en. Real-device-only checks go in `docs/DEVICE_TEST_CHECKLIST.md` (created, seeded with bootstrap items).
+- **2026-09-26 — iOS verified on the Simulator.**
+  - `flutter build ios --simulator --debug` succeeded first time, with no fixes needed (SPM; no CocoaPods used).
+  - On "Azm iPhone A" (iPhone 17, iOS 27.0): English LTR, then the device switched to Arabic showed RTL, Readex Pro, and `عزم` on the home screen.
+  - First-launch catalog install confirmed by reading the app's `Documents/azm.sqlite`: catalog v2, 1,324 exercises, 50 Arabic, 3 programs, and the one-active index.
+  - A debug first launch takes ~25 s (JIT), same as the Android emulator.
+- **2026-09-26 — Xcode DerivedData goes to the real `~/Library/Developer/Xcode/DerivedData` for ALL iOS builds** (not only under `ios_env`, as the README said before). Xcode ignores `$HOME` and Flutter doesn't pass `-derivedDataPath`. Changing Xcode's global `IDECustomDerivedDataLocation` would violate the sandbox rule, so this is accepted under the Xcode exception and the README was corrected. Simulator devices and their app containers are Xcode-managed too (`~/Library/Developer/CoreSimulator`).
+- **2026-09-26 — Dedicated devices:** simulators "Azm iPhone A" and "Azm iPhone B" (iPhone 17, iOS 27.0) and a second AVD `azm_api37_b` were created, so the owner's existing simulators are never touched and two windows can test in parallel. "Azm iPhone A"'s device language was set to Arabic for the launcher check and left that way; tests force the app language, so it doesn't matter.
+- **2026-09-26 — Android launcher label in Arabic could not be shown visually.** The Google Play emulator image ignores `-change-locale` (not rootable). The APK resources prove it (`aapt2`: `application-label-ar:'عزم'`), saved as `docs/screenshots/shell/android/launcher_label.txt`, and a visual check was added to the device checklist.
+- **2026-09-26 — Screenshot harness** (`app/integration_test/screenshot_harness.dart` + `test_driver/integration_test.dart` + `tools/screenshots.sh`), built on `integration_test` + `flutter drive`. It uses the same `bootstrapApp()` as `main()` (extracted into `lib/bootstrap.dart`). Each feature owns its own `<feature>_screens_test.dart`.
+  - It pumps frames for a fixed 1.2 s instead of `pumpAndSettle`, because the first run hung.
+  - `ScreenStep.push` must not await `router.push()`: that Future only completes on pop, and awaiting it caused a deadlock that was found and fixed.
+  - Android needs `convertFlutterSurfaceToImage()`. Screenshots capture the Flutter view only (no status bar).
+  - Added dev deps: `integration_test`, `flutter_driver` (SDK).
+- **2026-09-26 — Parallel windows via git worktrees inside ROOT** (`.worktrees/<name>`, gitignored), one branch and one device set each. A shared checkout would make concurrent builds clobber `app/build`, `.dart_tool` and the generated files. `env.sh` now searches up to 3 parent levels for `.tooling` (exported as `AZM_TOOLING`), so a worktree uses the shared SDKs. `serve_media_dev.dart` falls back to the main checkout's `media/`.
+- **2026-09-26 — ARB fragments per owner** (`app/lib/core/l10n/arb_src/<owner>/{ar,en}.arb`), merged by `tools/merge_arb.dart` / `tools/gen_l10n.sh` into the files gen-l10n reads. It enforces the owner prefix, ar/en key parity, no duplicates, and a description on every key. Parallel windows therefore never edit the same ARB file, and merge conflicts can only hit generated output, which is fixed by re-running the tool. Owners: core (app/shell/common), settings, workout, exercises, routines, history. Existing keys moved without content change (verified identical).
+- **2026-09-26 — Routes and the shell slot pre-registered so feature windows never edit the router:** `/exercise/:id`, `/exercise-picker` (contract: pops `List<String>` ids in selection order, or null), `/active-workout`, `/workout-summary/:id`, and `ActiveWorkoutBarSlot` above the tab bar. Their placeholder screens live in the owning features. Routines/history routes will come through Requests.
+- **2026-09-26 — `AzmSize.tabBarReserve` fixed:** with `extendBody`, the body's `MediaQuery.padding.bottom` already includes the bottom bar (and the new slot), so the old formula counted the bar twice. It is now `padding.bottom + 16`.
+- **2026-09-26 — `exerciseNames()` / `context.namesOf()` added to core** (primary/secondary names per SPEC), so the workout and exercises features don't each write their own version.
+- **2026-09-26 — Sandbox slip:** while trimming the Android label file, a redundant command briefly wrote and then deleted `/tmp/x`, which is outside ROOT. There was no other effect. Noted for honesty; all temp files belong in `.tooling/tmp`.

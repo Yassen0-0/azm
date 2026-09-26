@@ -43,6 +43,18 @@ void main() {
     expect(await top('سحب عالي'), '0198');
     expect(await top('لانجز'), '0336');
     expect(await top('RDL'), '0085');
+    expect(await top('عقلة مقلوب'), '1326');
+    expect(await top('عقله عكسي'), '1326');
+  });
+
+  test('all shipped Arabic names are owner-reviewed', () async {
+    final withAr = (await db.select(db.exercises).get()).where((e) => e.nameAr != null);
+    expect(withAr, hasLength(50));
+  });
+
+  test('removed aliases no longer match', () async {
+    expect(await repo.search('شرج'), isEmpty);
+    expect(await repo.search('طحن'), isEmpty);
   });
 
   test('multi-token queries must match every token', () async {

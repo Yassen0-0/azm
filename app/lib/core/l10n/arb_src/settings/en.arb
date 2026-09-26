@@ -1,0 +1,11 @@
+{
+  "@@locale": "en",
+  "settingsTitle": "Settings",
+  "settingsLanguage": "Language",
+  "settingsLanguageSystem": "Device language",
+  "settingsLanguageArabic": "العربية",
+  "settingsLanguageEnglish": "English",
+  "settingsTheme": "Appearance",
+  "settingsThemeDark": "Dark",
+  "settingsThemeLight": "Light"
+}

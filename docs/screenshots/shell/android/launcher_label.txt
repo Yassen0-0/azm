@@ -1,0 +1,4 @@
+# Android launcher label (aapt2 dump badging app-debug.apk, 2026-09-26)
+package: name='app.azm.gym' versionCode='1' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+application-label:'Azm'
+application-label-ar:'عزم'
