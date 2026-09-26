@@ -1,0 +1,117 @@
+# Azm — Design system
+
+Azm reuses the **Ather** design system (tokens in [`design/theme.json`](../design/theme.json), CSS mirror in [`design/theme.css`](../design/theme.css), font [`design/ReadexPro.ttf`](../design/ReadexPro.ttf)) with the **gym adaptations** below. `theme.json` is the raw source; **this document wins** wherever the two differ (renamed tokens, dark default, amber).
+
+The Flutter port lives in `app/lib/core/theme/` (Phase 2). No widget may use a colour, size, radius, duration or text style that is not defined there.
+
+## Principles (inherited, still binding)
+
+- White + grey + black, **one** accent blue, one green, one red, and **one new amber** (Azm's only addition). No other hues. **No gradients, no glows, no shadows**: the card is the elevation (a card sits on a page of a different value).
+- **Glass** (blur σ 24, card tint at 85%, `glassBorder` edge) is used **only on the floating tab bar**.
+- **Blue means active**: selected tab, primary button, ticked checkbox, progress fill. It never means "done/correct".
+- **Tabular figures** (`tnum`) on every number. **Max font weight 700.**
+- Spacing ladder only: **4 · 8 · 12 · 16 · 20 · 24** (`xxs xs md xl xxl xxxl`). Page margin 16, card padding 16, gap between cards 12.
+- **Concentric radii**: inner radius = outer radius − padding.
+- No ripples, no scrollbars, no scroll tint. Press feedback = `scale(0.97)` over 140 ms.
+- "No data yet" is grey `—` (`textNoData`), never `0` and never red.
+- **Reduced motion is respected everywhere**: jump to the end state, with no scale/rise.
+- **Arabic-first, RTL**. Page transitions fade + rise **vertically** (direction-neutral). Layout uses only `start/end` (`EdgeInsetsDirectional`, `AlignmentDirectional`), never `left/right`.
+- **Western digits (0–9)** in both languages.
+
+## Gym adaptations
+
+### 1. Dark is the default theme
+Dark is the default on first run; light is available in settings. Dark is a re-mapping of light (same tokens, different values), not a redesign.
+
+### 2. Semantic tokens renamed by function
+
+| Ather token | Azm token | Light | Dark | Meaning in Azm |
+|---|---|---|---|---|
+| `right` | **`setDone`** | `#34C759` | `#34C759` | Completed set (row tint, ✓), switch on |
+| `rightText` | **`setDoneText`** | `#1B7F3B` | `#34C759` | Green text |
+| — (new) | **`setDoneTint`** | `#34C7591F` | `#34C75926` | Background wash of a completed set row (derived: `setDone` at 12% / 15%) |
+| `wrong` | **`destructive`** | `#FF3B30` | `#FF3B30` | Delete, missed/invalid, error. **Never a failure set.** |
+| `wrongTint` | **`destructiveTint`** | `#FF3B301A` | `#FF3B3026` | Error banner, delete swipe background |
+| `wrongText` | **`destructiveText`** | `#C93229` | `#FF3B30` | Red small text |
+| — (new hue) | **`warmup`** | `#FF9F0A` | `#FF9F0A` | Warm-up set label/fill (amber) |
+| — (new) | **`warmupText`** | `#B25F00` | `#FF9F0A` | Amber text on light cards (contrast-safe) |
+| — (new) | **`warmupTint`** | `#FF9F0A1F` | `#FF9F0A26` | Amber wash (warm-up label chip) |
+| — (new) | **`pr`** | = `accent` | = `accent` | PR 🏆 badge and PR numbers. It reuses the accent blue, so no extra hue is added; the 🏆 emoji carries the "gold" meaning. |
+| `onState` | `onState` | `#FFFFFF` | `#FFFFFF` | Text/icons on `setDone`, `destructive`, `warmup` fills |
+
+All other colour tokens (`pageBackground`, `card`, `muted`, `fill`, `track`, `text*`, `accent`, `onAccent`, `accentSoft`, `actionDisabled`, `divider`, `glassBorder`, `switch*`, `checkbox*`, `dashedBorder`, `scrim`, `actionPrimary`, `onPrimary`) keep Ather's names and values; see `design/theme.json` → `colors`.
+
+**Removed from Ather's colour logic:** the `masteryRule` (study mastery %). Azm has no mastery score. Progress bars use `accent` for the fill.
+
+### 3. Typography
+
+Font: **Readex Pro** (variable, `wght` 200–700, Arabic + Latin), the **only** family. Always drive the `wght` axis explicitly (`fontVariations: [FontVariation('wght', w)]`) or every weight renders the same. `fontFeatures: [tnum]` everywhere.
+
+The Ather type scale is kept (sizes/weights/line heights in `theme.json` → `typography.styles`). Study-specific styles are renamed:
+
+| Ather style | Azm style | Size / weight | Azm use |
+|---|---|---|---|
+| `resultNumber` | `summaryNumber` | 56 / 700 | Big Lifted total on the workout summary |
+| `celebrationNumber` | `prNumber` | 44 / 700 | PR celebration number |
+| `lockWordmark` | `wordmark` | 38 / 700 | "عزم / Azm" wordmark on splash |
+| `lessonNumber` | `liftedNumber` | 34 / 700 | LiftedCounter in the history header |
+| `today` | `homeTitle` | 32 / 700 | Workout tab title (display) |
+| `cardNumber` | `cardNumber` | 30 / 700 | Stat card number |
+| `inputLarge` | `keypadValue` | 28 / 700 | Value shown above the WeightKeypad |
+| `rowNumber` | `rowNumber` | **19 / 700** | **Set-row weight/reps**, stat values |
+| `weekLabel` colour / `dayLabel` | `dayLabel` | 13 / 600 | Calendar weekday letters (History) |
+
+Every other style (`stepTitle`, `sectionTitle`, `screenTitle`, `rowTitle`, `cardTitle`, `button`, `body`, `secondary`, `chipLabel`, `tabLabel`, `badgeLabel`, `micro`, …) keeps its Ather name and values. Material text theme mapping is as in `theme.json` → `materialTextTheme`, with `today` → `homeTitle`.
+
+### 4. Motion
+
+Unchanged from Ather (`theme.json` → `motion`): easing `standard / press / sheet / celebration / value`, durations (`press 140`, `tick 220`, `sheet 280`, `celebration 500`, `value 600`, …), springs `crisp / select / settle / celebrate`. Gym uses:
+
+| Moment | Motion |
+|---|---|
+| ✓ a set | row tint cross-fade `tick` 220 ms + light haptic |
+| Lifted number rising | `value` 600 ms, `value` easing (count-up) |
+| PR number / 🏆 badge | `celebrate` spring (the only overshoot); the badge itself never overshoots past 1.0 |
+| Rest timer bar in/out | `settle` spring / `exit` 200 ms |
+| Workout ⇄ minimized bar | `sheet` 280 ms |
+| Reduced motion | jump to the end state; haptics stay |
+
+### 5. Sizes
+
+Inherited: `minTouchTarget 48`, `primaryButton 52`, `headerButton 36`, `input 46`, tab bar 64 high lifted 12, sheet handle 36×5, card radius 16, button 14, input 12, sheet 22, pill 999.
+
+Gym additions:
+
+| Token | Value | Use |
+|---|---|---|
+| `setRowMinHeight` | **52** | Minimum height of a SetRow |
+| `setCellMinWidth` | 48 | Weight / reps / ✓ cells (touch target ≥ 48) |
+| `keypadKeyHeight` | 52 | WeightKeypad key |
+| `restBarHeight` | 64 | RestTimerBar |
+| `activeBarHeight` | 56 | ActiveWorkoutBar (minimized workout, above the tab bar) |
+| `thumbnail` | 48 (list), 72 (card) | Exercise thumbnail square, radius `input` 12 |
+
+All touch targets are ≥ 48 even when the visible element is smaller.
+
+## New components
+
+| Component | Description |
+|---|---|
+| **SetRow** | `[type label] [previous] [weight] [reps] [✓]`, min height 52, numbers in `rowNumber`. Type label: set number (normal), `إ/W` in `warmup`, `د/D`, `ف/F`. Tap label → type menu. Tap previous → fills weight + reps. ✓ → row gets `setDoneTint`, ✓ turns `setDone` with `onState` check, haptic. Swipe toward the *end* edge to delete (`destructiveTint` background). PR sets show a 🏆 badge. |
+| **WeightKeypad** | Custom bottom keypad replacing the system keyboard: 3×4 digits + decimal + backspace, `−2.5` / `+2.5`, next/done. Keys 52 high on `card`, radius `button`. The value preview uses `keypadValue`. |
+| **RestTimerBar** | Bottom bar: remaining `mm:ss` (tabular), progress (`track`/`accent`), `−15`, `+15`, skip. Derived from an end timestamp. A **mini** variant (time only) appears inside the ActiveWorkoutBar. |
+| **ActiveWorkoutBar** | Persistent bar above the tab bar when the workout is minimized: workout name, elapsed time, mini rest timer; tap to expand. |
+| **ExerciseCard** | Thumbnail (or muscle-icon fallback) + primary name (`rowTitle`) + secondary name in the other language (`secondary`) + optional PR badge. |
+| **MuscleChips** | Horizontal scroll of filter chips (radius pill, `fill` → `accent` when selected, `chipLabel`). |
+| **LiftedCounter** | Number + unit + optional comparison line, animating with `value`. Used in the workout header (small, `rowNumber`), summary (`summaryNumber`) and history (`liftedNumber`). |
+
+Inherited components (primary button, card, input, bottom sheet, dialog, chip, segmented control, progress bar, switch, checkbox, toast, error banner, app bar, **floating glass tab bar**) follow `theme.json` → `components`, with `wrong*` → `destructive*` and `right` → `setDone`.
+
+## Removed Ather-specific pieces
+
+- Study-only names: `lessonNumber`, `lockWordmark`, `today` (renamed above), `masteryRule`, "overdue" semantics.
+- Ather's brand mark (the wobbled ring) and wordmark. Azm's mark lives in `brand/`.
+
+## Iconography
+
+Rounded, 2 px-ish stroke icons (Material Symbols Rounded or an equivalent built-in set), size 24 (tab bar 25). Muscle fallback icon for missing exercise media. Directional icons (back/forward chevrons, swipe hints) **must mirror in RTL**; non-directional ones (✓, 🏆, timer) must not.

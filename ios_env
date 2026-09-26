@@ -1,0 +1,37 @@
+#!/bin/bash
+# Run ONE command with the Azm sandbox (env.sh) but with the REAL home restored,
+# for anything that needs Apple code signing: the login keychain, Xcode accounts
+# and provisioning profiles live under the real ~ and cannot be relocated.
+#
+#   ./ios_env flutter run -d <physical-iphone-id>
+#   ./ios_env flutter build ios --release
+#   ./ios_env flutter build ipa
+#   ./ios_env xcodebuild -workspace app/ios/Runner.xcworkspace -scheme Runner ...
+#
+# Everything else from env.sh stays: PATH (sandbox tools only), PUB_CACHE,
+# GEM_HOME, CP_* (CocoaPods), GRADLE_USER_HOME, XDG_* (Flutter settings), TMPDIR,
+# JAVA_TOOL_OPTIONS. Simulator builds and Android do NOT need this wrapper.
+#
+# Known spill into the real home in this mode (Xcode is the allowed exception):
+# Xcode DerivedData/ModuleCache from `flutter build ios` (Flutter does not pass
+# -derivedDataPath), and Xcode's own SwiftPM/signing caches under ~/Library.
+# Direct `xcodebuild` calls get -derivedDataPath .tooling/xcode-derived added.
+set -euo pipefail
+
+if [ $# -eq 0 ]; then
+  sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'
+  exit 64
+fi
+
+AZM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+# shellcheck source=env.sh
+source "$AZM_ROOT_DIR/env.sh"
+
+export HOME="$AZM_REAL_HOME"
+export AZM_IOS_SIGNING=1
+
+if [ "$1" = "xcodebuild" ] && [[ " $* " != *" -derivedDataPath "* ]]; then
+  shift
+  exec xcodebuild -derivedDataPath "$AZM_XCODE_DERIVED" "$@"
+fi
+exec "$@"
