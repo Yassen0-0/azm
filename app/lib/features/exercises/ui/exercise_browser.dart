@@ -8,6 +8,7 @@ import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_pressable.dart';
 import '../../../core/widgets/exercise_card.dart';
 import '../../../core/widgets/muscle_chips.dart';
+import '../../settings/data/training_settings.dart';
 import '../data/exercise_history.dart';
 import '../data/exercise_labels.dart';
 import '../data/exercise_library.dart';
@@ -95,7 +96,7 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final records = ref.watch(exerciseRecordsProvider).value ?? const {};
-    final unit = ref.watch(exercisesWeightUnitProvider).value ?? WeightUnit.kg;
+    final unit = ref.watch(weightUnitProvider).value ?? WeightUnit.kg;
     final results = _results;
     final selection = widget.selection;
     // A selected rare muscle stays visible even if "More" was never tapped.

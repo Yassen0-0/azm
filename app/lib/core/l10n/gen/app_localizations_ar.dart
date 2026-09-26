@@ -184,7 +184,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'لسه ملعبتش التمرين ده. سجّل أول مجموعة وتاريخك هيظهر هنا.';
 
   @override
-  String get exercisesSetLabelWarmup => 'إ';
+  String get exercisesSetLabelWarmup => 'ح';
 
   @override
   String get exercisesSetLabelDrop => 'د';
@@ -551,7 +551,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get workoutSetTypeWarmupShort => 'إ';
+  String get workoutSetTypeWarmupShort => 'ح';
 
   @override
   String get workoutSetTypeDropShort => 'د';
@@ -657,9 +657,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get workoutFinishTitle => 'تنهي التمرين؟';
 
   @override
-  String get workoutFinishBody => 'السِتات اللي مش متعلّم عليها ✓ هتتشال.';
-
-  @override
   String get workoutFinishNothing =>
       'مفيش ولا سِت متعلّم عليها ✓ لسه. تحب تلغي التمرين؟';
 
@@ -739,5 +736,51 @@ class AppLocalizationsAr extends AppLocalizations {
   String get workoutBarOpen => 'افتح التمرين';
 
   @override
-  String get workoutDebugSeed => 'DEBUG: ضيف تمارين تجريبية';
+  String get workoutFinishAllDoneBody =>
+      'كل السِتات متعلّم عليها ✓. نحفظ التمرين؟';
+
+  @override
+  String workoutFinishUncheckedBody(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'فيه $countText سِت من غير ✓.',
+      few: 'فيه $countText سِتات من غير ✓.',
+      two: 'فيه سِتّين من غير ✓.',
+      one: 'فيه سِت واحد من غير ✓.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String workoutFinishEmptyNote(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منهم $countText سِت فاضي هيتشالوا.',
+      few: 'منهم $countText سِتات فاضية هتتشال.',
+      two: 'منهم سِتّين فاضيين هيتشالوا.',
+      one: 'منهم سِت فاضي هيتشال.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutFinishMarkAllDone => 'علّم عليهم كلهم ✓';
+
+  @override
+  String get workoutFinishRemoveThem => 'شيلهم';
+
+  @override
+  String get workoutExactAlarmTitle => 'خلّي تنبيه الراحة ييجي في معاده';
+
+  @override
+  String get workoutExactAlarmBody =>
+      'والشاشة مقفولة، أندرويد ممكن يأخّر تنبيه «الراحة خلصت» كام دقيقة. اسمح لعزم بـ«المنبّهات والتذكيرات» عشان يرن بالظبط لما الراحة تخلص. تقدر تغيّر ده في أي وقت من إعدادات الموبايل.';
+
+  @override
+  String get workoutExactAlarmAllow => 'افتح الإعدادات';
+
+  @override
+  String get workoutExactAlarmLater => 'مش دلوقتي';
 }

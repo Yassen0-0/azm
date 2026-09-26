@@ -238,3 +238,88 @@ Future<bool> confirmDialog(
   );
   return ok ?? false;
 }
+
+/// Choice in the "finish with unticked sets" dialog.
+enum FinishChoice { markAllDone, removeThem }
+
+/// Finish confirmation when [unchecked] sets have no ✓ ([empty] of them have
+/// no reps and are removed whatever the choice). "Mark all done" is offered
+/// only when at least one of them can be logged.
+Future<FinishChoice?> showFinishUncheckedDialog(BuildContext context, {required int unchecked, required int empty}) {
+  final l = context.l10n;
+  final canMark = unchecked > empty;
+  return showDialog<FinishChoice>(
+    context: context,
+    useRootNavigator: true,
+    builder: (ctx) {
+      final c = ctx.colors;
+      final body = [
+        l.workoutFinishUncheckedBody(unchecked, AzmNumbers.integer(unchecked)),
+        if (empty > 0) l.workoutFinishEmptyNote(empty, AzmNumbers.integer(empty)),
+      ].join('\n');
+      return AlertDialog(
+        title: Text(l.workoutFinishTitle, style: AzmType.cardTitle.copyWith(color: c.textPrimary)),
+        content: Text(body, style: AzmType.body.copyWith(color: c.textSecondary)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l.workoutCancel)),
+          TextButton(
+            key: const ValueKey('workoutFinishRemoveThem'),
+            onPressed: () => Navigator.pop(ctx, FinishChoice.removeThem),
+            style: TextButton.styleFrom(foregroundColor: c.destructiveText),
+            child: Text(l.workoutFinishRemoveThem),
+          ),
+          if (canMark)
+            TextButton(
+              key: const ValueKey('workoutFinishMarkAllDone'),
+              onPressed: () => Navigator.pop(ctx, FinishChoice.markAllDone),
+              style: TextButton.styleFrom(foregroundColor: c.accent),
+              child: Text(l.workoutFinishMarkAllDone),
+            ),
+        ],
+      );
+    },
+  );
+}
+
+/// Android-only, shown once on the first rest timer: why "Alarms & reminders"
+/// helps. Returns true when the user wants to open the system screen.
+Future<bool> showExactAlarmSheet(BuildContext context) async {
+  final l = context.l10n;
+  final allow = await showModalBottomSheet<bool>(
+    context: context,
+    useRootNavigator: true,
+    isScrollControlled: true, // long text / landscape / large fonts scroll instead of overflowing
+    builder: (ctx) {
+      final c = ctx.colors;
+      return SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.xxl, 0, AzmSpace.xxl, AzmSpace.xs),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Icon(Icons.alarm_rounded, color: c.accent, size: AzmSize.minTouchTarget),
+              const SizedBox(height: AzmSpace.md),
+              Text(l.workoutExactAlarmTitle, style: AzmType.cardTitle.copyWith(color: c.textPrimary)),
+              const SizedBox(height: AzmSpace.xs),
+              Text(l.workoutExactAlarmBody, style: AzmType.body.copyWith(color: c.textSecondary)),
+              const SizedBox(height: AzmSpace.xxl),
+              FilledButton(
+                key: const ValueKey('workoutExactAlarmAllow'),
+                onPressed: () => Navigator.pop(ctx, true),
+                child: Text(l.workoutExactAlarmAllow),
+              ),
+              const SizedBox(height: AzmSpace.xs),
+              TextButton(
+                key: const ValueKey('workoutExactAlarmLater'),
+                onPressed: () => Navigator.pop(ctx, false),
+                child: Text(l.workoutExactAlarmLater),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+  return allow ?? false;
+}

@@ -40,7 +40,7 @@ Each exercise in a workout shows a table of sets. Columns per set: **type · pre
   | Type | Label AR / EN | Color |
   |---|---|---|
   | normal | its number (1, 2, 3, …; counts normal sets only) | default |
-  | warm-up | `إ` / `W` | amber (`warmup`) |
+  | warm-up | `ح` / `W` | amber (`warmup`) |
   | drop | `د` / `D` | default |
   | failure | `ف` / `F` | default (**never red**: failure sets are intentional, not mistakes) |
 

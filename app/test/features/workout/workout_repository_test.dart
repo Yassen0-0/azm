@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:azm/core/db/app_database.dart';
 import 'package:azm/core/utils/workout_math.dart';
+import 'package:azm/features/settings/data/training_settings.dart';
 import 'package:azm/features/workout/data/workout_models.dart';
 import 'package:azm/features/workout/data/workout_repository.dart';
 import 'package:drift/drift.dart' hide isNull, isNotNull;
@@ -191,7 +192,7 @@ void main() {
     await repo.addExercises(id, ['0025']);
     expect((await repo.loadDetail(id))!.exercises.first.restSeconds, kDefaultRestSeconds);
 
-    await db.writeSetting(WorkoutSettingsKeys.defaultRestSeconds, '120');
+    await db.writeSetting(TrainingSettingsKeys.defaultRestSeconds, '120');
     expect((await repo.loadDetail(id))!.exercises.first.restSeconds, 120);
 
     await db.into(db.routines).insert(RoutinesCompanion.insert(id: const Value('r1'), name: 'Push'));
@@ -204,7 +205,7 @@ void main() {
 
   test('unit setting lb is read for display', () async {
     expect((await repo.weightUnit()).name, 'kg');
-    await db.writeSetting(WorkoutSettingsKeys.unit, '"lb"');
+    await db.writeSetting(TrainingSettingsKeys.unit, '"lb"');
     final id = await repo.startEmpty('W');
     expect((await repo.loadDetail(id))!.unit.name, 'lb');
   });

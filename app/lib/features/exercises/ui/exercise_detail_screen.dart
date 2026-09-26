@@ -16,6 +16,7 @@ import '../../../core/widgets/azm_header.dart';
 import '../../../core/widgets/azm_placeholder.dart';
 import '../../../core/widgets/exercise_card.dart' show isolateName;
 import '../../../core/widgets/muscle_chips.dart';
+import '../../settings/data/training_settings.dart';
 import '../data/exercise_history.dart';
 import '../data/exercise_labels.dart';
 import '../data/exercise_library.dart';
@@ -81,7 +82,7 @@ class _DetailBody extends ConsumerWidget {
     final names = context.namesOf(e);
     final hasMedia = ref.watch(mediaResolverProvider).gifFor(e) != null;
     final history = ref.watch(exerciseHistoryProvider(e.id)).value ?? ExerciseHistory.empty;
-    final unit = ref.watch(exercisesWeightUnitProvider).value ?? WeightUnit.kg;
+    final unit = ref.watch(weightUnitProvider).value ?? WeightUnit.kg;
     final instructions = exerciseInstructions(e, Localizations.localeOf(context));
 
     return ListView(
@@ -96,7 +97,7 @@ class _DetailBody extends ConsumerWidget {
           child: LayoutBuilder(
             builder: (context, box) => Column(
               children: [
-                ExerciseAnimation(exercise: e, size: math.min(box.maxWidth, AzmSize.thumbnailCard * 3)),
+                ExerciseAnimation(exercise: e, size: math.min(box.maxWidth, AzmSize.exerciseMedia)),
                 if (hasMedia) ...[
                   const SizedBox(height: AzmSpace.xs),
                   Text(

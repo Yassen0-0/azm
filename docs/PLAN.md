@@ -68,7 +68,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **Acceptance:**
   - [x] Workout tab home: big "Start workout" (empty workout) → active workout in 1 tap. Routines/programs lists come later (routines task).
   - [x] Active workout: exercises with SetRows (type · previous · weight · reps · ✓), add exercise (picker contract above), add/remove sets, reorder exercises.
-  - [x] Set type menu on label tap; labels `إ/W`, `د/D`, `ف/F`, numbers for normal sets; warm-up in amber; failure never red.
+  - [x] Set type menu on label tap; labels `ح/W` (was `إ`, changed at integration), `د/D`, `ف/F`, numbers for normal sets; warm-up in amber; failure never red.
   - [x] "Previous" = same set index from the last finished workout with that exercise; tap fills weight + reps.
   - [x] ✓ → `setDoneTint`, light haptic, rest timer auto-starts (per-exercise override → default 90 s).
   - [x] Swipe to delete (toward the end edge, mirrored in RTL).
@@ -85,6 +85,19 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - **Remove at merge (DEBUG ONLY):** `app/lib/features/workout/debug/debug_seed.dart`, the `kDebugMode` "DEBUG: add sample exercises" button in `features/workout/ui/active_workout_screen.dart` (+ its `debug_seed.dart` import), and the ARB key `workoutDebugSeed` in `arb_src/workout/{ar,en}.arb` (then `tools/gen_l10n.sh`). Once the real picker is merged, check `Add exercise` → picker → exercises appear in selection order.
   - `ActiveWorkoutBarSlot` is now a `ConsumerStatefulWidget` (same name + const constructor).
   - After merging, re-run `tools/gen_l10n.sh` (generated ARB/gen files will conflict) and the full definition of done on `main`.
+  - **Done at integration (2026-09-26):** debug seeding removed; real picker in use.
+
+## 1b. INTEGRATION — merge exercises + workout (main) — [x] done 2026-09-26
+
+- [x] Merged `feature/exercises` then `feature/workout`; conflicts (docs only) logged in DECISIONS_LOG.
+- [x] Workout debug seeding removed; `Add exercise` → real picker → exercises in selection order.
+- [x] Requests resolved: theme tokens, shared unit/rest providers, `timezone` direct dep, DATA.md keys.
+- [x] Warm-up label `ح` (AR, amber) / `W` (EN).
+- [x] Finish with unticked sets: count + "Mark all done" / "Remove them".
+- [x] Android exact alarms: one-time explanation sheet on the first rest timer → system screen; inexact fallback kept; never asked again automatically.
+- [x] E2E integration test `app/integration_test/workout_flow_screens_test.dart` (start → picker ×3 → keypad → ✓ → rest ±/skip → finish → summary → exercise detail history + records), both platforms, ar + en; proof in `docs/screenshots/workout_flow/`. Android run: `flutter drive … --dart-define=AZM_E2E_OPEN_ALARM_SETTINGS=true` with the host helper (DECISIONS_LOG); iOS: `AZM_DEVICE_SET=B tools/screenshots.sh workout_flow ios`.
+- [x] Parity screenshots regenerated on both platforms: `workout` (2 new screens: finish dialog, exact-alarm sheet), `exercises`, `workout_flow`.
+- [x] Definition of done on `main`; worktrees removed (branches kept).
 
 ## 2. `app/lib/features/routines/**` — Routines & ready programs
 
@@ -176,11 +189,8 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 
 _(Cross-folder requests go here: "@owner-of-X: need Y". Remove when handled.)_
 
-- **@owner (theme):** tokens for the exercise detail/chart: `AzmSize.chartHeight` (144), `AzmSize.exerciseMedia` (216), chart stroke (2) and dot radius (4). Exercises currently derives them from existing tokens (`thumbnailCard × 2/3`, `opticalInset`, `xxs`); swap them in when they exist. (exercises, 2026-09-26)
-- **@settings:** expose a shared `weightUnitProvider` (reads/writes the `unit` setting) in `features/settings/data/`. Exercises reads the key directly via `exercisesWeightUnitProvider` for now; switch it over when yours exists. (exercises, 2026-09-26)
 - **@history:** per-exercise history for the detail screen and the library 🏆 badges goes through `ExerciseHistorySource` (`features/exercises/data/exercise_history.dart`). Override `exerciseHistorySourceProvider` if you need other rules (e.g. edited workouts). A "see all history" route from the detail screen would need a new route. (exercises, 2026-09-26)
-
-- @owner (window B, 2026-09-26): make `timezone` a **direct** dependency in `app/pubspec.yaml` (same version as resolved, `^0.11.0`); `features/workout/data/rest_notifications.dart` imports it for `TZDateTime` with a lint suppression until then.
-- @owner / data docs (window B, 2026-09-26): add the settings keys `active_rest_total_seconds` (int, rest length incl. ±15, for the progress bar) and `workout_notifications_asked` (bool) to DATA.md → Settings keys.
-- @settings (window B, 2026-09-26): the workout reads `unit` (`"kg"`/`"lb"`) and `default_rest_seconds` (int) from settings on every detail load; writing them from the settings screen is enough, no API needed.
 - @brand (window B, 2026-09-26): the Android notification icon `res/drawable/ic_stat_azm.xml` is a placeholder dumbbell; replace with the final monochrome mark.
+- **@settings (integrator, 2026-09-26):** the unit / default-rest UI (settings screen + onboarding) must write through `TrainingSettingsWriter` (`features/settings/data/training_settings.dart`); every reader already watches `weightUnitProvider` / `defaultRestSecondsProvider`.
+
+_Resolved at integration (2026-09-26): theme tokens `AzmSize.chartHeight/exerciseMedia/chartStroke/chartDot`; shared `weightUnitProvider` + `defaultRestSecondsProvider` (settings owns writing); `timezone` direct dependency; new settings keys documented in DATA.md._

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:azm/app.dart';
 import 'package:azm/core/db/app_database.dart';
+import 'package:azm/core/theme/azm_theme.dart';
 import 'package:azm/features/settings/data/app_settings.dart';
 import 'package:azm/features/workout/data/rest_notifications.dart';
 import 'package:azm/features/workout/data/rest_timer.dart';
@@ -146,13 +147,15 @@ void main() {
     await settle(tester);
     expect(Directionality.of(tester.element(find.text('منشار'))), TextDirection.rtl);
 
-    // Set label → type menu → warm-up (إ).
+    // Set label → type menu → warm-up (ح, amber).
     await tester.tap(find.text('1'));
     await settle(tester);
     expect(find.text('نوع السِت'), findsOneWidget);
     await tester.tap(find.text('إحماء'));
     await settle(tester);
-    expect(find.text('إ'), findsOneWidget);
+    expect(find.text('ح'), findsOneWidget);
+    final amber = Theme.of(tester.element(find.text('ح'))).extension<AzmColors>()!.warmupText;
+    expect(tester.widget<Text>(find.text('ح')).style?.color, amber);
     final s = (await repo().loadDetail(workoutId))!.exercises.first.sets.first;
     expect(s.type, SetType.warmup);
 

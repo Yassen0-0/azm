@@ -392,10 +392,10 @@ abstract class AppLocalizations {
   /// **'لسه ملعبتش التمرين ده. سجّل أول مجموعة وتاريخك هيظهر هنا.'**
   String get exercisesHistoryEmpty;
 
-  /// Short label of a warm-up set in the history list.
+  /// Short label of a warm-up set in the history list: ح (from إحماء; owner decision 2026-09-26, same as the workout set label).
   ///
   /// In ar, this message translates to:
-  /// **'إ'**
+  /// **'ح'**
   String get exercisesSetLabelWarmup;
 
   /// Short label of a drop set in the history list.
@@ -1118,10 +1118,10 @@ abstract class AppLocalizations {
   /// **'{value} {unit}'**
   String workoutWeightUnit(String value, String unit);
 
-  /// One-letter label of a warm-up set.
+  /// One-letter label of a warm-up set: ح (from إحماء; owner decision 2026-09-26 — إ looked like '!'). Shown in amber.
   ///
   /// In ar, this message translates to:
-  /// **'إ'**
+  /// **'ح'**
   String get workoutSetTypeWarmupShort;
 
   /// One-letter label of a drop set.
@@ -1322,12 +1322,6 @@ abstract class AppLocalizations {
   /// **'تنهي التمرين؟'**
   String get workoutFinishTitle;
 
-  /// Finish confirmation dialog body.
-  ///
-  /// In ar, this message translates to:
-  /// **'السِتات اللي مش متعلّم عليها ✓ هتتشال.'**
-  String get workoutFinishBody;
-
   /// Dialog when finishing a workout with no completed sets.
   ///
   /// In ar, this message translates to:
@@ -1424,11 +1418,59 @@ abstract class AppLocalizations {
   /// **'افتح التمرين'**
   String get workoutBarOpen;
 
-  /// DEBUG-ONLY button (kDebugMode) until the exercise picker is merged. Remove at merge.
+  /// Finish confirmation body when every set is ticked.
   ///
   /// In ar, this message translates to:
-  /// **'DEBUG: ضيف تمارين تجريبية'**
-  String get workoutDebugSeed;
+  /// **'كل السِتات متعلّم عليها ✓. نحفظ التمرين؟'**
+  String get workoutFinishAllDoneBody;
+
+  /// Finish dialog: number of sets without a tick. countText = count with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{فيه سِت واحد من غير ✓.} =2{فيه سِتّين من غير ✓.} few{فيه {countText} سِتات من غير ✓.} other{فيه {countText} سِت من غير ✓.}}'**
+  String workoutFinishUncheckedBody(int count, String countText);
+
+  /// Finish dialog: how many of the unticked sets have no reps (removed whatever the choice). countText = count with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{منهم سِت فاضي هيتشال.} =2{منهم سِتّين فاضيين هيتشالوا.} few{منهم {countText} سِتات فاضية هتتشال.} other{منهم {countText} سِت فاضي هيتشالوا.}}'**
+  String workoutFinishEmptyNote(int count, String countText);
+
+  /// Finish dialog action: tick every unticked set (empty reps taken from 'previous'), then finish.
+  ///
+  /// In ar, this message translates to:
+  /// **'علّم عليهم كلهم ✓'**
+  String get workoutFinishMarkAllDone;
+
+  /// Finish dialog action: drop the unticked sets, then finish.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيلهم'**
+  String get workoutFinishRemoveThem;
+
+  /// Android-only one-time sheet on the first rest timer: title.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلّي تنبيه الراحة ييجي في معاده'**
+  String get workoutExactAlarmTitle;
+
+  /// Android-only one-time sheet: why the exact-alarm permission helps. «Alarms & reminders» is the Android settings page name.
+  ///
+  /// In ar, this message translates to:
+  /// **'والشاشة مقفولة، أندرويد ممكن يأخّر تنبيه «الراحة خلصت» كام دقيقة. اسمح لعزم بـ«المنبّهات والتذكيرات» عشان يرن بالظبط لما الراحة تخلص. تقدر تغيّر ده في أي وقت من إعدادات الموبايل.'**
+  String get workoutExactAlarmBody;
+
+  /// Exact-alarm sheet: opens the system permission screen.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح الإعدادات'**
+  String get workoutExactAlarmAllow;
+
+  /// Exact-alarm sheet: dismiss (never asked again automatically).
+  ///
+  /// In ar, this message translates to:
+  /// **'مش دلوقتي'**
+  String get workoutExactAlarmLater;
 }
 
 class _AppLocalizationsDelegate

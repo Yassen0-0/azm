@@ -90,6 +90,10 @@ Gym additions:
 | `restBarHeight` | 64 | RestTimerBar |
 | `activeBarHeight` | 56 | ActiveWorkoutBar (minimized workout, above the tab bar) |
 | `thumbnail` | 48 (list), 72 (card) | Exercise thumbnail square, radius `input` 12 |
+| `chartHeight` | 144 | Progress chart on the exercise detail |
+| `exerciseMedia` | 216 | Max edge of the exercise GIF / fallback square on the detail |
+| `chartStroke` | 2 | Progress chart line width |
+| `chartDot` | 4 | Progress chart data-point radius |
 
 All touch targets are ≥ 48 even when the visible element is smaller.
 
@@ -97,7 +101,7 @@ All touch targets are ≥ 48 even when the visible element is smaller.
 
 | Component | Description |
 |---|---|
-| **SetRow** | `[type label] [previous] [weight] [reps] [✓]`, min height 52, numbers in `rowNumber`. Type label: set number (normal), `إ/W` in `warmup`, `د/D`, `ف/F`. Tap label → type menu. Tap previous → fills weight + reps. ✓ → row gets `setDoneTint`, ✓ turns `setDone` with `onState` check, haptic. Swipe toward the *end* edge to delete (`destructiveTint` background). PR sets show a 🏆 badge. |
+| **SetRow** | `[type label] [previous] [weight] [reps] [✓]`, min height 52, numbers in `rowNumber`. Type label: set number (normal), `ح/W` in `warmup`, `د/D`, `ف/F`. Tap label → type menu. Tap previous → fills weight + reps. ✓ → row gets `setDoneTint`, ✓ turns `setDone` with `onState` check, haptic. Swipe toward the *end* edge to delete (`destructiveTint` background). PR sets show a 🏆 badge. |
 | **WeightKeypad** | Custom bottom keypad replacing the system keyboard: 3×4 digits + decimal + backspace, `−2.5` / `+2.5`, next/done. Keys 52 high on `card`, radius `button`. The value preview uses `keypadValue`. |
 | **RestTimerBar** | Bottom bar: remaining `mm:ss` (tabular), progress (`track`/`accent`), `−15`, `+15`, skip. Derived from an end timestamp. A **mini** variant (time only) appears inside the ActiveWorkoutBar. |
 | **ActiveWorkoutBar** | Persistent bar above the tab bar when the workout is minimized: workout name, elapsed time, mini rest timer; tap to expand. |

@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/db/catalog_repository.dart';
-import '../../../core/utils/units.dart';
 
 /// What the library / picker is currently asking the catalog for.
 @immutable
@@ -61,11 +60,3 @@ List<String> decodeStringList(String? json) {
   }
   return (steps: decodeStringList(e.instructionsEn), englishFallback: wantsArabic);
 }
-
-/// The weight unit chosen in settings (`unit` key, JSON "kg" | "lb"; default
-/// kg). Read-only here: the settings feature owns writing it.
-final exercisesWeightUnitProvider = FutureProvider<WeightUnit>((ref) async {
-  final json = await ref.watch(appDatabaseProvider).readSetting('unit');
-  if (json == null) return WeightUnit.kg;
-  return jsonDecode(json) == 'lb' ? WeightUnit.lb : WeightUnit.kg;
-}, retry: (_, _) => null);

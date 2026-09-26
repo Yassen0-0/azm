@@ -1,10 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// TZDateTime is required by zonedSchedule but not re-exported by the plugin;
-// `timezone` is its transitive dependency. Request filed in docs/PLAN.md to
-// make it a direct dependency.
-// ignore: depend_on_referenced_packages
 import 'package:timezone/timezone.dart' as tz;
 
 /// Localized notification text (resolved by the caller: no BuildContext here).
@@ -26,6 +22,13 @@ abstract interface class RestAlarm {
   /// True when the scheduled notification may arrive late (Android without
   /// the exact-alarm permission), so the app shows it itself while running.
   Future<bool> mayBeLate();
+
+  /// False when the user turned notifications off for the app.
+  Future<bool> notificationsEnabled();
+
+  /// Android: opens the system "Alarms & reminders" screen for the app and
+  /// completes when the user comes back. No-op elsewhere.
+  Future<void> requestExactAlarms();
 }
 
 /// flutter_local_notifications implementation (both platforms).
@@ -122,6 +125,20 @@ class LocalRestAlarm implements RestAlarm {
     if (!_android) return false;
     await _ensureInit();
     return !(await _androidImpl?.canScheduleExactNotifications() ?? false);
+  }
+
+  @override
+  Future<bool> notificationsEnabled() async {
+    if (!_android) return true;
+    await _ensureInit();
+    return await _androidImpl?.areNotificationsEnabled() ?? true;
+  }
+
+  @override
+  Future<void> requestExactAlarms() async {
+    if (!_android) return;
+    await _ensureInit();
+    await _androidImpl?.requestExactAlarmsPermission();
   }
 }
 

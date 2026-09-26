@@ -15,6 +15,8 @@ import 'package:azm/features/workout/data/rest_timer.dart';
 import 'package:azm/features/workout/data/workout_models.dart';
 import 'package:azm/features/workout/data/workout_repository.dart';
 import 'package:azm/features/workout/ui/active_workout_bar_slot.dart';
+import 'package:azm/features/workout/ui/active_workout_screen.dart';
+import 'package:azm/features/workout/ui/workout_sheets.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -38,8 +40,9 @@ Future<void> _wipe(ProviderContainer c) async {
   final db = c.read(appDatabaseProvider);
   await c.read(restTimerProvider.notifier).skip();
   await db.delete(db.workouts).go(); // cascades to exercises + sets
-  // No permission prompt over the screenshots.
+  // No permission prompt / exact-alarm sheet over the screenshots.
   await db.writeSetting(WorkoutSettingsKeys.notificationsAsked, jsonEncode(true));
+  await db.writeSetting(WorkoutSettingsKeys.exactAlarmsAsked, jsonEncode(true));
 }
 
 /// A finished workout two days ago: bench 40×12 (W), 60×8, 60×8; squat 100×5 ×3.
@@ -135,6 +138,17 @@ void main() {
     }),
     ScreenStep('minimized_bar', (tester, c, router) async {
       router.go(AppRoutes.history);
+    }),
+    // Bench set 3, squat sets 2 + 3 have no ✓ (the failure set is empty).
+    ScreenStep('finish_unticked_dialog', (tester, c, router) async {
+      await _openActive(tester, router);
+      await tester.tap(find.text(_l10n(c).workoutFinish));
+    }),
+    // Android-only in real use (exact alarms not allowed); rendered on both
+    // platforms here for layout parity.
+    ScreenStep('exact_alarm_sheet', (tester, c, router) async {
+      await _openActive(tester, router);
+      unawaited(showExactAlarmSheet(tester.element(find.byType(ActiveWorkoutScreen))));
     }),
     ScreenStep('summary', (tester, c, router) async {
       final repo = c.read(workoutRepositoryProvider);

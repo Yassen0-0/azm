@@ -4,14 +4,10 @@ import '../../../core/db/app_database.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/utils/workout_math.dart';
 
-/// Default rest when neither the routine exercise nor settings override it.
-const int kDefaultRestSeconds = 90;
-
-/// Settings keys read/written by the workout feature (values JSON-encoded,
-/// docs/DATA.md). `unit` and `default_rest_seconds` are written by settings.
+/// Settings keys written by the workout feature (values JSON-encoded,
+/// docs/DATA.md). `unit` and `default_rest_seconds` belong to settings
+/// (`TrainingSettingsKeys`, features/settings/data/training_settings.dart).
 abstract final class WorkoutSettingsKeys {
-  static const unit = 'unit';
-  static const defaultRestSeconds = 'default_rest_seconds';
   static const restEndsAt = 'active_rest_ends_at';
   static const restNotificationId = 'active_rest_notification_id';
 
@@ -20,6 +16,45 @@ abstract final class WorkoutSettingsKeys {
 
   /// True once the notification permission prompt has been shown.
   static const notificationsAsked = 'workout_notifications_asked';
+
+  /// True once the Android exact-alarm explanation sheet has been shown.
+  static const exactAlarmsAsked = 'workout_exact_alarms_asked';
+}
+
+/// Values a set gets when it is ✓'d: empty reps (and weight) are taken from
+/// "previous". `reps <= 0` means there is still nothing to log.
+({double weightKg, int reps}) completionValues(WorkoutSet set, WorkoutSet? previous) {
+  var weight = set.weightKg;
+  var reps = set.reps;
+  if (reps <= 0 && previous != null) {
+    reps = previous.reps;
+    if (weight <= 0) weight = previous.weightKg;
+  }
+  return (weightKg: weight, reps: reps);
+}
+
+/// A set to ✓ with these values.
+typedef SetCompletion = ({String setId, double weightKg, int reps});
+
+/// Sets without ✓ at finish time: [loggable] ones can be ✓'d by "Mark all
+/// done" (same rule as tapping ✓); [empty] ones have no reps even after
+/// "previous" and are removed either way.
+({List<SetCompletion> loggable, int empty}) uncheckedSets(WorkoutDetail d) {
+  final loggable = <SetCompletion>[];
+  var empty = 0;
+  for (final e in d.exercises) {
+    for (var i = 0; i < e.sets.length; i++) {
+      final s = e.sets[i];
+      if (s.completedAt != null) continue;
+      final v = completionValues(s, e.previousFor(i));
+      if (v.reps > 0) {
+        loggable.add((setId: s.id, weightKg: v.weightKg, reps: v.reps));
+      } else {
+        empty++;
+      }
+    }
+  }
+  return (loggable: loggable, empty: empty);
 }
 
 SetStats setStatsOf(WorkoutSet s) => SetStats(

@@ -55,7 +55,9 @@ class FakeRestAlarm implements RestAlarm {
   final cancelled = <int>[];
   final shown = <int>[];
   var permissionRequests = 0;
+  var exactAlarmRequests = 0;
   bool late = false;
+  bool enabled = true;
 
   @override
   Future<void> requestPermission() async => permissionRequests++;
@@ -76,6 +78,12 @@ class FakeRestAlarm implements RestAlarm {
 
   @override
   Future<bool> mayBeLate() async => late;
+
+  @override
+  Future<bool> notificationsEnabled() async => enabled;
+
+  @override
+  Future<void> requestExactAlarms() async => exactAlarmRequests++;
 }
 
 /// A finished workout with one exercise and the given (weight, reps, type) sets.

@@ -131,7 +131,7 @@ source ./env.sh && cd app && flutter run \
 | drift | 2.35.0 | | uuid | 4.6.0 |
 | drift_flutter | 0.3.1 | | path_provider | 2.1.6 |
 | sqlite3 (direct dep; native lib via build hooks) | 3.6.0 | | flutter_localizations | SDK |
-| intl | 0.20.3 | | | |
+| intl | 0.20.3 | | timezone (direct dep; `TZDateTime` for the rest notification) | 0.11.1 |
 | *dev:* drift_dev | 2.35.0 | | *dev:* build_runner | 2.16.1 |
 | *dev:* flutter_lints | 6.0.0 | | *dev:* integration_test, flutter_driver | SDK |
 

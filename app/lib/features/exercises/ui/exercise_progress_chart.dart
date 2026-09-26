@@ -16,9 +16,7 @@ class ExerciseProgressChart extends StatelessWidget {
   /// Chronological (oldest first), at least 2.
   final List<ProgressPoint> points;
 
-  // Derived from existing tokens (no chart tokens in the theme yet, see
-  // docs/PLAN.md → Requests).
-  static const double height = AzmSize.thumbnailCard * 2;
+  static const double height = AzmSize.chartHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +54,8 @@ class _ChartPainter extends CustomPainter {
   final Color grid;
   final Color dotHole;
 
-  static const double _stroke = AzmSpace.opticalInset;
-  static const double _dot = AzmSpace.xxs;
+  static const double _stroke = AzmSize.chartStroke;
+  static const double _dot = AzmSize.chartDot;
 
   @override
   void paint(Canvas canvas, Size size) {

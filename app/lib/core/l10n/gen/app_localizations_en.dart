@@ -657,9 +657,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutFinishTitle => 'Finish workout?';
 
   @override
-  String get workoutFinishBody => 'Sets without a ✓ will be removed.';
-
-  @override
   String get workoutFinishNothing =>
       'No completed sets yet. Discard this workout?';
 
@@ -734,5 +731,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutBarOpen => 'Open workout';
 
   @override
-  String get workoutDebugSeed => 'DEBUG: add sample exercises';
+  String get workoutFinishAllDoneBody =>
+      'All sets are ticked ✓. Save this workout?';
+
+  @override
+  String workoutFinishUncheckedBody(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText sets have no ✓ yet.',
+      one: '1 set has no ✓ yet.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String workoutFinishEmptyNote(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText of them are empty and will be removed.',
+      one: '1 of them is empty and will be removed.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutFinishMarkAllDone => 'Mark all done';
+
+  @override
+  String get workoutFinishRemoveThem => 'Remove them';
+
+  @override
+  String get workoutExactAlarmTitle => 'Get the rest alert on time';
+
+  @override
+  String get workoutExactAlarmBody =>
+      'With the screen off, Android can delay the “rest is over” alert by a few minutes. Allow “Alarms & reminders” for Azm so it rings exactly when your rest ends. You can change this any time in the phone settings.';
+
+  @override
+  String get workoutExactAlarmAllow => 'Open settings';
+
+  @override
+  String get workoutExactAlarmLater => 'Not now';
 }

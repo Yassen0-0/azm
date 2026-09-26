@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/utils/workout_math.dart';
+import '../../settings/data/training_settings.dart';
 import 'workout_models.dart';
 
 /// All workout reads/writes. Every mutation hits the DB immediately; the UI
@@ -115,11 +114,22 @@ class WorkoutRepository {
         }
       });
 
-  /// Finishes the workout: sets without ✓ are dropped, exercises left empty
-  /// are dropped, status → finished. Returns false (and changes nothing) when
+  /// Finishes the workout: the sets in [complete] are ✓'d first ("Mark all
+  /// done"), then sets without ✓ are dropped, exercises left empty are
+  /// dropped, status → finished. Returns false (and changes nothing) when
   /// there is no completed set at all.
-  Future<bool> finish(String workoutId) => db.transaction(() async {
+  Future<bool> finish(String workoutId, {List<SetCompletion> complete = const []}) => db.transaction(() async {
         final weIds = await _exerciseIds(workoutId);
+        final now = _now();
+        for (final c in complete) {
+          await (db.update(db.workoutSets)
+                ..where((s) => s.id.equals(c.setId) & s.workoutExerciseId.isIn(weIds)))
+              .write(WorkoutSetsCompanion(
+            completedAt: Value(now),
+            weightKg: Value(c.weightKg),
+            reps: Value(c.reps),
+          ));
+        }
         final done = await (db.select(db.workoutSets)
               ..where((s) => s.workoutExerciseId.isIn(weIds) & s.completedAt.isNotNull()))
             .get();
@@ -258,16 +268,10 @@ class WorkoutRepository {
 
   // ---- Settings the workout reads ------------------------------------------
 
-  Future<WeightUnit> weightUnit() async {
-    final raw = await db.readSetting(WorkoutSettingsKeys.unit);
-    return raw != null && jsonDecode(raw) == 'lb' ? WeightUnit.lb : WeightUnit.kg;
-  }
+  Future<WeightUnit> weightUnit() async => parseWeightUnit(await db.readSetting(TrainingSettingsKeys.unit));
 
-  Future<int> defaultRestSeconds() async {
-    final raw = await db.readSetting(WorkoutSettingsKeys.defaultRestSeconds);
-    final v = raw == null ? null : jsonDecode(raw);
-    return v is int && v > 0 ? v : kDefaultRestSeconds;
-  }
+  Future<int> defaultRestSeconds() async =>
+      parseDefaultRestSeconds(await db.readSetting(TrainingSettingsKeys.defaultRestSeconds));
 
   // ---- Helpers -------------------------------------------------------------
 
@@ -322,8 +326,13 @@ final activeWorkoutProvider = StreamProvider<Workout?>(
   retry: noRetry,
 );
 
-/// Full detail of one workout (active screen, summary).
+/// Full detail of one workout (active screen, summary). Reloads when the
+/// unit or the default rest changes in settings.
 final workoutDetailProvider = StreamProvider.family<WorkoutDetail?, String>(
-  (ref, id) => ref.watch(workoutRepositoryProvider).watchDetail(id),
+  (ref, id) {
+    ref.watch(weightUnitProvider.select((u) => u.value));
+    ref.watch(defaultRestSecondsProvider.select((r) => r.value));
+    return ref.watch(workoutRepositoryProvider).watchDetail(id);
+  },
   retry: noRetry,
 );

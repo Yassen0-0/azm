@@ -209,9 +209,9 @@
   "@exercisesHistoryEmpty": {
     "description": "Detail: empty state when there is no history for the exercise."
   },
-  "exercisesSetLabelWarmup": "إ",
+  "exercisesSetLabelWarmup": "ح",
   "@exercisesSetLabelWarmup": {
-    "description": "Short label of a warm-up set in the history list."
+    "description": "Short label of a warm-up set in the history list: ح (from إحماء; owner decision 2026-09-26, same as the workout set label)."
   },
   "exercisesSetLabelDrop": "د",
   "@exercisesSetLabelDrop": {

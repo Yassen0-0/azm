@@ -49,3 +49,9 @@ Emulator/Simulator can't prove these; check on real phones (both platforms unles
 - [ ] Swipe-to-delete a set feels right in Arabic (swipe toward the LEFT edge = end in RTL) and English (toward the right). (workout, 2026-09-26)
 - [ ] Reduced motion (iOS Settings → Accessibility → Motion / Android "Remove animations"): Lifted counter and PR badge jump without animation; haptics stay. (workout, 2026-09-26)
 - [ ] Performance: a long workout (8 exercises × 5 sets) scrolls smoothly while the rest timer runs. (workout, 2026-09-26)
+
+### Integration (added by integrator, 2026-09-26)
+- [ ] **Android 14+ exact-alarm sheet:** fresh install → first ✓ → after the notification prompt, the explanation sheet appears once. "Open settings" → toggle "Alarms & reminders" ON → Back: this rest's notification now arrives on time with the screen off. Reinstall, choose "Not now": the sheet never appears again, rests still notify (possibly late). Revoking the permission later in system settings: the app is restarted by Android; check an active workout resumes intact. (integrator, 2026-09-26)
+- [ ] Android 12–13 phone (exact alarms granted by default): no sheet ever appears. (integrator, 2026-09-26)
+- [ ] Finish with unticked sets on a real phone: the three-button dialog fits (buttons stack vertically in both languages) and "Mark all done" fills empty sets from "previous" as expected. (integrator, 2026-09-26)
+- [ ] Low-end Android phone: "Start workout" opens the active workout every time (the stale-provider bounce fixed at integration never reappears). (integrator, 2026-09-26)

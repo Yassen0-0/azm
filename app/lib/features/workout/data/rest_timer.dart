@@ -183,6 +183,37 @@ class RestTimerController extends Notifier<RestTimerState?> {
     }
   }
 
+  /// Android, once ever: true when the "rest is over" alert may be late
+  /// because exact alarms are not allowed (Android 14+ default), notifications
+  /// are on, and the explanation sheet was never shown.
+  Future<bool> shouldExplainExactAlarms() async {
+    try {
+      if (await _db.readSetting(WorkoutSettingsKeys.exactAlarmsAsked) != null) return false;
+      return await _alarm.mayBeLate() && await _alarm.notificationsEnabled();
+    } catch (e) {
+      debugPrint('exact alarm check failed: $e');
+      return false;
+    }
+  }
+
+  /// Records that the explanation was shown: it is never shown again
+  /// automatically, whatever the user chose.
+  Future<void> markExactAlarmsExplained() async {
+    try {
+      await _db.writeSetting(WorkoutSettingsKeys.exactAlarmsAsked, jsonEncode(true));
+    } catch (e) {
+      debugPrint('exact alarm flag failed: $e');
+    }
+  }
+
+  /// Opens the system permission screen, then re-schedules the running rest
+  /// so it becomes exact if the user allowed it (inexact otherwise).
+  Future<void> requestExactAlarms() async {
+    await _safe(_alarm.requestExactAlarms);
+    final s = state;
+    if (s != null) await _schedule(s);
+  }
+
   /// Notification text in the app language (forced setting, else device).
   RestAlarmText _text() {
     final locale = ref.read(appSettingsProvider).forcedLocale ??

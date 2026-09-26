@@ -237,9 +237,9 @@
   "@exercisesHistoryEmpty": {
     "description": "Detail: empty state when there is no history for the exercise."
   },
-  "exercisesSetLabelWarmup": "إ",
+  "exercisesSetLabelWarmup": "ح",
   "@exercisesSetLabelWarmup": {
-    "description": "Short label of a warm-up set in the history list."
+    "description": "Short label of a warm-up set in the history list: ح (from إحماء; owner decision 2026-09-26, same as the workout set label)."
   },
   "exercisesSetLabelDrop": "د",
   "@exercisesSetLabelDrop": {
@@ -737,9 +737,9 @@
       }
     }
   },
-  "workoutSetTypeWarmupShort": "إ",
+  "workoutSetTypeWarmupShort": "ح",
   "@workoutSetTypeWarmupShort": {
-    "description": "One-letter label of a warm-up set."
+    "description": "One-letter label of a warm-up set: ح (from إحماء; owner decision 2026-09-26 — إ looked like '!'). Shown in amber."
   },
   "workoutSetTypeDropShort": "د",
   "@workoutSetTypeDropShort": {
@@ -883,10 +883,6 @@
   "@workoutFinishTitle": {
     "description": "Finish confirmation dialog title."
   },
-  "workoutFinishBody": "السِتات اللي مش متعلّم عليها ✓ هتتشال.",
-  "@workoutFinishBody": {
-    "description": "Finish confirmation dialog body."
-  },
   "workoutFinishNothing": "مفيش ولا سِت متعلّم عليها ✓ لسه. تحب تلغي التمرين؟",
   "@workoutFinishNothing": {
     "description": "Dialog when finishing a workout with no completed sets."
@@ -975,8 +971,56 @@
   "@workoutBarOpen": {
     "description": "Semantics label of the minimized workout bar."
   },
-  "workoutDebugSeed": "DEBUG: ضيف تمارين تجريبية",
-  "@workoutDebugSeed": {
-    "description": "DEBUG-ONLY button (kDebugMode) until the exercise picker is merged. Remove at merge."
+  "workoutFinishAllDoneBody": "كل السِتات متعلّم عليها ✓. نحفظ التمرين؟",
+  "@workoutFinishAllDoneBody": {
+    "description": "Finish confirmation body when every set is ticked."
+  },
+  "workoutFinishUncheckedBody": "{count, plural, =1{فيه سِت واحد من غير ✓.} =2{فيه سِتّين من غير ✓.} few{فيه {countText} سِتات من غير ✓.} other{فيه {countText} سِت من غير ✓.}}",
+  "@workoutFinishUncheckedBody": {
+    "description": "Finish dialog: number of sets without a tick. countText = count with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutFinishEmptyNote": "{count, plural, =1{منهم سِت فاضي هيتشال.} =2{منهم سِتّين فاضيين هيتشالوا.} few{منهم {countText} سِتات فاضية هتتشال.} other{منهم {countText} سِت فاضي هيتشالوا.}}",
+  "@workoutFinishEmptyNote": {
+    "description": "Finish dialog: how many of the unticked sets have no reps (removed whatever the choice). countText = count with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutFinishMarkAllDone": "علّم عليهم كلهم ✓",
+  "@workoutFinishMarkAllDone": {
+    "description": "Finish dialog action: tick every unticked set (empty reps taken from 'previous'), then finish."
+  },
+  "workoutFinishRemoveThem": "شيلهم",
+  "@workoutFinishRemoveThem": {
+    "description": "Finish dialog action: drop the unticked sets, then finish."
+  },
+  "workoutExactAlarmTitle": "خلّي تنبيه الراحة ييجي في معاده",
+  "@workoutExactAlarmTitle": {
+    "description": "Android-only one-time sheet on the first rest timer: title."
+  },
+  "workoutExactAlarmBody": "والشاشة مقفولة، أندرويد ممكن يأخّر تنبيه «الراحة خلصت» كام دقيقة. اسمح لعزم بـ«المنبّهات والتذكيرات» عشان يرن بالظبط لما الراحة تخلص. تقدر تغيّر ده في أي وقت من إعدادات الموبايل.",
+  "@workoutExactAlarmBody": {
+    "description": "Android-only one-time sheet: why the exact-alarm permission helps. «Alarms & reminders» is the Android settings page name."
+  },
+  "workoutExactAlarmAllow": "افتح الإعدادات",
+  "@workoutExactAlarmAllow": {
+    "description": "Exact-alarm sheet: opens the system permission screen."
+  },
+  "workoutExactAlarmLater": "مش دلوقتي",
+  "@workoutExactAlarmLater": {
+    "description": "Exact-alarm sheet: dismiss (never asked again automatically)."
   }
 }

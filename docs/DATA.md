@@ -93,7 +93,9 @@ Muscle, body-part and equipment keys are localized through ARB (`muscle_pectoral
 | `workout_sets` | `id` uuid PK, `workout_exercise_id` → workout_exercises (cascade), `sort`, `type` (`normal`\|`warmup`\|`drop`\|`failure`), `weight_kg` REAL NOT NULL DEFAULT 0, `reps` INTEGER NOT NULL DEFAULT 0, `completed_at` NULL (null = not ✓) |
 | `settings` | `key` TEXT PK, `value` TEXT (JSON-encoded) |
 
-Settings keys (values JSON-encoded): `locale` (`"system"`\|`"ar"`\|`"en"`, implemented), `theme` (`"dark"`\|`"light"`, implemented), `unit` (`"kg"`\|`"lb"`), `default_rest_seconds` (90), `onboarding_done` (bool), `active_rest_ends_at` (ISO UTC or null), `active_rest_notification_id`.
+Settings keys (values JSON-encoded): `locale` (`"system"`\|`"ar"`\|`"en"`, implemented), `theme` (`"dark"`\|`"light"`, implemented), `unit` (`"kg"`\|`"lb"`), `default_rest_seconds` (90), `onboarding_done` (bool), `active_rest_ends_at` (ISO UTC or null), `active_rest_notification_id`, `active_rest_total_seconds` (int: current rest length incl. ±15, for the progress bar; null when no rest), `workout_notifications_asked` (bool: notification permission prompt shown once), `workout_exact_alarms_asked` (bool: Android exact-alarm explanation sheet shown once).
+
+`unit` and `default_rest_seconds` are owned by settings: written only through `TrainingSettingsWriter`, read by every feature through `weightUnitProvider` / `defaultRestSecondsProvider` (`features/settings/data/training_settings.dart`). The `active_rest_*` and `workout_*` keys are owned by the workout feature.
 
 **Why no FKs from user tables to `exercises`:** catalog tables are dropped and re-filled on a version bump. User history must survive, even for an exercise removed from a future catalog (the UI then shows "Unknown exercise" with the stored id).
 

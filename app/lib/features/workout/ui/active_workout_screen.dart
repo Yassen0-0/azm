@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +19,6 @@ import '../../../core/widgets/weight_keypad.dart';
 import '../data/rest_timer.dart';
 import '../data/workout_models.dart';
 import '../data/workout_repository.dart';
-import '../debug/debug_seed.dart';
 import 'workout_exercise_section.dart';
 import 'workout_format.dart';
 import 'workout_sheets.dart';
@@ -44,6 +42,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
 
   WorkoutDetail? _detail;
   bool _leaving = false;
+  bool _checkingGone = false;
   final _rowKeys = <String, GlobalKey>{};
 
   WorkoutRepository get _repo => ref.read(workoutRepositoryProvider);
@@ -57,11 +56,13 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
     final workout = active.value;
 
     if (workout == null) {
-      if (!active.isLoading && !_leaving) {
-        // Nothing to show (discarded elsewhere / stale route): go back.
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted && context.canPop()) context.pop();
-        });
+      if (!active.isLoading && !_leaving && !_checkingGone) {
+        // Nothing to show (discarded elsewhere / stale route): go back. The
+        // provider can still hold the null from BEFORE "Start workout" (the
+        // DB stream hasn't re-emitted yet on a slow device), so confirm
+        // with the DB before leaving.
+        _checkingGone = true;
+        unawaited(_leaveIfGone());
       }
       return const Scaffold(body: SizedBox.shrink());
     }
@@ -111,15 +112,6 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
                           onTap: () => _addExercises(workout.id),
                           primary: true,
                         ),
-                        // DEBUG ONLY — remove at merge (see debug/debug_seed.dart).
-                        if (kDebugMode) ...[
-                          const SizedBox(height: AzmSpace.xs),
-                          _WideButton(
-                            label: l.workoutDebugSeed,
-                            icon: Icons.bug_report_outlined,
-                            onTap: () => debugSeedExercises(_repo, workout.id),
-                          ),
-                        ],
                         const SizedBox(height: AzmSpace.xs),
                         _WideButton(
                           label: l.workoutDiscard,
@@ -169,6 +161,13 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
 
   // ---- Navigation ----------------------------------------------------------
 
+  Future<void> _leaveIfGone() async {
+    final w = await _repo.active();
+    _checkingGone = false;
+    if (w != null || !mounted || _leaving) return;
+    if (context.canPop()) context.pop();
+  }
+
   void _minimize() {
     _closeKeypad();
     if (context.canPop()) {
@@ -189,8 +188,14 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
     final d = _detail;
     if (d == null) return;
     final l = context.l10n;
+    final id = d.workout.id;
     _closeKeypad();
-    if (d.completedSets == 0) {
+    final open = uncheckedSets(d);
+    final unchecked = open.loggable.length + open.empty;
+
+    Future<void> finish({List<SetCompletion> complete = const []}) =>
+        _leave(() => _repo.finish(id, complete: complete), AppRoutes.workoutSummaryFor(id));
+    Future<void> offerDiscard() async {
       final discard = await confirmDialog(
         context,
         title: l.workoutDiscardTitle,
@@ -198,11 +203,26 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
         confirm: l.workoutDiscardConfirm,
         destructive: true,
       );
-      if (discard) await _leave(() => _repo.discard(d.workout.id), AppRoutes.workout);
+      if (discard) await _leave(() => _repo.discard(id), AppRoutes.workout);
+    }
+
+    if (d.completedSets == 0 && open.loggable.isEmpty) return offerDiscard();
+    if (unchecked == 0) {
+      final ok = await confirmDialog(context, title: l.workoutFinishTitle, body: l.workoutFinishAllDoneBody, confirm: l.workoutFinish);
+      if (ok) await finish();
       return;
     }
-    final ok = await confirmDialog(context, title: l.workoutFinishTitle, body: l.workoutFinishBody, confirm: l.workoutFinish);
-    if (ok) await _leave(() => _repo.finish(d.workout.id), AppRoutes.workoutSummaryFor(d.workout.id));
+    final choice = await showFinishUncheckedDialog(context, unchecked: unchecked, empty: open.empty);
+    if (!mounted) return;
+    switch (choice) {
+      case FinishChoice.markAllDone:
+        await finish(complete: open.loggable);
+      case FinishChoice.removeThem:
+        if (d.completedSets == 0) return offerDiscard(); // nothing would be left
+        await finish();
+      case null:
+        return;
+    }
   }
 
   Future<void> _discard(String workoutId) async {
@@ -284,12 +304,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
       await _repo.setCompleted(set.id, false);
       return;
     }
-    var weight = set.weightKg;
-    var reps = set.reps;
-    if (reps <= 0 && previous != null) {
-      reps = previous.reps;
-      if (weight <= 0) weight = previous.weightKg;
-    }
+    final (:weightKg, :reps) = completionValues(set, previous);
     if (reps <= 0) {
       // Nothing to log yet: open the keypad on reps instead.
       unawaited(HapticFeedback.selectionClick());
@@ -298,8 +313,20 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
     }
     if (_editing?.setId == set.id) _closeKeypad();
     unawaited(HapticFeedback.lightImpact());
-    await _repo.setCompleted(set.id, true, weightKg: weight, reps: reps);
-    await ref.read(restTimerProvider.notifier).start(exercise.restSeconds);
+    await _repo.setCompleted(set.id, true, weightKg: weightKg, reps: reps);
+    final rest = ref.read(restTimerProvider.notifier);
+    await rest.start(exercise.restSeconds);
+    await _maybeExplainExactAlarms(rest);
+  }
+
+  /// Android 14+: once ever, on the first rest timer, explain why exact
+  /// alarms matter and offer the system screen. Declining keeps the inexact
+  /// fallback; it is never asked again automatically.
+  Future<void> _maybeExplainExactAlarms(RestTimerController rest) async {
+    if (!await rest.shouldExplainExactAlarms() || !mounted) return;
+    await rest.markExactAlarmsExplained();
+    if (!mounted) return;
+    if (await showExactAlarmSheet(context)) await rest.requestExactAlarms();
   }
 
   @override

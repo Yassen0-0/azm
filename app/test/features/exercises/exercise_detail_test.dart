@@ -88,7 +88,7 @@ void main() {
       tester.getTopLeft(find.text(isolateName('Push B'), skipOffstage: false)).dy,
       lessThan(tester.getTopLeft(find.text(isolateName('Push A'))).dy),
     );
-    expect(find.text('${isolateName('62.5 kg')} × 7', skipOffstage: false), findsOneWidget);
+    expect(find.text('\u2066${isolateName('62.5 kg')} × 7\u2069', skipOffstage: false), findsOneWidget);
     expect(find.text('F', skipOffstage: false), findsOneWidget);
     expect(find.text('W'), findsOneWidget);
   });

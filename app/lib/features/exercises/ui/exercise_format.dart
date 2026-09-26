@@ -19,9 +19,10 @@ abstract final class ExerciseFormat {
   static String weight(AppLocalizations l, double kg, WeightUnit u) =>
       isolateName(l.exercisesWeightValue(number(kg, u), unit(l, u)));
 
-  /// "62.5 kg × 8".
+  /// "62.5 kg × 8", in an LTR isolate so it reads the same in RTL (weight
+  /// first), like the workout's set values.
   static String set(AppLocalizations l, HistorySet s, WeightUnit u) =>
-      l.exercisesSetValue(weight(l, s.weightKg, u), AzmNumbers.integer(s.reps));
+      '\u2066${l.exercisesSetValue(weight(l, s.weightKg, u), AzmNumbers.integer(s.reps))}\u2069';
 
   /// Short set-type label for non-normal sets (normal sets use their number).
   static String? typeLabel(AppLocalizations l, SetType t) => switch (t) {

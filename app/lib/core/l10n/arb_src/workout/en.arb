@@ -56,7 +56,6 @@
   "workoutRestChannelName": "Rest timer",
   "workoutRestChannelDescription": "Alerts you when your rest is over",
   "workoutFinishTitle": "Finish workout?",
-  "workoutFinishBody": "Sets without a ✓ will be removed.",
   "workoutFinishNothing": "No completed sets yet. Discard this workout?",
   "workoutDiscard": "Discard workout",
   "workoutDiscardTitle": "Discard workout?",
@@ -73,5 +72,13 @@
   "workoutComparePyramid": "{count, plural, =1{the weight of a pyramid stone block 🗿} other{the weight of {countText} pyramid stone blocks 🗿}}",
   "workoutCompareElephant": "{count, plural, =1{the weight of an elephant 🐘} other{the weight of {countText} elephants 🐘}}",
   "workoutBarOpen": "Open workout",
-  "workoutDebugSeed": "DEBUG: add sample exercises"
+  "workoutFinishAllDoneBody": "All sets are ticked ✓. Save this workout?",
+  "workoutFinishUncheckedBody": "{count, plural, =1{1 set has no ✓ yet.} other{{countText} sets have no ✓ yet.}}",
+  "workoutFinishEmptyNote": "{count, plural, =1{1 of them is empty and will be removed.} other{{countText} of them are empty and will be removed.}}",
+  "workoutFinishMarkAllDone": "Mark all done",
+  "workoutFinishRemoveThem": "Remove them",
+  "workoutExactAlarmTitle": "Get the rest alert on time",
+  "workoutExactAlarmBody": "With the screen off, Android can delay the “rest is over” alert by a few minutes. Allow “Alarms & reminders” for Azm so it rings exactly when your rest ends. You can change this any time in the phone settings.",
+  "workoutExactAlarmAllow": "Open settings",
+  "workoutExactAlarmLater": "Not now"
 }

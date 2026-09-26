@@ -61,6 +61,16 @@ abstract final class AzmSize {
   static const double thumbnailList = 48;
   static const double thumbnailCard = 72;
 
+  // Exercise detail
+  /// Height of the per-exercise progress chart.
+  static const double chartHeight = 144;
+  /// Max edge of the exercise GIF / fallback square on the detail screen.
+  static const double exerciseMedia = 216;
+  /// Line width of the progress chart.
+  static const double chartStroke = 2;
+  /// Radius of a data point on the progress chart.
+  static const double chartDot = 4;
+
   /// Bottom space a tab page must leave so its last item clears the floating
   /// tab bar. The shell Scaffold uses extendBody, so the body's bottom padding
   /// already contains tab bar + lift + device inset + ActiveWorkoutBarSlot;
