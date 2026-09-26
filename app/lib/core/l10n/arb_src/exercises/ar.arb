@@ -1,3 +1,572 @@
 {
-  "@@locale": "ar"
+  "@@locale": "ar",
+  "exercisesSearchHint": "ابحث بالعربي أو English",
+  "@exercisesSearchHint": {
+    "description": "Hint in the exercise search box (Arabic, slang or English all work)."
+  },
+  "exercisesSearchClear": "مسح البحث",
+  "@exercisesSearchClear": {
+    "description": "Accessibility label of the clear (x) button in the search box."
+  },
+  "exercisesFilterAll": "الكل",
+  "@exercisesFilterAll": {
+    "description": "First muscle chip: no muscle filter."
+  },
+  "exercisesFilterEquipment": "الأداة",
+  "@exercisesFilterEquipment": {
+    "description": "Button that opens the equipment filter sheet (no equipment chosen)."
+  },
+  "exercisesEquipmentSheetTitle": "فلتر بالأداة",
+  "@exercisesEquipmentSheetTitle": {
+    "description": "Title of the equipment filter bottom sheet."
+  },
+  "exercisesEquipmentAll": "كل الأدوات",
+  "@exercisesEquipmentAll": {
+    "description": "Equipment sheet option: no equipment filter."
+  },
+  "exercisesRemoveEquipmentFilter": "شيل فلتر {equipment}",
+  "@exercisesRemoveEquipmentFilter": {
+    "description": "Accessibility label of the active equipment pill; tapping it removes the filter.",
+    "placeholders": {
+      "equipment": {
+        "type": "String"
+      }
+    }
+  },
+  "exercisesResultCount": "{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{count} تمارين} many{{count} تمرين} other{{count} تمرين}}",
+  "@exercisesResultCount": {
+    "description": "Number of exercises in the list under the filters.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exercisesNoResultsTitle": "مفيش تمرين بالاسم ده",
+  "@exercisesNoResultsTitle": {
+    "description": "Empty state title when the search/filters match nothing."
+  },
+  "exercisesNoResultsBody": "جرّب اسم تاني، أو شيل الفلاتر.",
+  "@exercisesNoResultsBody": {
+    "description": "Empty state hint when the search/filters match nothing."
+  },
+  "exercisesClearFilters": "شيل الفلاتر",
+  "@exercisesClearFilters": {
+    "description": "Button in the no-results state: resets search text, muscle and equipment."
+  },
+  "exercisesLibraryEmpty": "مكتبة التمارين مش جاهزة لسه",
+  "@exercisesLibraryEmpty": {
+    "description": "Empty state when the catalog could not be loaded (should not happen)."
+  },
+  "exercisesPrBadge": "رقمك القياسي: {weight}",
+  "@exercisesPrBadge": {
+    "description": "Accessibility label of the 🏆 badge on an exercise row; weight includes the unit.",
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
+  },
+  "exercisesUnitKg": "kg",
+  "@exercisesUnitKg": {
+    "description": "Weight unit kilograms (Latin \"kg\" in both languages, as in the brief)."
+  },
+  "exercisesUnitLb": "lb",
+  "@exercisesUnitLb": {
+    "description": "Weight unit pounds (Latin \"lb\" in both languages)."
+  },
+  "exercisesWeightValue": "{value} {unit}",
+  "@exercisesWeightValue": {
+    "description": "A weight with its unit, e.g. \"60 kg\".",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "exercisesSetValue": "{weight} × {reps}",
+  "@exercisesSetValue": {
+    "description": "One set: weight with unit × reps, e.g. \"60 kg × 8\".",
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      },
+      "reps": {
+        "type": "String"
+      }
+    }
+  },
+  "exercisesPickerTitle": "اختار التمارين",
+  "@exercisesPickerTitle": {
+    "description": "Title of the multi-select exercise picker."
+  },
+  "exercisesPickerCancel": "إلغاء",
+  "@exercisesPickerCancel": {
+    "description": "Accessibility label of the close button of the picker (returns nothing)."
+  },
+  "exercisesPickerAdd": "إضافة",
+  "@exercisesPickerAdd": {
+    "description": "Picker confirm button when nothing is selected (disabled)."
+  },
+  "exercisesPickerAddCount": "إضافة ({count})",
+  "@exercisesPickerAddCount": {
+    "description": "Picker confirm button with the number of selected exercises.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exercisesPickerSelected": "مختار رقم {index}",
+  "@exercisesPickerSelected": {
+    "description": "Accessibility: this exercise is selected at position {index}.",
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "exercisesUnknown": "تمرين غير معروف",
+  "@exercisesUnknown": {
+    "description": "Shown when an exercise id is not in the catalog anymore."
+  },
+  "exercisesDetailTarget": "العضلة الأساسية",
+  "@exercisesDetailTarget": {
+    "description": "Detail: label of the primary muscle."
+  },
+  "exercisesDetailSecondary": "عضلات مساعدة",
+  "@exercisesDetailSecondary": {
+    "description": "Detail: label of the secondary muscles."
+  },
+  "exercisesDetailEquipment": "الأداة",
+  "@exercisesDetailEquipment": {
+    "description": "Detail: label of the equipment."
+  },
+  "exercisesDetailBodyPart": "منطقة الجسم",
+  "@exercisesDetailBodyPart": {
+    "description": "Detail: label of the body part."
+  },
+  "exercisesDetailInstructions": "طريقة الأداء",
+  "@exercisesDetailInstructions": {
+    "description": "Detail: section title of the step-by-step instructions."
+  },
+  "exercisesDetailInstructionsEnglishOnly": "الشرح بالإنجليزي بس لحد دلوقتي.",
+  "@exercisesDetailInstructionsEnglishOnly": {
+    "description": "Detail: note shown in Arabic when an exercise has no Arabic instructions yet."
+  },
+  "exercisesDetailAttribution": "© Gym visual — https://gymvisual.com/",
+  "@exercisesDetailAttribution": {
+    "description": "Media attribution line, required whenever exercise media is shown (docs/LICENSES.md). Keep verbatim."
+  },
+  "exercisesDetailRecords": "أرقامك القياسية",
+  "@exercisesDetailRecords": {
+    "description": "Detail: section title of the PR stats."
+  },
+  "exercisesRecordHeaviest": "أتقل وزن",
+  "@exercisesRecordHeaviest": {
+    "description": "PR type: heaviest weight lifted."
+  },
+  "exercisesRecordBest1Rm": "أقصى 1RM تقديري",
+  "@exercisesRecordBest1Rm": {
+    "description": "PR type: best estimated one-rep max (Epley)."
+  },
+  "exercisesRecordBestVolume": "أحسن حجم لمجموعة",
+  "@exercisesRecordBestVolume": {
+    "description": "PR type: best single-set volume (weight × reps)."
+  },
+  "exercisesDetailProgress": "تطورك",
+  "@exercisesDetailProgress": {
+    "description": "Detail: section title of the progress chart."
+  },
+  "exercisesChartHeaviest": "أتقل وزن",
+  "@exercisesChartHeaviest": {
+    "description": "Chart metric: heaviest weight per workout."
+  },
+  "exercisesChart1Rm": "1RM",
+  "@exercisesChart1Rm": {
+    "description": "Chart metric: best estimated 1RM per workout."
+  },
+  "exercisesChartVolume": "الحجم",
+  "@exercisesChartVolume": {
+    "description": "Chart metric: total volume (weight × reps) per workout."
+  },
+  "exercisesChartEmpty": "الرسم هيظهر بعد تمرينين على الأقل.",
+  "@exercisesChartEmpty": {
+    "description": "Detail: empty state of the progress chart (fewer than 2 workouts)."
+  },
+  "exercisesDetailHistory": "سجلك",
+  "@exercisesDetailHistory": {
+    "description": "Detail: section title of the recent workouts with this exercise."
+  },
+  "exercisesHistoryEmpty": "لسه ملعبتش التمرين ده. سجّل أول مجموعة وتاريخك هيظهر هنا.",
+  "@exercisesHistoryEmpty": {
+    "description": "Detail: empty state when there is no history for the exercise."
+  },
+  "exercisesSetLabelWarmup": "إ",
+  "@exercisesSetLabelWarmup": {
+    "description": "Short label of a warm-up set in the history list."
+  },
+  "exercisesSetLabelDrop": "د",
+  "@exercisesSetLabelDrop": {
+    "description": "Short label of a drop set in the history list."
+  },
+  "exercisesSetLabelFailure": "ف",
+  "@exercisesSetLabelFailure": {
+    "description": "Short label of a failure set in the history list."
+  },
+  "exercisesMuscleAbs": "بطن",
+  "@exercisesMuscleAbs": {
+    "description": "Dataset muscle \"abs\" (localized label)."
+  },
+  "exercisesMusclePectorals": "صدر",
+  "@exercisesMusclePectorals": {
+    "description": "Dataset muscle \"pectorals\" (localized label)."
+  },
+  "exercisesMuscleBiceps": "باي",
+  "@exercisesMuscleBiceps": {
+    "description": "Dataset muscle \"biceps\" (localized label)."
+  },
+  "exercisesMuscleGlutes": "مؤخرة",
+  "@exercisesMuscleGlutes": {
+    "description": "Dataset muscle \"glutes\" (localized label)."
+  },
+  "exercisesMuscleDelts": "كتف",
+  "@exercisesMuscleDelts": {
+    "description": "Dataset muscle \"delts\" (localized label)."
+  },
+  "exercisesMuscleTriceps": "تراي",
+  "@exercisesMuscleTriceps": {
+    "description": "Dataset muscle \"triceps\" (localized label)."
+  },
+  "exercisesMuscleUpperBack": "ظهر علوي",
+  "@exercisesMuscleUpperBack": {
+    "description": "Dataset muscle \"upper back\" (localized label)."
+  },
+  "exercisesMuscleLats": "لاتس",
+  "@exercisesMuscleLats": {
+    "description": "Dataset muscle \"lats\" (localized label)."
+  },
+  "exercisesMuscleCalves": "سمانة",
+  "@exercisesMuscleCalves": {
+    "description": "Dataset muscle \"calves\" (localized label)."
+  },
+  "exercisesMuscleQuads": "فخذ أمامي",
+  "@exercisesMuscleQuads": {
+    "description": "Dataset muscle \"quads\" (localized label)."
+  },
+  "exercisesMuscleForearms": "ساعد",
+  "@exercisesMuscleForearms": {
+    "description": "Dataset muscle \"forearms\" (localized label)."
+  },
+  "exercisesMuscleCardiovascularSystem": "كارديو",
+  "@exercisesMuscleCardiovascularSystem": {
+    "description": "Dataset muscle \"cardiovascular system\" (localized label)."
+  },
+  "exercisesMuscleHamstrings": "فخذ خلفي",
+  "@exercisesMuscleHamstrings": {
+    "description": "Dataset muscle \"hamstrings\" (localized label)."
+  },
+  "exercisesMuscleSpine": "فقرات الظهر",
+  "@exercisesMuscleSpine": {
+    "description": "Dataset muscle \"spine\" (localized label)."
+  },
+  "exercisesMuscleTraps": "ترابيس",
+  "@exercisesMuscleTraps": {
+    "description": "Dataset muscle \"traps\" (localized label)."
+  },
+  "exercisesMuscleAdductors": "فخذ داخلي",
+  "@exercisesMuscleAdductors": {
+    "description": "Dataset muscle \"adductors\" (localized label)."
+  },
+  "exercisesMuscleSerratusAnterior": "المنشارية",
+  "@exercisesMuscleSerratusAnterior": {
+    "description": "Dataset muscle \"serratus anterior\" (localized label)."
+  },
+  "exercisesMuscleAbductors": "فخذ خارجي",
+  "@exercisesMuscleAbductors": {
+    "description": "Dataset muscle \"abductors\" (localized label)."
+  },
+  "exercisesMuscleLevatorScapulae": "رافعة اللوح",
+  "@exercisesMuscleLevatorScapulae": {
+    "description": "Dataset muscle \"levator scapulae\" (localized label)."
+  },
+  "exercisesMuscleAbdominals": "بطن",
+  "@exercisesMuscleAbdominals": {
+    "description": "Dataset muscle \"abdominals\" (localized label)."
+  },
+  "exercisesMuscleAnkleStabilizers": "مثبتات الكاحل",
+  "@exercisesMuscleAnkleStabilizers": {
+    "description": "Dataset muscle \"ankle stabilizers\" (localized label)."
+  },
+  "exercisesMuscleAnkles": "كاحل",
+  "@exercisesMuscleAnkles": {
+    "description": "Dataset muscle \"ankles\" (localized label)."
+  },
+  "exercisesMuscleBack": "ظهر",
+  "@exercisesMuscleBack": {
+    "description": "Dataset muscle \"back\" (localized label)."
+  },
+  "exercisesMuscleBrachialis": "العضدية",
+  "@exercisesMuscleBrachialis": {
+    "description": "Dataset muscle \"brachialis\" (localized label)."
+  },
+  "exercisesMuscleChest": "صدر",
+  "@exercisesMuscleChest": {
+    "description": "Dataset muscle \"chest\" (localized label)."
+  },
+  "exercisesMuscleCore": "عضلات الجذع",
+  "@exercisesMuscleCore": {
+    "description": "Dataset muscle \"core\" (localized label)."
+  },
+  "exercisesMuscleDeltoids": "كتف",
+  "@exercisesMuscleDeltoids": {
+    "description": "Dataset muscle \"deltoids\" (localized label)."
+  },
+  "exercisesMuscleFeet": "قدم",
+  "@exercisesMuscleFeet": {
+    "description": "Dataset muscle \"feet\" (localized label)."
+  },
+  "exercisesMuscleGripMuscles": "قبضة",
+  "@exercisesMuscleGripMuscles": {
+    "description": "Dataset muscle \"grip muscles\" (localized label)."
+  },
+  "exercisesMuscleGroin": "أعلى الفخذ الداخلي",
+  "@exercisesMuscleGroin": {
+    "description": "Dataset muscle \"groin\" (localized label)."
+  },
+  "exercisesMuscleHands": "إيد",
+  "@exercisesMuscleHands": {
+    "description": "Dataset muscle \"hands\" (localized label)."
+  },
+  "exercisesMuscleHipFlexors": "قابضات الورك",
+  "@exercisesMuscleHipFlexors": {
+    "description": "Dataset muscle \"hip flexors\" (localized label)."
+  },
+  "exercisesMuscleInnerThighs": "فخذ داخلي",
+  "@exercisesMuscleInnerThighs": {
+    "description": "Dataset muscle \"inner thighs\" (localized label)."
+  },
+  "exercisesMuscleLatissimusDorsi": "لاتس",
+  "@exercisesMuscleLatissimusDorsi": {
+    "description": "Dataset muscle \"latissimus dorsi\" (localized label)."
+  },
+  "exercisesMuscleLowerAbs": "بطن سفلي",
+  "@exercisesMuscleLowerAbs": {
+    "description": "Dataset muscle \"lower abs\" (localized label)."
+  },
+  "exercisesMuscleLowerBack": "أسفل الظهر",
+  "@exercisesMuscleLowerBack": {
+    "description": "Dataset muscle \"lower back\" (localized label)."
+  },
+  "exercisesMuscleObliques": "جوانب البطن",
+  "@exercisesMuscleObliques": {
+    "description": "Dataset muscle \"obliques\" (localized label)."
+  },
+  "exercisesMuscleQuadriceps": "فخذ أمامي",
+  "@exercisesMuscleQuadriceps": {
+    "description": "Dataset muscle \"quadriceps\" (localized label)."
+  },
+  "exercisesMuscleRearDeltoids": "كتف خلفي",
+  "@exercisesMuscleRearDeltoids": {
+    "description": "Dataset muscle \"rear deltoids\" (localized label)."
+  },
+  "exercisesMuscleRhomboids": "المعينية",
+  "@exercisesMuscleRhomboids": {
+    "description": "Dataset muscle \"rhomboids\" (localized label)."
+  },
+  "exercisesMuscleRotatorCuff": "الكفة المدورة",
+  "@exercisesMuscleRotatorCuff": {
+    "description": "Dataset muscle \"rotator cuff\" (localized label)."
+  },
+  "exercisesMuscleShins": "قصبة الرجل",
+  "@exercisesMuscleShins": {
+    "description": "Dataset muscle \"shins\" (localized label)."
+  },
+  "exercisesMuscleShoulders": "كتف",
+  "@exercisesMuscleShoulders": {
+    "description": "Dataset muscle \"shoulders\" (localized label)."
+  },
+  "exercisesMuscleSoleus": "السمانة العميقة",
+  "@exercisesMuscleSoleus": {
+    "description": "Dataset muscle \"soleus\" (localized label)."
+  },
+  "exercisesMuscleSternocleidomastoid": "عضلة الرقبة",
+  "@exercisesMuscleSternocleidomastoid": {
+    "description": "Dataset muscle \"sternocleidomastoid\" (localized label)."
+  },
+  "exercisesMuscleTrapezius": "ترابيس",
+  "@exercisesMuscleTrapezius": {
+    "description": "Dataset muscle \"trapezius\" (localized label)."
+  },
+  "exercisesMuscleUpperChest": "صدر علوي",
+  "@exercisesMuscleUpperChest": {
+    "description": "Dataset muscle \"upper chest\" (localized label)."
+  },
+  "exercisesMuscleWristExtensors": "باسطات الرسغ",
+  "@exercisesMuscleWristExtensors": {
+    "description": "Dataset muscle \"wrist extensors\" (localized label)."
+  },
+  "exercisesMuscleWristFlexors": "قابضات الرسغ",
+  "@exercisesMuscleWristFlexors": {
+    "description": "Dataset muscle \"wrist flexors\" (localized label)."
+  },
+  "exercisesMuscleWrists": "رسغ",
+  "@exercisesMuscleWrists": {
+    "description": "Dataset muscle \"wrists\" (localized label)."
+  },
+  "exercisesEquipmentBodyWeight": "وزن الجسم",
+  "@exercisesEquipmentBodyWeight": {
+    "description": "Dataset equipment \"body weight\" (localized label)."
+  },
+  "exercisesEquipmentDumbbell": "دمبل",
+  "@exercisesEquipmentDumbbell": {
+    "description": "Dataset equipment \"dumbbell\" (localized label)."
+  },
+  "exercisesEquipmentCable": "كابل",
+  "@exercisesEquipmentCable": {
+    "description": "Dataset equipment \"cable\" (localized label)."
+  },
+  "exercisesEquipmentBarbell": "بار",
+  "@exercisesEquipmentBarbell": {
+    "description": "Dataset equipment \"barbell\" (localized label)."
+  },
+  "exercisesEquipmentLeverageMachine": "جهاز",
+  "@exercisesEquipmentLeverageMachine": {
+    "description": "Dataset equipment \"leverage machine\" (localized label)."
+  },
+  "exercisesEquipmentBand": "أستك",
+  "@exercisesEquipmentBand": {
+    "description": "Dataset equipment \"band\" (localized label)."
+  },
+  "exercisesEquipmentSmithMachine": "سميث",
+  "@exercisesEquipmentSmithMachine": {
+    "description": "Dataset equipment \"smith machine\" (localized label)."
+  },
+  "exercisesEquipmentKettlebell": "كيتل بل",
+  "@exercisesEquipmentKettlebell": {
+    "description": "Dataset equipment \"kettlebell\" (localized label)."
+  },
+  "exercisesEquipmentWeighted": "بوزن إضافي",
+  "@exercisesEquipmentWeighted": {
+    "description": "Dataset equipment \"weighted\" (localized label)."
+  },
+  "exercisesEquipmentStabilityBall": "كورة توازن",
+  "@exercisesEquipmentStabilityBall": {
+    "description": "Dataset equipment \"stability ball\" (localized label)."
+  },
+  "exercisesEquipmentEzBarbell": "بار زجزاج",
+  "@exercisesEquipmentEzBarbell": {
+    "description": "Dataset equipment \"ez barbell\" (localized label)."
+  },
+  "exercisesEquipmentSledMachine": "جهاز سليد",
+  "@exercisesEquipmentSledMachine": {
+    "description": "Dataset equipment \"sled machine\" (localized label)."
+  },
+  "exercisesEquipmentAssisted": "بمساعدة",
+  "@exercisesEquipmentAssisted": {
+    "description": "Dataset equipment \"assisted\" (localized label)."
+  },
+  "exercisesEquipmentMedicineBall": "كورة طبية",
+  "@exercisesEquipmentMedicineBall": {
+    "description": "Dataset equipment \"medicine ball\" (localized label)."
+  },
+  "exercisesEquipmentRope": "حبل",
+  "@exercisesEquipmentRope": {
+    "description": "Dataset equipment \"rope\" (localized label)."
+  },
+  "exercisesEquipmentRoller": "رولر",
+  "@exercisesEquipmentRoller": {
+    "description": "Dataset equipment \"roller\" (localized label)."
+  },
+  "exercisesEquipmentResistanceBand": "أستك مقاومة",
+  "@exercisesEquipmentResistanceBand": {
+    "description": "Dataset equipment \"resistance band\" (localized label)."
+  },
+  "exercisesEquipmentBosuBall": "بوسو بول",
+  "@exercisesEquipmentBosuBall": {
+    "description": "Dataset equipment \"bosu ball\" (localized label)."
+  },
+  "exercisesEquipmentWheelRoller": "عجلة بطن",
+  "@exercisesEquipmentWheelRoller": {
+    "description": "Dataset equipment \"wheel roller\" (localized label)."
+  },
+  "exercisesEquipmentOlympicBarbell": "بار أوليمبي",
+  "@exercisesEquipmentOlympicBarbell": {
+    "description": "Dataset equipment \"olympic barbell\" (localized label)."
+  },
+  "exercisesEquipmentUpperBodyErgometer": "عجلة إيد",
+  "@exercisesEquipmentUpperBodyErgometer": {
+    "description": "Dataset equipment \"upper body ergometer\" (localized label)."
+  },
+  "exercisesEquipmentTrapBar": "تراب بار",
+  "@exercisesEquipmentTrapBar": {
+    "description": "Dataset equipment \"trap bar\" (localized label)."
+  },
+  "exercisesEquipmentTire": "كاوتش",
+  "@exercisesEquipmentTire": {
+    "description": "Dataset equipment \"tire\" (localized label)."
+  },
+  "exercisesEquipmentStepmillMachine": "جهاز سلالم",
+  "@exercisesEquipmentStepmillMachine": {
+    "description": "Dataset equipment \"stepmill machine\" (localized label)."
+  },
+  "exercisesEquipmentStationaryBike": "عجلة ثابتة",
+  "@exercisesEquipmentStationaryBike": {
+    "description": "Dataset equipment \"stationary bike\" (localized label)."
+  },
+  "exercisesEquipmentSkiergMachine": "جهاز سكي",
+  "@exercisesEquipmentSkiergMachine": {
+    "description": "Dataset equipment \"skierg machine\" (localized label)."
+  },
+  "exercisesEquipmentHammer": "مطرقة",
+  "@exercisesEquipmentHammer": {
+    "description": "Dataset equipment \"hammer\" (localized label)."
+  },
+  "exercisesEquipmentEllipticalMachine": "أوربتراك",
+  "@exercisesEquipmentEllipticalMachine": {
+    "description": "Dataset equipment \"elliptical machine\" (localized label)."
+  },
+  "exercisesBodyPartUpperArms": "دراع",
+  "@exercisesBodyPartUpperArms": {
+    "description": "Dataset body part \"upper arms\" (localized label)."
+  },
+  "exercisesBodyPartUpperLegs": "فخذ",
+  "@exercisesBodyPartUpperLegs": {
+    "description": "Dataset body part \"upper legs\" (localized label)."
+  },
+  "exercisesBodyPartBack": "ظهر",
+  "@exercisesBodyPartBack": {
+    "description": "Dataset body part \"back\" (localized label)."
+  },
+  "exercisesBodyPartWaist": "بطن ووسط",
+  "@exercisesBodyPartWaist": {
+    "description": "Dataset body part \"waist\" (localized label)."
+  },
+  "exercisesBodyPartChest": "صدر",
+  "@exercisesBodyPartChest": {
+    "description": "Dataset body part \"chest\" (localized label)."
+  },
+  "exercisesBodyPartShoulders": "أكتاف",
+  "@exercisesBodyPartShoulders": {
+    "description": "Dataset body part \"shoulders\" (localized label)."
+  },
+  "exercisesBodyPartLowerLegs": "سمانة",
+  "@exercisesBodyPartLowerLegs": {
+    "description": "Dataset body part \"lower legs\" (localized label)."
+  },
+  "exercisesBodyPartLowerArms": "ساعد",
+  "@exercisesBodyPartLowerArms": {
+    "description": "Dataset body part \"lower arms\" (localized label)."
+  },
+  "exercisesBodyPartCardio": "كارديو",
+  "@exercisesBodyPartCardio": {
+    "description": "Dataset body part \"cardio\" (localized label)."
+  },
+  "exercisesBodyPartNeck": "رقبة",
+  "@exercisesBodyPartNeck": {
+    "description": "Dataset body part \"neck\" (localized label)."
+  }
 }
