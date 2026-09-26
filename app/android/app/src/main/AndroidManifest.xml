@@ -1,6 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Exercise media (thumbnails/GIFs) from the CDN. -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Rest-timer notification (flutter_local_notifications; the plugin itself
+         adds POST_NOTIFICATIONS + VIBRATE). BOOT_COMPLETED re-schedules a pending
+         rest alarm after a reboot. Exact alarms: SCHEDULE_EXACT_ALARM is used when
+         the user/OS grants it (denied by default on Android 14+), otherwise the
+         app falls back to an inexact alarm + an in-app notification while it runs
+         (docs/DECISIONS_LOG.md). USE_EXACT_ALARM is NOT used (reserved for alarm
+         clock / calendar apps by Play policy). -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <application
         android:label="@string/app_name"
         android:name="${applicationName}"
@@ -27,6 +36,16 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- flutter_local_notifications: scheduled notifications + reboot. -->
+        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
