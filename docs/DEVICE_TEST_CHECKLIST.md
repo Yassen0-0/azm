@@ -23,4 +23,11 @@ Format: `- [ ] <what to check> — <how> (added by <feature>, <date>)`
 
 ## Both platforms — to be filled by feature agents
 - _workout: haptics on ✓ (light impact), rest-timer end sound + vibration, notification delivered with the app in background / killed / phone locked, exact-alarm behavior on Android 14+, notification permission prompts…_
-- _exercises: GIF playback smoothness and memory on the detail screen, image cache after going offline…_
+- _exercises: see below._
+
+### Exercises (added by exercises, 2026-09-26)
+- [ ] Search feels instant while typing in a **release** build on a mid-range phone (Android and iPhone): every keystroke < 50 ms, first open of the Exercises tab (one-time catalog load) < 300 ms. Emulator debug numbers are in DECISIONS_LOG. (exercises, 2026-09-26)
+- [ ] Arabic keyboard input in the search box (Gboard Arabic, iOS Arabic keyboard): letters with hamza/tashkeel, and switching AR↔EN mid-query, still find results. (exercises, 2026-09-26)
+- [ ] With licensed media: thumbnails in the library scroll smoothly (1,324 rows); the detail GIF plays smoothly, memory stays stable when opening 20+ details in a row, and the attribution line shows. Offline after a first view: cached media still shows; uncached → fallback icon. (exercises, 2026-09-26)
+- [ ] The equipment sheet: swipe-down dismiss and the home indicator/gesture bar don't conflict (iPhone with Face ID, Android gesture navigation). (exercises, 2026-09-26)
+- [ ] VoiceOver / TalkBack read the picker rows as "selected, number N", and the 🏆 badge as "your record: …". (exercises, 2026-09-26)

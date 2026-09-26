@@ -91,7 +91,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [ ] Ready programs list (`CatalogRepository.programs()`) → "Add to my routines" copies them as editable routines, names in the app language; `target_reps` = range max (DATA.md).
   - [ ] Onboarding hook: the program chosen in onboarding is copied on finish.
 
-## 3. EXERCISES window — library, picker, detail  (branch `feature/exercises`, device set **A**)
+## 3. EXERCISES window — library, picker, detail  (branch `feature/exercises`, device set **A**) — DONE 2026-09-26 (awaiting merge)
 
 - **Goal:** find any exercise fast in Arabic, Egyptian slang or English; pick several for a workout/routine; see an exercise's details and your own history with it.
 - **Owns (only these):**
@@ -102,13 +102,13 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **Uses, read-only:** `CatalogRepository` (`search(query, target:, equipment:)`, `exercise`, `exercisesByIds`), `ExerciseThumbnail` / `ExerciseAnimation`, `mediaResolverProvider`, `context.namesOf(e)`, workout tables for "your history" (queries in `features/exercises/data/`), `epley1Rm`/`PrBests.fromSets`, `Units`, tokens.
 - **Contract with WORKOUT (you provide):** `ExercisePickerScreen` = multi-select, search + filters like the library, selection order visible (1, 2, 3…), confirm → `context.pop(<String>[ids in selection order])`, back/cancel → `context.pop()` (null). Keep this exact contract. Routines will use it too.
 - **Acceptance:**
-  - [ ] Library: search box (normalized AR/slang/EN via `CatalogRepository.search`), MuscleChips (target), equipment filter bottom sheet, list of ExerciseCards (thumbnail with fallback icon, primary + secondary name, PR badge if any). Empty and no-results states.
-  - [ ] Two names per row via `context.namesOf`; English-only exercises show just the English name.
-  - [ ] Picker (contract above).
-  - [ ] Detail: GIF via `ExerciseAnimation` (only here) + attribution line "© Gym visual — https://gymvisual.com/" when media is shown; instructions (AR if present, else EN); target + secondary muscles + equipment (localized); your history (recent sets), chart (best set / e1RM / volume over time), PRs. Empty states when there's no history.
-  - [ ] Search < 50 ms for any query over 1,324 rows (measure on the emulator; add a real-device check to the checklist).
-  - [ ] Tests: search UI (Arabic, slang, English, filters), picker returns ordered ids, names logic in cards, detail with and without history.
-  - [ ] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh exercises`, covering library (default, a search in Arabic, filtered), equipment sheet, picker with 3 selected, detail with no media (fallback) and with seeded history, in ar + en on both platforms. (With the dev media server + `AZM_MEDIA_ALLOW_ALL`, media may appear in LOCAL screenshots only. **Never commit screenshots that show Gym visual media**, see LICENSES.md; commit the fallback versions.)
+  - [x] Library: search box (normalized AR/slang/EN via `CatalogRepository.search`), MuscleChips (target), equipment filter bottom sheet, list of ExerciseCards (thumbnail with fallback icon, primary + secondary name, PR badge if any). Empty and no-results states.
+  - [x] Two names per row via `context.namesOf`; English-only exercises show just the English name.
+  - [x] Picker (contract above).
+  - [x] Detail: GIF via `ExerciseAnimation` (only here) + attribution line "© Gym visual — https://gymvisual.com/" when media is shown; instructions (AR if present, else EN); target + secondary muscles + equipment (localized); your history (recent sets), chart (best set / e1RM / volume over time), PRs. Empty states when there's no history.
+  - [x] Search < 50 ms for any query over 1,324 rows (measure on the emulator; add a real-device check to the checklist). Result: in-memory index, worst query 17.5 ms on the debug emulator (see DECISIONS_LOG); real-device check in the checklist.
+  - [x] Tests: search UI (Arabic, slang, English, filters), picker returns ordered ids, names logic in cards, detail with and without history.
+  - [x] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh exercises`, covering library (default, a search in Arabic, filtered), equipment sheet, picker with 3 selected, detail with no media (fallback) and with seeded history, in ar + en on both platforms. (With the dev media server + `AZM_MEDIA_ALLOW_ALL`, media may appear in LOCAL screenshots only. **Never commit screenshots that show Gym visual media**, see LICENSES.md; commit the fallback versions.)
 
 ## 4. `app/lib/features/history/**` — History, stats, PRs
 
@@ -171,3 +171,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 ## Requests
 
 _(Cross-folder requests go here: "@owner-of-X: need Y". Remove when handled.)_
+
+- **@owner (theme):** tokens for the exercise detail/chart: `AzmSize.chartHeight` (144), `AzmSize.exerciseMedia` (216), chart stroke (2) and dot radius (4). Exercises currently derives them from existing tokens (`thumbnailCard × 2/3`, `opticalInset`, `xxs`); swap them in when they exist. (exercises, 2026-09-26)
+- **@settings:** expose a shared `weightUnitProvider` (reads/writes the `unit` setting) in `features/settings/data/`. Exercises reads the key directly via `exercisesWeightUnitProvider` for now; switch it over when yours exists. (exercises, 2026-09-26)
+- **@history:** per-exercise history for the detail screen and the library 🏆 badges goes through `ExerciseHistorySource` (`features/exercises/data/exercise_history.dart`). Override `exerciseHistorySourceProvider` if you need other rules (e.g. edited workouts). A "see all history" route from the detail screen would need a new route. (exercises, 2026-09-26)
