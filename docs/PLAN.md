@@ -54,7 +54,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 
 ---
 
-## 1. WORKOUT window — logging, rest timer, summary  (branch `feature/workout`, device set **B**)
+## 1. WORKOUT window — logging, rest timer, summary  (branch `feature/workout`, device set **B**) — [x] done 2026-09-26 (window B), not merged yet
 
 - **Goal:** the core loop: start (empty or from a routine), log sets, rest, finish, see the summary. North star: app open → first set logged in ≤ 3 taps.
 - **Owns (only these):**
@@ -66,21 +66,25 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **Uses, read-only:** `AppDatabase` tables `workouts`/`workout_exercises`/`workout_sets`/`settings` (write your queries in `features/workout/data/`), `core/utils` (`liftedKg`, `detectPrs`, `PrBests`, `liftedComparison`, `Units`, `SetType`), `context.namesOf(e)`, `ExerciseThumbnail`, `AzmMotion`/tokens.
 - **Contract with EXERCISES:** add exercises with `final ids = await context.push<List<String>>(AppRoutes.exercisePicker);`. You get catalog ids in selection order, or null if cancelled. Until the exercises window ships the picker, the placeholder returns null. Handle that, and seed exercises directly in the DB for tests/screenshots.
 - **Acceptance:**
-  - [ ] Workout tab home: big "Start workout" (empty workout) → active workout in 1 tap. Routines/programs lists come later (routines task).
-  - [ ] Active workout: exercises with SetRows (type · previous · weight · reps · ✓), add exercise (picker contract above), add/remove sets, reorder exercises.
-  - [ ] Set type menu on label tap; labels `إ/W`, `د/D`, `ف/F`, numbers for normal sets; warm-up in amber; failure never red.
-  - [ ] "Previous" = same set index from the last finished workout with that exercise; tap fills weight + reps.
-  - [ ] ✓ → `setDoneTint`, light haptic, rest timer auto-starts (per-exercise override → default 90 s).
-  - [ ] Swipe to delete (toward the end edge, mirrored in RTL).
-  - [ ] WeightKeypad (digits, decimal, ±2.5 in the display unit via `Units.stepKg`, backspace, next/done); never the system keyboard.
-  - [ ] Header: duration | Lifted | sets; Lifted animates (`AzmMotion.value`, 600 ms; reduced motion respected).
-  - [ ] Every edit persisted immediately; kill the app mid-workout → reopen resumes exactly (at most one `active` workout; the DB enforces it).
-  - [ ] Minimize → `ActiveWorkoutBarSlot` shows the ActiveWorkoutBar (name, elapsed, mini rest timer) on every tab; tap restores.
-  - [ ] RestTimerBar from an end timestamp + scheduled local notification; −15/+15/skip; haptic + sound at end; survives background/kill (`active_rest_ends_at`, `active_rest_notification_id` settings keys).
-  - [ ] Notification setup for `flutter_local_notifications` 22 (per its README): Android receivers, `POST_NOTIFICATIONS` (13+), exact vs inexact alarms (decide + log), iOS permission request, localized text. Desugaring is already on.
-  - [ ] Finish → summary (`workoutSummaryFor(id)`): duration, Lifted + comparison (SPEC rule), PRs with celebration (🏆, `celebrate` spring), best set per exercise. Discard with confirmation.
-  - [ ] Tests: SetRow states, keypad, timer remaining-time math, persistence/resume, previous-set lookup.
-  - [ ] Parity: `AZM_DEVICE_SET=B tools/screenshots.sh workout`, covering home, active workout (with seeded sets: normal/warm-up/drop/failure, some ✓, a PR), keypad open, rest timer running, minimized bar on another tab, summary, in ar + en on both platforms. Checklist items: haptics, timer sound/vibration, notification delivery (background, killed, locked), exact alarms on Android 14+.
+  - [x] Workout tab home: big "Start workout" (empty workout) → active workout in 1 tap. Routines/programs lists come later (routines task).
+  - [x] Active workout: exercises with SetRows (type · previous · weight · reps · ✓), add exercise (picker contract above), add/remove sets, reorder exercises.
+  - [x] Set type menu on label tap; labels `إ/W`, `د/D`, `ف/F`, numbers for normal sets; warm-up in amber; failure never red.
+  - [x] "Previous" = same set index from the last finished workout with that exercise; tap fills weight + reps.
+  - [x] ✓ → `setDoneTint`, light haptic, rest timer auto-starts (per-exercise override → default 90 s).
+  - [x] Swipe to delete (toward the end edge, mirrored in RTL).
+  - [x] WeightKeypad (digits, decimal, ±2.5 in the display unit via `Units.stepKg`, backspace, next/done); never the system keyboard.
+  - [x] Header: duration | Lifted | sets; Lifted animates (`AzmMotion.value`, 600 ms; reduced motion respected).
+  - [x] Every edit persisted immediately; kill the app mid-workout → reopen resumes exactly (at most one `active` workout; the DB enforces it).
+  - [x] Minimize → `ActiveWorkoutBarSlot` shows the ActiveWorkoutBar (name, elapsed, mini rest timer) on every tab; tap restores.
+  - [x] RestTimerBar from an end timestamp + scheduled local notification; −15/+15/skip; haptic + sound at end; survives background/kill (`active_rest_ends_at`, `active_rest_notification_id` settings keys).
+  - [x] Notification setup for `flutter_local_notifications` 22 (per its README): Android receivers, `POST_NOTIFICATIONS` (13+), exact vs inexact alarms (decide + log), iOS permission request, localized text. Desugaring is already on.
+  - [x] Finish → summary (`workoutSummaryFor(id)`): duration, Lifted + comparison (SPEC rule), PRs with celebration (🏆, `celebrate` spring), best set per exercise. Discard with confirmation.
+  - [x] Tests: SetRow states, keypad, timer remaining-time math, persistence/resume, previous-set lookup.
+  - [x] Parity: `AZM_DEVICE_SET=B tools/screenshots.sh workout`, covering home, active workout (with seeded sets: normal/warm-up/drop/failure, some ✓, a PR), keypad open, rest timer running, minimized bar on another tab, summary, in ar + en on both platforms. Checklist items: haptics, timer sound/vibration, notification delivery (background, killed, locked), exact alarms on Android 14+.
+- **Merge notes (window B, 2026-09-26):**
+  - **Remove at merge (DEBUG ONLY):** `app/lib/features/workout/debug/debug_seed.dart`, the `kDebugMode` "DEBUG: add sample exercises" button in `features/workout/ui/active_workout_screen.dart` (+ its `debug_seed.dart` import), and the ARB key `workoutDebugSeed` in `arb_src/workout/{ar,en}.arb` (then `tools/gen_l10n.sh`). Once the real picker is merged, check `Add exercise` → picker → exercises appear in selection order.
+  - `ActiveWorkoutBarSlot` is now a `ConsumerStatefulWidget` (same name + const constructor).
+  - After merging, re-run `tools/gen_l10n.sh` (generated ARB/gen files will conflict) and the full definition of done on `main`.
 
 ## 2. `app/lib/features/routines/**` — Routines & ready programs
 
@@ -175,3 +179,8 @@ _(Cross-folder requests go here: "@owner-of-X: need Y". Remove when handled.)_
 - **@owner (theme):** tokens for the exercise detail/chart: `AzmSize.chartHeight` (144), `AzmSize.exerciseMedia` (216), chart stroke (2) and dot radius (4). Exercises currently derives them from existing tokens (`thumbnailCard × 2/3`, `opticalInset`, `xxs`); swap them in when they exist. (exercises, 2026-09-26)
 - **@settings:** expose a shared `weightUnitProvider` (reads/writes the `unit` setting) in `features/settings/data/`. Exercises reads the key directly via `exercisesWeightUnitProvider` for now; switch it over when yours exists. (exercises, 2026-09-26)
 - **@history:** per-exercise history for the detail screen and the library 🏆 badges goes through `ExerciseHistorySource` (`features/exercises/data/exercise_history.dart`). Override `exerciseHistorySourceProvider` if you need other rules (e.g. edited workouts). A "see all history" route from the detail screen would need a new route. (exercises, 2026-09-26)
+
+- @owner (window B, 2026-09-26): make `timezone` a **direct** dependency in `app/pubspec.yaml` (same version as resolved, `^0.11.0`); `features/workout/data/rest_notifications.dart` imports it for `TZDateTime` with a lint suppression until then.
+- @owner / data docs (window B, 2026-09-26): add the settings keys `active_rest_total_seconds` (int, rest length incl. ±15, for the progress bar) and `workout_notifications_asked` (bool) to DATA.md → Settings keys.
+- @settings (window B, 2026-09-26): the workout reads `unit` (`"kg"`/`"lb"`) and `default_rest_seconds` (int) from settings on every detail load; writing them from the settings screen is enough, no API needed.
+- @brand (window B, 2026-09-26): the Android notification icon `res/drawable/ic_stat_azm.xml` is a placeholder dumbbell; replace with the final monochrome mark.

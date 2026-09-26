@@ -1,3 +1,349 @@
 {
-  "@@locale": "ar"
+  "@@locale": "ar",
+  "workoutStart": "ابدأ تمرين",
+  "@workoutStart": {
+    "description": "Big primary button on the Workout tab: starts an empty workout."
+  },
+  "workoutStartHint": "تمرين فاضي، وضيف التمارين وانت شغال",
+  "@workoutStartHint": {
+    "description": "Subtitle under the start button."
+  },
+  "workoutResume": "كمّل التمرين",
+  "@workoutResume": {
+    "description": "Button on the Workout tab when a workout is already running."
+  },
+  "workoutInProgress": "تمرين شغال",
+  "@workoutInProgress": {
+    "description": "Label above the running workout card on the Workout tab."
+  },
+  "workoutNameMorning": "تمرين الصبح",
+  "@workoutNameMorning": {
+    "description": "Default name of a workout started 05:00-11:59."
+  },
+  "workoutNameAfternoon": "تمرين الضهر",
+  "@workoutNameAfternoon": {
+    "description": "Default name of a workout started 12:00-16:59."
+  },
+  "workoutNameEvening": "تمرين بالليل",
+  "@workoutNameEvening": {
+    "description": "Default name of a workout started 17:00-21:59."
+  },
+  "workoutNameNight": "تمرين آخر الليل",
+  "@workoutNameNight": {
+    "description": "Default name of a workout started 22:00-04:59."
+  },
+  "workoutMinimize": "صغّر التمرين",
+  "@workoutMinimize": {
+    "description": "Semantics label of the chevron that minimizes the active workout into the bar."
+  },
+  "workoutFinish": "إنهاء",
+  "@workoutFinish": {
+    "description": "Header button that finishes the active workout."
+  },
+  "workoutStatDuration": "المدة",
+  "@workoutStatDuration": {
+    "description": "Header stat label: elapsed workout time."
+  },
+  "workoutStatLifted": "شِلت",
+  "@workoutStatLifted": {
+    "description": "Header/summary stat label: total weight x reps of completed sets (Egyptian: shilt = you lifted)."
+  },
+  "workoutStatSets": "السِتات",
+  "@workoutStatSets": {
+    "description": "Header stat label: number of completed sets."
+  },
+  "workoutStatPrs": "أرقام قياسية",
+  "@workoutStatPrs": {
+    "description": "Summary stat label: number of personal records."
+  },
+  "workoutColSet": "سِت",
+  "@workoutColSet": {
+    "description": "Set-table column header: set number / type."
+  },
+  "workoutColPrevious": "السابق",
+  "@workoutColPrevious": {
+    "description": "Set-table column header: same set in the last workout."
+  },
+  "workoutColReps": "عدّات",
+  "@workoutColReps": {
+    "description": "Set-table column header: repetitions."
+  },
+  "workoutUnitKg": "kg",
+  "@workoutUnitKg": {
+    "description": "Weight unit label for kilograms (kept Latin in Arabic, as said in gyms)."
+  },
+  "workoutUnitLb": "lb",
+  "@workoutUnitLb": {
+    "description": "Weight unit label for pounds."
+  },
+  "workoutNoData": "—",
+  "@workoutNoData": {
+    "description": "Shown where there is no data yet (never 0)."
+  },
+  "workoutSetValue": "{weight} × {reps}",
+  "@workoutSetValue": {
+    "description": "A set as weight x reps, e.g. 60 × 8.",
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      },
+      "reps": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutWeightUnit": "{value} {unit}",
+  "@workoutWeightUnit": {
+    "description": "A weight with its unit, e.g. 62.5 kg.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutSetTypeWarmupShort": "إ",
+  "@workoutSetTypeWarmupShort": {
+    "description": "One-letter label of a warm-up set."
+  },
+  "workoutSetTypeDropShort": "د",
+  "@workoutSetTypeDropShort": {
+    "description": "One-letter label of a drop set."
+  },
+  "workoutSetTypeFailureShort": "ف",
+  "@workoutSetTypeFailureShort": {
+    "description": "One-letter label of a set to failure."
+  },
+  "workoutSetTypeTitle": "نوع السِت",
+  "@workoutSetTypeTitle": {
+    "description": "Title of the set-type menu (tap the set label)."
+  },
+  "workoutSetTypeNormal": "عادي",
+  "@workoutSetTypeNormal": {
+    "description": "Set type: normal working set."
+  },
+  "workoutSetTypeWarmup": "إحماء",
+  "@workoutSetTypeWarmup": {
+    "description": "Set type: warm-up."
+  },
+  "workoutSetTypeDrop": "دروب سِت",
+  "@workoutSetTypeDrop": {
+    "description": "Set type: drop set."
+  },
+  "workoutSetTypeFailure": "للفشل",
+  "@workoutSetTypeFailure": {
+    "description": "Set type: to failure (intentional, never shown as an error)."
+  },
+  "workoutAddSet": "ضيف سِت",
+  "@workoutAddSet": {
+    "description": "Button under an exercise's sets."
+  },
+  "workoutAddExercise": "ضيف تمرين",
+  "@workoutAddExercise": {
+    "description": "Button that opens the exercise picker."
+  },
+  "workoutEmpty": "ضيف أول تمرين عشان تبدأ تسجّل",
+  "@workoutEmpty": {
+    "description": "Empty state of the active workout."
+  },
+  "workoutExerciseOptions": "خيارات التمرين",
+  "@workoutExerciseOptions": {
+    "description": "Semantics label of the exercise menu button."
+  },
+  "workoutReorder": "رتّب التمارين",
+  "@workoutReorder": {
+    "description": "Menu item + sheet title: reorder exercises in the workout."
+  },
+  "workoutRemoveExercise": "شيل التمرين",
+  "@workoutRemoveExercise": {
+    "description": "Menu item: remove an exercise and its sets from the workout."
+  },
+  "workoutDone": "تم",
+  "@workoutDone": {
+    "description": "Generic done/close button."
+  },
+  "workoutCancel": "إلغاء",
+  "@workoutCancel": {
+    "description": "Cancel button in dialogs."
+  },
+  "workoutDeleteSet": "امسح السِت",
+  "@workoutDeleteSet": {
+    "description": "Semantics label of the swipe-to-delete action on a set."
+  },
+  "workoutCompleteSet": "علّم السِت خلصان",
+  "@workoutCompleteSet": {
+    "description": "Semantics label of the check button on a set row."
+  },
+  "workoutUnknownExercise": "تمرين مش معروف ({id})",
+  "@workoutUnknownExercise": {
+    "description": "Exercise no longer in the catalog.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutKeypadWeight": "الوزن ({unit})",
+  "@workoutKeypadWeight": {
+    "description": "Keypad preview label when editing a weight.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutKeypadNext": "التالي",
+  "@workoutKeypadNext": {
+    "description": "Keypad key: move to the next field."
+  },
+  "workoutKeypadBackspace": "امسح رقم",
+  "@workoutKeypadBackspace": {
+    "description": "Semantics label of the keypad backspace key."
+  },
+  "workoutKeypadHide": "اقفل الكيبورد",
+  "@workoutKeypadHide": {
+    "description": "Semantics label of the keypad close key."
+  },
+  "workoutKeypadDecrease": "نقّص",
+  "@workoutKeypadDecrease": {
+    "description": "Semantics label of the keypad minus step key."
+  },
+  "workoutKeypadIncrease": "زوّد",
+  "@workoutKeypadIncrease": {
+    "description": "Semantics label of the keypad plus step key."
+  },
+  "workoutRest": "راحة",
+  "@workoutRest": {
+    "description": "Rest timer bar label."
+  },
+  "workoutRestSkip": "تخطّي",
+  "@workoutRestSkip": {
+    "description": "Rest timer button: end the rest now."
+  },
+  "workoutRestLess": "نقّص 15 ثانية",
+  "@workoutRestLess": {
+    "description": "Semantics label of the rest timer -15 button."
+  },
+  "workoutRestMore": "زوّد 15 ثانية",
+  "@workoutRestMore": {
+    "description": "Semantics label of the rest timer +15 button."
+  },
+  "workoutRestNotificationTitle": "الراحة خلصت 💪",
+  "@workoutRestNotificationTitle": {
+    "description": "Local notification title when the rest timer ends."
+  },
+  "workoutRestNotificationBody": "يلا على السِت اللي بعده",
+  "@workoutRestNotificationBody": {
+    "description": "Local notification body when the rest timer ends."
+  },
+  "workoutRestChannelName": "مؤقت الراحة",
+  "@workoutRestChannelName": {
+    "description": "Android notification channel name."
+  },
+  "workoutRestChannelDescription": "تنبيه لما وقت الراحة يخلص",
+  "@workoutRestChannelDescription": {
+    "description": "Android notification channel description."
+  },
+  "workoutFinishTitle": "تنهي التمرين؟",
+  "@workoutFinishTitle": {
+    "description": "Finish confirmation dialog title."
+  },
+  "workoutFinishBody": "السِتات اللي مش متعلّم عليها ✓ هتتشال.",
+  "@workoutFinishBody": {
+    "description": "Finish confirmation dialog body."
+  },
+  "workoutFinishNothing": "مفيش ولا سِت متعلّم عليها ✓ لسه. تحب تلغي التمرين؟",
+  "@workoutFinishNothing": {
+    "description": "Dialog when finishing a workout with no completed sets."
+  },
+  "workoutDiscard": "إلغاء التمرين",
+  "@workoutDiscard": {
+    "description": "Button + dialog action that deletes the active workout."
+  },
+  "workoutDiscardTitle": "تلغي التمرين؟",
+  "@workoutDiscardTitle": {
+    "description": "Discard confirmation dialog title."
+  },
+  "workoutDiscardBody": "كل اللي سجّلته في التمرين ده هيتمسح.",
+  "@workoutDiscardBody": {
+    "description": "Discard confirmation dialog body."
+  },
+  "workoutDiscardConfirm": "امسح",
+  "@workoutDiscardConfirm": {
+    "description": "Destructive confirm button of the discard dialog."
+  },
+  "workoutSummaryTitle": "عاش! التمرين خلص",
+  "@workoutSummaryTitle": {
+    "description": "Summary screen title."
+  },
+  "workoutSummaryPrs": "أرقام قياسية جديدة",
+  "@workoutSummaryPrs": {
+    "description": "Summary section: personal records set in this workout."
+  },
+  "workoutSummaryBestSets": "أحسن سِت في كل تمرين",
+  "@workoutSummaryBestSets": {
+    "description": "Summary section: best set of each exercise."
+  },
+  "workoutSummaryNotFound": "التمرين ده مش موجود",
+  "@workoutSummaryNotFound": {
+    "description": "Summary shown for a missing workout id."
+  },
+  "workoutPrHeaviest": "أتقل وزن",
+  "@workoutPrHeaviest": {
+    "description": "PR type: heaviest weight."
+  },
+  "workoutPr1Rm": "أعلى 1RM متوقّع",
+  "@workoutPr1Rm": {
+    "description": "PR type: best estimated one-rep max (Epley)."
+  },
+  "workoutPrVolume": "أعلى حجم في سِت",
+  "@workoutPrVolume": {
+    "description": "PR type: best single-set weight x reps."
+  },
+  "workoutCompareCar": "{count, plural, =1{وزن عربية ملاكي 🚗} =2{وزن عربيتين ملاكي 🚗} few{وزن {countText} عربيات ملاكي 🚗} other{وزن {countText} عربية ملاكي 🚗}}",
+  "@workoutCompareCar": {
+    "description": "Lifted comparison in cars (1,400 kg each). countText = count with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutComparePyramid": "{count, plural, =1{وزن حجر من الهرم 🗿} =2{وزن حجرين من الهرم 🗿} few{وزن {countText} حجارة من الهرم 🗿} other{وزن {countText} حجر من الهرم 🗿}}",
+  "@workoutComparePyramid": {
+    "description": "Lifted comparison in pyramid blocks (2,500 kg each).",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutCompareElephant": "{count, plural, =1{وزن فيل 🐘} =2{وزن فيلين 🐘} few{وزن {countText} فيلة 🐘} other{وزن {countText} فيل 🐘}}",
+  "@workoutCompareElephant": {
+    "description": "Lifted comparison in elephants (6,000 kg each).",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutBarOpen": "افتح التمرين",
+  "@workoutBarOpen": {
+    "description": "Semantics label of the minimized workout bar."
+  },
+  "workoutDebugSeed": "DEBUG: ضيف تمارين تجريبية",
+  "@workoutDebugSeed": {
+    "description": "DEBUG-ONLY button (kDebugMode) until the exercise picker is merged. Remove at merge."
+  }
 }
