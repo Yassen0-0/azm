@@ -38,10 +38,6 @@ class ExerciseQuery {
   int get hashCode => Object.hash(text, target, equipment);
 }
 
-/// Runs [query] against the catalog. Results are ranked by the repository.
-Future<List<Exercise>> searchExercises(CatalogRepository repo, ExerciseQuery query) =>
-    repo.search(query.text, target: query.target, equipment: query.equipment);
-
 /// One catalog exercise by id (null if the catalog no longer has it).
 final exerciseByIdProvider = FutureProvider.autoDispose.family<Exercise?, String>(
   (ref, id) => ref.watch(catalogRepositoryProvider).exercise(id),

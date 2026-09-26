@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/db/app_database.dart';
-import '../../../core/db/catalog_repository.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
@@ -13,6 +11,7 @@ import '../../../core/widgets/muscle_chips.dart';
 import '../data/exercise_history.dart';
 import '../data/exercise_labels.dart';
 import '../data/exercise_library.dart';
+import '../data/exercise_search_index.dart';
 import 'equipment_sheet.dart';
 import 'exercise_format.dart';
 
@@ -63,9 +62,8 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
     final request = ++_request;
     final query = _query;
     try {
-      final sw = Stopwatch()..start();
-      final rows = await searchExercises(ref.read(catalogRepositoryProvider), query);
-      if (kDebugMode) debugPrint('[exercises] search "${query.text}" → ${rows.length} in ${sw.elapsedMilliseconds} ms');
+      final index = await ref.read(exerciseSearchIndexProvider.future);
+      final rows = index.search(query);
       if (!mounted || request != _request) return;
       setState(() {
         _results = rows;

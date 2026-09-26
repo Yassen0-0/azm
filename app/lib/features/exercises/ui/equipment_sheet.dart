@@ -14,6 +14,8 @@ Future<EquipmentChoice?> showEquipmentSheet(BuildContext context, {required Stri
   return showModalBottomSheet<EquipmentChoice>(
     context: context,
     isScrollControlled: true,
+    // Above the shell's floating tab bar.
+    useRootNavigator: true,
     useSafeArea: true,
     constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.75),
     builder: (context) => _EquipmentSheet(selected: selected),

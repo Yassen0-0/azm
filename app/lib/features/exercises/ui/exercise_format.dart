@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/utils/workout_math.dart';
+import '../../../core/widgets/exercise_card.dart' show isolateName;
 import '../data/exercise_history.dart';
 
 /// Display helpers for weights, sets and dates. Storage stays kg; conversion
@@ -14,9 +15,9 @@ abstract final class ExerciseFormat {
   /// Just the number in the display unit: "62.5".
   static String number(double kg, WeightUnit u) => AzmNumbers.decimal(Units.toDisplay(kg, u));
 
-  /// "62.5 kg".
+  /// "62.5 kg", bidi-isolated so it never reorders to "kg 62.5" in RTL.
   static String weight(AppLocalizations l, double kg, WeightUnit u) =>
-      l.exercisesWeightValue(number(kg, u), unit(l, u));
+      isolateName(l.exercisesWeightValue(number(kg, u), unit(l, u)));
 
   /// "62.5 kg × 8".
   static String set(AppLocalizations l, HistorySet s, WeightUnit u) =>

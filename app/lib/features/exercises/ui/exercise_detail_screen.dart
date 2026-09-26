@@ -14,6 +14,7 @@ import '../../../core/utils/units.dart';
 import '../../../core/utils/workout_math.dart';
 import '../../../core/widgets/azm_header.dart';
 import '../../../core/widgets/azm_placeholder.dart';
+import '../../../core/widgets/exercise_card.dart' show isolateName;
 import '../../../core/widgets/muscle_chips.dart';
 import '../data/exercise_history.dart';
 import '../data/exercise_labels.dart';
@@ -49,7 +50,7 @@ class ExerciseDetailScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AzmInnerHeader(
-              title: e == null ? '' : context.namesOf(e).primary,
+              title: e == null ? '' : isolateName(context.namesOf(e).primary),
               backLabel: l10n.commonBack,
               onBack: () => context.pop(),
             ),
@@ -109,8 +110,9 @@ class _DetailBody extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: AzmSpace.xl),
-        Text(names.primary, style: AzmType.sectionTitle.copyWith(color: c.textPrimary)),
-        if (names.secondary != null) Text(names.secondary!, style: AzmType.body.copyWith(color: c.textSecondary)),
+        Text(isolateName(names.primary), style: AzmType.sectionTitle.copyWith(color: c.textPrimary)),
+        if (names.secondary != null)
+          Text(isolateName(names.secondary!), style: AzmType.body.copyWith(color: c.textSecondary)),
         const SizedBox(height: AzmSpace.xl),
         _MusclesCard(exercise: e),
         _SectionTitle(l10n.exercisesDetailRecords),
@@ -150,10 +152,7 @@ class _DetailBody extends ConsumerWidget {
                       Expanded(
                         // English steps keep their own direction inside an Arabic UI.
                         child: Text(
-                          step,
-                          textDirection: instructions.englishFallback
-                              ? TextDirection.ltr
-                              : null, // directionality: ignore (English text in the Arabic UI)
+                          isolateName(step),
                           style: AzmType.body.copyWith(color: c.textPrimary),
                         ),
                       ),
@@ -325,12 +324,12 @@ class _Stat extends StatelessWidget {
             children: [
               TextSpan(
                 // "No data yet" is a grey dash, never 0.
-                text: none ? '—' : ExerciseFormat.number(kg, unit),
+                text: none ? '—' : '\u2068${ExerciseFormat.number(kg, unit)}', // isolate opens here…
                 style: AzmType.rowNumber.copyWith(color: none ? c.textNoData : c.pr),
               ),
               if (!none)
                 TextSpan(
-                  text: ' ${ExerciseFormat.unit(l10n, unit)}',
+                  text: ' ${ExerciseFormat.unit(l10n, unit)}\u2069', // …and closes here (no "kg 70" in RTL)
                   style: AzmType.small.copyWith(color: c.textSecondary),
                 ),
             ],
@@ -442,7 +441,7 @@ class _SessionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            session.workoutName,
+            isolateName(session.workoutName),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AzmType.listTitle.copyWith(color: c.textPrimary),

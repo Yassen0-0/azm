@@ -6,6 +6,11 @@ import '../media/exercise_media.dart';
 import '../theme/azm_theme.dart';
 import 'azm_pressable.dart';
 
+/// Wraps a name in a first-strong isolate (U+2068 … U+2069) so an English
+/// name inside the Arabic UI keeps its own order ("3/4 Sit-Up", not
+/// "Sit-Up 3/4") while the row itself stays RTL-aligned, and vice versa.
+String isolateName(String name) => '\u2068$name\u2069';
+
 /// Exercise row for lists (DESIGN.md → ExerciseCard): thumbnail (or the
 /// muscle-icon fallback), primary name (`rowTitle`), secondary name in the
 /// other language (`secondary`), optional 🏆 record badge.
@@ -55,14 +60,14 @@ class ExerciseCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    names.primary,
+                    isolateName(names.primary),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: AzmType.rowTitle.copyWith(color: c.textPrimary),
                   ),
                   if (names.secondary != null)
                     Text(
-                      names.secondary!,
+                      isolateName(names.secondary!),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AzmType.secondary.copyWith(color: c.textSecondary),

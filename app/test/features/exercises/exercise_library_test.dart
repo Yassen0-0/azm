@@ -43,8 +43,8 @@ void main() {
     await openLibrary(tester, LanguagePref.ar);
     await search(tester, 'بنش');
     final card = find.byType(ExerciseCard).first;
-    expect(find.descendant(of: card, matching: find.text('ضغط بار مستوي')), findsOneWidget);
-    expect(find.descendant(of: card, matching: find.text('Barbell Bench Press')), findsOneWidget);
+    expect(find.descendant(of: card, matching: find.text(isolateName('ضغط بار مستوي'))), findsOneWidget);
+    expect(find.descendant(of: card, matching: find.text(isolateName('Barbell Bench Press'))), findsOneWidget);
 
     // 0001 "3/4 Sit-Up" has no Arabic name → only the English name.
     await search(tester, '3/4 sit');
@@ -57,8 +57,8 @@ void main() {
     await openLibrary(tester, LanguagePref.en);
     await search(tester, 'bench');
     final card = find.byKey(const ValueKey('0025'));
-    expect(find.descendant(of: card, matching: find.text('Barbell Bench Press')), findsOneWidget);
-    expect(find.descendant(of: card, matching: find.text('ضغط بار مستوي')), findsOneWidget);
+    expect(find.descendant(of: card, matching: find.text(isolateName('Barbell Bench Press'))), findsOneWidget);
+    expect(find.descendant(of: card, matching: find.text(isolateName('ضغط بار مستوي'))), findsOneWidget);
   });
 
   testWidgets('muscle chip filters by target; "All" resets', (tester) async {
@@ -120,8 +120,8 @@ void main() {
     );
     await openLibrary(tester, LanguagePref.en);
     await search(tester, 'barbell bench press');
-    expect(find.text('🏆 80 kg'), findsOneWidget);
-    expect(find.bySemanticsLabel(RegExp('Your record: 80 kg')), findsOneWidget);
+    expect(find.text('🏆 ${isolateName('80 kg')}'), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('Your record: ${isolateName('80 kg')}')), findsOneWidget);
   });
 
   testWidgets('tapping a row opens the detail', (tester) async {
