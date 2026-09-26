@@ -40,6 +40,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercisesFilterAll => 'الكل';
 
   @override
+  String get exercisesFilterMore => 'المزيد';
+
+  @override
   String get exercisesFilterEquipment => 'الأداة';
 
   @override
@@ -199,7 +202,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercisesMuscleBiceps => 'باي';
 
   @override
-  String get exercisesMuscleGlutes => 'مؤخرة';
+  String get exercisesMuscleGlutes => 'جلوتس';
 
   @override
   String get exercisesMuscleDelts => 'كتف';
@@ -370,7 +373,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercisesEquipmentStabilityBall => 'كورة توازن';
 
   @override
-  String get exercisesEquipmentEzBarbell => 'بار زجزاج';
+  String get exercisesEquipmentEzBarbell => 'بار زد';
 
   @override
   String get exercisesEquipmentSledMachine => 'جهاز سليد';
@@ -418,7 +421,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercisesEquipmentSkiergMachine => 'جهاز سكي';
 
   @override
-  String get exercisesEquipmentHammer => 'مطرقة';
+  String get exercisesEquipmentHammer => 'مرزبة';
 
   @override
   String get exercisesEquipmentEllipticalMachine => 'أوربتراك';

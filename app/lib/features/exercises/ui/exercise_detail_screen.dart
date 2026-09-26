@@ -151,10 +151,7 @@ class _DetailBody extends ConsumerWidget {
                       ),
                       Expanded(
                         // English steps keep their own direction inside an Arabic UI.
-                        child: Text(
-                          isolateName(step),
-                          style: AzmType.body.copyWith(color: c.textPrimary),
-                        ),
+                        child: Text(isolateName(step), style: AzmType.body.copyWith(color: c.textPrimary)),
                       ),
                     ],
                   ),

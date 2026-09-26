@@ -158,6 +158,12 @@ abstract class AppLocalizations {
   /// **'الكل'**
   String get exercisesFilterAll;
 
+  /// Last muscle chip: shows the less common muscles inline.
+  ///
+  /// In ar, this message translates to:
+  /// **'المزيد'**
+  String get exercisesFilterMore;
+
   /// Button that opens the equipment filter sheet (no equipment chosen).
   ///
   /// In ar, this message translates to:
@@ -404,529 +410,529 @@ abstract class AppLocalizations {
   /// **'ف'**
   String get exercisesSetLabelFailure;
 
-  /// Dataset muscle "abs" (localized label).
+  /// Dataset muscle "abs" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'بطن'**
   String get exercisesMuscleAbs;
 
-  /// Dataset muscle "pectorals" (localized label).
+  /// Dataset muscle "pectorals" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'صدر'**
   String get exercisesMusclePectorals;
 
-  /// Dataset muscle "biceps" (localized label).
+  /// Dataset muscle "biceps" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'باي'**
   String get exercisesMuscleBiceps;
 
-  /// Dataset muscle "glutes" (localized label).
+  /// Dataset muscle "glutes" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
-  /// **'مؤخرة'**
+  /// **'جلوتس'**
   String get exercisesMuscleGlutes;
 
-  /// Dataset muscle "delts" (localized label).
+  /// Dataset muscle "delts" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كتف'**
   String get exercisesMuscleDelts;
 
-  /// Dataset muscle "triceps" (localized label).
+  /// Dataset muscle "triceps" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'تراي'**
   String get exercisesMuscleTriceps;
 
-  /// Dataset muscle "upper back" (localized label).
+  /// Dataset muscle "upper back" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'ظهر علوي'**
   String get exercisesMuscleUpperBack;
 
-  /// Dataset muscle "lats" (localized label).
+  /// Dataset muscle "lats" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'لاتس'**
   String get exercisesMuscleLats;
 
-  /// Dataset muscle "calves" (localized label).
+  /// Dataset muscle "calves" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'سمانة'**
   String get exercisesMuscleCalves;
 
-  /// Dataset muscle "quads" (localized label).
+  /// Dataset muscle "quads" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'فخذ أمامي'**
   String get exercisesMuscleQuads;
 
-  /// Dataset muscle "forearms" (localized label).
+  /// Dataset muscle "forearms" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'ساعد'**
   String get exercisesMuscleForearms;
 
-  /// Dataset muscle "cardiovascular system" (localized label).
+  /// Dataset muscle "cardiovascular system" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كارديو'**
   String get exercisesMuscleCardiovascularSystem;
 
-  /// Dataset muscle "hamstrings" (localized label).
+  /// Dataset muscle "hamstrings" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'فخذ خلفي'**
   String get exercisesMuscleHamstrings;
 
-  /// Dataset muscle "spine" (localized label).
+  /// Dataset muscle "spine" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'فقرات الظهر'**
   String get exercisesMuscleSpine;
 
-  /// Dataset muscle "traps" (localized label).
+  /// Dataset muscle "traps" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'ترابيس'**
   String get exercisesMuscleTraps;
 
-  /// Dataset muscle "adductors" (localized label).
+  /// Dataset muscle "adductors" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'فخذ داخلي'**
   String get exercisesMuscleAdductors;
 
-  /// Dataset muscle "serratus anterior" (localized label).
+  /// Dataset muscle "serratus anterior" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'المنشارية'**
   String get exercisesMuscleSerratusAnterior;
 
-  /// Dataset muscle "abductors" (localized label).
+  /// Dataset muscle "abductors" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'فخذ خارجي'**
   String get exercisesMuscleAbductors;
 
-  /// Dataset muscle "levator scapulae" (localized label).
+  /// Dataset muscle "levator scapulae" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'رافعة اللوح'**
   String get exercisesMuscleLevatorScapulae;
 
-  /// Dataset muscle "abdominals" (localized label).
+  /// Dataset muscle "abdominals" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'بطن'**
   String get exercisesMuscleAbdominals;
 
-  /// Dataset muscle "ankle stabilizers" (localized label).
+  /// Dataset muscle "ankle stabilizers" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'مثبتات الكاحل'**
   String get exercisesMuscleAnkleStabilizers;
 
-  /// Dataset muscle "ankles" (localized label).
+  /// Dataset muscle "ankles" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كاحل'**
   String get exercisesMuscleAnkles;
 
-  /// Dataset muscle "back" (localized label).
+  /// Dataset muscle "back" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'ظهر'**
   String get exercisesMuscleBack;
 
-  /// Dataset muscle "brachialis" (localized label).
+  /// Dataset muscle "brachialis" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'العضدية'**
   String get exercisesMuscleBrachialis;
 
-  /// Dataset muscle "chest" (localized label).
+  /// Dataset muscle "chest" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'صدر'**
   String get exercisesMuscleChest;
 
-  /// Dataset muscle "core" (localized label).
+  /// Dataset muscle "core" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'عضلات الجذع'**
   String get exercisesMuscleCore;
 
-  /// Dataset muscle "deltoids" (localized label).
+  /// Dataset muscle "deltoids" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كتف'**
   String get exercisesMuscleDeltoids;
 
-  /// Dataset muscle "feet" (localized label).
+  /// Dataset muscle "feet" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'قدم'**
   String get exercisesMuscleFeet;
 
-  /// Dataset muscle "grip muscles" (localized label).
+  /// Dataset muscle "grip muscles" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'قبضة'**
   String get exercisesMuscleGripMuscles;
 
-  /// Dataset muscle "groin" (localized label).
+  /// Dataset muscle "groin" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'أعلى الفخذ الداخلي'**
   String get exercisesMuscleGroin;
 
-  /// Dataset muscle "hands" (localized label).
+  /// Dataset muscle "hands" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'إيد'**
   String get exercisesMuscleHands;
 
-  /// Dataset muscle "hip flexors" (localized label).
+  /// Dataset muscle "hip flexors" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'قابضات الورك'**
   String get exercisesMuscleHipFlexors;
 
-  /// Dataset muscle "inner thighs" (localized label).
+  /// Dataset muscle "inner thighs" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'فخذ داخلي'**
   String get exercisesMuscleInnerThighs;
 
-  /// Dataset muscle "latissimus dorsi" (localized label).
+  /// Dataset muscle "latissimus dorsi" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'لاتس'**
   String get exercisesMuscleLatissimusDorsi;
 
-  /// Dataset muscle "lower abs" (localized label).
+  /// Dataset muscle "lower abs" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'بطن سفلي'**
   String get exercisesMuscleLowerAbs;
 
-  /// Dataset muscle "lower back" (localized label).
+  /// Dataset muscle "lower back" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'أسفل الظهر'**
   String get exercisesMuscleLowerBack;
 
-  /// Dataset muscle "obliques" (localized label).
+  /// Dataset muscle "obliques" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'جوانب البطن'**
   String get exercisesMuscleObliques;
 
-  /// Dataset muscle "quadriceps" (localized label).
+  /// Dataset muscle "quadriceps" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'فخذ أمامي'**
   String get exercisesMuscleQuadriceps;
 
-  /// Dataset muscle "rear deltoids" (localized label).
+  /// Dataset muscle "rear deltoids" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كتف خلفي'**
   String get exercisesMuscleRearDeltoids;
 
-  /// Dataset muscle "rhomboids" (localized label).
+  /// Dataset muscle "rhomboids" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'المعينية'**
   String get exercisesMuscleRhomboids;
 
-  /// Dataset muscle "rotator cuff" (localized label).
+  /// Dataset muscle "rotator cuff" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'الكفة المدورة'**
   String get exercisesMuscleRotatorCuff;
 
-  /// Dataset muscle "shins" (localized label).
+  /// Dataset muscle "shins" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'قصبة الرجل'**
   String get exercisesMuscleShins;
 
-  /// Dataset muscle "shoulders" (localized label).
+  /// Dataset muscle "shoulders" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كتف'**
   String get exercisesMuscleShoulders;
 
-  /// Dataset muscle "soleus" (localized label).
+  /// Dataset muscle "soleus" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'السمانة العميقة'**
   String get exercisesMuscleSoleus;
 
-  /// Dataset muscle "sternocleidomastoid" (localized label).
+  /// Dataset muscle "sternocleidomastoid" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'عضلة الرقبة'**
   String get exercisesMuscleSternocleidomastoid;
 
-  /// Dataset muscle "trapezius" (localized label).
+  /// Dataset muscle "trapezius" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'ترابيس'**
   String get exercisesMuscleTrapezius;
 
-  /// Dataset muscle "upper chest" (localized label).
+  /// Dataset muscle "upper chest" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'صدر علوي'**
   String get exercisesMuscleUpperChest;
 
-  /// Dataset muscle "wrist extensors" (localized label).
+  /// Dataset muscle "wrist extensors" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'باسطات الرسغ'**
   String get exercisesMuscleWristExtensors;
 
-  /// Dataset muscle "wrist flexors" (localized label).
+  /// Dataset muscle "wrist flexors" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'قابضات الرسغ'**
   String get exercisesMuscleWristFlexors;
 
-  /// Dataset muscle "wrists" (localized label).
+  /// Dataset muscle "wrists" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'رسغ'**
   String get exercisesMuscleWrists;
 
-  /// Dataset equipment "body weight" (localized label).
+  /// Dataset equipment "body weight" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'وزن الجسم'**
   String get exercisesEquipmentBodyWeight;
 
-  /// Dataset equipment "dumbbell" (localized label).
+  /// Dataset equipment "dumbbell" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'دمبل'**
   String get exercisesEquipmentDumbbell;
 
-  /// Dataset equipment "cable" (localized label).
+  /// Dataset equipment "cable" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كابل'**
   String get exercisesEquipmentCable;
 
-  /// Dataset equipment "barbell" (localized label).
+  /// Dataset equipment "barbell" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'بار'**
   String get exercisesEquipmentBarbell;
 
-  /// Dataset equipment "leverage machine" (localized label).
+  /// Dataset equipment "leverage machine" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'جهاز'**
   String get exercisesEquipmentLeverageMachine;
 
-  /// Dataset equipment "band" (localized label).
+  /// Dataset equipment "band" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'أستك'**
   String get exercisesEquipmentBand;
 
-  /// Dataset equipment "smith machine" (localized label).
+  /// Dataset equipment "smith machine" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'سميث'**
   String get exercisesEquipmentSmithMachine;
 
-  /// Dataset equipment "kettlebell" (localized label).
+  /// Dataset equipment "kettlebell" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كيتل بل'**
   String get exercisesEquipmentKettlebell;
 
-  /// Dataset equipment "weighted" (localized label).
+  /// Dataset equipment "weighted" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'بوزن إضافي'**
   String get exercisesEquipmentWeighted;
 
-  /// Dataset equipment "stability ball" (localized label).
+  /// Dataset equipment "stability ball" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كورة توازن'**
   String get exercisesEquipmentStabilityBall;
 
-  /// Dataset equipment "ez barbell" (localized label).
+  /// Dataset equipment "ez barbell" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
-  /// **'بار زجزاج'**
+  /// **'بار زد'**
   String get exercisesEquipmentEzBarbell;
 
-  /// Dataset equipment "sled machine" (localized label).
+  /// Dataset equipment "sled machine" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'جهاز سليد'**
   String get exercisesEquipmentSledMachine;
 
-  /// Dataset equipment "assisted" (localized label).
+  /// Dataset equipment "assisted" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'بمساعدة'**
   String get exercisesEquipmentAssisted;
 
-  /// Dataset equipment "medicine ball" (localized label).
+  /// Dataset equipment "medicine ball" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كورة طبية'**
   String get exercisesEquipmentMedicineBall;
 
-  /// Dataset equipment "rope" (localized label).
+  /// Dataset equipment "rope" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'حبل'**
   String get exercisesEquipmentRope;
 
-  /// Dataset equipment "roller" (localized label).
+  /// Dataset equipment "roller" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'رولر'**
   String get exercisesEquipmentRoller;
 
-  /// Dataset equipment "resistance band" (localized label).
+  /// Dataset equipment "resistance band" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'أستك مقاومة'**
   String get exercisesEquipmentResistanceBand;
 
-  /// Dataset equipment "bosu ball" (localized label).
+  /// Dataset equipment "bosu ball" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'بوسو بول'**
   String get exercisesEquipmentBosuBall;
 
-  /// Dataset equipment "wheel roller" (localized label).
+  /// Dataset equipment "wheel roller" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'عجلة بطن'**
   String get exercisesEquipmentWheelRoller;
 
-  /// Dataset equipment "olympic barbell" (localized label).
+  /// Dataset equipment "olympic barbell" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'بار أوليمبي'**
   String get exercisesEquipmentOlympicBarbell;
 
-  /// Dataset equipment "upper body ergometer" (localized label).
+  /// Dataset equipment "upper body ergometer" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'عجلة إيد'**
   String get exercisesEquipmentUpperBodyErgometer;
 
-  /// Dataset equipment "trap bar" (localized label).
+  /// Dataset equipment "trap bar" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'تراب بار'**
   String get exercisesEquipmentTrapBar;
 
-  /// Dataset equipment "tire" (localized label).
+  /// Dataset equipment "tire" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كاوتش'**
   String get exercisesEquipmentTire;
 
-  /// Dataset equipment "stepmill machine" (localized label).
+  /// Dataset equipment "stepmill machine" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'جهاز سلالم'**
   String get exercisesEquipmentStepmillMachine;
 
-  /// Dataset equipment "stationary bike" (localized label).
+  /// Dataset equipment "stationary bike" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'عجلة ثابتة'**
   String get exercisesEquipmentStationaryBike;
 
-  /// Dataset equipment "skierg machine" (localized label).
+  /// Dataset equipment "skierg machine" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'جهاز سكي'**
   String get exercisesEquipmentSkiergMachine;
 
-  /// Dataset equipment "hammer" (localized label).
+  /// Dataset equipment "hammer" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
-  /// **'مطرقة'**
+  /// **'مرزبة'**
   String get exercisesEquipmentHammer;
 
-  /// Dataset equipment "elliptical machine" (localized label).
+  /// Dataset equipment "elliptical machine" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'أوربتراك'**
   String get exercisesEquipmentEllipticalMachine;
 
-  /// Dataset body part "upper arms" (localized label).
+  /// Dataset body part "upper arms" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'دراع'**
   String get exercisesBodyPartUpperArms;
 
-  /// Dataset body part "upper legs" (localized label).
+  /// Dataset body part "upper legs" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'فخذ'**
   String get exercisesBodyPartUpperLegs;
 
-  /// Dataset body part "back" (localized label).
+  /// Dataset body part "back" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'ظهر'**
   String get exercisesBodyPartBack;
 
-  /// Dataset body part "waist" (localized label).
+  /// Dataset body part "waist" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'بطن ووسط'**
   String get exercisesBodyPartWaist;
 
-  /// Dataset body part "chest" (localized label).
+  /// Dataset body part "chest" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'صدر'**
   String get exercisesBodyPartChest;
 
-  /// Dataset body part "shoulders" (localized label).
+  /// Dataset body part "shoulders" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'أكتاف'**
   String get exercisesBodyPartShoulders;
 
-  /// Dataset body part "lower legs" (localized label).
+  /// Dataset body part "lower legs" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'سمانة'**
   String get exercisesBodyPartLowerLegs;
 
-  /// Dataset body part "lower arms" (localized label).
+  /// Dataset body part "lower arms" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'ساعد'**
   String get exercisesBodyPartLowerArms;
 
-  /// Dataset body part "cardio" (localized label).
+  /// Dataset body part "cardio" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'كارديو'**
   String get exercisesBodyPartCardio;
 
-  /// Dataset body part "neck" (localized label).
+  /// Dataset body part "neck" (localized label, owner-reviewed 2026-09-26).
   ///
   /// In ar, this message translates to:
   /// **'رقبة'**

@@ -63,8 +63,7 @@ void main() {
 
   testWidgets('muscle chip filters by target; "All" resets', (tester) async {
     await openLibrary(tester, LanguagePref.en);
-    await tester.tap(find.text('Biceps').first);
-    await settle(tester);
+    await tapChip(tester, 'Biceps');
     expect(find.text('151 exercises'), findsOneWidget);
     final targets = (await db.select(db.exercises).get())
         .where((e) => cardIds().contains(e.id))
@@ -72,9 +71,17 @@ void main() {
         .toSet();
     expect(targets, {'biceps'});
 
-    await tester.tap(find.text('All'));
-    await settle(tester);
+    await tapChip(tester, 'All');
     expect(find.text('1324 exercises'), findsOneWidget);
+  });
+
+  testWidgets('"More" chip expands the rare muscles inline', (tester) async {
+    await openLibrary(tester, LanguagePref.en);
+    expect(find.text('Spine'), findsNothing);
+    await tapChip(tester, 'More');
+    expect(find.text('More'), findsNothing);
+    await tapChip(tester, 'Spine');
+    expect(find.text('19 exercises'), findsOneWidget);
   });
 
   testWidgets('equipment sheet filters; the pill removes the filter', (tester) async {
@@ -88,8 +95,7 @@ void main() {
     expect(find.text('154 exercises'), findsOneWidget);
 
     // Combined with a search and a muscle.
-    await tester.tap(find.text('Chest').first);
-    await settle(tester);
+    await tapChip(tester, 'Chest');
     await search(tester, 'bench');
     expect(cardIds(), contains('0025'));
 

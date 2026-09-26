@@ -16,22 +16,36 @@ class MuscleChipItem {
 /// pill, `fill` → `accent` when selected, `chipLabel`. The first chip sits at
 /// the start edge (mirrors in RTL). Each chip keeps a 48px hit area.
 class MuscleChips extends StatelessWidget {
-  const MuscleChips({super.key, required this.items, required this.selected, required this.onSelected});
+  const MuscleChips({
+    super.key,
+    required this.items,
+    required this.selected,
+    required this.onSelected,
+    this.moreLabel,
+    this.onMore,
+  });
 
   final List<MuscleChipItem> items;
   final String? selected;
   final ValueChanged<String?> onSelected;
 
+  /// Optional final "More" chip (never selected); tapping it calls [onMore],
+  /// which typically adds more [items] inline.
+  final String? moreLabel;
+  final VoidCallback? onMore;
+
   @override
   Widget build(BuildContext context) {
+    final hasMore = moreLabel != null && onMore != null;
     return SizedBox(
       height: AzmSize.minTouchTarget,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.pageMargin),
-        itemCount: items.length,
+        itemCount: items.length + (hasMore ? 1 : 0),
         separatorBuilder: (_, _) => const SizedBox(width: AzmSpace.xs),
         itemBuilder: (context, i) {
+          if (i == items.length) return _Chip(label: moreLabel!, selected: false, onTap: onMore!);
           final item = items[i];
           return _Chip(label: item.label, selected: item.value == selected, onTap: () => onSelected(item.value));
         },

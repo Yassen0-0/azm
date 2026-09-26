@@ -25,7 +25,11 @@ void main() {
   }
 
   Future<void> scrollTo(WidgetTester tester, Finder f) async {
-    await tester.scrollUntilVisible(f, 200, scrollable: find.descendant(of: find.byType(ExerciseDetailScreen), matching: find.byType(Scrollable)).first);
+    await tester.scrollUntilVisible(
+      f,
+      200,
+      scrollable: find.descendant(of: find.byType(ExerciseDetailScreen), matching: find.byType(Scrollable)).first,
+    );
     await settle(tester);
   }
 

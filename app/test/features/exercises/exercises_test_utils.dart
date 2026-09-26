@@ -2,10 +2,11 @@ import 'package:azm/app.dart';
 import 'package:azm/core/db/app_database.dart';
 import 'package:azm/core/db/catalog_installer.dart';
 import 'package:azm/core/widgets/exercise_card.dart';
+import 'package:azm/core/widgets/muscle_chips.dart';
 import 'package:azm/features/settings/data/app_settings.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -93,4 +94,17 @@ void useTallScreen(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
+}
+
+/// Scrolls the muscle chip row until [label] is on screen, then taps it.
+Future<void> tapChip(WidgetTester tester, String label) async {
+  final row = find.descendant(of: find.byType(MuscleChips), matching: find.byType(Scrollable)).first;
+  final chip = find.descendant(of: find.byType(MuscleChips), matching: find.text(label));
+  // From the start of the row, scroll forward until the chip is on screen.
+  tester.state<ScrollableState>(row).position.jumpTo(0);
+  await settle(tester);
+  await tester.scrollUntilVisible(chip.hitTestable(), 150, scrollable: row);
+  await settle(tester);
+  await tester.tap(chip);
+  await settle(tester);
 }

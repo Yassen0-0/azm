@@ -38,6 +38,7 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
   ExerciseQuery _query = const ExerciseQuery();
   List<Exercise>? _results;
   bool _failed = false;
+  bool _moreMuscles = false;
   int _request = 0;
 
   @override
@@ -97,6 +98,8 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
     final unit = ref.watch(exercisesWeightUnitProvider).value ?? WeightUnit.kg;
     final results = _results;
     final selection = widget.selection;
+    // A selected rare muscle stays visible even if "More" was never tapped.
+    final showMoreMuscles = _moreMuscles || ExerciseLabels.moreTargets.contains(_query.target);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -121,7 +124,12 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
           items: [
             MuscleChipItem(value: null, label: l10n.exercisesFilterAll),
             for (final t in ExerciseLabels.targets) MuscleChipItem(value: t, label: ExerciseLabels.muscle(l10n, t)),
+            if (showMoreMuscles)
+              for (final t in ExerciseLabels.moreTargets)
+                MuscleChipItem(value: t, label: ExerciseLabels.muscle(l10n, t)),
           ],
+          moreLabel: showMoreMuscles ? null : l10n.exercisesFilterMore,
+          onMore: () => setState(() => _moreMuscles = true),
           selected: _query.target,
           onSelected: (t) => _update(_query.copyWith(target: () => t)),
         ),

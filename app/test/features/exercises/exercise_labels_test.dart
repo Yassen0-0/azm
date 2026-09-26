@@ -39,8 +39,17 @@ void main() {
   }
 
   test('chip and sheet lists cover exactly the catalog targets / equipment', () {
-    expect(ExerciseLabels.targets.toSet(), {for (final e in all) e.target});
+    expect({...ExerciseLabels.targets, ...ExerciseLabels.moreTargets}, {for (final e in all) e.target});
+    expect(ExerciseLabels.targets.length + ExerciseLabels.moreTargets.length, 19); // no duplicates
     expect(ExerciseLabels.equipment.toSet(), {for (final e in all) e.equipment});
+  });
+
+  test('owner corrections', () {
+    final l = lookupAppLocalizations(const Locale('ar'));
+    expect(ExerciseLabels.muscle(l, 'glutes'), 'جلوتس');
+    expect(ExerciseLabels.equipmentLabel(l, 'ez barbell'), 'بار زد');
+    expect(ExerciseLabels.equipmentLabel(l, 'hammer'), 'مرزبة');
+    expect(ExerciseLabels.targets.take(3), ['pectorals', 'lats', 'upper back']);
   });
 
   test('unknown key falls back to the raw key', () {

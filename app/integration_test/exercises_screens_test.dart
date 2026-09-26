@@ -8,6 +8,7 @@ import 'package:azm/core/db/app_database.dart';
 import 'package:azm/core/db/catalog_repository.dart';
 import 'package:azm/core/router/app_router.dart';
 import 'package:azm/core/widgets/exercise_card.dart';
+import 'package:azm/core/widgets/muscle_chips.dart';
 import 'package:azm/features/exercises/data/exercise_library.dart';
 import 'package:azm/features/exercises/data/exercise_search_index.dart';
 import 'package:azm/features/exercises/ui/exercise_detail_screen.dart';
@@ -33,6 +34,14 @@ Future<void> _pumpFor(WidgetTester tester, [int frames = 20]) async {
   for (var i = 0; i < frames; i++) {
     await tester.pump(const Duration(milliseconds: 16));
   }
+}
+
+/// Jumps the muscle chip row to its start or end.
+Future<void> _chipsTo(WidgetTester tester, {required bool end}) async {
+  final row = find.descendant(of: find.byType(MuscleChips), matching: find.byType(Scrollable)).first;
+  final p = tester.state<ScrollableState>(row).position;
+  p.jumpTo(end ? p.maxScrollExtent : 0);
+  await _pumpFor(tester);
 }
 
 Future<void> _typeSearch(WidgetTester tester, String text) async {
@@ -132,7 +141,18 @@ void main() => runScreenshotSuite('exercises', [
     await _measureSearch(container);
     router.go(AppRoutes.exercises);
   }),
+  ScreenStep('library_more_muscles', (tester, container, router) async {
+    final ar = Localizations.localeOf(tester.element(find.byType(TextField).first)).languageCode == 'ar';
+    await _chipsTo(tester, end: true);
+    await tester.tap(find.text(ar ? 'المزيد' : 'More'));
+    await _pumpFor(tester, 20);
+    // Show the expanded rare muscles; jump twice because the first jump uses
+    // an extent estimated before the new chips were laid out.
+    await _chipsTo(tester, end: true);
+    await _chipsTo(tester, end: true);
+  }),
   ScreenStep('library_search_ar', (tester, container, router) async {
+    await _chipsTo(tester, end: false);
     await _typeSearch(tester, 'بنش');
   }),
   ScreenStep('equipment_sheet', (tester, container, router) async {

@@ -7,28 +7,27 @@ import '../../../core/l10n/l10n.dart';
 /// The key lists mirror the bundled catalog. A key a future catalog adds
 /// falls back to the raw key (capitalized) until it gets an ARB entry.
 abstract final class ExerciseLabels {
-  /// Target muscles, most exercises first (the MuscleChips order).
+  /// Target muscles in real-world usage order (owner, 2026-09-26): the
+  /// MuscleChips shown first.
   static const List<String> targets = [
-    'abs',
     'pectorals',
-    'biceps',
-    'glutes',
-    'delts',
-    'triceps',
-    'upper back',
     'lats',
-    'calves',
+    'upper back',
+    'delts',
+    'biceps',
+    'triceps',
     'quads',
-    'forearms',
-    'cardiovascular system',
     'hamstrings',
-    'spine',
+    'glutes',
+    'calves',
+    'abs',
+    'forearms',
     'traps',
-    'adductors',
-    'serratus anterior',
-    'abductors',
-    'levator scapulae',
+    'cardiovascular system',
   ];
+
+  /// Less common targets, behind the final "More" chip.
+  static const List<String> moreTargets = ['spine', 'adductors', 'abductors', 'serratus anterior', 'levator scapulae'];
 
   /// Equipment, most exercises first (the equipment sheet order).
   static const List<String> equipment = [

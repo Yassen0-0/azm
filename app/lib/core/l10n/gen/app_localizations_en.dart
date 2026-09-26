@@ -40,6 +40,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exercisesFilterAll => 'All';
 
   @override
+  String get exercisesFilterMore => 'More';
+
+  @override
   String get exercisesFilterEquipment => 'Equipment';
 
   @override

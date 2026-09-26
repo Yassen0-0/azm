@@ -40,6 +40,10 @@
   "@exercisesFilterAll": {
     "description": "First muscle chip: no muscle filter."
   },
+  "exercisesFilterMore": "المزيد",
+  "@exercisesFilterMore": {
+    "description": "Last muscle chip: shows the less common muscles inline."
+  },
   "exercisesFilterEquipment": "الأداة",
   "@exercisesFilterEquipment": {
     "description": "Button that opens the equipment filter sheet (no equipment chosen)."
@@ -247,355 +251,355 @@
   },
   "exercisesMuscleAbs": "بطن",
   "@exercisesMuscleAbs": {
-    "description": "Dataset muscle \"abs\" (localized label)."
+    "description": "Dataset muscle \"abs\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMusclePectorals": "صدر",
   "@exercisesMusclePectorals": {
-    "description": "Dataset muscle \"pectorals\" (localized label)."
+    "description": "Dataset muscle \"pectorals\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleBiceps": "باي",
   "@exercisesMuscleBiceps": {
-    "description": "Dataset muscle \"biceps\" (localized label)."
+    "description": "Dataset muscle \"biceps\" (localized label, owner-reviewed 2026-09-26)."
   },
-  "exercisesMuscleGlutes": "مؤخرة",
+  "exercisesMuscleGlutes": "جلوتس",
   "@exercisesMuscleGlutes": {
-    "description": "Dataset muscle \"glutes\" (localized label)."
+    "description": "Dataset muscle \"glutes\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleDelts": "كتف",
   "@exercisesMuscleDelts": {
-    "description": "Dataset muscle \"delts\" (localized label)."
+    "description": "Dataset muscle \"delts\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleTriceps": "تراي",
   "@exercisesMuscleTriceps": {
-    "description": "Dataset muscle \"triceps\" (localized label)."
+    "description": "Dataset muscle \"triceps\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleUpperBack": "ظهر علوي",
   "@exercisesMuscleUpperBack": {
-    "description": "Dataset muscle \"upper back\" (localized label)."
+    "description": "Dataset muscle \"upper back\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleLats": "لاتس",
   "@exercisesMuscleLats": {
-    "description": "Dataset muscle \"lats\" (localized label)."
+    "description": "Dataset muscle \"lats\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleCalves": "سمانة",
   "@exercisesMuscleCalves": {
-    "description": "Dataset muscle \"calves\" (localized label)."
+    "description": "Dataset muscle \"calves\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleQuads": "فخذ أمامي",
   "@exercisesMuscleQuads": {
-    "description": "Dataset muscle \"quads\" (localized label)."
+    "description": "Dataset muscle \"quads\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleForearms": "ساعد",
   "@exercisesMuscleForearms": {
-    "description": "Dataset muscle \"forearms\" (localized label)."
+    "description": "Dataset muscle \"forearms\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleCardiovascularSystem": "كارديو",
   "@exercisesMuscleCardiovascularSystem": {
-    "description": "Dataset muscle \"cardiovascular system\" (localized label)."
+    "description": "Dataset muscle \"cardiovascular system\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleHamstrings": "فخذ خلفي",
   "@exercisesMuscleHamstrings": {
-    "description": "Dataset muscle \"hamstrings\" (localized label)."
+    "description": "Dataset muscle \"hamstrings\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleSpine": "فقرات الظهر",
   "@exercisesMuscleSpine": {
-    "description": "Dataset muscle \"spine\" (localized label)."
+    "description": "Dataset muscle \"spine\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleTraps": "ترابيس",
   "@exercisesMuscleTraps": {
-    "description": "Dataset muscle \"traps\" (localized label)."
+    "description": "Dataset muscle \"traps\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleAdductors": "فخذ داخلي",
   "@exercisesMuscleAdductors": {
-    "description": "Dataset muscle \"adductors\" (localized label)."
+    "description": "Dataset muscle \"adductors\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleSerratusAnterior": "المنشارية",
   "@exercisesMuscleSerratusAnterior": {
-    "description": "Dataset muscle \"serratus anterior\" (localized label)."
+    "description": "Dataset muscle \"serratus anterior\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleAbductors": "فخذ خارجي",
   "@exercisesMuscleAbductors": {
-    "description": "Dataset muscle \"abductors\" (localized label)."
+    "description": "Dataset muscle \"abductors\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleLevatorScapulae": "رافعة اللوح",
   "@exercisesMuscleLevatorScapulae": {
-    "description": "Dataset muscle \"levator scapulae\" (localized label)."
+    "description": "Dataset muscle \"levator scapulae\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleAbdominals": "بطن",
   "@exercisesMuscleAbdominals": {
-    "description": "Dataset muscle \"abdominals\" (localized label)."
+    "description": "Dataset muscle \"abdominals\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleAnkleStabilizers": "مثبتات الكاحل",
   "@exercisesMuscleAnkleStabilizers": {
-    "description": "Dataset muscle \"ankle stabilizers\" (localized label)."
+    "description": "Dataset muscle \"ankle stabilizers\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleAnkles": "كاحل",
   "@exercisesMuscleAnkles": {
-    "description": "Dataset muscle \"ankles\" (localized label)."
+    "description": "Dataset muscle \"ankles\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleBack": "ظهر",
   "@exercisesMuscleBack": {
-    "description": "Dataset muscle \"back\" (localized label)."
+    "description": "Dataset muscle \"back\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleBrachialis": "العضدية",
   "@exercisesMuscleBrachialis": {
-    "description": "Dataset muscle \"brachialis\" (localized label)."
+    "description": "Dataset muscle \"brachialis\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleChest": "صدر",
   "@exercisesMuscleChest": {
-    "description": "Dataset muscle \"chest\" (localized label)."
+    "description": "Dataset muscle \"chest\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleCore": "عضلات الجذع",
   "@exercisesMuscleCore": {
-    "description": "Dataset muscle \"core\" (localized label)."
+    "description": "Dataset muscle \"core\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleDeltoids": "كتف",
   "@exercisesMuscleDeltoids": {
-    "description": "Dataset muscle \"deltoids\" (localized label)."
+    "description": "Dataset muscle \"deltoids\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleFeet": "قدم",
   "@exercisesMuscleFeet": {
-    "description": "Dataset muscle \"feet\" (localized label)."
+    "description": "Dataset muscle \"feet\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleGripMuscles": "قبضة",
   "@exercisesMuscleGripMuscles": {
-    "description": "Dataset muscle \"grip muscles\" (localized label)."
+    "description": "Dataset muscle \"grip muscles\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleGroin": "أعلى الفخذ الداخلي",
   "@exercisesMuscleGroin": {
-    "description": "Dataset muscle \"groin\" (localized label)."
+    "description": "Dataset muscle \"groin\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleHands": "إيد",
   "@exercisesMuscleHands": {
-    "description": "Dataset muscle \"hands\" (localized label)."
+    "description": "Dataset muscle \"hands\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleHipFlexors": "قابضات الورك",
   "@exercisesMuscleHipFlexors": {
-    "description": "Dataset muscle \"hip flexors\" (localized label)."
+    "description": "Dataset muscle \"hip flexors\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleInnerThighs": "فخذ داخلي",
   "@exercisesMuscleInnerThighs": {
-    "description": "Dataset muscle \"inner thighs\" (localized label)."
+    "description": "Dataset muscle \"inner thighs\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleLatissimusDorsi": "لاتس",
   "@exercisesMuscleLatissimusDorsi": {
-    "description": "Dataset muscle \"latissimus dorsi\" (localized label)."
+    "description": "Dataset muscle \"latissimus dorsi\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleLowerAbs": "بطن سفلي",
   "@exercisesMuscleLowerAbs": {
-    "description": "Dataset muscle \"lower abs\" (localized label)."
+    "description": "Dataset muscle \"lower abs\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleLowerBack": "أسفل الظهر",
   "@exercisesMuscleLowerBack": {
-    "description": "Dataset muscle \"lower back\" (localized label)."
+    "description": "Dataset muscle \"lower back\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleObliques": "جوانب البطن",
   "@exercisesMuscleObliques": {
-    "description": "Dataset muscle \"obliques\" (localized label)."
+    "description": "Dataset muscle \"obliques\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleQuadriceps": "فخذ أمامي",
   "@exercisesMuscleQuadriceps": {
-    "description": "Dataset muscle \"quadriceps\" (localized label)."
+    "description": "Dataset muscle \"quadriceps\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleRearDeltoids": "كتف خلفي",
   "@exercisesMuscleRearDeltoids": {
-    "description": "Dataset muscle \"rear deltoids\" (localized label)."
+    "description": "Dataset muscle \"rear deltoids\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleRhomboids": "المعينية",
   "@exercisesMuscleRhomboids": {
-    "description": "Dataset muscle \"rhomboids\" (localized label)."
+    "description": "Dataset muscle \"rhomboids\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleRotatorCuff": "الكفة المدورة",
   "@exercisesMuscleRotatorCuff": {
-    "description": "Dataset muscle \"rotator cuff\" (localized label)."
+    "description": "Dataset muscle \"rotator cuff\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleShins": "قصبة الرجل",
   "@exercisesMuscleShins": {
-    "description": "Dataset muscle \"shins\" (localized label)."
+    "description": "Dataset muscle \"shins\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleShoulders": "كتف",
   "@exercisesMuscleShoulders": {
-    "description": "Dataset muscle \"shoulders\" (localized label)."
+    "description": "Dataset muscle \"shoulders\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleSoleus": "السمانة العميقة",
   "@exercisesMuscleSoleus": {
-    "description": "Dataset muscle \"soleus\" (localized label)."
+    "description": "Dataset muscle \"soleus\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleSternocleidomastoid": "عضلة الرقبة",
   "@exercisesMuscleSternocleidomastoid": {
-    "description": "Dataset muscle \"sternocleidomastoid\" (localized label)."
+    "description": "Dataset muscle \"sternocleidomastoid\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleTrapezius": "ترابيس",
   "@exercisesMuscleTrapezius": {
-    "description": "Dataset muscle \"trapezius\" (localized label)."
+    "description": "Dataset muscle \"trapezius\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleUpperChest": "صدر علوي",
   "@exercisesMuscleUpperChest": {
-    "description": "Dataset muscle \"upper chest\" (localized label)."
+    "description": "Dataset muscle \"upper chest\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleWristExtensors": "باسطات الرسغ",
   "@exercisesMuscleWristExtensors": {
-    "description": "Dataset muscle \"wrist extensors\" (localized label)."
+    "description": "Dataset muscle \"wrist extensors\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleWristFlexors": "قابضات الرسغ",
   "@exercisesMuscleWristFlexors": {
-    "description": "Dataset muscle \"wrist flexors\" (localized label)."
+    "description": "Dataset muscle \"wrist flexors\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesMuscleWrists": "رسغ",
   "@exercisesMuscleWrists": {
-    "description": "Dataset muscle \"wrists\" (localized label)."
+    "description": "Dataset muscle \"wrists\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentBodyWeight": "وزن الجسم",
   "@exercisesEquipmentBodyWeight": {
-    "description": "Dataset equipment \"body weight\" (localized label)."
+    "description": "Dataset equipment \"body weight\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentDumbbell": "دمبل",
   "@exercisesEquipmentDumbbell": {
-    "description": "Dataset equipment \"dumbbell\" (localized label)."
+    "description": "Dataset equipment \"dumbbell\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentCable": "كابل",
   "@exercisesEquipmentCable": {
-    "description": "Dataset equipment \"cable\" (localized label)."
+    "description": "Dataset equipment \"cable\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentBarbell": "بار",
   "@exercisesEquipmentBarbell": {
-    "description": "Dataset equipment \"barbell\" (localized label)."
+    "description": "Dataset equipment \"barbell\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentLeverageMachine": "جهاز",
   "@exercisesEquipmentLeverageMachine": {
-    "description": "Dataset equipment \"leverage machine\" (localized label)."
+    "description": "Dataset equipment \"leverage machine\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentBand": "أستك",
   "@exercisesEquipmentBand": {
-    "description": "Dataset equipment \"band\" (localized label)."
+    "description": "Dataset equipment \"band\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentSmithMachine": "سميث",
   "@exercisesEquipmentSmithMachine": {
-    "description": "Dataset equipment \"smith machine\" (localized label)."
+    "description": "Dataset equipment \"smith machine\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentKettlebell": "كيتل بل",
   "@exercisesEquipmentKettlebell": {
-    "description": "Dataset equipment \"kettlebell\" (localized label)."
+    "description": "Dataset equipment \"kettlebell\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentWeighted": "بوزن إضافي",
   "@exercisesEquipmentWeighted": {
-    "description": "Dataset equipment \"weighted\" (localized label)."
+    "description": "Dataset equipment \"weighted\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentStabilityBall": "كورة توازن",
   "@exercisesEquipmentStabilityBall": {
-    "description": "Dataset equipment \"stability ball\" (localized label)."
+    "description": "Dataset equipment \"stability ball\" (localized label, owner-reviewed 2026-09-26)."
   },
-  "exercisesEquipmentEzBarbell": "بار زجزاج",
+  "exercisesEquipmentEzBarbell": "بار زد",
   "@exercisesEquipmentEzBarbell": {
-    "description": "Dataset equipment \"ez barbell\" (localized label)."
+    "description": "Dataset equipment \"ez barbell\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentSledMachine": "جهاز سليد",
   "@exercisesEquipmentSledMachine": {
-    "description": "Dataset equipment \"sled machine\" (localized label)."
+    "description": "Dataset equipment \"sled machine\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentAssisted": "بمساعدة",
   "@exercisesEquipmentAssisted": {
-    "description": "Dataset equipment \"assisted\" (localized label)."
+    "description": "Dataset equipment \"assisted\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentMedicineBall": "كورة طبية",
   "@exercisesEquipmentMedicineBall": {
-    "description": "Dataset equipment \"medicine ball\" (localized label)."
+    "description": "Dataset equipment \"medicine ball\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentRope": "حبل",
   "@exercisesEquipmentRope": {
-    "description": "Dataset equipment \"rope\" (localized label)."
+    "description": "Dataset equipment \"rope\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentRoller": "رولر",
   "@exercisesEquipmentRoller": {
-    "description": "Dataset equipment \"roller\" (localized label)."
+    "description": "Dataset equipment \"roller\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentResistanceBand": "أستك مقاومة",
   "@exercisesEquipmentResistanceBand": {
-    "description": "Dataset equipment \"resistance band\" (localized label)."
+    "description": "Dataset equipment \"resistance band\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentBosuBall": "بوسو بول",
   "@exercisesEquipmentBosuBall": {
-    "description": "Dataset equipment \"bosu ball\" (localized label)."
+    "description": "Dataset equipment \"bosu ball\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentWheelRoller": "عجلة بطن",
   "@exercisesEquipmentWheelRoller": {
-    "description": "Dataset equipment \"wheel roller\" (localized label)."
+    "description": "Dataset equipment \"wheel roller\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentOlympicBarbell": "بار أوليمبي",
   "@exercisesEquipmentOlympicBarbell": {
-    "description": "Dataset equipment \"olympic barbell\" (localized label)."
+    "description": "Dataset equipment \"olympic barbell\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentUpperBodyErgometer": "عجلة إيد",
   "@exercisesEquipmentUpperBodyErgometer": {
-    "description": "Dataset equipment \"upper body ergometer\" (localized label)."
+    "description": "Dataset equipment \"upper body ergometer\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentTrapBar": "تراب بار",
   "@exercisesEquipmentTrapBar": {
-    "description": "Dataset equipment \"trap bar\" (localized label)."
+    "description": "Dataset equipment \"trap bar\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentTire": "كاوتش",
   "@exercisesEquipmentTire": {
-    "description": "Dataset equipment \"tire\" (localized label)."
+    "description": "Dataset equipment \"tire\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentStepmillMachine": "جهاز سلالم",
   "@exercisesEquipmentStepmillMachine": {
-    "description": "Dataset equipment \"stepmill machine\" (localized label)."
+    "description": "Dataset equipment \"stepmill machine\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentStationaryBike": "عجلة ثابتة",
   "@exercisesEquipmentStationaryBike": {
-    "description": "Dataset equipment \"stationary bike\" (localized label)."
+    "description": "Dataset equipment \"stationary bike\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentSkiergMachine": "جهاز سكي",
   "@exercisesEquipmentSkiergMachine": {
-    "description": "Dataset equipment \"skierg machine\" (localized label)."
+    "description": "Dataset equipment \"skierg machine\" (localized label, owner-reviewed 2026-09-26)."
   },
-  "exercisesEquipmentHammer": "مطرقة",
+  "exercisesEquipmentHammer": "مرزبة",
   "@exercisesEquipmentHammer": {
-    "description": "Dataset equipment \"hammer\" (localized label)."
+    "description": "Dataset equipment \"hammer\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesEquipmentEllipticalMachine": "أوربتراك",
   "@exercisesEquipmentEllipticalMachine": {
-    "description": "Dataset equipment \"elliptical machine\" (localized label)."
+    "description": "Dataset equipment \"elliptical machine\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartUpperArms": "دراع",
   "@exercisesBodyPartUpperArms": {
-    "description": "Dataset body part \"upper arms\" (localized label)."
+    "description": "Dataset body part \"upper arms\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartUpperLegs": "فخذ",
   "@exercisesBodyPartUpperLegs": {
-    "description": "Dataset body part \"upper legs\" (localized label)."
+    "description": "Dataset body part \"upper legs\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartBack": "ظهر",
   "@exercisesBodyPartBack": {
-    "description": "Dataset body part \"back\" (localized label)."
+    "description": "Dataset body part \"back\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartWaist": "بطن ووسط",
   "@exercisesBodyPartWaist": {
-    "description": "Dataset body part \"waist\" (localized label)."
+    "description": "Dataset body part \"waist\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartChest": "صدر",
   "@exercisesBodyPartChest": {
-    "description": "Dataset body part \"chest\" (localized label)."
+    "description": "Dataset body part \"chest\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartShoulders": "أكتاف",
   "@exercisesBodyPartShoulders": {
-    "description": "Dataset body part \"shoulders\" (localized label)."
+    "description": "Dataset body part \"shoulders\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartLowerLegs": "سمانة",
   "@exercisesBodyPartLowerLegs": {
-    "description": "Dataset body part \"lower legs\" (localized label)."
+    "description": "Dataset body part \"lower legs\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartLowerArms": "ساعد",
   "@exercisesBodyPartLowerArms": {
-    "description": "Dataset body part \"lower arms\" (localized label)."
+    "description": "Dataset body part \"lower arms\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartCardio": "كارديو",
   "@exercisesBodyPartCardio": {
-    "description": "Dataset body part \"cardio\" (localized label)."
+    "description": "Dataset body part \"cardio\" (localized label, owner-reviewed 2026-09-26)."
   },
   "exercisesBodyPartNeck": "رقبة",
   "@exercisesBodyPartNeck": {
-    "description": "Dataset body part \"neck\" (localized label)."
+    "description": "Dataset body part \"neck\" (localized label, owner-reviewed 2026-09-26)."
   },
   "settingsTitle": "الإعدادات",
   "@settingsTitle": {

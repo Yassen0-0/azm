@@ -85,11 +85,9 @@ void main() {
     final (_, result, _) = await openPicker(tester);
     await tapExercise(tester, 'barbell bench press', '0025');
     await tester.enterText(find.byType(TextField), '');
-    await tester.tap(find.text('Biceps').first);
-    await settle(tester);
+    await tapChip(tester, 'Biceps');
     expect(find.text('151 exercises'), findsOneWidget);
-    await tester.tap(find.text('All'));
-    await settle(tester);
+    await tapChip(tester, 'All');
     await tapExercise(tester, 'barbell bench press', '0025'); // toggles off
     expect(find.text('Add'), findsOneWidget);
     expect(result(), isNull);
