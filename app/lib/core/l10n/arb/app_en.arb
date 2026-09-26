@@ -1,0 +1,18 @@
+{
+  "@@locale": "en",
+  "appName": "Azm",
+  "shellTabWorkout": "Workout",
+  "shellTabHistory": "History",
+  "shellTabExercises": "Exercises",
+  "shellOpenSettings": "Settings",
+  "shellComingSoon": "This screen is still being built",
+  "settingsTitle": "Settings",
+  "settingsLanguage": "Language",
+  "settingsLanguageSystem": "Device language",
+  "settingsLanguageArabic": "العربية",
+  "settingsLanguageEnglish": "English",
+  "settingsTheme": "Appearance",
+  "settingsThemeDark": "Dark",
+  "settingsThemeLight": "Light",
+  "commonBack": "Back"
+}

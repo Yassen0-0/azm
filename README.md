@@ -4,7 +4,7 @@ Hevy-style gym tracker for Android and iOS. Flutter, Arabic-first, fully bilingu
 
 This folder (the **ROOT**) is fully self-contained: code, data, design system, docs **and** every SDK and cache live inside it. It can be moved to another disk (see [Moving the folder](#moving-the-folder)).
 
-> Status: tooling + project folder ready (Phases 0–1). The Flutter app skeleton (Phase 2) and data layer (Phase 3) are next. See [docs/PLAN.md](docs/PLAN.md).
+> Status: tooling, project folder and Flutter app skeleton ready (Phases 0–2). The data layer (Phase 3) is next. See [docs/PLAN.md](docs/PLAN.md).
 
 **Start here:** [CLAUDE.md](CLAUDE.md) (rules) · [docs/SPEC.md](docs/SPEC.md) (what) · [docs/DESIGN.md](docs/DESIGN.md) (look) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) (how) · [docs/DATA.md](docs/DATA.md) (data) · [docs/LICENSES.md](docs/LICENSES.md) (**media is not ours**) · [docs/PLAN.md](docs/PLAN.md) (backlog) · [docs/DECISIONS_LOG.md](docs/DECISIONS_LOG.md) · [docs/ORIGINAL_BRIEF.md](docs/ORIGINAL_BRIEF.md)
 
@@ -76,6 +76,39 @@ The redirected `HOME` hides your login keychain, Xcode accounts and provisioning
 Everything else (PATH, pub-cache, gems, CocoaPods, Gradle, Flutter settings, TMPDIR) stays inside ROOT. **Not needed** for Android or the iOS Simulator, which use plain `source ./env.sh && ...`.
 
 What still lands in your real `~/Library` in this mode (Xcode is the allowed exception): Xcode DerivedData/ModuleCache from `flutter build ios` (Flutter does not pass `-derivedDataPath`), and Xcode's own signing/SwiftPM caches.
+
+## The app (`app/`)
+
+| | |
+|---|---|
+| Dart package | `azm` |
+| Android `applicationId` / iOS bundle id | `app.azm.gym` |
+| Platforms | Android + iOS only |
+| Launcher name | `عزم` on Arabic devices, `Azm` otherwise (Android `values-ar/strings.xml`; iOS `ar.lproj`/`en.lproj` `InfoPlist.strings`) |
+| Font | Readex Pro only (`app/assets/fonts/ReadexPro.ttf`) |
+| Strings | gen-l10n, ARB in `app/lib/core/l10n/arb/` (Arabic is the template), generated Dart in `app/lib/core/l10n/gen/` |
+
+```sh
+source ./env.sh && cd app && flutter run                # emulator (start it first: emulator -avd azm_api37 &) or simulator
+source ./env.sh && cd app && flutter test && flutter analyze
+tools/check_directionality.sh                           # fails on left/right layout APIs in app/lib/
+./ios_env flutter run -d <iphone-id>                    # physical iPhone (code signing)
+```
+
+### Package versions (locked in `app/pubspec.lock`)
+
+| Package | Version | | Package | Version |
+|---|---|---|---|---|
+| flutter_riverpod | 3.4.3 | | cached_network_image | 4.0.2 |
+| go_router | 18.0.1 | | flutter_local_notifications | 22.3.1 |
+| drift | 2.35.0 | | uuid | 4.6.0 |
+| drift_flutter | 0.3.1 | | path_provider | 2.1.6 |
+| sqlite3 (native via build hooks) | 3.6.0 | | flutter_localizations | SDK |
+| intl | 0.20.3 | | | |
+| *dev:* drift_dev | 2.35.0 | | *dev:* build_runner | 2.16.1 |
+| *dev:* flutter_lints | 6.0.0 | | | |
+
+`sqlite3_flutter_libs` (listed in the original brief) is **not** used: it is end-of-life, and since `sqlite3` 3.x the native SQLite library ships through Dart build hooks (see DECISIONS_LOG).
 
 ## Pinned toolchain
 

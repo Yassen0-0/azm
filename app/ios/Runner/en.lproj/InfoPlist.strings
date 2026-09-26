@@ -1,0 +1,3 @@
+/* Home-screen name on non-Arabic devices */
+"CFBundleDisplayName" = "Azm";
+"CFBundleName" = "Azm";

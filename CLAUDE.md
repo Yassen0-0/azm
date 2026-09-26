@@ -21,7 +21,7 @@ Read `docs/SPEC.md`, `docs/DESIGN.md`, `docs/ARCHITECTURE.md` (and `docs/DATA.md
 
 ## Code rules
 
-- **No hard-coded UI strings.** Everything goes through gen-l10n ARB (`app_ar.arb` + `app_en.arb`, always both).
+- **No hard-coded UI strings.** Everything goes through gen-l10n ARB in `app/lib/core/l10n/arb/` (`app_ar.arb` is the template + `app_en.arb`, always both); read strings with `context.l10n`.
 - **No left/right.** Only `EdgeInsetsDirectional`, `AlignmentDirectional`, `start/end`, `PositionedDirectional`, `BorderRadiusDirectional`. `tools/check_directionality.sh` must pass.
 - **No new colours, sizes, radii, durations or text styles** outside `app/lib/core/theme/`. If you need one, add it to the theme and document it in `docs/DESIGN.md`.
 - **Western digits (0–9)** in both languages; tabular figures.

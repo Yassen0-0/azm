@@ -1,0 +1,75 @@
+import 'package:flutter/widgets.dart';
+
+/// Spacing ladder — 4 · 8 · 12 · 16 · 20 · 24 ONLY. No invented sizes at call sites.
+abstract final class AzmSpace {
+  static const double xxs = 4;
+  static const double xs = 8;
+  static const double md = 12;
+  static const double xl = 16;
+  static const double xxl = 20;
+  static const double xxxl = 24;
+
+  static const double opticalInset = 2;
+  static const double textGap = 6;
+  static const double pageMargin = 16;
+  static const double cardPadding = 16;
+  static const double listGap = 12;
+  static const EdgeInsetsDirectional inputPadding =
+      EdgeInsetsDirectional.symmetric(horizontal: 16, vertical: 12);
+}
+
+/// Corner radii. Concentric rule: inner = outer − padding between them.
+abstract final class AzmRadius {
+  static const double card = 16;
+  static const double button = 14;
+  static const double input = 12;
+  static const double segment = 8;
+  static const double sheet = 22;
+  static const double dialog = 16;
+  static const double pill = 999;
+}
+
+/// Component sizes (Ather + gym additions, see docs/DESIGN.md → Sizes).
+abstract final class AzmSize {
+  static const double primaryButton = 52;
+  static const double headerButton = 36;
+  static const double input = 46;
+  static const double inputTall = 50;
+  static const double bigNumberField = 72;
+  static const double checkbox = 24;
+  static const double minTouchTarget = 48;
+  static const double dayPicker = 48;
+  static const double barTrack = 8;
+  static const double barTrackSmall = 6;
+  static const double sheetHandleWidth = 36;
+  static const double sheetHandleHeight = 5;
+  static const double toastBottom = 104;
+  static const double icon = 24;
+
+  // Floating glass tab bar
+  static const double tabBarHeight = 64;
+  static const double tabBarLift = 12;
+  static const double tabBarIcon = 25;
+  static const double tabBarBadgeDisc = 16;
+
+  // Gym additions
+  static const double setRowMinHeight = 52;
+  static const double setCellMinWidth = 48;
+  static const double keypadKeyHeight = 52;
+  static const double restBarHeight = 64;
+  static const double activeBarHeight = 56;
+  static const double thumbnailList = 48;
+  static const double thumbnailCard = 72;
+
+  /// Bottom space a scrollable page must leave so its last item clears the
+  /// floating tab bar (bar + lift + device inset).
+  static double tabBarReserve(BuildContext context) =>
+      tabBarHeight + tabBarLift + MediaQuery.paddingOf(context).bottom + AzmSpace.xl;
+}
+
+/// Glass — the floating tab bar ONLY (the one blur in the app).
+abstract final class AzmGlass {
+  static const double blurSigma = 24;
+  static const double tintOpacity = 0.85;
+  static const double borderWidth = 1;
+}

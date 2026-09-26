@@ -2,7 +2,7 @@
 
 **How to use this file:** each task **owns** a set of paths. An agent works only inside the paths its task owns. Several Claude Code windows can then run in parallel without editing the same files. To change a file you don't own, add a note under **Requests** in the owning task instead of editing the file. Mark status inline: `[ ]` todo · `[~]` in progress (write your window/date) · `[x]` done.
 
-Shared files, where edits must be minimal and coordinated: `app/pubspec.yaml`, `app/lib/app.dart`, `app/lib/core/router*`, `app/lib/l10n/*.arb`, `docs/PLAN.md`, `docs/DECISIONS_LOG.md` (append-only). For ARB files, add keys **only under your feature's prefix** (`workout_…`, `history_…`) and keep both `app_ar.arb` and `app_en.arb` in sync.
+Shared files, where edits must be minimal and coordinated: `app/pubspec.yaml`, `app/lib/app.dart`, `app/lib/core/router*`, `app/lib/core/l10n/arb/*.arb`, `docs/PLAN.md`, `docs/DECISIONS_LOG.md` (append-only). For ARB files, add keys **only under your feature's camelCase prefix** (`workout…`, `history…`) and keep both `app_ar.arb` and `app_en.arb` in sync.
 
 Before finishing any task: `flutter test`, `flutter analyze`, the directionality check (`tools/check_directionality.sh`), and log assumptions in DECISIONS_LOG.md.
 
@@ -14,7 +14,7 @@ Before finishing any task: `flutter test`, `flutter analyze`, the directionality
 |---|---|---|
 | Phase 0: sandboxed tooling (`env.sh`, `.tooling/`) | [x] | `env.sh`, `ios_env`, `.tooling/` |
 | Phase 1: project folder, docs, data import, git | [x] | everything at ROOT |
-| **Phase 2: Flutter skeleton** | [ ] | `app/**`, `tools/check_directionality.sh` |
+| **Phase 2: Flutter skeleton** | [x] (iOS build not yet run — see DECISIONS_LOG) | `app/**`, `tools/check_directionality.sh` |
 | **Phase 3: data layer** | [ ] | `app/lib/core/db/**`, `app/lib/core/utils/**`, `app/lib/core/media/**`, `tools/build_catalog.dart`, `data/ar/**` (first 50), `data/programs/**`, `data/catalog/**`, `app/test/**` |
 
 Phase 2 acceptance: `flutter create` (org `app.azm.gym`, android+ios); deps pinned in README; Readex Pro the only font; gen-l10n with ar/en and the System/ع/EN setting; localized launcher name (`عزم`/`Azm`); theme ported with gym adaptations (dark default); `go_router` `StatefulShellRoute` with 3 tabs + glass tab bar + settings route; directionality check script; zero hard-coded strings.
