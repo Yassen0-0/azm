@@ -127,8 +127,8 @@ class WeightKeypad extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AzmSpace.xxs),
-          _KeyRow(children: [digit(1), digit(2), digit(3), _Key(label: '−$stepText', semanticLabel: decreaseLabel, onTap: () => onKey(const KeypadStep(up: false)))]),
-          _KeyRow(children: [digit(4), digit(5), digit(6), _Key(label: '+$stepText', semanticLabel: increaseLabel, onTap: () => onKey(const KeypadStep(up: true)))]),
+          _KeyRow(children: [digit(1), digit(2), digit(3), _Key(label: '\u2066−$stepText\u2069', semanticLabel: decreaseLabel, onTap: () => onKey(const KeypadStep(up: false)))]),
+          _KeyRow(children: [digit(4), digit(5), digit(6), _Key(label: '\u2066+$stepText\u2069', semanticLabel: increaseLabel, onTap: () => onKey(const KeypadStep(up: true)))]),
           _KeyRow(children: [
             digit(7),
             digit(8),

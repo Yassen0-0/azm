@@ -64,8 +64,8 @@ void main() {
     expect(find.text('60'), findsOneWidget);
     await tester.tap(find.text('7'));
     await tester.tap(find.text('.'));
-    await tester.tap(find.text('+2.5'));
-    await tester.tap(find.text('−2.5'));
+    await tester.tap(find.textContaining('+2.5'));
+    await tester.tap(find.textContaining('−2.5'));
     await tester.tap(find.bySemanticsLabel('Delete digit'));
     await tester.tap(find.bySemanticsLabel('Close keypad'));
     await tester.tap(find.text('Next'));

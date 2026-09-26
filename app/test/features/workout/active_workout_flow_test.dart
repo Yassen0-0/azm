@@ -69,7 +69,7 @@ void main() {
     await settle(tester);
     expect(find.text('Barbell Bench Press'), findsOneWidget);
     expect(find.text('ضغط بار مستوي'), findsOneWidget); // secondary name
-    expect(find.text('60 × 8'), findsOneWidget); // previous
+    expect(find.textContaining('60 × 8'), findsOneWidget); // previous
 
     // ✓ an empty set → filled from previous, persisted, rest timer starts.
     await tester.tap(find.bySemanticsLabel('Mark set complete'));
@@ -126,7 +126,7 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
     expect(find.text('Workout complete'), findsOneWidget);
     expect(find.text('New PRs'), findsOneWidget);
-    expect(find.text('70 kg × 8'), findsWidgets);
+    expect(find.textContaining('70 kg × 8'), findsWidgets);
     expect(find.text('Heaviest weight · Best est. 1RM · Best set volume'), findsOneWidget);
     expect(await repo().active(), isNull);
 

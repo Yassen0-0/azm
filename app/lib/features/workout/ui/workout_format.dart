@@ -15,13 +15,14 @@ extension WorkoutFormat on AppLocalizations {
   String weightWithUnit(double kg, WeightUnit unit) =>
       workoutWeightUnit(weightNumber(kg, unit), unitLabel(unit));
 
-  /// e.g. `60 × 8` (weight in the display unit, no unit).
+  /// e.g. `60 × 8` (weight in the display unit, no unit). Kept left-to-right
+  /// in Arabic too, so it never reorders into `8 × 60`.
   String setValue(WorkoutSet s, WeightUnit unit) =>
-      workoutSetValue(weightNumber(s.weightKg, unit), '${s.reps}');
+      ltrIsolate(workoutSetValue(weightNumber(s.weightKg, unit), '${s.reps}'));
 
-  /// e.g. `60 kg × 8`.
+  /// e.g. `60 kg × 8` (left-to-right in both languages).
   String setValueWithUnit(WorkoutSet s, WeightUnit unit) =>
-      workoutSetValue(weightWithUnit(s.weightKg, unit), '${s.reps}');
+      ltrIsolate(workoutSetValue(weightWithUnit(s.weightKg, unit), '${s.reps}'));
 
   String setLabelFor(SetType type, int? number) => switch (type) {
         SetType.normal => '${number ?? ''}',
@@ -64,6 +65,11 @@ extension WorkoutFormat on AppLocalizations {
     };
   }
 }
+
+/// Wraps a numeric expression (`60 kg × 8`, `−15`) in a Unicode
+/// left-to-right isolate so the bidi algorithm can't reorder its parts inside
+/// Arabic text. (A text-level fix: no hard-coded TextDirection.)
+String ltrIsolate(String s) => '\u2066$s\u2069';
 
 /// Weight number in the display unit, 0.1 precision, trailing zeros dropped.
 String weightNumber(double kg, WeightUnit unit) => AzmNumbers.decimal(Units.toDisplay(kg, unit));
