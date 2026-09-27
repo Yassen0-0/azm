@@ -1,3 +1,16 @@
 {
-  "@@locale": "en"
+  "@@locale": "en",
+  "onboardingStep": "Step {step} of {total}",
+  "onboardingWelcome": "Welcome to Azm",
+  "onboardingUnitTitle": "Which unit do you lift in?",
+  "onboardingUnitBody": "You can change it later in settings.",
+  "onboardingUnitKg": "Kilograms",
+  "onboardingUnitLb": "Pounds",
+  "onboardingUnitKgExample": "e.g. bench 60 kg",
+  "onboardingUnitLbExample": "e.g. bench 135 lb",
+  "onboardingNext": "Next",
+  "onboardingProgramTitle": "Start with a ready program?",
+  "onboardingProgramBody": "Its days are added to your routines, and you can edit them any time.",
+  "onboardingStartWithProgram": "Add program and start",
+  "onboardingSkip": "Skip, start empty"
 }

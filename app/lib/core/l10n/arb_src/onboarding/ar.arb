@@ -1,3 +1,63 @@
 {
-  "@@locale": "ar"
+  "@@locale": "ar",
+  "onboardingStep": "خطوة {step} من {total}",
+  "@onboardingStep": {
+    "description": "Progress label at the top of onboarding.",
+    "placeholders": {
+      "step": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingWelcome": "أهلاً بيك في عزم",
+  "@onboardingWelcome": {
+    "description": "Small heading on the first onboarding step."
+  },
+  "onboardingUnitTitle": "بتشيل بالكيلو ولا بالباوند؟",
+  "@onboardingUnitTitle": {
+    "description": "Title of the unit step."
+  },
+  "onboardingUnitBody": "تقدر تغيّرها بعدين من الإعدادات.",
+  "@onboardingUnitBody": {
+    "description": "Body of the unit step."
+  },
+  "onboardingUnitKg": "كيلو",
+  "@onboardingUnitKg": {
+    "description": "Unit option (kg)."
+  },
+  "onboardingUnitLb": "باوند",
+  "@onboardingUnitLb": {
+    "description": "Unit option (lb)."
+  },
+  "onboardingUnitKgExample": "مثلاً بنش 60 kg",
+  "@onboardingUnitKgExample": {
+    "description": "Example under the kg option."
+  },
+  "onboardingUnitLbExample": "مثلاً بنش 135 lb",
+  "@onboardingUnitLbExample": {
+    "description": "Example under the lb option."
+  },
+  "onboardingNext": "التالي",
+  "@onboardingNext": {
+    "description": "Button: next onboarding step."
+  },
+  "onboardingProgramTitle": "تحب تبدأ ببرنامج جاهز؟",
+  "@onboardingProgramTitle": {
+    "description": "Title of the ready program step."
+  },
+  "onboardingProgramBody": "أيامه هتتضاف لروتيناتك وتقدر تعدّل فيها براحتك.",
+  "@onboardingProgramBody": {
+    "description": "Body of the ready program step."
+  },
+  "onboardingStartWithProgram": "ضيف البرنامج وابدأ",
+  "@onboardingStartWithProgram": {
+    "description": "Primary button when a program is selected."
+  },
+  "onboardingSkip": "تخطّى، وابدأ من غير برنامج",
+  "@onboardingSkip": {
+    "description": "Button that finishes onboarding without a program."
+  }
 }

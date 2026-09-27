@@ -457,6 +457,284 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercisesBodyPartNeck => 'رقبة';
 
   @override
+  String onboardingStep(String step, String total) {
+    return 'خطوة $step من $total';
+  }
+
+  @override
+  String get onboardingWelcome => 'أهلاً بيك في عزم';
+
+  @override
+  String get onboardingUnitTitle => 'بتشيل بالكيلو ولا بالباوند؟';
+
+  @override
+  String get onboardingUnitBody => 'تقدر تغيّرها بعدين من الإعدادات.';
+
+  @override
+  String get onboardingUnitKg => 'كيلو';
+
+  @override
+  String get onboardingUnitLb => 'باوند';
+
+  @override
+  String get onboardingUnitKgExample => 'مثلاً بنش 60 kg';
+
+  @override
+  String get onboardingUnitLbExample => 'مثلاً بنش 135 lb';
+
+  @override
+  String get onboardingNext => 'التالي';
+
+  @override
+  String get onboardingProgramTitle => 'تحب تبدأ ببرنامج جاهز؟';
+
+  @override
+  String get onboardingProgramBody =>
+      'أيامه هتتضاف لروتيناتك وتقدر تعدّل فيها براحتك.';
+
+  @override
+  String get onboardingStartWithProgram => 'ضيف البرنامج وابدأ';
+
+  @override
+  String get onboardingSkip => 'تخطّى، وابدأ من غير برنامج';
+
+  @override
+  String get routinesMyRoutines => 'روتيناتي';
+
+  @override
+  String get routinesNew => 'روتين جديد';
+
+  @override
+  String get routinesEmptyTitle => 'لسه معندكش روتين';
+
+  @override
+  String get routinesEmptyBody =>
+      'اعمل الروتين مرة واحدة وابدأه بضغطة واحدة. أو خد برنامج جاهز.';
+
+  @override
+  String routinesExerciseCount(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText تمرين',
+      few: '$countText تمارين',
+      two: 'تمرينين',
+      one: 'تمرين واحد',
+      zero: 'مفيش تمارين',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String routinesStart(String name) {
+    return 'ابدأ $name';
+  }
+
+  @override
+  String get routinesReadyPrograms => 'برامج جاهزة';
+
+  @override
+  String get routinesReadyProgramsHint => 'خد برنامج مجرّب وعدّل فيه براحتك';
+
+  @override
+  String get routinesUntitled => 'روتين من غير اسم';
+
+  @override
+  String get routinesEditTitle => 'تعديل الروتين';
+
+  @override
+  String get routinesNameHint => 'اسم الروتين';
+
+  @override
+  String get routinesNotesHint => 'ملاحظات (اختياري)';
+
+  @override
+  String get routinesAddExercises => 'ضيف تمارين';
+
+  @override
+  String get routinesEditorEmpty =>
+      'ضيف تمارين الروتين، وحدّد السِتات المطلوبة لكل تمرين.';
+
+  @override
+  String get routinesColSet => 'سِت';
+
+  @override
+  String routinesColWeight(String unit) {
+    return '$unit';
+  }
+
+  @override
+  String get routinesColReps => 'عدّات';
+
+  @override
+  String get routinesUnitKg => 'kg';
+
+  @override
+  String get routinesUnitLb => 'lb';
+
+  @override
+  String get routinesNoTarget => '—';
+
+  @override
+  String get routinesAddSet => 'ضيف سِت';
+
+  @override
+  String get routinesDeleteSet => 'امسح السِت';
+
+  @override
+  String get routinesSetTypeTitle => 'نوع السِت';
+
+  @override
+  String routinesRestValue(String time) {
+    return 'راحة $time';
+  }
+
+  @override
+  String routinesRestDefault(String time) {
+    return 'راحة $time (الافتراضي)';
+  }
+
+  @override
+  String get routinesRestTitle => 'وقت الراحة';
+
+  @override
+  String routinesRestUseDefault(String time) {
+    return 'الافتراضي من الإعدادات ($time)';
+  }
+
+  @override
+  String get routinesExerciseOptions => 'اختيارات التمرين';
+
+  @override
+  String get routinesReorder => 'رتّب التمارين';
+
+  @override
+  String get routinesRemoveExercise => 'شيل التمرين';
+
+  @override
+  String get routinesRemoveExerciseTitle => 'تشيل التمرين ده؟';
+
+  @override
+  String get routinesRemoveExerciseBody => 'السِتات بتاعته هتتشال من الروتين.';
+
+  @override
+  String get routinesRemove => 'شيل';
+
+  @override
+  String get routinesDelete => 'امسح الروتين';
+
+  @override
+  String get routinesDeleteTitle => 'تمسح الروتين ده؟';
+
+  @override
+  String get routinesDeleteBody => 'التمارين اللي عملتها بيه هتفضل في السجل.';
+
+  @override
+  String get routinesDeleteConfirm => 'امسح';
+
+  @override
+  String get routinesCancel => 'إلغاء';
+
+  @override
+  String get routinesDone => 'تم';
+
+  @override
+  String get routinesStartWorkout => 'ابدأ التمرين';
+
+  @override
+  String routinesKeypadWeight(String unit) {
+    return 'الوزن المطلوب ($unit)';
+  }
+
+  @override
+  String get routinesKeypadReps => 'العدّات المطلوبة';
+
+  @override
+  String get routinesKeypadNext => 'التالي';
+
+  @override
+  String get routinesKeypadDone => 'تم';
+
+  @override
+  String get routinesKeypadBackspace => 'امسح رقم';
+
+  @override
+  String get routinesKeypadHide => 'اقفل الكيبورد';
+
+  @override
+  String get routinesKeypadDecrease => 'نقّص';
+
+  @override
+  String get routinesKeypadIncrease => 'زوّد';
+
+  @override
+  String routinesProgramDays(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText يوم في الأسبوع',
+      few: '$countText أيام في الأسبوع',
+      two: 'يومين في الأسبوع',
+      one: 'يوم واحد في الأسبوع',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String routinesProgramRoutineCount(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText روتين',
+      few: '$countText روتينات',
+      two: 'روتينين',
+      one: 'روتين واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get routinesLevelBeginner => 'مبتدئ';
+
+  @override
+  String get routinesLevelIntermediate => 'متوسط';
+
+  @override
+  String get routinesProgramAdd => 'ضيفه لروتيناتي';
+
+  @override
+  String routinesProgramAdded(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'اتضاف $countText روتين لروتيناتك',
+      few: 'اتضاف $countText روتينات لروتيناتك',
+      two: 'اتضاف روتينين لروتيناتك',
+      one: 'اتضاف روتين واحد لروتيناتك',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String routinesSetsReps(String sets, String reps) {
+    return '$sets × $reps';
+  }
+
+  @override
+  String get routinesProgramMissing => 'البرنامج ده مش موجود.';
+
+  @override
+  String get routinesListSeparator => '، ';
+
+  @override
+  String get routinesResumed => 'فيه تمرين شغال، ففتحناهولك.';
+
+  @override
+  String routinesUnknownExercise(String id) {
+    return 'تمرين مش معروف ($id)';
+  }
+
+  @override
   String get settingsTitle => 'الإعدادات';
 
   @override
