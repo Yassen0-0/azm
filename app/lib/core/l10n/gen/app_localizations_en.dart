@@ -456,6 +456,302 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exercisesBodyPartNeck => 'Neck';
 
   @override
+  String get historyLiftedSoFar => 'Lifted so far';
+
+  @override
+  String historyCompactThousand(String value) {
+    return '${value}K';
+  }
+
+  @override
+  String historyCompactMillion(String value) {
+    return '${value}M';
+  }
+
+  @override
+  String historyCompactBillion(String value) {
+    return '${value}B';
+  }
+
+  @override
+  String historyWorkoutCount(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText workouts',
+      one: '1 workout',
+      zero: 'No workouts',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String historySetCount(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText sets',
+      one: '1 set',
+      zero: 'No sets',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get historyOpenStats => 'Stats';
+
+  @override
+  String get historyViewList => 'List';
+
+  @override
+  String get historyViewCalendar => 'Calendar';
+
+  @override
+  String get historyEmptyTitle => 'No workouts yet';
+
+  @override
+  String get historyEmptyBody =>
+      'Finish your first workout and it shows up here, with everything you lifted.';
+
+  @override
+  String historyDurationMinutes(String minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String historyDurationHours(String hours, String minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String get historyUnitKg => 'kg';
+
+  @override
+  String get historyUnitLb => 'lb';
+
+  @override
+  String historyWeightValue(String value, String unit) {
+    return '$value $unit';
+  }
+
+  @override
+  String historySetValue(String weight, String reps) {
+    return '$weight × $reps';
+  }
+
+  @override
+  String historyExerciseSets(String count, String name) {
+    return '$count × $name';
+  }
+
+  @override
+  String historyPrBadge(String count) {
+    return '🏆 $count';
+  }
+
+  @override
+  String historyPrCountLabel(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText personal records',
+      one: '1 personal record',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get historyNoData => '—';
+
+  @override
+  String historyUnknownExercise(String id) {
+    return 'Unknown exercise ($id)';
+  }
+
+  @override
+  String get historyPrevMonth => 'Previous month';
+
+  @override
+  String get historyNextMonth => 'Next month';
+
+  @override
+  String get historyDayEmpty => 'No workouts on this day';
+
+  @override
+  String get historyPickDay => 'Tap a marked day to see its workouts';
+
+  @override
+  String get historyWorkoutOptions => 'Workout options';
+
+  @override
+  String get historyRename => 'Rename';
+
+  @override
+  String get historyRenameTitle => 'Workout name';
+
+  @override
+  String get historySave => 'Save';
+
+  @override
+  String get historyCancel => 'Cancel';
+
+  @override
+  String get historyDeleteWorkout => 'Delete workout';
+
+  @override
+  String get historyDeleteTitle => 'Delete this workout?';
+
+  @override
+  String get historyDeleteBody =>
+      'All its sets are removed, and your Lifted total and records are recalculated. This can\'t be undone.';
+
+  @override
+  String get historyDeleteConfirm => 'Delete';
+
+  @override
+  String get historyStatDuration => 'Duration';
+
+  @override
+  String get historyStatLifted => 'Lifted';
+
+  @override
+  String get historyStatSets => 'Sets';
+
+  @override
+  String get historyStatPrs => 'PRs';
+
+  @override
+  String get historyStatWorkouts => 'Workouts';
+
+  @override
+  String get historyColSet => 'Set';
+
+  @override
+  String get historyColPrevious => 'Previous';
+
+  @override
+  String get historyColReps => 'Reps';
+
+  @override
+  String get historySetTypeTitle => 'Set type';
+
+  @override
+  String get historySetTypeNormal => 'Normal';
+
+  @override
+  String get historySetTypeWarmup => 'Warm-up';
+
+  @override
+  String get historySetTypeDrop => 'Drop set';
+
+  @override
+  String get historySetTypeFailure => 'Failure';
+
+  @override
+  String get historySetTypeWarmupShort => 'W';
+
+  @override
+  String get historySetTypeDropShort => 'D';
+
+  @override
+  String get historySetTypeFailureShort => 'F';
+
+  @override
+  String get historyAddSet => 'Add set';
+
+  @override
+  String get historyAddExercise => 'Add exercise';
+
+  @override
+  String get historyExerciseOptions => 'Exercise options';
+
+  @override
+  String get historyRemoveExercise => 'Remove exercise';
+
+  @override
+  String get historyDeleteSet => 'Delete set';
+
+  @override
+  String get historyCompleteSet => 'Mark set done';
+
+  @override
+  String historyKeypadWeight(String unit) {
+    return 'Weight ($unit)';
+  }
+
+  @override
+  String get historyKeypadNext => 'Next';
+
+  @override
+  String get historyDone => 'Done';
+
+  @override
+  String get historyKeypadBackspace => 'Backspace';
+
+  @override
+  String get historyKeypadHide => 'Hide keypad';
+
+  @override
+  String get historyKeypadDecrease => 'Decrease';
+
+  @override
+  String get historyKeypadIncrease => 'Increase';
+
+  @override
+  String get historyEditHint =>
+      'Edits save instantly. Sets without ✓ or reps are removed when you leave.';
+
+  @override
+  String get historyNotFound => 'This workout doesn\'t exist';
+
+  @override
+  String get historyStatsTitle => 'Stats';
+
+  @override
+  String get historyStatsPerWeek => 'Workouts per week';
+
+  @override
+  String historyStatsThisWeek(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'This week: $countText workouts',
+      one: 'This week: 1 workout',
+      zero: 'This week: none yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String historyStatsAverage(String value) {
+    return 'Average $value a week';
+  }
+
+  @override
+  String get historyStatsRecords => 'Personal records';
+
+  @override
+  String get historyStatsRecordsEmpty =>
+      'No records yet. Finish a workout with weights and they show up here.';
+
+  @override
+  String get historyRecordHeaviest => 'Heaviest';
+
+  @override
+  String get historyRecord1Rm => 'Est. 1RM';
+
+  @override
+  String get historyRecordVolume => 'Best volume';
+
+  @override
+  String historySeeAll(String count) {
+    return 'See all history ($count)';
+  }
+
+  @override
+  String get historyExerciseRecords => 'Your records';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

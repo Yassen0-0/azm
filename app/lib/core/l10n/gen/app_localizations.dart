@@ -938,6 +938,468 @@ abstract class AppLocalizations {
   /// **'رقبة'**
   String get exercisesBodyPartNeck;
 
+  /// History header label above the all-time Lifted total (sum of weight x reps of every completed set).
+  ///
+  /// In ar, this message translates to:
+  /// **'شِلت لحد دلوقتي'**
+  String get historyLiftedSoFar;
+
+  /// Compact number in thousands (e.g. 450K). value has Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} ألف'**
+  String historyCompactThousand(String value);
+
+  /// Compact number in millions (e.g. 1.2M).
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} مليون'**
+  String historyCompactMillion(String value);
+
+  /// Compact number in billions.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} مليار'**
+  String historyCompactBillion(String value);
+
+  /// Number of finished workouts. countText = count with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{countText} تمارين} other{{countText} تمرين}}'**
+  String historyWorkoutCount(int count, String countText);
+
+  /// Number of completed sets. countText = count with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{مفيش سِتات} =1{سِت واحد} =2{سِتّين} few{{countText} سِتات} other{{countText} سِت}}'**
+  String historySetCount(int count, String countText);
+
+  /// Button on the History header that opens the Stats screen.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإحصائيات'**
+  String get historyOpenStats;
+
+  /// Segmented control: show history as a list of workout cards.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمة'**
+  String get historyViewList;
+
+  /// Segmented control: show history as a month calendar.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقويم'**
+  String get historyViewCalendar;
+
+  /// History empty state title.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه مفيش تمارين'**
+  String get historyEmptyTitle;
+
+  /// History empty state body.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلّص أول تمرين وهتلاقيه هنا، ومعاه كل اللي شِلته.'**
+  String get historyEmptyBody;
+
+  /// Workout duration under an hour. minutes has Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes} د'**
+  String historyDurationMinutes(String minutes);
+
+  /// Workout duration of an hour or more.
+  ///
+  /// In ar, this message translates to:
+  /// **'{hours} س {minutes} د'**
+  String historyDurationHours(String hours, String minutes);
+
+  /// Weight unit: kilograms (kept in Latin letters, as written in Egyptian gyms).
+  ///
+  /// In ar, this message translates to:
+  /// **'kg'**
+  String get historyUnitKg;
+
+  /// Weight unit: pounds.
+  ///
+  /// In ar, this message translates to:
+  /// **'lb'**
+  String get historyUnitLb;
+
+  /// A weight with its unit, e.g. 62.5 kg.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} {unit}'**
+  String historyWeightValue(String value, String unit);
+
+  /// One set: weight x reps (kept left-to-right).
+  ///
+  /// In ar, this message translates to:
+  /// **'{weight} × {reps}'**
+  String historySetValue(String weight, String reps);
+
+  /// Workout card line: number of sets x exercise name.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} × {name}'**
+  String historyExerciseSets(String count, String name);
+
+  /// Workout card: number of personal records set in that workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'🏆 {count}'**
+  String historyPrBadge(String count);
+
+  /// Screen-reader label of the PR badge.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{رقم قياسي واحد} =2{رقمين قياسيين} few{{countText} أرقام قياسية} other{{countText} رقم قياسي}}'**
+  String historyPrCountLabel(int count, String countText);
+
+  /// No data yet (grey dash, never 0).
+  ///
+  /// In ar, this message translates to:
+  /// **'—'**
+  String get historyNoData;
+
+  /// Name shown for an exercise that is no longer in the catalog.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمرين مش معروف ({id})'**
+  String historyUnknownExercise(String id);
+
+  /// Calendar: go to the previous month (screen-reader label).
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر اللي فات'**
+  String get historyPrevMonth;
+
+  /// Calendar: go to the next month (screen-reader label).
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر الجاي'**
+  String get historyNextMonth;
+
+  /// Calendar: the selected day has no workouts.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش تمارين في اليوم ده'**
+  String get historyDayEmpty;
+
+  /// Calendar: hint when no day is selected.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوس على يوم معلّم عشان تشوف تمارينه'**
+  String get historyPickDay;
+
+  /// Past workout header menu button (screen-reader label).
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات التمرين'**
+  String get historyWorkoutOptions;
+
+  /// Menu action: rename the workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر الاسم'**
+  String get historyRename;
+
+  /// Rename dialog title.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم التمرين'**
+  String get historyRenameTitle;
+
+  /// Dialog button: save.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get historySave;
+
+  /// Dialog button: cancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get historyCancel;
+
+  /// Menu action / button: delete this past workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح التمرين'**
+  String get historyDeleteWorkout;
+
+  /// Delete confirmation title.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمسح التمرين ده؟'**
+  String get historyDeleteTitle;
+
+  /// Delete confirmation body.
+  ///
+  /// In ar, this message translates to:
+  /// **'هيتمسح بكل سِتاته، واللي شِلته والأرقام القياسية هيتحسبوا من تاني. مفيش رجوع.'**
+  String get historyDeleteBody;
+
+  /// Delete confirmation button.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح'**
+  String get historyDeleteConfirm;
+
+  /// Stat label: workout duration.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدة'**
+  String get historyStatDuration;
+
+  /// Stat label: Lifted (weight x reps of completed sets).
+  ///
+  /// In ar, this message translates to:
+  /// **'شِلت'**
+  String get historyStatLifted;
+
+  /// Stat label: completed sets.
+  ///
+  /// In ar, this message translates to:
+  /// **'السِتات'**
+  String get historyStatSets;
+
+  /// Stat label: personal records.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرقام قياسية'**
+  String get historyStatPrs;
+
+  /// Stat label: number of finished workouts.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمارين'**
+  String get historyStatWorkouts;
+
+  /// Set-table column: set number / type.
+  ///
+  /// In ar, this message translates to:
+  /// **'سِت'**
+  String get historyColSet;
+
+  /// Set-table column: same set in the workout before this one.
+  ///
+  /// In ar, this message translates to:
+  /// **'السابق'**
+  String get historyColPrevious;
+
+  /// Set-table column / keypad title: repetitions.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّات'**
+  String get historyColReps;
+
+  /// Set type sheet title.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع السِت'**
+  String get historySetTypeTitle;
+
+  /// Set type: normal.
+  ///
+  /// In ar, this message translates to:
+  /// **'عادي'**
+  String get historySetTypeNormal;
+
+  /// Set type: warm-up.
+  ///
+  /// In ar, this message translates to:
+  /// **'إحماء'**
+  String get historySetTypeWarmup;
+
+  /// Set type: drop set.
+  ///
+  /// In ar, this message translates to:
+  /// **'دروب سِت'**
+  String get historySetTypeDrop;
+
+  /// Set type: to failure (never shown in red).
+  ///
+  /// In ar, this message translates to:
+  /// **'للفشل'**
+  String get historySetTypeFailure;
+
+  /// Set label of a warm-up set (amber).
+  ///
+  /// In ar, this message translates to:
+  /// **'ح'**
+  String get historySetTypeWarmupShort;
+
+  /// Set label of a drop set.
+  ///
+  /// In ar, this message translates to:
+  /// **'د'**
+  String get historySetTypeDropShort;
+
+  /// Set label of a failure set.
+  ///
+  /// In ar, this message translates to:
+  /// **'ف'**
+  String get historySetTypeFailureShort;
+
+  /// Button under an exercise's sets.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف سِت'**
+  String get historyAddSet;
+
+  /// Button: add exercises to this past workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف تمرين'**
+  String get historyAddExercise;
+
+  /// Exercise menu button (screen-reader label).
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات التمرين'**
+  String get historyExerciseOptions;
+
+  /// Exercise menu action.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيل التمرين'**
+  String get historyRemoveExercise;
+
+  /// Swipe-to-delete label of a set.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح السِت'**
+  String get historyDeleteSet;
+
+  /// Screen-reader label of the ✓ cell.
+  ///
+  /// In ar, this message translates to:
+  /// **'علّم السِت خلصان'**
+  String get historyCompleteSet;
+
+  /// Keypad title when editing a weight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن ({unit})'**
+  String historyKeypadWeight(String unit);
+
+  /// Keypad key: go to the next value.
+  ///
+  /// In ar, this message translates to:
+  /// **'التالي'**
+  String get historyKeypadNext;
+
+  /// Keypad key on the last value.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get historyDone;
+
+  /// Keypad backspace (screen-reader label).
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح رقم'**
+  String get historyKeypadBackspace;
+
+  /// Keypad hide key (screen-reader label).
+  ///
+  /// In ar, this message translates to:
+  /// **'اقفل الكيبورد'**
+  String get historyKeypadHide;
+
+  /// Keypad minus-step key (screen-reader label).
+  ///
+  /// In ar, this message translates to:
+  /// **'نقّص'**
+  String get historyKeypadDecrease;
+
+  /// Keypad plus-step key (screen-reader label).
+  ///
+  /// In ar, this message translates to:
+  /// **'زوّد'**
+  String get historyKeypadIncrease;
+
+  /// Note at the top of a past workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي تعديل بيتحفظ على طول. السِت من غير ✓ أو من غير عدّات بيتشال لما تخرج.'**
+  String get historyEditHint;
+
+  /// Past workout: id not found or not finished.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمرين ده مش موجود'**
+  String get historyNotFound;
+
+  /// Stats screen title.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإحصائيات'**
+  String get historyStatsTitle;
+
+  /// Stats section: weekly workout chart.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمارين في الأسبوع'**
+  String get historyStatsPerWeek;
+
+  /// Stats chart headline: workouts in the current week.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{الأسبوع ده: مفيش لسه} =1{الأسبوع ده: تمرين واحد} =2{الأسبوع ده: تمرينين} few{الأسبوع ده: {countText} تمارين} other{الأسبوع ده: {countText} تمرين}}'**
+  String historyStatsThisWeek(int count, String countText);
+
+  /// Stats chart subline: average workouts per week over the chart.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط {value} في الأسبوع'**
+  String historyStatsAverage(String value);
+
+  /// Stats section: per-exercise records.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرقامك القياسية'**
+  String get historyStatsRecords;
+
+  /// Stats: no records yet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه مفيش أرقام قياسية. خلّص تمرين فيه أوزان وهتظهر هنا.'**
+  String get historyStatsRecordsEmpty;
+
+  /// Record: heaviest weight.
+  ///
+  /// In ar, this message translates to:
+  /// **'أتقل وزن'**
+  String get historyRecordHeaviest;
+
+  /// Record: best estimated one-rep max (Epley).
+  ///
+  /// In ar, this message translates to:
+  /// **'1RM تقديري'**
+  String get historyRecord1Rm;
+
+  /// Record: best single-set volume (weight x reps).
+  ///
+  /// In ar, this message translates to:
+  /// **'أحسن حجم'**
+  String get historyRecordVolume;
+
+  /// Exercise detail: opens the full history of the exercise. count = number of workouts.
+  ///
+  /// In ar, this message translates to:
+  /// **'شوف كل السجل ({count})'**
+  String historySeeAll(String count);
+
+  /// Full exercise history: records card title.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرقامك في التمرين ده'**
+  String get historyExerciseRecords;
+
   /// Settings screen title.
   ///
   /// In ar, this message translates to:

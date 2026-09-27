@@ -457,6 +457,310 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercisesBodyPartNeck => 'رقبة';
 
   @override
+  String get historyLiftedSoFar => 'شِلت لحد دلوقتي';
+
+  @override
+  String historyCompactThousand(String value) {
+    return '$value ألف';
+  }
+
+  @override
+  String historyCompactMillion(String value) {
+    return '$value مليون';
+  }
+
+  @override
+  String historyCompactBillion(String value) {
+    return '$value مليار';
+  }
+
+  @override
+  String historyWorkoutCount(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText تمرين',
+      few: '$countText تمارين',
+      two: 'تمرينين',
+      one: 'تمرين واحد',
+      zero: 'مفيش تمارين',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String historySetCount(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText سِت',
+      few: '$countText سِتات',
+      two: 'سِتّين',
+      one: 'سِت واحد',
+      zero: 'مفيش سِتات',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get historyOpenStats => 'الإحصائيات';
+
+  @override
+  String get historyViewList => 'قائمة';
+
+  @override
+  String get historyViewCalendar => 'تقويم';
+
+  @override
+  String get historyEmptyTitle => 'لسه مفيش تمارين';
+
+  @override
+  String get historyEmptyBody =>
+      'خلّص أول تمرين وهتلاقيه هنا، ومعاه كل اللي شِلته.';
+
+  @override
+  String historyDurationMinutes(String minutes) {
+    return '$minutes د';
+  }
+
+  @override
+  String historyDurationHours(String hours, String minutes) {
+    return '$hours س $minutes د';
+  }
+
+  @override
+  String get historyUnitKg => 'kg';
+
+  @override
+  String get historyUnitLb => 'lb';
+
+  @override
+  String historyWeightValue(String value, String unit) {
+    return '$value $unit';
+  }
+
+  @override
+  String historySetValue(String weight, String reps) {
+    return '$weight × $reps';
+  }
+
+  @override
+  String historyExerciseSets(String count, String name) {
+    return '$count × $name';
+  }
+
+  @override
+  String historyPrBadge(String count) {
+    return '🏆 $count';
+  }
+
+  @override
+  String historyPrCountLabel(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText رقم قياسي',
+      few: '$countText أرقام قياسية',
+      two: 'رقمين قياسيين',
+      one: 'رقم قياسي واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get historyNoData => '—';
+
+  @override
+  String historyUnknownExercise(String id) {
+    return 'تمرين مش معروف ($id)';
+  }
+
+  @override
+  String get historyPrevMonth => 'الشهر اللي فات';
+
+  @override
+  String get historyNextMonth => 'الشهر الجاي';
+
+  @override
+  String get historyDayEmpty => 'مفيش تمارين في اليوم ده';
+
+  @override
+  String get historyPickDay => 'دوس على يوم معلّم عشان تشوف تمارينه';
+
+  @override
+  String get historyWorkoutOptions => 'خيارات التمرين';
+
+  @override
+  String get historyRename => 'غيّر الاسم';
+
+  @override
+  String get historyRenameTitle => 'اسم التمرين';
+
+  @override
+  String get historySave => 'حفظ';
+
+  @override
+  String get historyCancel => 'إلغاء';
+
+  @override
+  String get historyDeleteWorkout => 'امسح التمرين';
+
+  @override
+  String get historyDeleteTitle => 'تمسح التمرين ده؟';
+
+  @override
+  String get historyDeleteBody =>
+      'هيتمسح بكل سِتاته، واللي شِلته والأرقام القياسية هيتحسبوا من تاني. مفيش رجوع.';
+
+  @override
+  String get historyDeleteConfirm => 'امسح';
+
+  @override
+  String get historyStatDuration => 'المدة';
+
+  @override
+  String get historyStatLifted => 'شِلت';
+
+  @override
+  String get historyStatSets => 'السِتات';
+
+  @override
+  String get historyStatPrs => 'أرقام قياسية';
+
+  @override
+  String get historyStatWorkouts => 'التمارين';
+
+  @override
+  String get historyColSet => 'سِت';
+
+  @override
+  String get historyColPrevious => 'السابق';
+
+  @override
+  String get historyColReps => 'عدّات';
+
+  @override
+  String get historySetTypeTitle => 'نوع السِت';
+
+  @override
+  String get historySetTypeNormal => 'عادي';
+
+  @override
+  String get historySetTypeWarmup => 'إحماء';
+
+  @override
+  String get historySetTypeDrop => 'دروب سِت';
+
+  @override
+  String get historySetTypeFailure => 'للفشل';
+
+  @override
+  String get historySetTypeWarmupShort => 'ح';
+
+  @override
+  String get historySetTypeDropShort => 'د';
+
+  @override
+  String get historySetTypeFailureShort => 'ف';
+
+  @override
+  String get historyAddSet => 'ضيف سِت';
+
+  @override
+  String get historyAddExercise => 'ضيف تمرين';
+
+  @override
+  String get historyExerciseOptions => 'خيارات التمرين';
+
+  @override
+  String get historyRemoveExercise => 'شيل التمرين';
+
+  @override
+  String get historyDeleteSet => 'امسح السِت';
+
+  @override
+  String get historyCompleteSet => 'علّم السِت خلصان';
+
+  @override
+  String historyKeypadWeight(String unit) {
+    return 'الوزن ($unit)';
+  }
+
+  @override
+  String get historyKeypadNext => 'التالي';
+
+  @override
+  String get historyDone => 'تم';
+
+  @override
+  String get historyKeypadBackspace => 'امسح رقم';
+
+  @override
+  String get historyKeypadHide => 'اقفل الكيبورد';
+
+  @override
+  String get historyKeypadDecrease => 'نقّص';
+
+  @override
+  String get historyKeypadIncrease => 'زوّد';
+
+  @override
+  String get historyEditHint =>
+      'أي تعديل بيتحفظ على طول. السِت من غير ✓ أو من غير عدّات بيتشال لما تخرج.';
+
+  @override
+  String get historyNotFound => 'التمرين ده مش موجود';
+
+  @override
+  String get historyStatsTitle => 'الإحصائيات';
+
+  @override
+  String get historyStatsPerWeek => 'تمارين في الأسبوع';
+
+  @override
+  String historyStatsThisWeek(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'الأسبوع ده: $countText تمرين',
+      few: 'الأسبوع ده: $countText تمارين',
+      two: 'الأسبوع ده: تمرينين',
+      one: 'الأسبوع ده: تمرين واحد',
+      zero: 'الأسبوع ده: مفيش لسه',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String historyStatsAverage(String value) {
+    return 'متوسط $value في الأسبوع';
+  }
+
+  @override
+  String get historyStatsRecords => 'أرقامك القياسية';
+
+  @override
+  String get historyStatsRecordsEmpty =>
+      'لسه مفيش أرقام قياسية. خلّص تمرين فيه أوزان وهتظهر هنا.';
+
+  @override
+  String get historyRecordHeaviest => 'أتقل وزن';
+
+  @override
+  String get historyRecord1Rm => '1RM تقديري';
+
+  @override
+  String get historyRecordVolume => 'أحسن حجم';
+
+  @override
+  String historySeeAll(String count) {
+    return 'شوف كل السجل ($count)';
+  }
+
+  @override
+  String get historyExerciseRecords => 'أرقامك في التمرين ده';
+
+  @override
   String get settingsTitle => 'الإعدادات';
 
   @override

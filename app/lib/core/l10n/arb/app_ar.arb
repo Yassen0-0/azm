@@ -601,6 +601,423 @@
   "@exercisesBodyPartNeck": {
     "description": "Dataset body part \"neck\" (localized label, owner-reviewed 2026-09-26)."
   },
+  "historyLiftedSoFar": "شِلت لحد دلوقتي",
+  "@historyLiftedSoFar": {
+    "description": "History header label above the all-time Lifted total (sum of weight x reps of every completed set)."
+  },
+  "historyCompactThousand": "{value} ألف",
+  "@historyCompactThousand": {
+    "description": "Compact number in thousands (e.g. 450K). value has Western digits.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "historyCompactMillion": "{value} مليون",
+  "@historyCompactMillion": {
+    "description": "Compact number in millions (e.g. 1.2M).",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "historyCompactBillion": "{value} مليار",
+  "@historyCompactBillion": {
+    "description": "Compact number in billions.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "historyWorkoutCount": "{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{countText} تمارين} other{{countText} تمرين}}",
+  "@historyWorkoutCount": {
+    "description": "Number of finished workouts. countText = count with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "historySetCount": "{count, plural, =0{مفيش سِتات} =1{سِت واحد} =2{سِتّين} few{{countText} سِتات} other{{countText} سِت}}",
+  "@historySetCount": {
+    "description": "Number of completed sets. countText = count with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "historyOpenStats": "الإحصائيات",
+  "@historyOpenStats": {
+    "description": "Button on the History header that opens the Stats screen."
+  },
+  "historyViewList": "قائمة",
+  "@historyViewList": {
+    "description": "Segmented control: show history as a list of workout cards."
+  },
+  "historyViewCalendar": "تقويم",
+  "@historyViewCalendar": {
+    "description": "Segmented control: show history as a month calendar."
+  },
+  "historyEmptyTitle": "لسه مفيش تمارين",
+  "@historyEmptyTitle": {
+    "description": "History empty state title."
+  },
+  "historyEmptyBody": "خلّص أول تمرين وهتلاقيه هنا، ومعاه كل اللي شِلته.",
+  "@historyEmptyBody": {
+    "description": "History empty state body."
+  },
+  "historyDurationMinutes": "{minutes} د",
+  "@historyDurationMinutes": {
+    "description": "Workout duration under an hour. minutes has Western digits.",
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "historyDurationHours": "{hours} س {minutes} د",
+  "@historyDurationHours": {
+    "description": "Workout duration of an hour or more.",
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "historyUnitKg": "kg",
+  "@historyUnitKg": {
+    "description": "Weight unit: kilograms (kept in Latin letters, as written in Egyptian gyms)."
+  },
+  "historyUnitLb": "lb",
+  "@historyUnitLb": {
+    "description": "Weight unit: pounds."
+  },
+  "historyWeightValue": "{value} {unit}",
+  "@historyWeightValue": {
+    "description": "A weight with its unit, e.g. 62.5 kg.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "historySetValue": "{weight} × {reps}",
+  "@historySetValue": {
+    "description": "One set: weight x reps (kept left-to-right).",
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      },
+      "reps": {
+        "type": "String"
+      }
+    }
+  },
+  "historyExerciseSets": "{count} × {name}",
+  "@historyExerciseSets": {
+    "description": "Workout card line: number of sets x exercise name.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "historyPrBadge": "🏆 {count}",
+  "@historyPrBadge": {
+    "description": "Workout card: number of personal records set in that workout.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "historyPrCountLabel": "{count, plural, =1{رقم قياسي واحد} =2{رقمين قياسيين} few{{countText} أرقام قياسية} other{{countText} رقم قياسي}}",
+  "@historyPrCountLabel": {
+    "description": "Screen-reader label of the PR badge.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "historyNoData": "—",
+  "@historyNoData": {
+    "description": "No data yet (grey dash, never 0)."
+  },
+  "historyUnknownExercise": "تمرين مش معروف ({id})",
+  "@historyUnknownExercise": {
+    "description": "Name shown for an exercise that is no longer in the catalog.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "historyPrevMonth": "الشهر اللي فات",
+  "@historyPrevMonth": {
+    "description": "Calendar: go to the previous month (screen-reader label)."
+  },
+  "historyNextMonth": "الشهر الجاي",
+  "@historyNextMonth": {
+    "description": "Calendar: go to the next month (screen-reader label)."
+  },
+  "historyDayEmpty": "مفيش تمارين في اليوم ده",
+  "@historyDayEmpty": {
+    "description": "Calendar: the selected day has no workouts."
+  },
+  "historyPickDay": "دوس على يوم معلّم عشان تشوف تمارينه",
+  "@historyPickDay": {
+    "description": "Calendar: hint when no day is selected."
+  },
+  "historyWorkoutOptions": "خيارات التمرين",
+  "@historyWorkoutOptions": {
+    "description": "Past workout header menu button (screen-reader label)."
+  },
+  "historyRename": "غيّر الاسم",
+  "@historyRename": {
+    "description": "Menu action: rename the workout."
+  },
+  "historyRenameTitle": "اسم التمرين",
+  "@historyRenameTitle": {
+    "description": "Rename dialog title."
+  },
+  "historySave": "حفظ",
+  "@historySave": {
+    "description": "Dialog button: save."
+  },
+  "historyCancel": "إلغاء",
+  "@historyCancel": {
+    "description": "Dialog button: cancel."
+  },
+  "historyDeleteWorkout": "امسح التمرين",
+  "@historyDeleteWorkout": {
+    "description": "Menu action / button: delete this past workout."
+  },
+  "historyDeleteTitle": "تمسح التمرين ده؟",
+  "@historyDeleteTitle": {
+    "description": "Delete confirmation title."
+  },
+  "historyDeleteBody": "هيتمسح بكل سِتاته، واللي شِلته والأرقام القياسية هيتحسبوا من تاني. مفيش رجوع.",
+  "@historyDeleteBody": {
+    "description": "Delete confirmation body."
+  },
+  "historyDeleteConfirm": "امسح",
+  "@historyDeleteConfirm": {
+    "description": "Delete confirmation button."
+  },
+  "historyStatDuration": "المدة",
+  "@historyStatDuration": {
+    "description": "Stat label: workout duration."
+  },
+  "historyStatLifted": "شِلت",
+  "@historyStatLifted": {
+    "description": "Stat label: Lifted (weight x reps of completed sets)."
+  },
+  "historyStatSets": "السِتات",
+  "@historyStatSets": {
+    "description": "Stat label: completed sets."
+  },
+  "historyStatPrs": "أرقام قياسية",
+  "@historyStatPrs": {
+    "description": "Stat label: personal records."
+  },
+  "historyStatWorkouts": "التمارين",
+  "@historyStatWorkouts": {
+    "description": "Stat label: number of finished workouts."
+  },
+  "historyColSet": "سِت",
+  "@historyColSet": {
+    "description": "Set-table column: set number / type."
+  },
+  "historyColPrevious": "السابق",
+  "@historyColPrevious": {
+    "description": "Set-table column: same set in the workout before this one."
+  },
+  "historyColReps": "عدّات",
+  "@historyColReps": {
+    "description": "Set-table column / keypad title: repetitions."
+  },
+  "historySetTypeTitle": "نوع السِت",
+  "@historySetTypeTitle": {
+    "description": "Set type sheet title."
+  },
+  "historySetTypeNormal": "عادي",
+  "@historySetTypeNormal": {
+    "description": "Set type: normal."
+  },
+  "historySetTypeWarmup": "إحماء",
+  "@historySetTypeWarmup": {
+    "description": "Set type: warm-up."
+  },
+  "historySetTypeDrop": "دروب سِت",
+  "@historySetTypeDrop": {
+    "description": "Set type: drop set."
+  },
+  "historySetTypeFailure": "للفشل",
+  "@historySetTypeFailure": {
+    "description": "Set type: to failure (never shown in red)."
+  },
+  "historySetTypeWarmupShort": "ح",
+  "@historySetTypeWarmupShort": {
+    "description": "Set label of a warm-up set (amber)."
+  },
+  "historySetTypeDropShort": "د",
+  "@historySetTypeDropShort": {
+    "description": "Set label of a drop set."
+  },
+  "historySetTypeFailureShort": "ف",
+  "@historySetTypeFailureShort": {
+    "description": "Set label of a failure set."
+  },
+  "historyAddSet": "ضيف سِت",
+  "@historyAddSet": {
+    "description": "Button under an exercise's sets."
+  },
+  "historyAddExercise": "ضيف تمرين",
+  "@historyAddExercise": {
+    "description": "Button: add exercises to this past workout."
+  },
+  "historyExerciseOptions": "خيارات التمرين",
+  "@historyExerciseOptions": {
+    "description": "Exercise menu button (screen-reader label)."
+  },
+  "historyRemoveExercise": "شيل التمرين",
+  "@historyRemoveExercise": {
+    "description": "Exercise menu action."
+  },
+  "historyDeleteSet": "امسح السِت",
+  "@historyDeleteSet": {
+    "description": "Swipe-to-delete label of a set."
+  },
+  "historyCompleteSet": "علّم السِت خلصان",
+  "@historyCompleteSet": {
+    "description": "Screen-reader label of the ✓ cell."
+  },
+  "historyKeypadWeight": "الوزن ({unit})",
+  "@historyKeypadWeight": {
+    "description": "Keypad title when editing a weight.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "historyKeypadNext": "التالي",
+  "@historyKeypadNext": {
+    "description": "Keypad key: go to the next value."
+  },
+  "historyDone": "تم",
+  "@historyDone": {
+    "description": "Keypad key on the last value."
+  },
+  "historyKeypadBackspace": "امسح رقم",
+  "@historyKeypadBackspace": {
+    "description": "Keypad backspace (screen-reader label)."
+  },
+  "historyKeypadHide": "اقفل الكيبورد",
+  "@historyKeypadHide": {
+    "description": "Keypad hide key (screen-reader label)."
+  },
+  "historyKeypadDecrease": "نقّص",
+  "@historyKeypadDecrease": {
+    "description": "Keypad minus-step key (screen-reader label)."
+  },
+  "historyKeypadIncrease": "زوّد",
+  "@historyKeypadIncrease": {
+    "description": "Keypad plus-step key (screen-reader label)."
+  },
+  "historyEditHint": "أي تعديل بيتحفظ على طول. السِت من غير ✓ أو من غير عدّات بيتشال لما تخرج.",
+  "@historyEditHint": {
+    "description": "Note at the top of a past workout."
+  },
+  "historyNotFound": "التمرين ده مش موجود",
+  "@historyNotFound": {
+    "description": "Past workout: id not found or not finished."
+  },
+  "historyStatsTitle": "الإحصائيات",
+  "@historyStatsTitle": {
+    "description": "Stats screen title."
+  },
+  "historyStatsPerWeek": "تمارين في الأسبوع",
+  "@historyStatsPerWeek": {
+    "description": "Stats section: weekly workout chart."
+  },
+  "historyStatsThisWeek": "{count, plural, =0{الأسبوع ده: مفيش لسه} =1{الأسبوع ده: تمرين واحد} =2{الأسبوع ده: تمرينين} few{الأسبوع ده: {countText} تمارين} other{الأسبوع ده: {countText} تمرين}}",
+  "@historyStatsThisWeek": {
+    "description": "Stats chart headline: workouts in the current week.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "historyStatsAverage": "متوسط {value} في الأسبوع",
+  "@historyStatsAverage": {
+    "description": "Stats chart subline: average workouts per week over the chart.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "historyStatsRecords": "أرقامك القياسية",
+  "@historyStatsRecords": {
+    "description": "Stats section: per-exercise records."
+  },
+  "historyStatsRecordsEmpty": "لسه مفيش أرقام قياسية. خلّص تمرين فيه أوزان وهتظهر هنا.",
+  "@historyStatsRecordsEmpty": {
+    "description": "Stats: no records yet."
+  },
+  "historyRecordHeaviest": "أتقل وزن",
+  "@historyRecordHeaviest": {
+    "description": "Record: heaviest weight."
+  },
+  "historyRecord1Rm": "1RM تقديري",
+  "@historyRecord1Rm": {
+    "description": "Record: best estimated one-rep max (Epley)."
+  },
+  "historyRecordVolume": "أحسن حجم",
+  "@historyRecordVolume": {
+    "description": "Record: best single-set volume (weight x reps)."
+  },
+  "historySeeAll": "شوف كل السجل ({count})",
+  "@historySeeAll": {
+    "description": "Exercise detail: opens the full history of the exercise. count = number of workouts.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "historyExerciseRecords": "أرقامك في التمرين ده",
+  "@historyExerciseRecords": {
+    "description": "Full exercise history: records card title."
+  },
   "settingsTitle": "الإعدادات",
   "@settingsTitle": {
     "description": "Settings screen title."
