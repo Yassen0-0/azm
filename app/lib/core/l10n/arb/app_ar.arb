@@ -1361,6 +1361,223 @@
   "@settingsThemeLight": {
     "description": "Theme option: light."
   },
+  "settingsTraining": "التمرين",
+  "@settingsTraining": {
+    "description": "Settings group: weight unit and default rest time."
+  },
+  "settingsUnit": "وحدة الوزن",
+  "@settingsUnit": {
+    "description": "Settings row + sheet title: kg or lb (display only; weights are stored in kg)."
+  },
+  "settingsUnitKg": "كيلو (kg)",
+  "@settingsUnitKg": {
+    "description": "Unit choice: kilograms."
+  },
+  "settingsUnitLb": "باوند (lb)",
+  "@settingsUnitLb": {
+    "description": "Unit choice: pounds."
+  },
+  "settingsUnitValueKg": "kg",
+  "@settingsUnitValueKg": {
+    "description": "Short current value of the unit row (Latin 'kg' in both languages, like the rest of the app)."
+  },
+  "settingsUnitValueLb": "lb",
+  "@settingsUnitValueLb": {
+    "description": "Short current value of the unit row (Latin 'lb' in both languages)."
+  },
+  "settingsDefaultRest": "وقت الراحة الافتراضي",
+  "@settingsDefaultRest": {
+    "description": "Settings row + sheet title: default rest between sets (routines can override it per exercise)."
+  },
+  "settingsDefaultRestHint": "الروتين يقدر يغيّره لكل تمرين",
+  "@settingsDefaultRestHint": {
+    "description": "Small line under the rest sheet title."
+  },
+  "settingsBackup": "النسخة الاحتياطية",
+  "@settingsBackup": {
+    "description": "Settings group: export / import a JSON backup file."
+  },
+  "settingsExport": "صدّر نسخة احتياطية",
+  "@settingsExport": {
+    "description": "Backup row: create the backup file and open the share sheet."
+  },
+  "settingsExportHint": "روتيناتك وسجلّك وإعداداتك في ملف واحد",
+  "@settingsExportHint": {
+    "description": "Subtitle of the export row."
+  },
+  "settingsImport": "استرجع نسخة احتياطية",
+  "@settingsImport": {
+    "description": "Backup row: pick a backup file and restore it."
+  },
+  "settingsImportHint": "هيبدّل كل البيانات اللي على الموبايل ده",
+  "@settingsImportHint": {
+    "description": "Subtitle of the import row (warns that import replaces everything)."
+  },
+  "settingsExportFailed": "معرفناش نعمل النسخة. جرّب تاني.",
+  "@settingsExportFailed": {
+    "description": "Toast when writing/sharing the backup file fails."
+  },
+  "settingsImportConfirmTitle": "تسترجع النسخة دي؟",
+  "@settingsImportConfirmTitle": {
+    "description": "Import confirmation dialog title."
+  },
+  "settingsImportFrom": "نسخة من {date}",
+  "@settingsImportFrom": {
+    "description": "First line of the import confirmation: when the backup was made. {date} is a formatted date + time with Western digits.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportCountRoutines": "الروتينات: {count}",
+  "@settingsImportCountRoutines": {
+    "description": "Import confirmation count line. {count} is formatted with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportCountWorkouts": "التمارين: {count}",
+  "@settingsImportCountWorkouts": {
+    "description": "Import confirmation count line: finished + active workouts in the file.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportCountSets": "السِتات: {count}",
+  "@settingsImportCountSets": {
+    "description": "Import confirmation count line: logged sets in the file (same word as the History stat).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportWarning": "كل اللي على الموبايل ده هيتمسح ويتبدّل بالنسخة دي. مفيش رجوع.",
+  "@settingsImportWarning": {
+    "description": "Import confirmation warning."
+  },
+  "settingsImportConfirm": "استرجع",
+  "@settingsImportConfirm": {
+    "description": "Destructive confirm button of the import dialog."
+  },
+  "settingsCancel": "إلغاء",
+  "@settingsCancel": {
+    "description": "Cancel button in settings dialogs."
+  },
+  "settingsOk": "تمام",
+  "@settingsOk": {
+    "description": "Dismiss button of the import error dialog."
+  },
+  "settingsImportDone": "النسخة رجعت ✓",
+  "@settingsImportDone": {
+    "description": "Toast after a successful import."
+  },
+  "settingsImportErrorTitle": "مقدرناش نسترجع الملف ده",
+  "@settingsImportErrorTitle": {
+    "description": "Title of the import error dialog."
+  },
+  "settingsImportErrorNotJson": "الملف ده مش نسخة احتياطية (مش ملف JSON).",
+  "@settingsImportErrorNotJson": {
+    "description": "Import error: the file is not JSON."
+  },
+  "settingsImportErrorNotAzm": "الملف ده مش نسخة احتياطية من عزم.",
+  "@settingsImportErrorNotAzm": {
+    "description": "Import error: JSON without the Azm backup marker."
+  },
+  "settingsImportErrorNewer": "النسخة دي معمولة بإصدار أحدث من عزم. حدّث التطبيق وجرّب تاني.",
+  "@settingsImportErrorNewer": {
+    "description": "Import error: the backup version is newer than this app understands."
+  },
+  "settingsImportErrorCorrupt": "الملف ده بايظ أو ناقص.",
+  "@settingsImportErrorCorrupt": {
+    "description": "Import error: an Azm backup with broken content (types, ids, links)."
+  },
+  "settingsImportErrorRead": "مقدرناش نقرا الملف.",
+  "@settingsImportErrorRead": {
+    "description": "Import error: the picked file could not be opened."
+  },
+  "settingsImportErrorActive": "خلّص التمرين اللي شغال أو الغيه الأول، وبعدين استرجع النسخة.",
+  "@settingsImportErrorActive": {
+    "description": "Import refused while a workout is running."
+  },
+  "settingsImportUnchanged": "بياناتك زي ما هي، محصلش أي تغيير.",
+  "@settingsImportUnchanged": {
+    "description": "Second line of every import error: nothing was modified."
+  },
+  "settingsAbout": "عن عزم",
+  "@settingsAbout": {
+    "description": "Settings group: licences and version."
+  },
+  "settingsLicenses": "التراخيص والمصادر",
+  "@settingsLicenses": {
+    "description": "Settings row + licences screen title."
+  },
+  "settingsVersion": "الإصدار {version}",
+  "@settingsVersion": {
+    "description": "App version line under the About group. {version} like 1.0.0.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsLicensesIntro": "عزم مبني على شغل ناس تانية. شكراً ليهم.",
+  "@settingsLicensesIntro": {
+    "description": "Intro line on the licences screen."
+  },
+  "settingsLicensesExerciseData": "بيانات التمارين",
+  "@settingsLicensesExerciseData": {
+    "description": "Licences card title: the exercise dataset."
+  },
+  "settingsLicensesExerciseDataBody": "أسماء التمارين بالإنجليزي والعضلات والأدوات والتعليمات.",
+  "@settingsLicensesExerciseDataBody": {
+    "description": "What the dataset provides."
+  },
+  "settingsLicensesExerciseDataCredit": "Exercise data © 2026 Hasan Emir Yıldırım, MIT License",
+  "@settingsLicensesExerciseDataCredit": {
+    "description": "Attribution text from docs/LICENSES.md. Keep it in English, word for word."
+  },
+  "settingsLicensesFont": "الخط",
+  "@settingsLicensesFont": {
+    "description": "Licences card title: the typeface."
+  },
+  "settingsLicensesFontCredit": "Readex Pro © The Readex Pro Project Authors, SIL OFL 1.1",
+  "@settingsLicensesFontCredit": {
+    "description": "Attribution text from docs/LICENSES.md. Keep it in English, word for word."
+  },
+  "settingsLicensesMedia": "صور وحركات التمارين",
+  "@settingsLicensesMedia": {
+    "description": "Licences card title: exercise media."
+  },
+  "settingsLicensesMediaBody": "بتظهر بس للتمارين اللي معانا ترخيص لصورها.",
+  "@settingsLicensesMediaBody": {
+    "description": "Media is shown only when licensed (docs/LICENSES.md)."
+  },
+  "settingsLicensesMediaCredit": "© Gym visual — https://gymvisual.com/",
+  "@settingsLicensesMediaCredit": {
+    "description": "Mandatory media attribution. Keep it word for word."
+  },
+  "settingsLicensesOurs": "الأسماء العربية والبرامج",
+  "@settingsLicensesOurs": {
+    "description": "Licences card title: our own content."
+  },
+  "settingsLicensesOursBody": "الأسماء المصري والبرامج الجاهزة من عمل فريق عزم.",
+  "@settingsLicensesOursBody": {
+    "description": "Our own content credit."
+  },
+  "settingsLicensesPackages": "مكتبات مفتوحة المصدر",
+  "@settingsLicensesPackages": {
+    "description": "Licences row: opens Flutter's licence page."
+  },
+  "settingsLicensesPackagesBody": "النص الكامل لكل التراخيص، ومعاهم بيانات التمارين والخط.",
+  "@settingsLicensesPackagesBody": {
+    "description": "Subtitle of the open-source packages row."
+  },
   "workoutStart": "ابدأ تمرين",
   "@workoutStart": {
     "description": "Big primary button on the Workout tab: starts an empty workout."
