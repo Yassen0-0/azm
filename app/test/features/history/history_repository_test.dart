@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:azm/core/db/app_database.dart';
 import 'package:azm/features/exercises/data/exercise_history.dart';
 import 'package:azm/features/history/data/history_exercise_source.dart';
@@ -116,6 +114,19 @@ void main() {
       expect(seen, [480, 600]);
       final row = await (db.select(db.workoutSets)..where((s) => s.id.equals(id))).getSingle();
       expect(row.reps, 10);
+    });
+
+    test('writes made in a transaction (like finish()) re-emit, with names', () async {
+      final seen = <HistoryData>[];
+      final sub = history.watchHistory().listen(seen.add);
+      await pumpEventQueue();
+      await db.transaction(() => seedWorkout(db, startedAt: day(0), exercises: {bench: [n(60, 8)]}));
+      for (var i = 0; i < 50 && (seen.isEmpty || seen.last.isEmpty); i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      await sub.cancel();
+      expect(seen.last.workouts, hasLength(1));
+      expect(seen.last.exercises[bench]?.nameEn, 'Barbell Bench Press');
     });
 
     test('ticking sets in the active workout does not re-emit the history', () async {

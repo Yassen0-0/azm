@@ -34,7 +34,7 @@ class StatsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
     final data = ref.watch(historyProvider).value;
-    final exercises = ref.watch(historyExercisesProvider).value ?? const {};
+    final exercises = data?.exercises ?? const {};
     final unit = ref.watch(weightUnitProvider).value ?? WeightUnit.kg;
 
     return Scaffold(
@@ -105,7 +105,7 @@ class _Totals extends StatelessWidget {
           HistoryStat(label: l.historyStatSets, value: AzmNumbers.integer(data.setCount)),
           HistoryStat(
             label: l.historyStatLifted,
-            value: lifted <= 0 ? l.historyNoData : ltr(l.historyWeightValue(l.compact(lifted), l.unitLabel(unit))),
+            value: lifted <= 0 ? l.historyNoData : l.historyWeightValue(l.compact(lifted), l.unitLabel(unit)),
           ),
         ],
       ),

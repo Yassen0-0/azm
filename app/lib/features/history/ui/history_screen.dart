@@ -43,7 +43,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     final l = context.l10n;
     final async = ref.watch(historyProvider);
     final data = async.value;
-    final exercises = ref.watch(historyExercisesProvider).value ?? const {};
+    final exercises = data?.exercises ?? const {};
     final unit = ref.watch(weightUnitProvider).value ?? WeightUnit.kg;
 
     final Widget body;

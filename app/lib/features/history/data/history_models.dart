@@ -84,7 +84,7 @@ class ExerciseRecord {
 /// All history, newest workout first.
 @immutable
 class HistoryData {
-  const HistoryData({this.workouts = const [], this.records = const []});
+  const HistoryData({this.workouts = const [], this.records = const [], this.exercises = const {}});
 
   static const HistoryData empty = HistoryData();
 
@@ -93,6 +93,14 @@ class HistoryData {
 
   /// Exercises with at least one PR-eligible set, most recently done first.
   final List<ExerciseRecord> records;
+
+  /// Catalog rows of every exercise in [workouts] (names, thumbnails),
+  /// loaded in the SAME emission so cards never show stale names. Missing
+  /// ids = exercises that left the catalog.
+  final Map<String, Exercise> exercises;
+
+  HistoryData withExercises(Map<String, Exercise> exercises) =>
+      HistoryData(workouts: workouts, records: records, exercises: exercises);
 
   bool get isEmpty => workouts.isEmpty;
 

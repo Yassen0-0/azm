@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/db/app_database.dart';
-import '../../workout/data/workout_repository.dart' show noRetry;
+import '../../settings/data/training_settings.dart';
+import '../../workout/data/workout_models.dart';
+import '../../workout/data/workout_repository.dart';
 import 'history_models.dart';
 
 /// Reads the history of FINISHED workouts and makes the few edits the
@@ -19,7 +23,13 @@ class HistoryRepository {
   /// All finished workouts with their completed sets. Re-emits when any
   /// workout table changes, but only if the finished data actually changed
   /// (ticking sets in the active workout doesn't rebuild the history).
-  Stream<HistoryData> watchHistory() => db
+  Stream<HistoryData> watchHistory() => _combineLatest(
+        _watchRows().distinct(_sameRows).map(_build),
+        _watchCatalog(),
+        (HistoryData data, Map<String, Exercise> catalog) => data.withExercises(catalog),
+      );
+
+  Stream<List<Map<String, Object?>>> _watchRows() => db
       .customSelect(
         '''
         SELECT w.id AS wid, w.name AS wname, w.started_at AS ws, w.ended_at AS we,
@@ -35,9 +45,19 @@ class HistoryRepository {
         readsFrom: {db.workouts, db.workoutExercises, db.workoutSets},
       )
       .watch()
-      .map((rows) => [for (final r in rows) r.data])
-      .distinct(_sameRows)
-      .map(_build);
+      .map((rows) => [for (final r in rows) r.data]);
+
+  /// Catalog rows of every exercise used in a workout, as its OWN watched
+  /// query. (A follow-up query issued in reaction to the history stream hung
+  /// on device after a write transaction; two independent DB streams don't.)
+  Stream<Map<String, Exercise>> _watchCatalog() => db
+      .customSelect(
+        'SELECT x.* FROM exercises x WHERE x.id IN (SELECT DISTINCT exercise_id FROM workout_exercises)',
+        readsFrom: {db.exercises, db.workoutExercises},
+      )
+      .watch()
+      .map((rows) => {for (final r in rows) r.read<String>('id'): db.exercises.map(r.data)})
+      .distinct((a, b) => a.length == b.length && a.keys.every(b.containsKey));
 
   HistoryData _build(List<Map<String, Object?>> rows) {
     final raw = <RawWorkout>[];
@@ -144,6 +164,47 @@ class HistoryRepository {
       });
 }
 
+/// Emits [combine] of the latest values once both streams have emitted.
+Stream<R> _combineLatest<A, B, R>(Stream<A> a, Stream<B> b, R Function(A, B) combine) {
+  late StreamController<R> out;
+  StreamSubscription<A>? sa;
+  StreamSubscription<B>? sb;
+  A? va;
+  B? vb;
+  var hasA = false, hasB = false;
+  void emit() {
+    if (hasA && hasB) out.add(combine(va as A, vb as B));
+  }
+
+  out = StreamController<R>(
+    onListen: () {
+      sa = a.listen((v) {
+        va = v;
+        hasA = true;
+        emit();
+      }, onError: out.addError);
+      sb = b.listen((v) {
+        vb = v;
+        hasB = true;
+        emit();
+      }, onError: out.addError);
+    },
+    onPause: () {
+      sa?.pause();
+      sb?.pause();
+    },
+    onResume: () {
+      sa?.resume();
+      sb?.resume();
+    },
+    onCancel: () async {
+      await sa?.cancel();
+      await sb?.cancel();
+    },
+  );
+  return out.stream;
+}
+
 bool _sameRows(List<Map<String, Object?>> a, List<Map<String, Object?>> b) {
   if (a.length != b.length) return false;
   for (var i = 0; i < a.length; i++) {
@@ -162,9 +223,15 @@ final historyProvider = StreamProvider<HistoryData>(
   retry: noRetry,
 );
 
-/// Catalog rows of every exercise in the history (names, thumbnails).
-final historyExercisesProvider = FutureProvider<Map<String, Exercise>>((ref) async {
-  final data = await ref.watch(historyProvider.future);
-  final ids = {for (final w in data.workouts) ...w.exercises.map((e) => e.exerciseId)};
-  return ref.watch(historyRepositoryProvider).exercises(ids);
-}, retry: noRetry);
+
+/// Full detail of one past workout (same data as the live workout: previous
+/// sets, PRs versus earlier workouts). Unlike the workout feature's
+/// `workoutDetailProvider` it is disposed when the screen closes, so opening
+/// many past workouts doesn't leave live DB streams behind.
+final pastWorkoutDetailProvider = StreamProvider.autoDispose.family<WorkoutDetail?, String>(
+  (ref, id) {
+    ref.watch(weightUnitProvider.select((u) => u.value));
+    return ref.watch(workoutRepositoryProvider).watchDetail(id);
+  },
+  retry: noRetry,
+);

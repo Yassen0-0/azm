@@ -173,7 +173,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [x] Tests: search UI (Arabic, slang, English, filters), picker returns ordered ids, names logic in cards, detail with and without history.
   - [x] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh exercises`, covering library (default, a search in Arabic, filtered), equipment sheet, picker with 3 selected, detail with no media (fallback) and with seeded history, in ar + en on both platforms. (With the dev media server + `AZM_MEDIA_ALLOW_ALL`, media may appear in LOCAL screenshots only. **Never commit screenshots that show Gym visual media**, see LICENSES.md; commit the fallback versions.)
 
-## 4. D window — History, stats, PRs, all-time Lifted  (branch `feature/history`, device set **B**) — [ ]
+## 4. D window — History, stats, PRs, all-time Lifted  (branch `feature/history`, device set **B**) — [x] done 2026-09-27 (window D), not merged yet
 
 - **Goal:** see every past workout (list + calendar), fix a logged mistake, watch totals and records grow.
 - **Owns (only these):**
@@ -182,12 +182,13 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - `app/test/features/history/**`, `app/integration_test/history_screens_test.dart`, `docs/screenshots/history/**`
 - **Uses, read-only:** tables `workouts`/`workout_exercises`/`workout_sets` (edit FINISHED workouts only; never touch the active one), `WorkoutRepository` read/update methods, `ExerciseHistorySource`/`DbExerciseHistorySource`, `detectPrs`/`PrBests`/`liftedKg`/`liftedComparison`/`epley1Rm`, `Units` + `weightUnitProvider`, `SetRow`/`WeightKeypad`/`LiftedCounter`, `ExerciseThumbnail`, `context.namesOf`, tokens.
 - **Acceptance:**
-  - [ ] History tab (`HistoryScreen`): all-time Lifted header ("شِلت لحد دلوقتي 1.2 مليون kg" / "Lifted so far: 1.2M kg", compact formatting, Western digits; formatter lives in `features/history/`), list of workout cards (name, date, duration, Lifted, PR count, best set per exercise), list ↔ calendar toggle (month grid, days with workouts marked, tap a day → its workouts; week starts per locale), entry to Stats. Empty state.
-  - [ ] Past workout detail (`pastWorkoutFor(id)`), editable with the same `SetRow` components: weights/reps/type/add/delete sets, rename, delete workout (confirmation). Persisted immediately; Lifted, PR counts and records recompute (PRs = SPEC rules, evaluated chronologically, so editing an old workout can change later PRs).
-  - [ ] Stats (`stats`): workouts per week (chart, `AzmSize.chart*` tokens), total workouts/sets/Lifted, per-exercise PR list (heaviest, e1RM, best volume) → exercise detail.
-  - [ ] Exercise history hook: implement `createExerciseHistorySource` if your rules differ from the default (edited workouts are already live through the DB streams); `ExerciseHistoryLinkSlot` shows "See all history" when `sessionCount` > 10 (the detail shows 10) → `exerciseHistoryFor(id)` full list.
-  - [ ] Tests: lifted total + compact formatting (ar/en), PR recompute after an edit, calendar grouping by local day, stats per week, past-workout edits persisted.
-  - [ ] Parity: `AZM_DEVICE_SET=B tools/screenshots.sh history` (list with seeded workouts, calendar, past workout detail + keypad, stats, exercise full history, exercise detail with the "See all" link, empty state), ar + en, both platforms. Seed finished workouts in your own test (dedicated devices only).
+  - [x] History tab (`HistoryScreen`): all-time Lifted header ("شِلت لحد دلوقتي 1.2 مليون kg" / "Lifted so far: 1.2M kg", compact formatting, Western digits; formatter lives in `features/history/`), list of workout cards (name, date, duration, Lifted, PR count, best set per exercise), list ↔ calendar toggle (month grid, days with workouts marked, tap a day → its workouts; week starts per locale), entry to Stats. Empty state.
+  - [x] Past workout detail (`pastWorkoutFor(id)`), editable with the same `SetRow` components: weights/reps/type/add/delete sets, rename, delete workout (confirmation). Persisted immediately; Lifted, PR counts and records recompute (PRs = SPEC rules, evaluated chronologically, so editing an old workout can change later PRs).
+  - [x] Stats (`stats`): workouts per week (chart, `AzmSize.chart*` tokens), total workouts/sets/Lifted, per-exercise PR list (heaviest, e1RM, best volume) → exercise detail.
+  - [x] Exercise history hook: implement `createExerciseHistorySource` if your rules differ from the default (edited workouts are already live through the DB streams); `ExerciseHistoryLinkSlot` shows "See all history" when `sessionCount` > 10 (the detail shows 10) → `exerciseHistoryFor(id)` full list.
+  - [x] Tests: lifted total + compact formatting (ar/en), PR recompute after an edit, calendar grouping by local day, stats per week, past-workout edits persisted.
+  - [x] Parity: `AZM_DEVICE_SET=B tools/screenshots.sh history` (list with seeded workouts, calendar, past workout detail + keypad, stats, exercise full history, exercise detail with the "See all" link, empty state), ar + en, both platforms. Seed finished workouts in your own test (dedicated devices only).
+  - Notes: all logic in `features/history/{data,ui}`; decisions in DECISIONS_LOG → Window D. Proof: `docs/screenshots/history/{android,ios}/` (11 screens × ar/en). Tests: `test/features/history/` (26; full suite 179 green). Screenshot suite waits (max 20 s) for the seeded list on slow hosts.
 
 ## 5. `app/lib/features/settings/**` — Settings, onboarding, backup
 
@@ -255,3 +256,4 @@ _(append here only)_
 ### Requests from D (history), round 2
 
 _(append here only)_
+- @core/widgets (D, 2026-09-27, optional): `LiftedCounter` could take a `format` callback so the History header can use it with the compact form (`1.2M kg`). Until then history has `CompactLiftedNumber` (same layout/motion) in `features/history/ui/history_widgets.dart`.

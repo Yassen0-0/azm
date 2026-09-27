@@ -83,7 +83,7 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
   Widget build(BuildContext context) {
     final c = context.colors;
     final l = context.l10n;
-    final async = ref.watch(workoutDetailProvider(widget.workoutId));
+    final async = ref.watch(pastWorkoutDetailProvider(widget.workoutId));
     final d = async.value;
     final finished = d != null && d.workout.status == WorkoutStatus.finished;
     _detail = finished ? d : null;

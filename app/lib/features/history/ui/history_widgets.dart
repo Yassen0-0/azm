@@ -93,7 +93,8 @@ class CompactLiftedNumber extends StatelessWidget {
         children: [
           Flexible(
             child: Text(
-              v <= 0 ? l.historyNoData : ltr(l.compact(x)),
+              // No LTR isolate: "165 ألف" must read right-to-left in Arabic.
+              v <= 0 ? l.historyNoData : l.compact(x),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AzmType.liftedNumber.copyWith(color: v <= 0 ? c.textNoData : c.textPrimary),
