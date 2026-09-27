@@ -21,20 +21,20 @@ Flagged: 7.
 | 3200 | lever bent-over row with v-bar | سحب جهاز منحني بمقبض في | تي بار في |  |
 | 0575 | lever bicep curl | باي جهاز | بايسبس جهاز، كيرل جهاز |  |
 | 2289 | lever calf press | سمانة على جهاز الرجل | كاف برس، سمانة ليج برس |  |
-| 0577 | lever chest press | ضغط صدر جهاز - نسخة 2 | تشيست برس، جهاز صدر |  |
+| 0577 | lever chest press | ضغط صدر جهاز | تشيست برس، جهاز صدر |  |
 | 0578 | lever deadlift | ديدلفت جهاز | ديدلفت هامر ستريكث |  |
 | 1300 | lever decline chest press | ضغط صدر نازل جهاز | ديكلاين جهاز، صدر سفلي جهاز |  |
 | 1253 | lever donkey calf raise | سمانة دونكي | دونكي كاف، سمانة منحني |  |
 | 0579 | lever front pulldown | سحب عالي جهاز | لات بول داون جهاز، سحب أمامي جهاز |  |
 | 0580 | lever gripless shrug | ترابيس جهاز من غير مسكة | ترابيس جهاز، شراجز جهاز |  |
-| 1439 | lever gripless shrug v. 2 | ترابيس جهاز من غير مسكة - نسخة 2 | ترابيس جهاز |  |
+| 1439 | lever gripless shrug v. 2 | ترابيس جهاز من غير مسكة ضهر مسنود | ترابيس جهاز |  |
 | 2288 | lever gripper hands | جهاز قبضة | هاند جريبر، سواعد قبضة |  |
 | 1615 | lever hammer grip preacher curl | هامر ارتكاز جهاز | بريتشر هامر جهاز |  |
 | 0581 | lever high row | سحب عالي جهاز لورا | هاي رو جهاز |  |
-| 2286 | lever hip extension v. 2 | رجل لورا جهاز - نسخة 2 | هيب اكستنشن جهاز، جلوت جهاز |  |
+| 2286 | lever hip extension v. 2 | رجل لورا جهاز | هيب اكستنشن جهاز، جلوت جهاز |  |
 | 2611 | lever horizontal one leg press | دفع رجل أفقي برجل واحدة | ليج برس أفقي رجل واحدة |  |
 | 1299 | lever incline chest press | ضغط صدر عالي جهاز | انكلاين جهاز، صدر عالي جهاز |  |
-| 1479 | lever incline chest press v. 2 | ضغط صدر عالي جهاز - نسخة 2 | انكلاين جهاز |  |
+| 1479 | lever incline chest press v. 2 | ضغط صدر عالي جهاز | انكلاين جهاز |  |
 | 0582 | lever kneeling leg curl | رجل خلفي جهاز على الركبة | ليج كيرل راكع |  |
 | 0583 | lever kneeling twist | لف جانبي جهاز على الركب | تويست جهاز |  |
 | 0584 | lever lateral raise | رفرفة جانبي جهاز | جانبي جهاز، لاترال جهاز |  |
@@ -46,7 +46,7 @@ Flagged: 7.
 | 0590 | lever one arm shoulder press | ضغط كتف جهاز بدراع واحد | شولدر برس جهاز دراع واحد |  |
 | 0591 | lever overhand triceps dip | متوازي تراي جهاز | ديبس جهاز، تراي ديبس جهاز |  |
 | 0592 | lever preacher curl | باي ارتكاز جهاز | بريتشر جهاز، باي كرسي جهاز |  |
-| 1614 | lever preacher curl v. 2 | باي ارتكاز جهاز - نسخة 2 | بريتشر جهاز |  |
+| 1614 | lever preacher curl v. 2 | باي ارتكاز جهاز | بريتشر جهاز |  |
 | 2285 | lever pullover | بول أوفر جهاز | بلوفر جهاز |  |
 | 2736 | lever reverse grip lateral pulldown | سحب عالي جهاز عكسي | لات بول داون جهاز مقلوب |  |
 | 1616 | lever reverse grip preacher curl | باي ارتكاز جهاز عكسي | بريتشر جهاز مقلوب |  |
@@ -58,7 +58,7 @@ Flagged: 7.
 | 0594 | lever seated calf raise | سمانة قاعد جهاز | سمانة قاعد، سيتد كاف |  |
 | 1452 | lever seated crunch | كرانش جهاز قاعد | بطن جهاز، آب كرانش جهاز |  |
 | 0595 | lever seated crunch (chest pad) | كرانش جهاز بمخدة صدر | بطن جهاز صدر |  |
-| 3760 | lever seated crunch v. 2 | كرانش جهاز قاعد - نسخة 2 | بطن جهاز |  |
+| 3760 | lever seated crunch v. 2 | كرانش جهاز قاعد رجل مثبتة | بطن جهاز |  |
 | 1451 | lever seated dip | متوازي جهاز قاعد | ديبس قاعد جهاز، تراي ديبس قاعد |  |
 | 3759 | lever seated good morning | جود مورنينج جهاز قاعد | جود مورنينج جهاز |  |
 | 0597 | lever seated hip abduction | رجل خارجي جهاز | أبدكتور، جهاز خارجي |  |
@@ -69,11 +69,11 @@ Flagged: 7.
 | 1350 | lever seated row | سحب أرضي جهاز | سيتد رو جهاز، رو جهاز |  |
 | 1385 | lever seated squat calf raise on leg press machine | سمانة على جهاز دفع الرجل قاعد | سمانة ليج برس |  |
 | 0603 | lever shoulder press | ضغط كتف جهاز | شولدر برس جهاز، كتف جهاز |  |
-| 0869 | lever shoulder press v. 2 | ضغط كتف جهاز - نسخة 2 | شولدر برس جهاز |  |
-| 2318 | lever shoulder press v. 3 | ضغط كتف جهاز - نسخة 3 | شولدر برس جهاز |  |
+| 0869 | lever shoulder press v. 2 | ضغط كتف جهاز لقدام وفوق | شولدر برس جهاز |  |
+| 2318 | lever shoulder press v. 3 | ضغط كتف جهاز لقدام وفوق | شولدر برس جهاز |  |
 | 0604 | lever shrug | ترابيس جهاز بمسكة | شراجز جهاز |  |
 | 3758 | lever standing chest press | ضغط صدر جهاز واقف | تشيست برس واقف |  |
-| 1351 | lever t-bar reverse grip row | سحب تي بار عكسي - نسخة 2 | تي بار مسكة مقلوبة |  |
+| 1351 | lever t-bar reverse grip row | سحب تي بار عكسي | تي بار مسكة مقلوبة |  |
 | 0607 | lever triceps extension | تراي جهاز | ترايسبس اكستنشن جهاز، تراي جهاز قاعد |  |
 | 1313 | lever unilateral row | سحب جهاز بدراع واحد | يوني لاترال رو، سحب دراع دراع جهاز |  |
 | 1301 | machine inner chest press | ضغط صدر داخلي جهاز | انر تشيست برس |  |

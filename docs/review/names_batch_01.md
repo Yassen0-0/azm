@@ -70,8 +70,8 @@ Flagged: 13.
 | 0075 | barbell rear delt raise | رفرفة خلفي بار | كتف خلفي بار، ريير دلت بار |  |
 | 0076 | barbell rear delt row | سحب كتف خلفي بار | ريير دلت رو، سحب بار للصدر واسع |  |
 | 0078 | barbell rear lunge | طعن خلفي بار | ريفرس لانج بار، لانج لورا بار |  |
-| 0077 | barbell rear lunge v. 2 | طعن خلفي بار - نسخة 2 | ريفرس لانج بار، لانج لورا |  |
-| 0079 | barbell revers wrist curl v. 2 | سواعد عكسي بار - نسخة 2 | ريفرس ريست كيرل، سواعد مقلوب |  |
+| 0077 | barbell rear lunge v. 2 | طعن خلفي بار | ريفرس لانج بار، لانج لورا |  |
+| 0079 | barbell revers wrist curl v. 2 | سواعد عكسي بار | ريفرس ريست كيرل، سواعد مقلوب |  |
 | 2187 | barbell reverse close-grip bench press | ضغط بار ضيق عكسي | بنش ضيق عكسي، ريفرس كلوز جريب |  |
 | 0080 | barbell reverse curl | باي بار عكسي | ريفرس كيرل، باي مقلوب |  |
 | 0118 | barbell reverse grip bent over row | سحب بار عكسي | ريفرس رو، ياتس رو، سحب بار مقلوب |  |
@@ -86,22 +86,22 @@ Flagged: 13.
 | 0086 | barbell seated behind head military press | ضغط كتف بار خلف الرقبة | ضغط خلف الرقبة، ميلتري خلفي |  |
 | 0087 | barbell seated bradford rocky press | برادفورد برس قاعد | روكي برس، برادفورد |  |
 | 0088 | barbell seated calf raise | سمانة قاعد بار | سيتد كاف بار، سمانة قاعد |  |
-| 1371 | barbell seated calf raise | سمانة قاعد بار - نسخة 2 | سيتد كاف بار، سمانة قاعد |  |
+| 1371 | barbell seated calf raise | سمانة قاعد بار مع إطالة تحت | سيتد كاف بار، سمانة قاعد |  |
 | 1718 | barbell seated close grip behind neck triceps extension | تراي بار ضيق خلف الرقبة قاعد | تراي بار خلف الراس، اوفرهيد تراي بار |  |
 | 0089 | barbell seated close-grip concentration curl | باي تركيز بار قاعد | كونسنتريشن بار، باي تركيز |  |
 | 0090 | barbell seated good morning | جود مورنينج قاعد | جود مورنينج بار قاعد |  |
 | 0092 | barbell seated overhead triceps extension | تراي بار فوق الراس قاعد | اوفرهيد تراي بار، تراي فوق الراس |  |
 | 0094 | barbell seated twist | لف جانبي بار قاعد | تويست بار، روشن بار |  |
-| 0096 | barbell side bent v. 2 | ميل جانبي بار - نسخة 2 | سايد بيند بار، جانبي بطن بار |  |
+| 0096 | barbell side bent v. 2 | ميل جانبي بار | سايد بيند بار، جانبي بطن بار |  |
 | 0098 | barbell side split squat | سبليت سكوات جانبي بار | سايد سبليت سكوات، طعن جانبي ثابت |  |
-| 0097 | barbell side split squat v. 2 | سبليت سكوات جانبي بار - نسخة 2 | سايد سبليت سكوات |  |
+| 0097 | barbell side split squat v. 2 | سبليت سكوات جانبي بار بالتبادل | سايد سبليت سكوات |  |
 | 1756 | barbell single leg deadlift | ديدلفت برجل واحدة بار | سينجل ليج ديدلفت بار |  |
 | 0099 | barbell single leg split squat | سكوات بلغاري بار | بلغاري بار، سبليت سكوات رجل على بنش |  |
 | 2799 | barbell sitted alternate leg raise | رفع رجل قاعد بالتبادل بار (رجالي) | رفع رجل قاعد بار | ⚠️ الوضعية غير واضحة (قاعد وبار على الرجل؟) |
 | 2800 | barbell sitted alternate leg raise (female) | رفع رجل قاعد بالتبادل بار (حريمي) | رفع رجل قاعد بار | ⚠️ نفس 2799 بمؤدية |
 | 0100 | barbell skier | سكاير بار | لاندماين سكاير، سكاير | ⚠️ اسم نادر، غالبًا حركة لف بطرف البار |
 | 0101 | barbell speed squat | سكوات سرعة | سبيد سكوات، سكوات سريع |  |
-| 2810 | barbell split squat v. 2 | سبليت سكوات بار - نسخة 2 | سبليت سكوات بار، سبليت سكوات |  |
+| 2810 | barbell split squat v. 2 | سبليت سكوات بار | سبليت سكوات |  |
 | 0102 | barbell squat (on knees) | سكوات على الركب | سكوات ركب، سكوات راكع |  |
 | 2798 | barbell squat jump step rear lunge | سكوات نط مع طعن خلفي بار | جامب سكوات مع لانج |  |
 | 0103 | barbell standing ab rollerout | رول اوت بار من الوقوف | ستاندينج رول اوت، رول اوت واقف |  |

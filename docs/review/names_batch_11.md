@@ -55,7 +55,7 @@ Flagged: 5.
 | 0844 | weighted round arm | لف دراع بطارة | راوند ارم، طارة حوالين الراس | ⚠️ اسم نادر |
 | 0846 | weighted russian twist | روشن تويست بوزن | روشن بطارة |  |
 | 0845 | weighted russian twist (legs up) | روشن تويست بوزن رجل مرفوعة | روشن رجل مرفوعة |  |
-| 2371 | weighted russian twist v. 2 | روشن تويست بوزن - نسخة 2 | روشن بوزن |  |
+| 2371 | weighted russian twist v. 2 | روشن تويست بوزن | روشن بوزن |  |
 | 0849 | weighted seated twist (on stability ball) | لف قاعد على كورة بوزن | تويست كورة |  |
 | 0850 | weighted side bend (on stability ball) | ميل جانبي على كورة بوزن | سايد بيند كورة |  |
 | 0851 | weighted sissy squat | سكوات ركبة لقدام بوزن | سكوات على المشط بوزن | ⚠️ راجع 1489 |
@@ -79,7 +79,7 @@ Flagged: 5.
 | 0975 | band close-grip push-up | ضغط ضيق استك | بوش اب باند ضيق |  |
 | 0976 | band concentration curl | باي تركيز استك | كونسنتريشن باند |  |
 | 3117 | band fixed back close grip pulldown | سحب عالي ضيق استك ثابت ورا | بول داون باند ثابت |  |
-| 3116 | band fixed back underhand pulldown | سحب عالي عكسي استك | بول داون باند مقلوب |  |
+| 3116 | band fixed back underhand pulldown | سحب عالي عكسي استك ضهر ثابت | بول داون باند مقلوب |  |
 | 0977 | band front lateral raise | رفرفة أمامي جانبي استك | فرونت لاترال باند |  |
 | 0978 | band front raise | رفرفة أمامي استك | فرونت ريز باند |  |
 | 1408 | band hip lift | رفع حوض استك | هيب ليفت باند، جلوت بريدج باند |  |

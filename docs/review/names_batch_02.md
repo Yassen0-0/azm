@@ -26,14 +26,14 @@ Flagged: 16.
 | 0117 | barbell sumo deadlift | ديدلفت سومو | سومو، سومو ديدلفت |  |
 | 3305 | barbell thruster | ثراستر بار | ثراستر، سكوات مع ضغط كتف |  |
 | 0120 | barbell upright row | سحب بار للدقن | ابرايت رو، سحب للدقن، ترابيس أمامي |  |
-| 0119 | barbell upright row v. 2 | سحب بار للدقن - نسخة 2 | ابرايت رو، سحب للدقن |  |
-| 0121 | barbell upright row v. 3 | سحب بار للدقن - نسخة 3 | ابرايت رو، سحب للدقن |  |
+| 0119 | barbell upright row v. 2 | سحب بار للدقن | ابرايت رو، سحب للدقن |  |
+| 0121 | barbell upright row v. 3 | سحب بار للدقن | ابرايت رو، سحب للدقن |  |
 | 0122 | barbell wide bench press | ضغط بار مستوي واسع | بنش واسع، وايد جريب بنش |  |
 | 1258 | barbell wide reverse grip bench press | ضغط بار مستوي واسع عكسي | بنش واسع مقلوب، ريفرس جريب بنش |  |
 | 0124 | barbell wide squat | سكوات رجلين واسعة | سكوات واسع، وايد سكوات |  |
 | 0123 | barbell wide-grip upright row | سحب بار للدقن واسع | ابرايت رو واسع، سحب للدقن واسع |  |
-| 0126 | barbell wrist curl | سواعد بار | ريست كيرل بار، سواعد بار قاعد |  |
-| 0125 | barbell wrist curl v. 2 | سواعد بار - نسخة 2 | ريست كيرل بار، سواعد |  |
+| 0126 | barbell wrist curl | سواعد بار لحد الصوابع | ريست كيرل بار، سواعد بار قاعد |  |
+| 0125 | barbell wrist curl v. 2 | سواعد بار | ريست كيرل بار، سواعد |  |
 | 0127 | barbell zercher squat | سكوات زيرشر من الراك | زيرشر سكوات، زيرشر | ⚠️ لتمييزه عن 1545 (full zercher squat) |
 | 0248 | cambered bar lying row | سحب بار مقوس نايم | كامبرد بار رو، سيل رو | ⚠️ بار مقوس غير منتشر في الجيمات |
 | 0455 | finger curls | سواعد صوابع بار | فينجر كيرل، سواعد صوابع |  |
@@ -66,7 +66,7 @@ Flagged: 16.
 | 1458 | ez barbell seated curls | باي بار زد قاعد | زد قاعد، كيرل زد قاعد |  |
 | 0453 | ez barbell seated triceps extension | تراي بار زد قاعد | تراي زد فوق الراس، فرنساوي زد قاعد |  |
 | 0454 | ez barbell spider curl | سبايدر كيرل زد | باي سبايدر زد، سبايدر |  |
-| 1628 | ez barbell spider curl | سبايدر كيرل زد - نسخة 2 | باي سبايدر زد، سبايدر |  |
+| 1628 | ez barbell spider curl | سبايدر كيرل زد | باي سبايدر زد، سبايدر |  |
 | 2404 | ez-bar biceps curl (with arm blaster) | باي بار زد بآرم بلاستر | آرم بلاستر زد |  |
 | 2432 | ez-bar close-grip bench press | ضغط بار زد ضيق | بنش زد ضيق، كلوز جريب زد |  |
 | 2741 | ez-barbell standing wide grip biceps curl | باي بار زد واسع | زد واسع، باي زد مسكة واسعة |  |
@@ -83,7 +83,7 @@ Flagged: 16.
 | 1649 | dumbbell alternating bicep curl with leg raised on exercise ball | باي دمبل بالتبادل ورجل على كورة | باي على كورة | ⚠️ تمرين توازن نادر |
 | 1650 | dumbbell alternating seated bicep curl on exercise ball | باي دمبل بالتبادل قاعد على كورة | باي قاعد على كورة |  |
 | 2137 | dumbbell arnold press | أرنولد | أرنولد برس، ضغط أرنولد |  |
-| 0287 | dumbbell arnold press v. 2 | أرنولد - نسخة 2 | أرنولد برس |  |
+| 0287 | dumbbell arnold press v. 2 | أرنولد | أرنولد برس |  |
 | 0288 | dumbbell around pullover | بول أوفر دمبل دوران | اراوند بلوفر، بلوفر دايري |  |
 | 0290 | dumbbell bench seated press | ضغط كتف دمبل على بنش | شولدر برس بنش، كتف دمبل قاعد | ⚠️ قريب من 0405 |
 | 0291 | dumbbell bench squat | سكوات دمبل على بنش | بوكس سكوات دمبل |  |
@@ -98,13 +98,13 @@ Flagged: 16.
 | 1201 | dumbbell burpee | بيربي دمبل | بيربي، بيربي بالدمبل |  |
 | 0295 | dumbbell clean | كلين دمبل | دمبل كلين |  |
 | 1731 | dumbbell close grip press | ضغط دمبل ضيق | كلوز جريب دمبل، دمبل ضيق، سكويز برس |  |
-| 0296 | dumbbell close-grip press | ضغط دمبل ضيق - نسخة 2 | كلوز جريب دمبل، سكويز برس |  |
+| 0296 | dumbbell close-grip press | ضغط دمبل ضيق | كلوز جريب دمبل، سكويز برس |  |
 | 0297 | dumbbell concentration curl | باي تركيز | كونسنتريشن، باي تركيز دمبل، تركيز |  |
 | 3635 | dumbbell contralateral forward lunge | طعن أمامي دمبل بالعكس | لانج أمامي دمبل، طعن دمبل إيد عكس رجل | ⚠️ contralateral: الدمبل في الإيد عكس الرجل اللي قدام |
 | 0298 | dumbbell cross body hammer curl | هامر عرضي | كروس بودي هامر، هامر للصدر |  |
-| 1657 | dumbbell cross body hammer curl v. 2 | هامر عرضي - نسخة 2 | كروس بودي هامر |  |
+| 1657 | dumbbell cross body hammer curl v. 2 | هامر عرضي | كروس بودي هامر |  |
 | 0299 | dumbbell cuban press | كوبان برس | كوبان، كتف كوبان |  |
-| 2136 | dumbbell cuban press v. 2 | كوبان برس - نسخة 2 | كوبان |  |
+| 2136 | dumbbell cuban press v. 2 | كوبان برس | كوبان |  |
 | 0300 | dumbbell deadlift | ديدلفت دمبل | دمبل ديدلفت |  |
 | 0301 | dumbbell decline bench press | ضغط دمبل نازل | ديكلاين دمبل، صدر سفلي دمبل |  |
 | 0302 | dumbbell decline fly | تفتيح دمبل نازل | فلاي نازل، ديكلاين فلاي |  |

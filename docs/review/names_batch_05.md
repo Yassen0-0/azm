@@ -13,11 +13,11 @@ Flagged: 7.
 | 0417 | dumbbell standing calf raise | سمانة دمبل واقف | سمانة دمبل، كاف ريز دمبل |  |
 | 0418 | dumbbell standing concentration curl | باي تركيز واقف | كونسنتريشن واقف، باي تركيز منحني |  |
 | 0419 | dumbbell standing front raise above head | رفرفة أمامي لفوق الراس | فرونت ريز لفوق، أمامي دمبل لفوق |  |
-| 2321 | dumbbell standing inner biceps curl v. 2 | باي داخلي واقف - نسخة 2 | باي داخلي، باي كوع لجوه |  |
+| 2321 | dumbbell standing inner biceps curl v. 2 | باي داخلي واقف | باي داخلي، باي كوع لجوه |  |
 | 0420 | dumbbell standing kickback | كيك باك واقف | تراي كيك باك واقف |  |
 | 0421 | dumbbell standing one arm concentration curl | باي تركيز واقف بدراع واحد | كونسنتريشن دراع واحد واقف |  |
 | 0422 | dumbbell standing one arm curl (over incline bench) | باي دراع واحد على ضهر بنش عالي | باي بنش مايل واقف، بريتشر على البنش | ⚠️ الدراع على ضهر البنش المايل |
-| 1680 | dumbbell standing one arm curl over incline bench | باي دراع واحد على ضهر بنش عالي - نسخة 2 | بريتشر على البنش |  |
+| 1680 | dumbbell standing one arm curl over incline bench | باي دراع واحد على ضهر بنش عالي | بريتشر على البنش |  |
 | 0423 | dumbbell standing one arm extension | تراي دمبل فوق الراس بدراع واحد | اوفرهيد تراي دراع واحد، تراي دراع واحد واقف |  |
 | 0424 | dumbbell standing one arm palm in press | ضغط كتف كف لجوه بدراع واحد | شولدر برس هامر دراع واحد |  |
 | 0425 | dumbbell standing one arm reverse curl | باي عكسي بدراع واحد واقف | ريفرس كيرل دراع واحد |  |
@@ -33,7 +33,7 @@ Flagged: 7.
 | 2812 | dumbbell step-up split squat | سبليت سكوات رجل على ستيب دمبل | سبليت سكوات دمبل على ستيب |  |
 | 0432 | dumbbell stiff leg deadlift | ديدلفت دمبل رجل مفرودة | ستيف دمبل، ستيف ليج دمبل |  |
 | 0433 | dumbbell straight arm pullover | بول أوفر دمبل دراع مفرود | بلوفر دراع مفرود |  |
-| 0434 | dumbbell straight leg deadlift | ديدلفت دمبل رجل مفرودة - نسخة 2 | ستيف دمبل، ستريت ليج ديدلفت | ⚠️ قريب جدًا من 0432 |
+| 0434 | dumbbell straight leg deadlift | ديدلفت دمبل رجل مفرودة | ستيف دمبل، ستريت ليج ديدلفت | ⚠️ قريب جدًا من 0432 |
 | 2808 | dumbbell sumo pull through | سومو بول ثرو دمبل | سحب دمبل بين الرجلين، بول ثرو |  |
 | 2803 | dumbbell supported squat | سكوات دمبل مع سند | سكوات مسنود |  |
 | 0436 | dumbbell tate press | تيت برس دمبل | تيت برس |  |
@@ -103,7 +103,7 @@ Flagged: 7.
 | 0182 | cable lying close-grip curl | باي كابل نايم ضيق | باي نايم ضيق |  |
 | 0184 | cable lying extension pullover (with rope attachment) | بول أوفر حبل نايم | بلوفر كابل حبل |  |
 | 0185 | cable lying fly | تفتيح كابل نايم | فلاي كابل على بنش، كروس نايم |  |
-| 0186 | cable lying triceps extension v. 2 | تراي كابل نايم - نسخة 2 | فرنساوي كابل |  |
+| 0186 | cable lying triceps extension v. 2 | تراي حبل نايم | فرنساوي كابل |  |
 | 0188 | cable middle fly | كروس نص | ميدل كروس، كروس في النص |  |
 | 0189 | cable one arm bent over row | سحب كابل منحني بدراع واحد | ون ارم رو كابل |  |
 | 0190 | cable one arm curl | باي كابل بدراع واحد | باي دراع واحد كابل |  |

@@ -10,7 +10,7 @@ Flagged: 3.
 |---|---|---|---|---|
 | 0680 | rope climb | طلوع الحبل | روب كلايمب، تسلق حبل |  |
 | 1307 | push up on bosu ball | ضغط على بوسو | بوش اب بوسو |  |
-| 0653 | push-up (bosu ball) | ضغط على بوسو - نسخة 2 | بوش اب بوسو |  |
+| 0653 | push-up (bosu ball) | ضغط على بوسو | بوش اب بوسو |  |
 | 1705 | squat on bosu ball | سكوات على بوسو | بوسو سكوات |  |
 | 2204 | roller body saw | منشار الجسم على رولر | بودي سو، بلانك منشار |  |
 | 2206 | roller reverse crunch | كرانش عكسي على رولر | ريفرس كرانش رولر |  |
@@ -22,7 +22,7 @@ Flagged: 3.
 | 2459 | tire flip | قلب الكاوتش | تاير فليب، كاوتش |  |
 | 2139 | hands bike | عجلة إيد | هاند بايك، ارجوميتر إيد |  |
 | 2142 | ski ergometer | سكي ارج | جهاز سكي |  |
-| 2138 | stationary bike run v. 3 | عجلة ثابتة - نسخة 3 | بسكلتة ثابتة، عجلة |  |
+| 2138 | stationary bike run v. 3 | عجلة ثابتة بمقاومة | بسكلتة ثابتة، عجلة |  |
 | 2141 | walk elliptical cross trainer | أوربتراك | اليبتيكال، كروس ترينر |  |
 | 2311 | walking on stepmill | جهاز السلالم | ستيب ميل، سلم متحرك |  |
 | 1512 | all fours squad stretch | إطالة رجل أمامي على الأربعة | إطالة كوادز |  |
@@ -80,5 +80,5 @@ Flagged: 3.
 | 1599 | standing hamstring and calf stretch with strap | إطالة رجل خلفي وسمانة بحزام | إطالة هامسترينج حزام |  |
 | 2208 | roller back stretch | إطالة ضهر على رولر | فوم رولر ضهر |  |
 | 2205 | roller hip lat stretch | إطالة حوض ولات على رولر | فوم رولر حوض |  |
-| 2202 | roller hip stretch | إطالة حوض على رولر | فوم رولر حوض - نسخة 2 |  |
+| 2202 | roller hip stretch | إطالة حوض على رولر | فوم رولر جلوت |  |
 | 2207 | roller side lat stretch | إطالة لات جانبي على رولر | فوم رولر لات |  |

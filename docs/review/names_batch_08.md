@@ -8,7 +8,7 @@ Flagged: 10.
 
 | id | English | Arabic | aliases | ⚠️ |
 |---|---|---|---|---|
-| 1394 | smith reverse calf raises | سمانة عكسي سميث - نسخة 2 | رفع مشط سميث |  |
+| 1394 | smith reverse calf raises | سمانة عكسي سميث | رفع مشط سميث |  |
 | 1361 | smith reverse grip bent over row | سحب سميث منحني عكسي | رو سميث مقلوب |  |
 | 0764 | smith reverse-grip press | ضغط سميث مستوي عكسي | بنش سميث مقلوب |  |
 | 1395 | smith seated one leg calf raise | سمانة سميث قاعد برجل واحدة | سمانة قاعد سميث |  |
@@ -18,7 +18,7 @@ Flagged: 10.
 | 0767 | smith shrug | ترابيس سميث | شراجز سميث |  |
 | 0768 | smith single leg split squat | سكوات بلغاري سميث | بلغاري سميث |  |
 | 0769 | smith sprint lunge | طعن سبرينت سميث | سبرينت لانج سميث | ⚠️ اسم نادر |
-| 0770 | smith squat | سكوات سميث - نسخة 2 | سميث سكوات | ⚠️ قريب من 3281 |
+| 0770 | smith squat | سكوات سميث | سميث سكوات | ⚠️ قريب من 3281 |
 | 0771 | smith standing back wrist curl | سواعد سميث خلف الضهر | ريست كيرل خلفي سميث |  |
 | 0772 | smith standing behind head military press | ضغط كتف سميث خلف الراس واقف | ميلتري خلفي سميث |  |
 | 0773 | smith standing leg calf raise | سمانة سميث واقف | كاف ريز سميث |  |
@@ -32,7 +32,7 @@ Flagged: 10.
 | 1384 | hack one leg calf raise | سمانة هاك برجل واحدة | سمانة هاك رجل واحدة |  |
 | 1425 | sled 45 degrees one leg press | دفع رجل برجل واحدة | ليج برس رجل واحدة |  |
 | 1463 | sled 45° leg press (side pov) | دفع رجل (منظر جانبي) | ليج برس، جهاز رجل |  |
-| 0738 | sled 45в° calf press | سمانة على جهاز دفع الرجل | كاف برس، سمانة ليج برس - نسخة 2 | ⚠️ قريب من 2289 و1391 |
+| 0738 | sled 45в° calf press | سمانة على جهاز دفع الرجل | كاف برس، سمانة ليج برس 45 | ⚠️ قريب من 2289 و1391 |
 | 1464 | sled 45в° leg press (back pov) | دفع رجل (منظر من ورا) | ليج برس |  |
 | 0740 | sled 45в° leg wide press | دفع رجل واسع | ليج برس واسع |  |
 | 1391 | sled calf press on leg press | سمانة ليج برس | كاف برس ليج برس |  |

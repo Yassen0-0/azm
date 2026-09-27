@@ -29,7 +29,7 @@ Flagged: 6.
 | 0196 | cable pull through (with rope) | بول ثرو كابل | بول ثرو، سحب حبل بين الرجلين |  |
 | 0197 | cable pulldown (pro lat bar) | سحب عالي بار برو | لات بول داون برو بار |  |
 | 1638 | cable pulldown bicep curl | باي كابل من سحب عالي | باي على جهاز السحب العالي |  |
-| 0199 | cable pushdown (straight arm) v. 2 | بول أوفر كابل - نسخة 2 | سحب عالي دراع مفرود، ستريت ارم بول داون |  |
+| 0199 | cable pushdown (straight arm) v. 2 | بول أوفر كابل | سحب عالي دراع مفرود، ستريت ارم بول داون |  |
 | 0202 | cable rear delt row (stirrups) | سحب كتف خلفي كابل بمقابض | ريير دلت رو كابل |  |
 | 0204 | cable rear drive | ريير درايف كابل | تراي كابل لورا | ⚠️ اسم نادر؛ الترجمة وصفية |
 | 0205 | cable rear pulldown | سحب خلفي | سحب عالي خلف الرقبة، سحب خلفي كابل |  |
@@ -78,7 +78,7 @@ Flagged: 6.
 | 0228 | cable standing hip extension | رجل لورا كابل | كيك باك رجل كابل، جلوت كيك باك كابل |  |
 | 0229 | cable standing inner curl | باي كابل داخلي واقف | باي داخلي كابل |  |
 | 0230 | cable standing lift | ليفت كابل | لف بطن لفوق كابل، وود تشوب من تحت |  |
-| 0231 | cable standing one arm triceps extension | تراي كابل بدراع واحد واقف | تراي دراع واحد كابل - نسخة 2 |  |
+| 0231 | cable standing one arm triceps extension | تراي كابل بدراع واحد واقف | اوفرهيد تراي كابل دراع واحد |  |
 | 1376 | cable standing one leg calf raise | سمانة كابل برجل واحدة | كاف ريز كابل رجل واحدة |  |
 | 0232 | cable standing pulldown (with rope) | سحب حبل واقف للباي | بول داون حبل للباي | ⚠️ العضلة المستهدفة باي؛ الحركة غير واضحة |
 | 0233 | cable standing rear delt row (with rope) | فيس بول واقف | فيس بول، سحب للوش حبل واقف |  |

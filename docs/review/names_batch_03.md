@@ -12,24 +12,24 @@ Flagged: 15.
 | 1276 | dumbbell decline one arm fly | تفتيح دمبل نازل بدراع واحد | ديكلاين فلاي دراع واحد |  |
 | 1617 | dumbbell decline one arm hammer press | ضغط هامر نازل بدراع واحد | هامر برس نازل دراع واحد |  |
 | 0305 | dumbbell decline shrug | ترابيس دمبل على بنش نازل | ترابيس نازل، شراجز دمبل نازل | ⚠️ وضعية غير شائعة |
-| 0304 | dumbbell decline shrug v. 2 | ترابيس دمبل على بنش نازل - نسخة 2 | ترابيس نازل |  |
+| 0304 | dumbbell decline shrug v. 2 | ترابيس دمبل على بنش نازل مسكة هامر | ترابيس نازل |  |
 | 0306 | dumbbell decline triceps extension | تراي فرنساوي دمبل نازل | فرنساوي دمبل نازل، ديكلاين تراي دمبل |  |
 | 0307 | dumbbell decline twist fly | تفتيح دمبل نازل مع لف | تويست فلاي نازل |  |
 | 1437 | dumbbell finger curls | سواعد صوابع دمبل | فينجر كيرل دمبل |  |
 | 1277 | dumbbell fly on exercise ball | تفتيح دمبل على كورة | فلاي على كورة، تفتيح على الكورة |  |
 | 1732 | dumbbell forward lunge triceps extension | طعن أمامي مع تراي دمبل | لانج مع تراي |  |
-| 0309 | dumbbell front raise v. 2 | رفرفة أمامي - نسخة 2 | أمامي دمبل، فرونت ريز |  |
+| 0309 | dumbbell front raise v. 2 | رفرفة أمامي | أمامي دمبل، فرونت ريز |  |
 | 0311 | dumbbell full can lateral raise | رفرفة جانبي صباع لفوق | فول كان، جانبي إبهام لفوق | ⚠️ full can: الإبهام لفوق، الترجمة وصفية |
 | 1760 | dumbbell goblet squat | جوبلت سكوات | سكوات جوبلت، سكوات دمبل قدام الصدر |  |
 | 1659 | dumbbell hammer curl on exercise ball | هامر على كورة | هامر قاعد على كورة |  |
-| 0312 | dumbbell hammer curl v. 2 | هامر - نسخة 2 | هامر كيرل، شاكوش |  |
+| 0312 | dumbbell hammer curl v. 2 | هامر | هامر كيرل، شاكوش |  |
 | 2402 | dumbbell hammer curls (with arm blaster) | هامر بآرم بلاستر | آرم بلاستر هامر |  |
 | 1664 | dumbbell high curl | باي دمبل عالي | هاي كيرل، باي دبل بايسبس | ⚠️ الإيد لجنب الكتف (وضع دبل بايسبس)؛ غير متأكد |
 | 3545 | dumbbell incline alternate press | ضغط دمبل عالي بالتبادل | انكلاين دمبل بالتبادل |  |
 | 0315 | dumbbell incline biceps curl | باي دمبل على بنش عالي | انكلاين كيرل، باي مايل |  |
 | 0316 | dumbbell incline breeding | فتح دمبل على بنش عالي | فلاي عالي، تفتيح عالي | ⚠️ الاسم الإنجليزي فيه غلطة (breeding)؛ غالبًا تفتيح |
 | 0318 | dumbbell incline curl | باي مايل | باي دمبل مايل، انكلاين كيرل |  |
-| 0317 | dumbbell incline curl v. 2 | باي مايل - نسخة 2 | انكلاين كيرل |  |
+| 0317 | dumbbell incline curl v. 2 | باي مايل | انكلاين كيرل |  |
 | 0319 | dumbbell incline fly | تفتيح دمبل عالي | انكلاين فلاي، فلاي عالي، تفتيح عالي |  |
 | 1278 | dumbbell incline fly on exercise ball | تفتيح دمبل عالي على كورة | انكلاين فلاي على كورة |  |
 | 0320 | dumbbell incline hammer curl | هامر مايل | هامر على بنش عالي، انكلاين هامر |  |
@@ -70,7 +70,7 @@ Flagged: 15.
 | 2470 | dumbbell lying on floor rear delt raise | رفرفة خلفي نايم على الأرض | كتف خلفي أرض، ريير دلت أرض |  |
 | 0341 | dumbbell lying one arm deltoid rear | رفرفة خلفي نايم بدراع واحد | كتف خلفي نايم، ريير دلت دراع واحد |  |
 | 0343 | dumbbell lying one arm press | ضغط دمبل مستوي بدراع واحد | دمبل برس دراع واحد |  |
-| 0342 | dumbbell lying one arm press v. 2 | ضغط دمبل مستوي بدراع واحد - نسخة 2 | دمبل برس دراع واحد |  |
+| 0342 | dumbbell lying one arm press v. 2 | ضغط دمبل مستوي بدراع واحد كوع جنب الجسم | دمبل برس دراع واحد |  |
 | 0344 | dumbbell lying one arm pronated triceps extension | تراي دمبل نايم بدراع واحد كف لتحت | تراي دراع واحد نايم |  |
 | 0345 | dumbbell lying one arm rear lateral raise | رفرفة خلفي جانبي نايم بدراع واحد | كتف خلفي نايم على جنب | ⚠️ غالبًا نايم على جنبك |
 | 0346 | dumbbell lying one arm supinated triceps extension | تراي دمبل نايم بدراع واحد كف لفوق | تراي دراع واحد نايم مقلوب |  |

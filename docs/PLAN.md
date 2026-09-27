@@ -242,7 +242,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **No app code, no builds, no devices.** Don't touch `app/**` (the catalog asset is generated), `tools/**` or `data/catalog/**`.
 - **How:** batches of 100 ordered by likely usage (barbell/dumbbell/cable/machine staples and the variants of the first 50 first; stretches and rare equipment last). Every new entry `{"ar": "…", "aliases": [...], "reviewed": false}`. Follow the conventions of the reviewed 50 (Egyptian gym words, e.g. بنش، سكوات، دمبل، سميث، كابل، مرزبة، بار زد; English loanwords in Arabic script where gyms use them). After each batch: `source ./env.sh && tools/build_catalog.sh --check` must print OK (resolve every same-name warning or log why it's intended), then commit that batch alone, listing its ids in the commit message for native review.
 - **Acceptance:**
-  - [x] Batch 1 … [x] Batch 13 (final): all 1,324 exercises have an Arabic name; `--check` reports 0 English-only, 0 same-name warnings. Review tables: `docs/review/names_batch_01.md` … `_13.md` (109 names flagged ⚠️).
+  - [x] Batch 1 … [x] Batch 13 (final): all 1,324 exercises have an Arabic name; `--check` reports 0 English-only; its 32 same-name warnings are the intended identical groups in `docs/review/duplicates.md`. Review tables: `docs/review/names_batch_01.md` … `_13.md` (109 names flagged ⚠️).
   - [x] Log naming conventions and any judgement calls in DECISIONS_LOG → Window G.
   - [ ] Owner review pass later (flip `reviewed` to `true`), not this window.
   - [ ] Later (not this round): `instructions_ar`.
@@ -320,3 +320,5 @@ _(append here only)_
 ### Requests from G (Arabic names), round 3
 
 _(append here only)_
+
+- **Integrator, at merge:** hide the 33 "hide" ids listed in `docs/review/duplicates.md`. Each is truly identical to its "keep" id in the source data and shares its Arabic name. Hiding them makes `tools/build_catalog.sh --check` stop warning about the 32 groups. How to hide (catalog flag or build-time filter) is the integrator's call; G touches `data/ar/**` only.

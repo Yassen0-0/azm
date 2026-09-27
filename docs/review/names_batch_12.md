@@ -14,10 +14,10 @@ Flagged: 2.
 | 1008 | band step-up | طلوع بنش استك | ستيب اب باند |  |
 | 1009 | band stiff leg deadlift | ديدلفت استك رجل مفرودة | ستيف باند |  |
 | 1023 | band straight back stiff leg deadlift | ديدلفت استك رجل مفرودة ضهر مفرود | ستيف باند ضهر مفرود |  |
-| 1010 | band straight leg deadlift | ديدلفت استك رجل مفرودة - نسخة 2 | ستريت ليج باند |  |
+| 1010 | band straight leg deadlift | ديدلفت استك للظهر السفلي | ستريت ليج باند |  |
 | 1012 | band twisting overhead press | ضغط كتف استك مع لف | تويست برس باند |  |
-| 1369 | band two legs calf raise - (band under both legs) v. 2 | سمانة استك برجلين - نسخة 2 | كاف باند رجلين |  |
-| 1013 | band underhand pulldown | سحب عالي عكسي استك - نسخة 2 | بول داون باند مقلوب |  |
+| 1369 | band two legs calf raise - (band under both legs) v. 2 | سمانة استك برجلين | كاف باند رجلين |  |
+| 1013 | band underhand pulldown | سحب عالي عكسي استك | بول داون باند مقلوب |  |
 | 1014 | band v-up | في اب استك | في اب باند |  |
 | 1015 | band vertical pallof press | بالوف برس عمودي | بالوف برس لفوق |  |
 | 1016 | band wrist curl | سواعد استك | ريست كيرل باند |  |
@@ -101,7 +101,7 @@ Flagged: 2.
 | 1707 | prone twist on stability ball | لف على كورة نايم على بطنك | تويست كورة |  |
 | 0650 | pull-in (on stability ball) | ضم ركب على كورة | بول ان كورة، ني تك كورة |  |
 | 0655 | push-up (on stability ball) | ضغط على كورة | بوش اب كورة |  |
-| 0656 | push-up (on stability ball) | ضغط على كورة - نسخة 2 | بوش اب كورة |  |
+| 0656 | push-up (on stability ball) | ضغط على كورة | بوش اب كورة |  |
 | 0675 | reverse hyper extension (on stability ball) | هايبر عكسي على كورة | ريفرس هايبر كورة |  |
 | 2297 | stability ball crunch (full range hands behind head) | كرانش كورة مدى كامل | كرانش كورة كامل |  |
 | 0128 | battling ropes | حبال المعركة | باتل روب، حبال |  |
