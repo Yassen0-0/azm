@@ -60,12 +60,18 @@ class RoutineRepository {
 
   // ---- Routines --------------------------------------------------------------
 
-  /// "My routines" in display order, with their exercise ids.
-  // Drift shares stream queries with identical SQL whatever their readsFrom,
-  // so each change-tick query needs its own SQL text (the workout feature
-  // already uses `SELECT 1`).
+  /// "My routines" in display order, with their exercise ids. The watched
+  /// query reads the real routine rows (CLAUDE.md → Drift watch queries).
   Stream<List<RoutineSummary>> watchRoutines() => db
-      .customSelect('SELECT 1 AS routines_list_tick', readsFrom: {db.routines, db.routineExercises})
+      .customSelect(
+        '''
+        SELECT r.id, r.name, r.sort, e.id AS entry_id, e.exercise_id, e.sort AS entry_sort
+        FROM routines r
+        LEFT JOIN routine_exercises e ON e.routine_id = r.id
+        ORDER BY r.sort, r.created_at, e.sort
+        ''',
+        readsFrom: {db.routines, db.routineExercises},
+      )
       .watch()
       .asyncMap((_) => loadRoutines());
 
@@ -123,9 +129,21 @@ class RoutineRepository {
 
   // ---- Detail ----------------------------------------------------------------
 
-  /// Re-emits whenever any routine table changes. Null once deleted.
+  /// Re-emits whenever any routine table changes. Null once deleted. The
+  /// watched query reads this routine's real rows.
   Stream<RoutineDetail?> watchDetail(String routineId) => db
-      .customSelect('SELECT 1 AS routine_detail_tick', readsFrom: {db.routines, db.routineExercises, db.routineSets})
+      .customSelect(
+        '''
+        SELECT r.id, r.name, r.notes, e.id AS entry_id, e.sort AS entry_sort, e.rest_seconds,
+               s.id AS set_id, s.sort AS set_sort, s.type, s.target_reps, s.target_weight_kg
+        FROM routines r
+        LEFT JOIN routine_exercises e ON e.routine_id = r.id
+        LEFT JOIN routine_sets s ON s.routine_exercise_id = e.id
+        WHERE r.id = ?
+        ''',
+        variables: [Variable.withString(routineId)],
+        readsFrom: {db.routines, db.routineExercises, db.routineSets},
+      )
       .watch()
       .asyncMap((_) => loadDetail(routineId));
 

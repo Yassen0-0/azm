@@ -154,9 +154,24 @@ class WorkoutRepository {
 
   // ---- Detail ----------------------------------------------------------------
 
-  /// Re-emits the full detail whenever any workout table changes.
+  /// Re-emits the full detail whenever any workout table changes. The watched
+  /// query reads this workout's real rows (CLAUDE.md → Drift watch queries);
+  /// Drift re-runs it on any write to a table in `readsFrom`, which also
+  /// covers the other workouts that "previous" and PR bests come from. Unit
+  /// and default rest are settings, watched by `workoutDetailProvider`.
   Stream<WorkoutDetail?> watchDetail(String workoutId) => db
-      .customSelect('SELECT 1', readsFrom: {db.workouts, db.workoutExercises, db.workoutSets})
+      .customSelect(
+        '''
+        SELECT w.id, w.name, w.status, w.ended_at, e.id AS entry_id, e.sort AS entry_sort,
+               s.id AS set_id, s.sort AS set_sort, s.type, s.weight_kg, s.reps, s.completed_at
+        FROM workouts w
+        LEFT JOIN workout_exercises e ON e.workout_id = w.id
+        LEFT JOIN workout_sets s ON s.workout_exercise_id = e.id
+        WHERE w.id = ?
+        ''',
+        variables: [Variable.withString(workoutId)],
+        readsFrom: {db.workouts, db.workoutExercises, db.workoutSets},
+      )
       .watch()
       .asyncMap((_) => loadDetail(workoutId));
 

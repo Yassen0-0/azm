@@ -61,6 +61,7 @@ Read `docs/SPEC.md`, `docs/DESIGN.md`, `docs/ARCHITECTURE.md` (and `docs/DATA.md
 - **Weights are kg internally**; convert only for display and input.
 - **Every DB change for an active workout is persisted immediately.** No in-memory-only set state.
 - User records use UUID v4 ids. Catalog tables are never written outside the catalog installer.
+- **Drift watch queries read real tables.** Every `.watch()` / `watchSingle…()` / watched `customSelect` must select from the real tables it depends on, with a `readsFrom` listing exactly the tables in its SQL. **No dummy "tick" SQL** (`SELECT 1`, `SELECT 1 AS x`): Drift shares streams with identical SQL whatever their `readsFrom`, so one dummy query can silently stop another screen from updating. `test/core/db/watch_queries_audit_test.dart` enforces it.
 
 ## Before finishing
 
