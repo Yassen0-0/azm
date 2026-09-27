@@ -31,6 +31,77 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonBack => 'رجوع';
 
   @override
+  String get commonSetColSet => 'سِت';
+
+  @override
+  String get commonSetColPrevious => 'السابق';
+
+  @override
+  String get commonSetColReps => 'عدّات';
+
+  @override
+  String get commonUnitKg => 'kg';
+
+  @override
+  String get commonUnitLb => 'lb';
+
+  @override
+  String get commonNoData => '—';
+
+  @override
+  String get commonSetTypeTitle => 'نوع السِت';
+
+  @override
+  String get commonSetTypeNormal => 'عادي';
+
+  @override
+  String get commonSetTypeWarmup => 'إحماء';
+
+  @override
+  String get commonSetTypeDrop => 'دروب سِت';
+
+  @override
+  String get commonSetTypeFailure => 'للفشل';
+
+  @override
+  String get commonSetTypeWarmupShort => 'ح';
+
+  @override
+  String get commonSetTypeDropShort => 'د';
+
+  @override
+  String get commonSetTypeFailureShort => 'ف';
+
+  @override
+  String get commonSetDelete => 'امسح السِت';
+
+  @override
+  String get commonSetComplete => 'علّم السِت خلصان';
+
+  @override
+  String commonKeypadWeight(String unit) {
+    return 'الوزن ($unit)';
+  }
+
+  @override
+  String get commonKeypadNext => 'التالي';
+
+  @override
+  String get commonKeypadDone => 'تم';
+
+  @override
+  String get commonKeypadBackspace => 'امسح رقم';
+
+  @override
+  String get commonKeypadHide => 'اقفل الكيبورد';
+
+  @override
+  String get commonKeypadDecrease => 'نقّص';
+
+  @override
+  String get commonKeypadIncrease => 'زوّد';
+
+  @override
   String get exercisesSearchHint => 'ابحث بالعربي أو English';
 
   @override
@@ -182,15 +253,6 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get exercisesHistoryEmpty =>
       'لسه ملعبتش التمرين ده. سجّل أول مجموعة وتاريخك هيظهر هنا.';
-
-  @override
-  String get exercisesSetLabelWarmup => 'ح';
-
-  @override
-  String get exercisesSetLabelDrop => 'د';
-
-  @override
-  String get exercisesSetLabelFailure => 'ف';
 
   @override
   String get exercisesMuscleAbs => 'بطن';
@@ -529,12 +591,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get historyUnitKg => 'kg';
-
-  @override
-  String get historyUnitLb => 'lb';
-
-  @override
   String historyWeightValue(String value, String unit) {
     return '$value $unit';
   }
@@ -631,39 +687,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get historyStatWorkouts => 'التمارين';
 
   @override
-  String get historyColSet => 'سِت';
-
-  @override
-  String get historyColPrevious => 'السابق';
-
-  @override
-  String get historyColReps => 'عدّات';
-
-  @override
-  String get historySetTypeTitle => 'نوع السِت';
-
-  @override
-  String get historySetTypeNormal => 'عادي';
-
-  @override
-  String get historySetTypeWarmup => 'إحماء';
-
-  @override
-  String get historySetTypeDrop => 'دروب سِت';
-
-  @override
-  String get historySetTypeFailure => 'للفشل';
-
-  @override
-  String get historySetTypeWarmupShort => 'ح';
-
-  @override
-  String get historySetTypeDropShort => 'د';
-
-  @override
-  String get historySetTypeFailureShort => 'ف';
-
-  @override
   String get historyAddSet => 'ضيف سِت';
 
   @override
@@ -676,37 +699,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get historyRemoveExercise => 'شيل التمرين';
 
   @override
-  String get historyDeleteSet => 'امسح السِت';
-
-  @override
-  String get historyCompleteSet => 'علّم السِت خلصان';
-
-  @override
-  String historyKeypadWeight(String unit) {
-    return 'الوزن ($unit)';
-  }
-
-  @override
-  String get historyKeypadNext => 'التالي';
-
-  @override
-  String get historyDone => 'تم';
-
-  @override
-  String get historyKeypadBackspace => 'امسح رقم';
-
-  @override
-  String get historyKeypadHide => 'اقفل الكيبورد';
-
-  @override
-  String get historyKeypadDecrease => 'نقّص';
-
-  @override
-  String get historyKeypadIncrease => 'زوّد';
-
-  @override
   String get historyEditHint =>
-      'أي تعديل بيتحفظ على طول. السِت من غير ✓ أو من غير عدّات بيتشال لما تخرج.';
+      'التعديلات بتتحفظ على طول. اسحب السِت للآخر عشان تمسحه.';
 
   @override
   String get historyNotFound => 'التمرين ده مش موجود';
@@ -859,33 +853,13 @@ class AppLocalizationsAr extends AppLocalizations {
       'ضيف تمارين الروتين، وحدّد السِتات المطلوبة لكل تمرين.';
 
   @override
-  String get routinesColSet => 'سِت';
-
-  @override
-  String routinesColWeight(String unit) {
-    return '$unit';
-  }
-
-  @override
-  String get routinesColReps => 'عدّات';
-
-  @override
   String get routinesUnitKg => 'kg';
 
   @override
   String get routinesUnitLb => 'lb';
 
   @override
-  String get routinesNoTarget => '—';
-
-  @override
   String get routinesAddSet => 'ضيف سِت';
-
-  @override
-  String get routinesDeleteSet => 'امسح السِت';
-
-  @override
-  String get routinesSetTypeTitle => 'نوع السِت';
 
   @override
   String routinesRestValue(String time) {
@@ -951,24 +925,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get routinesKeypadReps => 'العدّات المطلوبة';
-
-  @override
-  String get routinesKeypadNext => 'التالي';
-
-  @override
-  String get routinesKeypadDone => 'تم';
-
-  @override
-  String get routinesKeypadBackspace => 'امسح رقم';
-
-  @override
-  String get routinesKeypadHide => 'اقفل الكيبورد';
-
-  @override
-  String get routinesKeypadDecrease => 'نقّص';
-
-  @override
-  String get routinesKeypadIncrease => 'زوّد';
 
   @override
   String routinesProgramDays(int count, String countText) {
@@ -1104,21 +1060,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get workoutStatPrs => 'أرقام قياسية';
 
   @override
-  String get workoutColSet => 'سِت';
-
-  @override
-  String get workoutColPrevious => 'السابق';
-
-  @override
-  String get workoutColReps => 'عدّات';
-
-  @override
-  String get workoutUnitKg => 'kg';
-
-  @override
-  String get workoutUnitLb => 'lb';
-
-  @override
   String get workoutNoData => '—';
 
   @override
@@ -1130,30 +1071,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String workoutWeightUnit(String value, String unit) {
     return '$value $unit';
   }
-
-  @override
-  String get workoutSetTypeWarmupShort => 'ح';
-
-  @override
-  String get workoutSetTypeDropShort => 'د';
-
-  @override
-  String get workoutSetTypeFailureShort => 'ف';
-
-  @override
-  String get workoutSetTypeTitle => 'نوع السِت';
-
-  @override
-  String get workoutSetTypeNormal => 'عادي';
-
-  @override
-  String get workoutSetTypeWarmup => 'إحماء';
-
-  @override
-  String get workoutSetTypeDrop => 'دروب سِت';
-
-  @override
-  String get workoutSetTypeFailure => 'للفشل';
 
   @override
   String get workoutAddSet => 'ضيف سِت';
@@ -1180,35 +1097,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get workoutCancel => 'إلغاء';
 
   @override
-  String get workoutDeleteSet => 'امسح السِت';
-
-  @override
-  String get workoutCompleteSet => 'علّم السِت خلصان';
-
-  @override
   String workoutUnknownExercise(String id) {
     return 'تمرين مش معروف ($id)';
   }
-
-  @override
-  String workoutKeypadWeight(String unit) {
-    return 'الوزن ($unit)';
-  }
-
-  @override
-  String get workoutKeypadNext => 'التالي';
-
-  @override
-  String get workoutKeypadBackspace => 'امسح رقم';
-
-  @override
-  String get workoutKeypadHide => 'اقفل الكيبورد';
-
-  @override
-  String get workoutKeypadDecrease => 'نقّص';
-
-  @override
-  String get workoutKeypadIncrease => 'زوّد';
 
   @override
   String get workoutRest => 'راحة';

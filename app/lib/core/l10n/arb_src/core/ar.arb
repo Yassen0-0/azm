@@ -27,5 +27,102 @@
   "commonBack": "رجوع",
   "@commonBack": {
     "description": "Semantics label for a back button."
+  },
+  "commonSetColSet": "سِت",
+  "@commonSetColSet": {
+    "description": "Set-table column header: set number / type label (SetRow, shared by workout, history, routines)."
+  },
+  "commonSetColPrevious": "السابق",
+  "@commonSetColPrevious": {
+    "description": "Set-table column header: same set in the last workout."
+  },
+  "commonSetColReps": "عدّات",
+  "@commonSetColReps": {
+    "description": "Set-table column header: repetitions. Also the keypad title when editing reps."
+  },
+  "commonUnitKg": "kg",
+  "@commonUnitKg": {
+    "description": "Weight unit label (kept Latin in Arabic, as in the SPEC). Set-table column header and keypad title."
+  },
+  "commonUnitLb": "lb",
+  "@commonUnitLb": {
+    "description": "Weight unit label (kept Latin in Arabic). Set-table column header and keypad title."
+  },
+  "commonNoData": "—",
+  "@commonNoData": {
+    "description": "Placeholder for a missing value (no previous set, empty keypad value)."
+  },
+  "commonSetTypeTitle": "نوع السِت",
+  "@commonSetTypeTitle": {
+    "description": "Title of the set type menu (tap on a set label)."
+  },
+  "commonSetTypeNormal": "عادي",
+  "@commonSetTypeNormal": {
+    "description": "Set type: normal working set."
+  },
+  "commonSetTypeWarmup": "إحماء",
+  "@commonSetTypeWarmup": {
+    "description": "Set type: warm-up."
+  },
+  "commonSetTypeDrop": "دروب سِت",
+  "@commonSetTypeDrop": {
+    "description": "Set type: drop set (gym slang)."
+  },
+  "commonSetTypeFailure": "للفشل",
+  "@commonSetTypeFailure": {
+    "description": "Set type: to failure."
+  },
+  "commonSetTypeWarmupShort": "ح",
+  "@commonSetTypeWarmupShort": {
+    "description": "One-letter label of a warm-up set: ح (from إحماء; owner decision 2026-09-26 — إ looked like '!'). Shown in amber."
+  },
+  "commonSetTypeDropShort": "د",
+  "@commonSetTypeDropShort": {
+    "description": "One-letter label of a drop set (from دروب)."
+  },
+  "commonSetTypeFailureShort": "ف",
+  "@commonSetTypeFailureShort": {
+    "description": "One-letter label of a failure set (from فشل). Never shown in red."
+  },
+  "commonSetDelete": "امسح السِت",
+  "@commonSetDelete": {
+    "description": "Semantics label / swipe action: delete a set."
+  },
+  "commonSetComplete": "علّم السِت خلصان",
+  "@commonSetComplete": {
+    "description": "Semantics label of the ✓ button of a set in the live workout."
+  },
+  "commonKeypadWeight": "الوزن ({unit})",
+  "@commonKeypadWeight": {
+    "description": "Keypad preview label when editing a weight.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "commonKeypadNext": "التالي",
+  "@commonKeypadNext": {
+    "description": "Keypad key: go to the next field."
+  },
+  "commonKeypadDone": "تم",
+  "@commonKeypadDone": {
+    "description": "Keypad key on the last field: close the keypad."
+  },
+  "commonKeypadBackspace": "امسح رقم",
+  "@commonKeypadBackspace": {
+    "description": "Semantics label of the keypad backspace key."
+  },
+  "commonKeypadHide": "اقفل الكيبورد",
+  "@commonKeypadHide": {
+    "description": "Semantics label of the key that hides the keypad."
+  },
+  "commonKeypadDecrease": "نقّص",
+  "@commonKeypadDecrease": {
+    "description": "Semantics label of the keypad − step key."
+  },
+  "commonKeypadIncrease": "زوّد",
+  "@commonKeypadIncrease": {
+    "description": "Semantics label of the keypad + step key."
   }
 }

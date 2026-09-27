@@ -113,7 +113,7 @@ void main() {
     final sets = (await repo().loadDetail(routineId))!.exercises.single.sets;
 
     // Weight 60 → Next → reps 8 → Done: each key is written immediately.
-    await tester.tap(find.byKey(ValueKey('routine-set-weight-${sets.first.id}')));
+    await tester.tap(find.byKey(ValueKey('set-weight-${sets.first.id}')));
     await settle(tester);
     expect(find.text('Target weight (kg)'), findsOneWidget);
     await tester.tap(find.text('6').last);

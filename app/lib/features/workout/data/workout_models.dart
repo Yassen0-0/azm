@@ -115,13 +115,6 @@ class WorkoutDetail {
   int get prCount => exercises.fold(0, (n, e) => n + e.prs.values.fold(0, (m, t) => m + t.length));
 }
 
-/// Display number of each set row: normal sets count 1, 2, 3…; other types
-/// get null (they show their letter instead).
-List<int?> normalSetNumbers(List<WorkoutSet> sets) {
-  var n = 0;
-  return [for (final s in sets) s.type == SetType.normal ? ++n : null];
-}
-
 /// Best set of an exercise for the summary: highest estimated 1RM among
 /// completed working sets (falls back to warm-ups if there are only warm-ups).
 WorkoutSet? bestSet(List<WorkoutSet> sets) {

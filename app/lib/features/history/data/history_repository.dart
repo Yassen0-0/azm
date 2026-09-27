@@ -11,7 +11,7 @@ import '../../workout/data/workout_repository.dart';
 import 'history_models.dart';
 
 /// Reads the history of FINISHED workouts and makes the few edits the
-/// workout feature doesn't offer (rename, delete, tidy up). Set edits of a
+/// workout feature doesn't offer (rename, delete, log added sets). Set edits of a
 /// past workout go through `WorkoutRepository` (same writes as the active
 /// workout). Every write guards `status = finished`: the active workout is
 /// never touched from here.
@@ -122,27 +122,40 @@ class HistoryRepository {
   /// Deletes a finished workout and everything in it (FK cascade).
   Future<void> delete(String workoutId) => (db.delete(db.workouts)..where((w) => _finished(workoutId))).go();
 
-  /// After editing: a finished workout keeps only logged sets (✓ and reps > 0)
-  /// and exercises that still have one, the same shape `finish()` leaves.
-  Future<void> tidy(String workoutId) => db.transaction(() async {
-        if (await finishedWorkout(workoutId) == null) return;
-        final entryIds = [
-          for (final e in await (db.select(db.workoutExercises)..where((e) => e.workoutId.equals(workoutId))).get())
-            e.id,
-        ];
-        if (entryIds.isEmpty) return;
-        await (db.delete(db.workoutSets)
-              ..where((s) => s.workoutExerciseId.isIn(entryIds) & (s.completedAt.isNull() | s.reps.isSmallerOrEqualValue(0))))
-            .go();
-        final withSets = (await (db.selectOnly(db.workoutSets, distinct: true)
-                  ..addColumns([db.workoutSets.workoutExerciseId])
-                  ..where(db.workoutSets.workoutExerciseId.isIn(entryIds)))
-                .get())
-            .map((r) => r.read(db.workoutSets.workoutExerciseId)!)
-            .toSet();
-        await (db.delete(db.workoutExercises)
-              ..where((e) => e.workoutId.equals(workoutId) & e.id.isNotIn(withSets)))
-            .go();
+  /// Every set of a finished workout is done: sets without ✓ (exercises just
+  /// added through the picker, or left by an interrupted edit) are logged at
+  /// the workout's end, with empty weight/reps taken from the same set of the
+  /// workout before (the ✓ rule, `completionValues`). Nothing is ever removed
+  /// here: deleting a set is the user's swipe. Returns the ids it logged.
+  Future<List<String>> logUnticked(String workoutId) => db.transaction(() async {
+        final w = await finishedWorkout(workoutId);
+        if (w == null) return const <String>[];
+        final entries = await (db.select(db.workoutExercises)..where((e) => e.workoutId.equals(workoutId))).get();
+        if (entries.isEmpty) return const <String>[];
+        final unticked = await (db.select(db.workoutSets)
+              ..where((s) => s.workoutExerciseId.isIn([for (final e in entries) e.id]) & s.completedAt.isNull())
+              ..orderBy([(s) => OrderingTerm.asc(s.sort)]))
+            .get();
+        if (unticked.isEmpty) return const <String>[];
+        final exerciseOf = {for (final e in entries) e.id: e.exerciseId};
+        final previous = await WorkoutRepository(db)
+            .previousSets(exerciseOf.values.toSet().toList(), before: w.startedAt, excludeWorkoutId: w.id);
+        final all = await (db.select(db.workoutSets)
+              ..where((s) => s.workoutExerciseId.isIn([for (final e in entries) e.id]))
+              ..orderBy([(s) => OrderingTerm.asc(s.sort)]))
+            .get();
+        final at = w.endedAt ?? w.startedAt;
+        for (final s in unticked) {
+          final index = all.where((x) => x.workoutExerciseId == s.workoutExerciseId).toList().indexWhere((x) => x.id == s.id);
+          final prev = previous[exerciseOf[s.workoutExerciseId]] ?? const <WorkoutSet>[];
+          final v = completionValues(s, index >= 0 && index < prev.length ? prev[index] : null);
+          await (db.update(db.workoutSets)..where((x) => x.id.equals(s.id))).write(WorkoutSetsCompanion(
+                weightKg: Value(v.weightKg),
+                reps: Value(v.reps),
+                completedAt: Value(at),
+              ));
+        }
+        return [for (final s in unticked) s.id];
       });
 
   /// Adds a set to an exercise of a past workout, already ✓ (a finished

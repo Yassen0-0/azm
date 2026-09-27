@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
@@ -15,12 +16,14 @@ import '../../../core/widgets/azm_pressable.dart';
 import '../../../core/widgets/lifted_counter.dart';
 import '../../../core/widgets/rest_timer_bar.dart';
 import '../../../core/widgets/set_row.dart';
+import '../../../core/widgets/set_keypad.dart';
 import '../../../core/widgets/weight_keypad.dart';
 import '../data/rest_timer.dart';
 import '../data/workout_models.dart';
 import '../data/workout_repository.dart';
 import 'workout_exercise_section.dart';
 import 'workout_format.dart';
+import '../../../core/widgets/set_type_sheet.dart';
 import 'workout_sheets.dart';
 
 /// Full-screen active workout (covers the tab bar). Route: AppRoutes.activeWorkout.
@@ -37,8 +40,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
   /// Set + field on the keypad, its text buffer, and whether the next digit
   /// replaces the buffer (freshly selected field).
   ({String setId, SetField field})? _editing;
-  String _buffer = '';
-  bool _fresh = true;
+  final _keypad = SetKeypadBuffer();
 
   WorkoutDetail? _detail;
   bool _leaving = false;
@@ -136,18 +138,11 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
                 onSkip: () => ref.read(restTimerProvider.notifier).skip(),
               ),
             if (editing != null && editingSet != null)
-              WeightKeypad(
-                title: editing.field == SetField.weight
-                    ? l.workoutKeypadWeight(l.unitLabel(_unit))
-                    : l.workoutColReps,
-                valueText: _buffer.isEmpty ? l.workoutNoData : _buffer,
-                allowDecimal: editing.field == SetField.weight,
-                stepText: editing.field == SetField.weight ? AzmNumbers.decimal(Units.keypadStep) : '1',
-                nextLabel: _nextTarget() == null ? l.workoutDone : l.workoutKeypadNext,
-                backspaceLabel: l.workoutKeypadBackspace,
-                hideLabel: l.workoutKeypadHide,
-                decreaseLabel: l.workoutKeypadDecrease,
-                increaseLabel: l.workoutKeypadIncrease,
+              SetValueKeypad(
+                field: editing.field,
+                unit: _unit,
+                buffer: _keypad.text,
+                hasNext: _nextTarget() != null,
                 onKey: _onKey,
               )
             else
@@ -265,10 +260,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
     unawaited(_repo.updateSet(set.id, weightKg: previous.weightKg, reps: previous.reps));
     final e = _editing;
     if (e?.setId == set.id) {
-      setState(() {
-        _buffer = e!.field == SetField.weight ? weightInputText(previous.weightKg, _unit) : '${previous.reps}';
-        _fresh = true;
-      });
+      setState(() => _keypad.load(e!.field == SetField.weight ? setWeightInput(previous.weightKg, _unit) : '${previous.reps}'));
     }
   }
 
@@ -278,8 +270,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
   void _edit(WorkoutSet set, SetField field) {
     setState(() {
       _editing = (setId: set.id, field: field);
-      _buffer = _inputText(set, field);
-      _fresh = true;
+      _keypad.load(_inputText(set, field));
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final ctx = _rowKeys[set.id]?.currentContext;
@@ -295,7 +286,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
   }
 
   String _inputText(WorkoutSet s, SetField f) => f == SetField.weight
-      ? (s.weightKg > 0 ? weightInputText(s.weightKg, _unit) : '')
+      ? (s.weightKg > 0 ? setWeightInput(s.weightKg, _unit) : '')
       : (s.reps > 0 ? '${s.reps}' : '');
 
   @override
@@ -378,33 +369,10 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
         } else {
           _edit(next.set, next.field);
         }
-      case KeypadStep(:final up):
-        if (weight) {
-          final kg = Units.stepKg(Units.fromDisplay(double.tryParse(_buffer) ?? 0, _unit), _unit, up: up);
-          unawaited(_repo.updateSet(set.id, weightKg: kg));
-          setState(() {
-            _buffer = kg > 0 ? weightInputText(kg, _unit) : '';
-            _fresh = true;
-          });
-        } else {
-          final reps = ((int.tryParse(_buffer) ?? 0) + (up ? 1 : -1)).clamp(0, 999);
-          unawaited(_repo.updateSet(set.id, reps: reps));
-          setState(() {
-            _buffer = reps > 0 ? '$reps' : '';
-            _fresh = true;
-          });
-        }
       default:
-        final r = applyKeypadKey(_buffer, _fresh, key, allowDecimal: weight, maxIntegerDigits: weight ? 4 : 3);
-        setState(() {
-          _buffer = r.buffer;
-          _fresh = r.fresh;
-        });
-        if (weight) {
-          unawaited(_repo.updateSet(set.id, weightKg: Units.fromDisplay(double.tryParse(r.buffer) ?? 0, _unit)));
-        } else {
-          unawaited(_repo.updateSet(set.id, reps: int.tryParse(r.buffer) ?? 0));
-        }
+        final v = _keypad.apply(key, e.field, _unit);
+        setState(() {});
+        unawaited(weight ? _repo.updateSet(set.id, weightKg: v ?? 0) : _repo.updateSet(set.id, reps: (v ?? 0).toInt()));
     }
   }
 
@@ -513,7 +481,7 @@ class _Stats extends ConsumerWidget {
           divider(),
           stat(
             l.workoutStatLifted,
-            LiftedCounter(value: Units.toDisplay(d?.liftedTotalKg ?? 0, unit), unit: l.unitLabel(unit)),
+            LiftedCounter(value: Units.toDisplay(d?.liftedTotalKg ?? 0, unit), unit: l.weightUnitLabel(unit)),
           ),
           divider(),
           stat(l.workoutStatSets, Text('${d?.completedSets ?? 0}', style: valueStyle)),

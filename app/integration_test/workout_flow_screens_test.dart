@@ -159,10 +159,10 @@ void main() {
       await _pump(tester, 300);
       for (final (w, r) in _logged) {
         await _typeOnKeypad(tester, w);
-        await tester.tap(find.text(l.workoutKeypadNext));
+        await tester.tap(find.text(l.commonKeypadNext));
         await tester.pump(const Duration(milliseconds: 100));
         await _typeOnKeypad(tester, r);
-        await tester.tap(find.text(r == _logged.last.$2 ? l.workoutDone : l.workoutKeypadNext));
+        await tester.tap(find.text(r == _logged.last.$2 ? l.commonKeypadDone : l.commonKeypadNext));
         await tester.pump(const Duration(milliseconds: 100));
       }
       await _pump(tester);
@@ -184,7 +184,7 @@ void main() {
         await tester.scrollUntilVisible(row, 150, scrollable: workoutList);
         await tester.ensureVisible(row);
         await _pump(tester, 300);
-        await tester.tap(find.descendant(of: row, matching: find.bySemanticsLabel(l.workoutCompleteSet)));
+        await tester.tap(find.descendant(of: row, matching: find.bySemanticsLabel(l.commonSetComplete)));
         await _pump(tester);
         if (i == 0 && find.text(l.workoutExactAlarmTitle).evaluate().isNotEmpty) {
           _log('exact-alarm sheet shown ($platform)');

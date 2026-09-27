@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
@@ -125,7 +126,7 @@ class _SessionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final c = context.colors;
-    final numbers = normalNumbers(session.sets.map((s) => s.type));
+    final numbers = normalSetNumbers(session.sets.map((s) => s.type));
     return AzmPressable(
       onTap: () => context.push(AppRoutes.pastWorkoutFor(session.workoutId)),
       child: HistoryCard(

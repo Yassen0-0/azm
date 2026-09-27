@@ -102,7 +102,7 @@ void main() {
       unawaited(router.push(AppRoutes.routineEditorFor(id)));
       await _pumpFor(tester);
       final d = (await c.read(routineRepositoryProvider).loadDetail(id))!;
-      await tester.tap(find.byKey(ValueKey('routine-set-weight-${d.exercises[0].sets[1].id}')));
+      await tester.tap(find.byKey(ValueKey('set-weight-${d.exercises[0].sets[1].id}')));
       await _pumpFor(tester, 400);
       await tester.tap(find.text('6').last);
       await tester.tap(find.text('2').last);

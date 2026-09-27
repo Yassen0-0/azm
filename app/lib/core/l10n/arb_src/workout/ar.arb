@@ -56,26 +56,6 @@
   "@workoutStatPrs": {
     "description": "Summary stat label: number of personal records."
   },
-  "workoutColSet": "سِت",
-  "@workoutColSet": {
-    "description": "Set-table column header: set number / type."
-  },
-  "workoutColPrevious": "السابق",
-  "@workoutColPrevious": {
-    "description": "Set-table column header: same set in the last workout."
-  },
-  "workoutColReps": "عدّات",
-  "@workoutColReps": {
-    "description": "Set-table column header: repetitions."
-  },
-  "workoutUnitKg": "kg",
-  "@workoutUnitKg": {
-    "description": "Weight unit label for kilograms (kept Latin in Arabic, as said in gyms)."
-  },
-  "workoutUnitLb": "lb",
-  "@workoutUnitLb": {
-    "description": "Weight unit label for pounds."
-  },
   "workoutNoData": "—",
   "@workoutNoData": {
     "description": "Shown where there is no data yet (never 0)."
@@ -103,38 +83,6 @@
         "type": "String"
       }
     }
-  },
-  "workoutSetTypeWarmupShort": "ح",
-  "@workoutSetTypeWarmupShort": {
-    "description": "One-letter label of a warm-up set: ح (from إحماء; owner decision 2026-09-26 — إ looked like '!'). Shown in amber."
-  },
-  "workoutSetTypeDropShort": "د",
-  "@workoutSetTypeDropShort": {
-    "description": "One-letter label of a drop set."
-  },
-  "workoutSetTypeFailureShort": "ف",
-  "@workoutSetTypeFailureShort": {
-    "description": "One-letter label of a set to failure."
-  },
-  "workoutSetTypeTitle": "نوع السِت",
-  "@workoutSetTypeTitle": {
-    "description": "Title of the set-type menu (tap the set label)."
-  },
-  "workoutSetTypeNormal": "عادي",
-  "@workoutSetTypeNormal": {
-    "description": "Set type: normal working set."
-  },
-  "workoutSetTypeWarmup": "إحماء",
-  "@workoutSetTypeWarmup": {
-    "description": "Set type: warm-up."
-  },
-  "workoutSetTypeDrop": "دروب سِت",
-  "@workoutSetTypeDrop": {
-    "description": "Set type: drop set."
-  },
-  "workoutSetTypeFailure": "للفشل",
-  "@workoutSetTypeFailure": {
-    "description": "Set type: to failure (intentional, never shown as an error)."
   },
   "workoutAddSet": "ضيف سِت",
   "@workoutAddSet": {
@@ -168,14 +116,6 @@
   "@workoutCancel": {
     "description": "Cancel button in dialogs."
   },
-  "workoutDeleteSet": "امسح السِت",
-  "@workoutDeleteSet": {
-    "description": "Semantics label of the swipe-to-delete action on a set."
-  },
-  "workoutCompleteSet": "علّم السِت خلصان",
-  "@workoutCompleteSet": {
-    "description": "Semantics label of the check button on a set row."
-  },
   "workoutUnknownExercise": "تمرين مش معروف ({id})",
   "@workoutUnknownExercise": {
     "description": "Exercise no longer in the catalog.",
@@ -184,35 +124,6 @@
         "type": "String"
       }
     }
-  },
-  "workoutKeypadWeight": "الوزن ({unit})",
-  "@workoutKeypadWeight": {
-    "description": "Keypad preview label when editing a weight.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
-      }
-    }
-  },
-  "workoutKeypadNext": "التالي",
-  "@workoutKeypadNext": {
-    "description": "Keypad key: move to the next field."
-  },
-  "workoutKeypadBackspace": "امسح رقم",
-  "@workoutKeypadBackspace": {
-    "description": "Semantics label of the keypad backspace key."
-  },
-  "workoutKeypadHide": "اقفل الكيبورد",
-  "@workoutKeypadHide": {
-    "description": "Semantics label of the keypad close key."
-  },
-  "workoutKeypadDecrease": "نقّص",
-  "@workoutKeypadDecrease": {
-    "description": "Semantics label of the keypad minus step key."
-  },
-  "workoutKeypadIncrease": "زوّد",
-  "@workoutKeypadIncrease": {
-    "description": "Semantics label of the keypad plus step key."
   },
   "workoutRest": "راحة",
   "@workoutRest": {

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/azm_theme.dart';
-import '../../../core/utils/workout_math.dart';
 import '../../../core/widgets/azm_pressable.dart';
-import 'history_text.dart';
 
 /// Bottom-sheet row: icon/leading + label (optionally destructive / selected).
 class HistorySheetAction extends StatelessWidget {
@@ -74,50 +72,6 @@ Future<T?> showHistorySheet<T>(
       ),
     );
 
-/// Set type menu. Returns the chosen type.
-Future<SetType?> showHistorySetTypeSheet(BuildContext context, SetType current) {
-  final l = context.l10n;
-  return showHistorySheet<SetType>(
-    context,
-    title: l.historySetTypeTitle,
-    children: (ctx) => [
-      for (final t in SetType.values)
-        HistorySheetAction(
-          label: l.setTypeName(t),
-          selected: t == current,
-          leading: _TypeChip(type: t),
-          onTap: () => Navigator.pop(ctx, t),
-        ),
-    ],
-  );
-}
-
-class _TypeChip extends StatelessWidget {
-  const _TypeChip({required this.type});
-
-  final SetType type;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final warm = type == SetType.warmup;
-    return Container(
-      width: AzmSize.headerButton,
-      height: AzmSize.headerButton,
-      alignment: AlignmentDirectional.center,
-      decoration: BoxDecoration(
-        color: warm ? c.warmupTint : c.fill,
-        borderRadius: BorderRadius.circular(AzmRadius.segment),
-      ),
-      child: Text(
-        context.l10n.setLabel(type, 1),
-        style: AzmType.controlLabel.copyWith(
-          color: warm ? c.warmupText : (type == SetType.normal ? c.textSecondary : c.textPrimary),
-        ),
-      ),
-    );
-  }
-}
 
 /// Confirmation dialog. Returns true on confirm.
 Future<bool> historyConfirm(

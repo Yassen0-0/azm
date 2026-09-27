@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/media/exercise_media.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
@@ -16,15 +17,15 @@ abstract interface class PastSetActions {
   void onLabelTap(WorkoutSet set);
   void onPreviousTap(WorkoutSet set, WorkoutSet previous);
   void onFieldTap(WorkoutSet set, SetField field);
-  void onToggleComplete(WorkoutSet set, WorkoutSet? previous);
   void onDeleteSet(WorkoutSet set);
   void onAddSet(WorkoutExerciseDetail exercise);
   void onExerciseMenu(WorkoutExerciseDetail exercise, String name);
 }
 
 /// One exercise of a past workout: header (thumbnail, names, menu), the same
-/// SetRow table as the live workout ("previous" = the workout before this
-/// one; 🏆 = PR versus every earlier workout), add set.
+/// SetRow table as the live workout without the ✓ column (every set of a
+/// finished workout is done; "previous" = the workout before this one;
+/// 🏆 = PR versus every earlier workout), add set. Delete = swipe only.
 class PastExerciseSection extends StatelessWidget {
   const PastExerciseSection({
     super.key,
@@ -46,7 +47,7 @@ class PastExerciseSection extends StatelessWidget {
     final c = context.colors;
     final l = context.l10n;
     final names = namesOrUnknown(context, detail.exercise, detail.entry.exerciseId);
-    final numbers = normalNumbers(detail.sets.map((s) => s.type));
+    final numbers = normalSetNumbers(detail.sets.map((s) => s.type));
 
     return Container(
       margin: const EdgeInsetsDirectional.only(bottom: AzmSpace.listGap),
@@ -88,10 +89,11 @@ class PastExerciseSection extends StatelessWidget {
             ),
           ),
           SetTableHeader(
-            setLabel: l.historyColSet,
-            previousLabel: l.historyColPrevious,
-            weightLabel: l.unitLabel(unit),
-            repsLabel: l.historyColReps,
+            setLabel: l.commonSetColSet,
+            previousLabel: l.commonSetColPrevious,
+            weightLabel: l.weightUnitLabel(unit),
+            repsLabel: l.commonSetColReps,
+            showCheck: false,
           ),
           const SizedBox(height: AzmSpace.xxs),
           for (var i = 0; i < detail.sets.length; i++)
@@ -126,28 +128,30 @@ class PastExerciseSection extends StatelessWidget {
     final s = detail.sets[i];
     final prev = detail.previousFor(i);
     final hasPrev = prev != null && prev.reps > 0;
-    final done = s.completedAt != null;
     return SetRow(
       key: ValueKey(s.id),
       setId: s.id,
       label: l.setLabel(s.type, number),
-      labelKind: labelKind(s.type),
-      previousText: hasPrev ? l.setValue(prev, unit, withUnit: false) : l.historyNoData,
-      weightText: s.weightKg > 0 || done ? weightNumber(s.weightKg, unit) : '',
-      repsText: s.reps > 0 || done ? AzmNumbers.integer(s.reps) : '',
-      weightHint: hasPrev ? weightNumber(prev.weightKg, unit) : l.historyNoData,
-      repsHint: hasPrev ? AzmNumbers.integer(prev.reps) : l.historyNoData,
-      completed: done,
+      labelKind: setLabelKind(s.type),
+      labelSemantics: l.setTypeName(s.type),
+      previousText: hasPrev ? l.setValue(prev, unit, withUnit: false) : l.commonNoData,
+      // Logged values, 0 included (a set of a finished workout is never "empty").
+      weightText: setWeightNumber(s.weightKg, unit),
+      repsText: AzmNumbers.integer(s.reps),
+      weightHint: l.commonNoData,
+      repsHint: l.commonNoData,
+      // Editable look (value cells filled), no done tint: there is no ✓ here.
+      completed: false,
       isPr: detail.prs.containsKey(i),
       activeField: editing?.setId == s.id ? editing!.field : null,
       onLabelTap: () => actions.onLabelTap(s),
       onPreviousTap: hasPrev ? () => actions.onPreviousTap(s, prev) : null,
       onWeightTap: () => actions.onFieldTap(s, SetField.weight),
       onRepsTap: () => actions.onFieldTap(s, SetField.reps),
-      onToggleComplete: () => actions.onToggleComplete(s, hasPrev ? prev : null),
+      onToggleComplete: null,
       onDelete: () => actions.onDeleteSet(s),
-      deleteLabel: l.historyDeleteSet,
-      completeLabel: l.historyCompleteSet,
+      deleteLabel: l.commonSetDelete,
+      completeLabel: null,
     );
   }
 }

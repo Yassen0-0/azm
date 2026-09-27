@@ -140,6 +140,144 @@ abstract class AppLocalizations {
   /// **'رجوع'**
   String get commonBack;
 
+  /// Set-table column header: set number / type label (SetRow, shared by workout, history, routines).
+  ///
+  /// In ar, this message translates to:
+  /// **'سِت'**
+  String get commonSetColSet;
+
+  /// Set-table column header: same set in the last workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'السابق'**
+  String get commonSetColPrevious;
+
+  /// Set-table column header: repetitions. Also the keypad title when editing reps.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّات'**
+  String get commonSetColReps;
+
+  /// Weight unit label (kept Latin in Arabic, as in the SPEC). Set-table column header and keypad title.
+  ///
+  /// In ar, this message translates to:
+  /// **'kg'**
+  String get commonUnitKg;
+
+  /// Weight unit label (kept Latin in Arabic). Set-table column header and keypad title.
+  ///
+  /// In ar, this message translates to:
+  /// **'lb'**
+  String get commonUnitLb;
+
+  /// Placeholder for a missing value (no previous set, empty keypad value).
+  ///
+  /// In ar, this message translates to:
+  /// **'—'**
+  String get commonNoData;
+
+  /// Title of the set type menu (tap on a set label).
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع السِت'**
+  String get commonSetTypeTitle;
+
+  /// Set type: normal working set.
+  ///
+  /// In ar, this message translates to:
+  /// **'عادي'**
+  String get commonSetTypeNormal;
+
+  /// Set type: warm-up.
+  ///
+  /// In ar, this message translates to:
+  /// **'إحماء'**
+  String get commonSetTypeWarmup;
+
+  /// Set type: drop set (gym slang).
+  ///
+  /// In ar, this message translates to:
+  /// **'دروب سِت'**
+  String get commonSetTypeDrop;
+
+  /// Set type: to failure.
+  ///
+  /// In ar, this message translates to:
+  /// **'للفشل'**
+  String get commonSetTypeFailure;
+
+  /// One-letter label of a warm-up set: ح (from إحماء; owner decision 2026-09-26 — إ looked like '!'). Shown in amber.
+  ///
+  /// In ar, this message translates to:
+  /// **'ح'**
+  String get commonSetTypeWarmupShort;
+
+  /// One-letter label of a drop set (from دروب).
+  ///
+  /// In ar, this message translates to:
+  /// **'د'**
+  String get commonSetTypeDropShort;
+
+  /// One-letter label of a failure set (from فشل). Never shown in red.
+  ///
+  /// In ar, this message translates to:
+  /// **'ف'**
+  String get commonSetTypeFailureShort;
+
+  /// Semantics label / swipe action: delete a set.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح السِت'**
+  String get commonSetDelete;
+
+  /// Semantics label of the ✓ button of a set in the live workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'علّم السِت خلصان'**
+  String get commonSetComplete;
+
+  /// Keypad preview label when editing a weight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن ({unit})'**
+  String commonKeypadWeight(String unit);
+
+  /// Keypad key: go to the next field.
+  ///
+  /// In ar, this message translates to:
+  /// **'التالي'**
+  String get commonKeypadNext;
+
+  /// Keypad key on the last field: close the keypad.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get commonKeypadDone;
+
+  /// Semantics label of the keypad backspace key.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح رقم'**
+  String get commonKeypadBackspace;
+
+  /// Semantics label of the key that hides the keypad.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقفل الكيبورد'**
+  String get commonKeypadHide;
+
+  /// Semantics label of the keypad − step key.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقّص'**
+  String get commonKeypadDecrease;
+
+  /// Semantics label of the keypad + step key.
+  ///
+  /// In ar, this message translates to:
+  /// **'زوّد'**
+  String get commonKeypadIncrease;
+
   /// Hint in the exercise search box (Arabic, slang or English all work).
   ///
   /// In ar, this message translates to:
@@ -391,24 +529,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لسه ملعبتش التمرين ده. سجّل أول مجموعة وتاريخك هيظهر هنا.'**
   String get exercisesHistoryEmpty;
-
-  /// Short label of a warm-up set in the history list: ح (from إحماء; owner decision 2026-09-26, same as the workout set label).
-  ///
-  /// In ar, this message translates to:
-  /// **'ح'**
-  String get exercisesSetLabelWarmup;
-
-  /// Short label of a drop set in the history list.
-  ///
-  /// In ar, this message translates to:
-  /// **'د'**
-  String get exercisesSetLabelDrop;
-
-  /// Short label of a failure set in the history list.
-  ///
-  /// In ar, this message translates to:
-  /// **'ف'**
-  String get exercisesSetLabelFailure;
 
   /// Dataset muscle "abs" (localized label, owner-reviewed 2026-09-26).
   ///
@@ -1016,18 +1136,6 @@ abstract class AppLocalizations {
   /// **'{hours} س {minutes} د'**
   String historyDurationHours(String hours, String minutes);
 
-  /// Weight unit: kilograms (kept in Latin letters, as written in Egyptian gyms).
-  ///
-  /// In ar, this message translates to:
-  /// **'kg'**
-  String get historyUnitKg;
-
-  /// Weight unit: pounds.
-  ///
-  /// In ar, this message translates to:
-  /// **'lb'**
-  String get historyUnitLb;
-
   /// A weight with its unit, e.g. 62.5 kg.
   ///
   /// In ar, this message translates to:
@@ -1178,72 +1286,6 @@ abstract class AppLocalizations {
   /// **'التمارين'**
   String get historyStatWorkouts;
 
-  /// Set-table column: set number / type.
-  ///
-  /// In ar, this message translates to:
-  /// **'سِت'**
-  String get historyColSet;
-
-  /// Set-table column: same set in the workout before this one.
-  ///
-  /// In ar, this message translates to:
-  /// **'السابق'**
-  String get historyColPrevious;
-
-  /// Set-table column / keypad title: repetitions.
-  ///
-  /// In ar, this message translates to:
-  /// **'عدّات'**
-  String get historyColReps;
-
-  /// Set type sheet title.
-  ///
-  /// In ar, this message translates to:
-  /// **'نوع السِت'**
-  String get historySetTypeTitle;
-
-  /// Set type: normal.
-  ///
-  /// In ar, this message translates to:
-  /// **'عادي'**
-  String get historySetTypeNormal;
-
-  /// Set type: warm-up.
-  ///
-  /// In ar, this message translates to:
-  /// **'إحماء'**
-  String get historySetTypeWarmup;
-
-  /// Set type: drop set.
-  ///
-  /// In ar, this message translates to:
-  /// **'دروب سِت'**
-  String get historySetTypeDrop;
-
-  /// Set type: to failure (never shown in red).
-  ///
-  /// In ar, this message translates to:
-  /// **'للفشل'**
-  String get historySetTypeFailure;
-
-  /// Set label of a warm-up set (amber).
-  ///
-  /// In ar, this message translates to:
-  /// **'ح'**
-  String get historySetTypeWarmupShort;
-
-  /// Set label of a drop set.
-  ///
-  /// In ar, this message translates to:
-  /// **'د'**
-  String get historySetTypeDropShort;
-
-  /// Set label of a failure set.
-  ///
-  /// In ar, this message translates to:
-  /// **'ف'**
-  String get historySetTypeFailureShort;
-
   /// Button under an exercise's sets.
   ///
   /// In ar, this message translates to:
@@ -1268,64 +1310,10 @@ abstract class AppLocalizations {
   /// **'شيل التمرين'**
   String get historyRemoveExercise;
 
-  /// Swipe-to-delete label of a set.
+  /// Hint at the top of a past workout being edited: edits are saved immediately; deleting a set is a swipe toward the end edge (the only way; nothing is removed automatically).
   ///
   /// In ar, this message translates to:
-  /// **'امسح السِت'**
-  String get historyDeleteSet;
-
-  /// Screen-reader label of the ✓ cell.
-  ///
-  /// In ar, this message translates to:
-  /// **'علّم السِت خلصان'**
-  String get historyCompleteSet;
-
-  /// Keypad title when editing a weight.
-  ///
-  /// In ar, this message translates to:
-  /// **'الوزن ({unit})'**
-  String historyKeypadWeight(String unit);
-
-  /// Keypad key: go to the next value.
-  ///
-  /// In ar, this message translates to:
-  /// **'التالي'**
-  String get historyKeypadNext;
-
-  /// Keypad key on the last value.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم'**
-  String get historyDone;
-
-  /// Keypad backspace (screen-reader label).
-  ///
-  /// In ar, this message translates to:
-  /// **'امسح رقم'**
-  String get historyKeypadBackspace;
-
-  /// Keypad hide key (screen-reader label).
-  ///
-  /// In ar, this message translates to:
-  /// **'اقفل الكيبورد'**
-  String get historyKeypadHide;
-
-  /// Keypad minus-step key (screen-reader label).
-  ///
-  /// In ar, this message translates to:
-  /// **'نقّص'**
-  String get historyKeypadDecrease;
-
-  /// Keypad plus-step key (screen-reader label).
-  ///
-  /// In ar, this message translates to:
-  /// **'زوّد'**
-  String get historyKeypadIncrease;
-
-  /// Note at the top of a past workout.
-  ///
-  /// In ar, this message translates to:
-  /// **'أي تعديل بيتحفظ على طول. السِت من غير ✓ أو من غير عدّات بيتشال لما تخرج.'**
+  /// **'التعديلات بتتحفظ على طول. اسحب السِت للآخر عشان تمسحه.'**
   String get historyEditHint;
 
   /// Past workout: id not found or not finished.
@@ -1556,24 +1544,6 @@ abstract class AppLocalizations {
   /// **'ضيف تمارين الروتين، وحدّد السِتات المطلوبة لكل تمرين.'**
   String get routinesEditorEmpty;
 
-  /// Set table column: set number / type.
-  ///
-  /// In ar, this message translates to:
-  /// **'سِت'**
-  String get routinesColSet;
-
-  /// Set table column: target weight, shows the unit (kg/lb).
-  ///
-  /// In ar, this message translates to:
-  /// **'{unit}'**
-  String routinesColWeight(String unit);
-
-  /// Set table column: target reps.
-  ///
-  /// In ar, this message translates to:
-  /// **'عدّات'**
-  String get routinesColReps;
-
   /// Kilogram unit label.
   ///
   /// In ar, this message translates to:
@@ -1586,29 +1556,11 @@ abstract class AppLocalizations {
   /// **'lb'**
   String get routinesUnitLb;
 
-  /// Placeholder of an empty target (no data).
-  ///
-  /// In ar, this message translates to:
-  /// **'—'**
-  String get routinesNoTarget;
-
   /// Adds a target set to an exercise.
   ///
   /// In ar, this message translates to:
   /// **'ضيف سِت'**
   String get routinesAddSet;
-
-  /// Semantics label of swipe-to-delete on a target set.
-  ///
-  /// In ar, this message translates to:
-  /// **'امسح السِت'**
-  String get routinesDeleteSet;
-
-  /// Title of the set type menu.
-  ///
-  /// In ar, this message translates to:
-  /// **'نوع السِت'**
-  String get routinesSetTypeTitle;
 
   /// Rest override chip on a routine exercise, e.g. Rest 2:30.
   ///
@@ -1723,42 +1675,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'العدّات المطلوبة'**
   String get routinesKeypadReps;
-
-  /// Keypad key: next field.
-  ///
-  /// In ar, this message translates to:
-  /// **'التالي'**
-  String get routinesKeypadNext;
-
-  /// Keypad key on the last field.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم'**
-  String get routinesKeypadDone;
-
-  /// Semantics label of the keypad backspace.
-  ///
-  /// In ar, this message translates to:
-  /// **'امسح رقم'**
-  String get routinesKeypadBackspace;
-
-  /// Semantics label of the keypad close key.
-  ///
-  /// In ar, this message translates to:
-  /// **'اقفل الكيبورد'**
-  String get routinesKeypadHide;
-
-  /// Semantics label of the keypad minus key.
-  ///
-  /// In ar, this message translates to:
-  /// **'نقّص'**
-  String get routinesKeypadDecrease;
-
-  /// Semantics label of the keypad plus key.
-  ///
-  /// In ar, this message translates to:
-  /// **'زوّد'**
-  String get routinesKeypadIncrease;
 
   /// Program frequency. countText = count with Western digits.
   ///
@@ -1958,36 +1874,6 @@ abstract class AppLocalizations {
   /// **'أرقام قياسية'**
   String get workoutStatPrs;
 
-  /// Set-table column header: set number / type.
-  ///
-  /// In ar, this message translates to:
-  /// **'سِت'**
-  String get workoutColSet;
-
-  /// Set-table column header: same set in the last workout.
-  ///
-  /// In ar, this message translates to:
-  /// **'السابق'**
-  String get workoutColPrevious;
-
-  /// Set-table column header: repetitions.
-  ///
-  /// In ar, this message translates to:
-  /// **'عدّات'**
-  String get workoutColReps;
-
-  /// Weight unit label for kilograms (kept Latin in Arabic, as said in gyms).
-  ///
-  /// In ar, this message translates to:
-  /// **'kg'**
-  String get workoutUnitKg;
-
-  /// Weight unit label for pounds.
-  ///
-  /// In ar, this message translates to:
-  /// **'lb'**
-  String get workoutUnitLb;
-
   /// Shown where there is no data yet (never 0).
   ///
   /// In ar, this message translates to:
@@ -2005,54 +1891,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{value} {unit}'**
   String workoutWeightUnit(String value, String unit);
-
-  /// One-letter label of a warm-up set: ح (from إحماء; owner decision 2026-09-26 — إ looked like '!'). Shown in amber.
-  ///
-  /// In ar, this message translates to:
-  /// **'ح'**
-  String get workoutSetTypeWarmupShort;
-
-  /// One-letter label of a drop set.
-  ///
-  /// In ar, this message translates to:
-  /// **'د'**
-  String get workoutSetTypeDropShort;
-
-  /// One-letter label of a set to failure.
-  ///
-  /// In ar, this message translates to:
-  /// **'ف'**
-  String get workoutSetTypeFailureShort;
-
-  /// Title of the set-type menu (tap the set label).
-  ///
-  /// In ar, this message translates to:
-  /// **'نوع السِت'**
-  String get workoutSetTypeTitle;
-
-  /// Set type: normal working set.
-  ///
-  /// In ar, this message translates to:
-  /// **'عادي'**
-  String get workoutSetTypeNormal;
-
-  /// Set type: warm-up.
-  ///
-  /// In ar, this message translates to:
-  /// **'إحماء'**
-  String get workoutSetTypeWarmup;
-
-  /// Set type: drop set.
-  ///
-  /// In ar, this message translates to:
-  /// **'دروب سِت'**
-  String get workoutSetTypeDrop;
-
-  /// Set type: to failure (intentional, never shown as an error).
-  ///
-  /// In ar, this message translates to:
-  /// **'للفشل'**
-  String get workoutSetTypeFailure;
 
   /// Button under an exercise's sets.
   ///
@@ -2102,59 +1940,11 @@ abstract class AppLocalizations {
   /// **'إلغاء'**
   String get workoutCancel;
 
-  /// Semantics label of the swipe-to-delete action on a set.
-  ///
-  /// In ar, this message translates to:
-  /// **'امسح السِت'**
-  String get workoutDeleteSet;
-
-  /// Semantics label of the check button on a set row.
-  ///
-  /// In ar, this message translates to:
-  /// **'علّم السِت خلصان'**
-  String get workoutCompleteSet;
-
   /// Exercise no longer in the catalog.
   ///
   /// In ar, this message translates to:
   /// **'تمرين مش معروف ({id})'**
   String workoutUnknownExercise(String id);
-
-  /// Keypad preview label when editing a weight.
-  ///
-  /// In ar, this message translates to:
-  /// **'الوزن ({unit})'**
-  String workoutKeypadWeight(String unit);
-
-  /// Keypad key: move to the next field.
-  ///
-  /// In ar, this message translates to:
-  /// **'التالي'**
-  String get workoutKeypadNext;
-
-  /// Semantics label of the keypad backspace key.
-  ///
-  /// In ar, this message translates to:
-  /// **'امسح رقم'**
-  String get workoutKeypadBackspace;
-
-  /// Semantics label of the keypad close key.
-  ///
-  /// In ar, this message translates to:
-  /// **'اقفل الكيبورد'**
-  String get workoutKeypadHide;
-
-  /// Semantics label of the keypad minus step key.
-  ///
-  /// In ar, this message translates to:
-  /// **'نقّص'**
-  String get workoutKeypadDecrease;
-
-  /// Semantics label of the keypad plus step key.
-  ///
-  /// In ar, this message translates to:
-  /// **'زوّد'**
-  String get workoutKeypadIncrease;
 
   /// Rest timer bar label.
   ///

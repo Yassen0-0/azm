@@ -31,6 +31,77 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonBack => 'Back';
 
   @override
+  String get commonSetColSet => 'Set';
+
+  @override
+  String get commonSetColPrevious => 'Previous';
+
+  @override
+  String get commonSetColReps => 'Reps';
+
+  @override
+  String get commonUnitKg => 'kg';
+
+  @override
+  String get commonUnitLb => 'lb';
+
+  @override
+  String get commonNoData => '—';
+
+  @override
+  String get commonSetTypeTitle => 'Set type';
+
+  @override
+  String get commonSetTypeNormal => 'Normal';
+
+  @override
+  String get commonSetTypeWarmup => 'Warm-up';
+
+  @override
+  String get commonSetTypeDrop => 'Drop set';
+
+  @override
+  String get commonSetTypeFailure => 'Failure';
+
+  @override
+  String get commonSetTypeWarmupShort => 'W';
+
+  @override
+  String get commonSetTypeDropShort => 'D';
+
+  @override
+  String get commonSetTypeFailureShort => 'F';
+
+  @override
+  String get commonSetDelete => 'Delete set';
+
+  @override
+  String get commonSetComplete => 'Mark set complete';
+
+  @override
+  String commonKeypadWeight(String unit) {
+    return 'Weight ($unit)';
+  }
+
+  @override
+  String get commonKeypadNext => 'Next';
+
+  @override
+  String get commonKeypadDone => 'Done';
+
+  @override
+  String get commonKeypadBackspace => 'Delete digit';
+
+  @override
+  String get commonKeypadHide => 'Close keypad';
+
+  @override
+  String get commonKeypadDecrease => 'Decrease';
+
+  @override
+  String get commonKeypadIncrease => 'Increase';
+
+  @override
   String get exercisesSearchHint => 'Search exercises';
 
   @override
@@ -181,15 +252,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get exercisesHistoryEmpty =>
       'You haven\'t done this exercise yet. Log a set and your history shows up here.';
-
-  @override
-  String get exercisesSetLabelWarmup => 'W';
-
-  @override
-  String get exercisesSetLabelDrop => 'D';
-
-  @override
-  String get exercisesSetLabelFailure => 'F';
 
   @override
   String get exercisesMuscleAbs => 'Abs';
@@ -524,12 +586,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get historyUnitKg => 'kg';
-
-  @override
-  String get historyUnitLb => 'lb';
-
-  @override
   String historyWeightValue(String value, String unit) {
     return '$value $unit';
   }
@@ -624,39 +680,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyStatWorkouts => 'Workouts';
 
   @override
-  String get historyColSet => 'Set';
-
-  @override
-  String get historyColPrevious => 'Previous';
-
-  @override
-  String get historyColReps => 'Reps';
-
-  @override
-  String get historySetTypeTitle => 'Set type';
-
-  @override
-  String get historySetTypeNormal => 'Normal';
-
-  @override
-  String get historySetTypeWarmup => 'Warm-up';
-
-  @override
-  String get historySetTypeDrop => 'Drop set';
-
-  @override
-  String get historySetTypeFailure => 'Failure';
-
-  @override
-  String get historySetTypeWarmupShort => 'W';
-
-  @override
-  String get historySetTypeDropShort => 'D';
-
-  @override
-  String get historySetTypeFailureShort => 'F';
-
-  @override
   String get historyAddSet => 'Add set';
 
   @override
@@ -669,37 +692,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyRemoveExercise => 'Remove exercise';
 
   @override
-  String get historyDeleteSet => 'Delete set';
-
-  @override
-  String get historyCompleteSet => 'Mark set done';
-
-  @override
-  String historyKeypadWeight(String unit) {
-    return 'Weight ($unit)';
-  }
-
-  @override
-  String get historyKeypadNext => 'Next';
-
-  @override
-  String get historyDone => 'Done';
-
-  @override
-  String get historyKeypadBackspace => 'Backspace';
-
-  @override
-  String get historyKeypadHide => 'Hide keypad';
-
-  @override
-  String get historyKeypadDecrease => 'Decrease';
-
-  @override
-  String get historyKeypadIncrease => 'Increase';
-
-  @override
   String get historyEditHint =>
-      'Edits save instantly. Sets without ✓ or reps are removed when you leave.';
+      'Changes save instantly. Swipe a set toward the end to delete it.';
 
   @override
   String get historyNotFound => 'This workout doesn\'t exist';
@@ -848,33 +842,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Add the exercises of this routine. You set the target sets for each one.';
 
   @override
-  String get routinesColSet => 'Set';
-
-  @override
-  String routinesColWeight(String unit) {
-    return '$unit';
-  }
-
-  @override
-  String get routinesColReps => 'Reps';
-
-  @override
   String get routinesUnitKg => 'kg';
 
   @override
   String get routinesUnitLb => 'lb';
 
   @override
-  String get routinesNoTarget => '—';
-
-  @override
   String get routinesAddSet => 'Add set';
-
-  @override
-  String get routinesDeleteSet => 'Delete set';
-
-  @override
-  String get routinesSetTypeTitle => 'Set type';
 
   @override
   String routinesRestValue(String time) {
@@ -942,24 +916,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get routinesKeypadReps => 'Target reps';
-
-  @override
-  String get routinesKeypadNext => 'Next';
-
-  @override
-  String get routinesKeypadDone => 'Done';
-
-  @override
-  String get routinesKeypadBackspace => 'Delete digit';
-
-  @override
-  String get routinesKeypadHide => 'Close keypad';
-
-  @override
-  String get routinesKeypadDecrease => 'Decrease';
-
-  @override
-  String get routinesKeypadIncrease => 'Increase';
 
   @override
   String routinesProgramDays(int count, String countText) {
@@ -1090,21 +1046,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutStatPrs => 'PRs';
 
   @override
-  String get workoutColSet => 'Set';
-
-  @override
-  String get workoutColPrevious => 'Previous';
-
-  @override
-  String get workoutColReps => 'Reps';
-
-  @override
-  String get workoutUnitKg => 'kg';
-
-  @override
-  String get workoutUnitLb => 'lb';
-
-  @override
   String get workoutNoData => '—';
 
   @override
@@ -1116,30 +1057,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String workoutWeightUnit(String value, String unit) {
     return '$value $unit';
   }
-
-  @override
-  String get workoutSetTypeWarmupShort => 'W';
-
-  @override
-  String get workoutSetTypeDropShort => 'D';
-
-  @override
-  String get workoutSetTypeFailureShort => 'F';
-
-  @override
-  String get workoutSetTypeTitle => 'Set type';
-
-  @override
-  String get workoutSetTypeNormal => 'Normal';
-
-  @override
-  String get workoutSetTypeWarmup => 'Warm-up';
-
-  @override
-  String get workoutSetTypeDrop => 'Drop set';
-
-  @override
-  String get workoutSetTypeFailure => 'Failure';
 
   @override
   String get workoutAddSet => 'Add set';
@@ -1166,35 +1083,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutCancel => 'Cancel';
 
   @override
-  String get workoutDeleteSet => 'Delete set';
-
-  @override
-  String get workoutCompleteSet => 'Mark set complete';
-
-  @override
   String workoutUnknownExercise(String id) {
     return 'Unknown exercise ($id)';
   }
-
-  @override
-  String workoutKeypadWeight(String unit) {
-    return 'Weight ($unit)';
-  }
-
-  @override
-  String get workoutKeypadNext => 'Next';
-
-  @override
-  String get workoutKeypadBackspace => 'Delete digit';
-
-  @override
-  String get workoutKeypadHide => 'Close keypad';
-
-  @override
-  String get workoutKeypadDecrease => 'Decrease';
-
-  @override
-  String get workoutKeypadIncrease => 'Increase';
 
   @override
   String get workoutRest => 'Rest';

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:azm/core/db/app_database.dart';
+import 'package:azm/core/l10n/set_labels.dart';
 import 'package:azm/core/utils/workout_math.dart';
 import 'package:azm/features/settings/data/training_settings.dart';
 import 'package:azm/features/workout/data/workout_models.dart';
@@ -262,7 +263,7 @@ void main() {
       s(SetType.normal, 70, 3),
       s(SetType.normal, 90, 1, done: false),
     ];
-    expect(normalSetNumbers(sets), [null, 1, null, 2, 3]);
+    expect(normalSetNumbers(sets.map((s) => s.type)), [null, 1, null, 2, 3]);
     expect(bestSet(sets), sets[3]); // 70×3 → e1RM 77 beats 60×8 → 76; the unfinished 90×1 is ignored
   });
 }

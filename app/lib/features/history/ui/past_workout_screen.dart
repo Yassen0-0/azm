@@ -1,17 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_header.dart';
 import '../../../core/widgets/set_row.dart';
+import '../../../core/widgets/set_keypad.dart';
+import '../../../core/widgets/set_type_sheet.dart';
 import '../../../core/widgets/weight_keypad.dart';
 import '../../workout/data/workout_models.dart';
 import '../../workout/data/workout_repository.dart';
@@ -23,12 +25,12 @@ import 'past_exercise_section.dart';
 
 /// Past (finished) workout detail, editable. Route: AppRoutes.pastWorkoutFor(id).
 ///
-/// Same set table as the live workout (SetRow + WeightKeypad): weights, reps,
-/// types, add/delete sets, add/remove exercises, rename, delete. Every edit is
-/// written at once; Lifted, PRs and records everywhere recompute from the DB
-/// streams (PRs chronologically, so later workouts can change too). A past
-/// workout keeps only logged sets: sets without ✓ or reps are removed when
-/// the screen closes ([HistoryRepository.tidy]).
+/// Same set table as the live workout (SetRow + SetValueKeypad) without the
+/// ✓: every set of a finished workout is done. Weights, reps, types, add
+/// sets, add/remove exercises, rename, delete; deleting a set is swipe-only
+/// and nothing is ever removed behind the user's back. Every edit is written
+/// at once; Lifted, PRs and records everywhere recompute from the DB streams
+/// (PRs chronologically, so later workouts can change too).
 class PastWorkoutScreen extends ConsumerStatefulWidget {
   const PastWorkoutScreen({super.key, required this.workoutId});
 
@@ -43,8 +45,7 @@ class PastWorkoutScreen extends ConsumerStatefulWidget {
 
 class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implements PastSetActions {
   ({String setId, SetField field})? _editing;
-  String _buffer = '';
-  bool _fresh = true;
+  final _keypad = SetKeypadBuffer();
   bool _leaving = false;
 
   WorkoutDetail? _detail;
@@ -66,18 +67,10 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
     } on Object {
       _historyOrNull = null;
     }
-    _tidy(); // leftovers of an interrupted edit (app killed while editing)
+    // Sets left without ✓ (app killed right after adding an exercise) are
+    // logged, never removed.
+    unawaited(_historyOrNull?.logUnticked(widget.workoutId).catchError((Object _) => const <String>[]));
   }
-
-  @override
-  void dispose() {
-    _tidy();
-    super.dispose();
-  }
-
-  /// Best effort: a failure (e.g. the DB already closed) only leaves unticked
-  /// sets that every reader ignores and the next visit removes.
-  void _tidy() => unawaited(_historyOrNull?.tidy(widget.workoutId).catchError((Object _) {}));
 
   @override
   Widget build(BuildContext context) {
@@ -145,16 +138,11 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
                     ),
             ),
             if (editing != null && editingSet != null)
-              WeightKeypad(
-                title: editing.field == SetField.weight ? l.historyKeypadWeight(l.unitLabel(_unit)) : l.historyColReps,
-                valueText: _buffer.isEmpty ? l.historyNoData : _buffer,
-                allowDecimal: editing.field == SetField.weight,
-                stepText: editing.field == SetField.weight ? AzmNumbers.decimal(Units.keypadStep) : '1',
-                nextLabel: _nextTarget() == null ? l.historyDone : l.historyKeypadNext,
-                backspaceLabel: l.historyKeypadBackspace,
-                hideLabel: l.historyKeypadHide,
-                decreaseLabel: l.historyKeypadDecrease,
-                increaseLabel: l.historyKeypadIncrease,
+              SetValueKeypad(
+                field: editing.field,
+                unit: _unit,
+                buffer: _keypad.text,
+                hasNext: _nextTarget() != null,
                 onKey: _onKey,
               )
             else
@@ -214,7 +202,9 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
     if (ids == null || ids.isEmpty || !mounted) return;
     final before = {for (final e in _detail?.exercises ?? const <WorkoutExerciseDetail>[]) e.entry.id};
     await _sets.addExercises(widget.workoutId, ids);
-    // Open the keypad on the first new set: new sets count once ✓'d.
+    // New sets are logged at once (values from the workout before, if any),
+    // then the keypad opens on the first one.
+    await _history.logUnticked(widget.workoutId);
     final d = await _sets.loadDetail(widget.workoutId);
     if (!mounted || d == null) return;
     for (final e in d.exercises) {
@@ -237,7 +227,7 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
 
   @override
   Future<void> onLabelTap(WorkoutSet set) async {
-    final type = await showHistorySetTypeSheet(context, set.type);
+    final type = await showSetTypeSheet(context, set.type);
     if (type != null && type != set.type) await _sets.updateSet(set.id, type: type);
   }
 
@@ -246,10 +236,7 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
     unawaited(_sets.updateSet(set.id, weightKg: previous.weightKg, reps: previous.reps));
     final e = _editing;
     if (e?.setId == set.id) {
-      setState(() {
-        _buffer = e!.field == SetField.weight ? weightInput(previous.weightKg, _unit) : '${previous.reps}';
-        _fresh = true;
-      });
+      setState(() => _keypad.load(e!.field == SetField.weight ? setWeightInput(previous.weightKg, _unit) : '${previous.reps}'));
     }
   }
 
@@ -259,10 +246,9 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
   void _edit(WorkoutSet set, SetField field) {
     setState(() {
       _editing = (setId: set.id, field: field);
-      _buffer = field == SetField.weight
-          ? (set.weightKg > 0 ? weightInput(set.weightKg, _unit) : '')
-          : (set.reps > 0 ? '${set.reps}' : '');
-      _fresh = true;
+      _keypad.load(field == SetField.weight
+          ? (set.weightKg > 0 ? setWeightInput(set.weightKg, _unit) : '')
+          : (set.reps > 0 ? '${set.reps}' : ''));
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final ctx = _rowKeys[set.id]?.currentContext;
@@ -275,23 +261,6 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
         );
       }
     });
-  }
-
-  @override
-  Future<void> onToggleComplete(WorkoutSet set, WorkoutSet? previous) async {
-    if (set.completedAt != null) {
-      await _sets.setCompleted(set.id, false);
-      return;
-    }
-    final (:weightKg, :reps) = completionValues(set, previous);
-    if (reps <= 0) {
-      unawaited(HapticFeedback.selectionClick());
-      _edit(set, SetField.reps);
-      return;
-    }
-    if (_editing?.setId == set.id) _closeKeypad();
-    unawaited(HapticFeedback.lightImpact());
-    await _sets.setCompleted(set.id, true, weightKg: weightKg, reps: reps);
   }
 
   @override
@@ -347,33 +316,10 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
         } else {
           _edit(next.set, next.field);
         }
-      case KeypadStep(:final up):
-        if (weight) {
-          final kg = Units.stepKg(Units.fromDisplay(double.tryParse(_buffer) ?? 0, _unit), _unit, up: up);
-          unawaited(_sets.updateSet(set.id, weightKg: kg));
-          setState(() {
-            _buffer = kg > 0 ? weightInput(kg, _unit) : '';
-            _fresh = true;
-          });
-        } else {
-          final reps = ((int.tryParse(_buffer) ?? 0) + (up ? 1 : -1)).clamp(0, 999);
-          unawaited(_sets.updateSet(set.id, reps: reps));
-          setState(() {
-            _buffer = reps > 0 ? '$reps' : '';
-            _fresh = true;
-          });
-        }
       default:
-        final r = applyKeypadKey(_buffer, _fresh, key, allowDecimal: weight, maxIntegerDigits: weight ? 4 : 3);
-        setState(() {
-          _buffer = r.buffer;
-          _fresh = r.fresh;
-        });
-        if (weight) {
-          unawaited(_sets.updateSet(set.id, weightKg: Units.fromDisplay(double.tryParse(r.buffer) ?? 0, _unit)));
-        } else {
-          unawaited(_sets.updateSet(set.id, reps: int.tryParse(r.buffer) ?? 0));
-        }
+        final v = _keypad.apply(key, e.field, _unit);
+        setState(() {});
+        unawaited(weight ? _sets.updateSet(set.id, weightKg: v ?? 0) : _sets.updateSet(set.id, reps: (v ?? 0).toInt()));
     }
   }
 

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/azm_theme.dart';
-import '../../../core/utils/workout_math.dart';
 import '../../../core/widgets/azm_pressable.dart';
-import 'workout_format.dart';
 
 /// Bottom-sheet list row: icon + label (optionally destructive / selected).
 class SheetAction extends StatelessWidget {
@@ -69,51 +67,6 @@ Future<T?> _sheet<T>(BuildContext context, {required String title, required List
         ),
       ),
     );
-
-/// Set type menu (tap on the set label). Returns the chosen type.
-Future<SetType?> showSetTypeSheet(BuildContext context, SetType current) {
-  final l = context.l10n;
-  return _sheet<SetType>(
-    context,
-    title: l.workoutSetTypeTitle,
-    children: (ctx) => [
-      for (final t in SetType.values)
-        SheetAction(
-          label: l.setTypeName(t),
-          selected: t == current,
-          leading: _TypeChip(type: t),
-          onTap: () => Navigator.pop(ctx, t),
-        ),
-    ],
-  );
-}
-
-class _TypeChip extends StatelessWidget {
-  const _TypeChip({required this.type});
-
-  final SetType type;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final warm = type == SetType.warmup;
-    return Container(
-      width: AzmSize.headerButton,
-      height: AzmSize.headerButton,
-      alignment: AlignmentDirectional.center,
-      decoration: BoxDecoration(
-        color: warm ? c.warmupTint : c.fill,
-        borderRadius: BorderRadius.circular(AzmRadius.segment),
-      ),
-      child: Text(
-        context.l10n.setLabelFor(type, 1),
-        style: AzmType.controlLabel.copyWith(
-          color: warm ? c.warmupText : (type == SetType.normal ? c.textSecondary : c.textPrimary),
-        ),
-      ),
-    );
-  }
-}
 
 enum ExerciseMenuAction { reorder, remove }
 

@@ -156,20 +156,37 @@ void main() {
       expect(await db.select(db.workoutSets).get(), isEmpty); // cascade
     });
 
-    test('added sets are logged; tidy drops unticked / empty sets and empty exercises', () async {
+    test('added sets are logged; nothing is ever removed automatically', () async {
       final w = await seedWorkout(db, startedAt: day(0), exercises: {bench: [n(60, 8)], squat: [n(100, 5)]});
       final benchEntry = (await sets.loadDetail(w))!.exercises.first.entry.id;
       await history.addLoggedSet(benchEntry, day(0));
-      var bench0 = (await sets.loadDetail(w))!.exercises.first.sets;
+      final bench0 = (await sets.loadDetail(w))!.exercises.first.sets;
       expect(bench0.map((s) => (s.weightKg, s.reps, s.completedAt != null)), [(60.0, 8, true), (60.0, 8, true)]);
 
-      await sets.setCompleted(bench0[1].id, false); // unticked → removed on tidy
-      await sets.updateSet(bench0[0].id, reps: 0); // emptied → removed on tidy
+      await sets.updateSet(bench0[0].id, reps: 0); // emptied: stays, the user swipes it away if wanted
       await sets.addExercises(w, [squat]); // a second squat entry, unticked
-      await history.tidy(w);
+      final logged = await history.logUnticked(w);
+      expect(logged, hasLength(1));
       final d = (await sets.loadDetail(w))!;
-      expect(d.exercises.map((e) => e.entry.exerciseId), [squat]);
-      expect(d.exercises.single.sets.single.reps, 5);
+      expect(d.exercises.map((e) => e.entry.exerciseId), [bench, squat, squat]);
+      expect(d.allSets.every((s) => s.completedAt != null), isTrue);
+      expect(d.exercises.first.sets.map((s) => s.reps), [0, 8]);
+      // No earlier workout with squat: the new set is logged empty (0 × 0).
+      expect(d.exercises.last.sets.map((s) => (s.weightKg, s.reps)), [(0.0, 0)]);
+      expect(await history.logUnticked(w), isEmpty);
+    });
+
+    test('logUnticked fills a new exercise from the workout before and never touches the active one', () async {
+      await seedWorkout(db, startedAt: day(0), exercises: {squat: [n(100, 5), n(110, 3)]});
+      final w = await seedWorkout(db, startedAt: day(2), exercises: {bench: [n(60, 8)]});
+      final active = await sets.startEmpty('Now');
+      await sets.addExercises(active, [bench]);
+      await sets.addExercises(w, [squat]);
+      await history.logUnticked(w);
+      final squatSets = (await sets.loadDetail(w))!.exercises.last.sets;
+      expect(squatSets.map((s) => (s.weightKg, s.reps, s.completedAt != null)), [(100.0, 5, true), (110.0, 3, true)]);
+      expect(await history.logUnticked(active), isEmpty);
+      expect((await sets.loadDetail(active))!.allSets.every((s) => s.completedAt == null), isTrue);
     });
   });
 

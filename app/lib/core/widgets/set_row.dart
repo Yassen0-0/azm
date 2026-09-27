@@ -3,11 +3,18 @@ import 'package:flutter/physics.dart';
 import 'package:flutter/semantics.dart';
 
 import '../theme/azm_theme.dart';
+import '../utils/workout_math.dart';
 import 'azm_pressable.dart';
 
 /// How the set label is drawn: normal sets show their number, warm-ups an
 /// amber letter, drop/failure a default-colour letter (failure is NEVER red).
 enum SetLabelKind { normal, warmup, other }
+
+SetLabelKind setLabelKind(SetType t) => switch (t) {
+      SetType.normal => SetLabelKind.normal,
+      SetType.warmup => SetLabelKind.warmup,
+      SetType.drop || SetType.failure => SetLabelKind.other,
+    };
 
 /// Which value cell is being edited with the keypad.
 enum SetField { weight, reps }
@@ -19,6 +26,8 @@ abstract final class SetRowColumns {
 }
 
 /// Column captions above a set table: set · previous · unit · reps · ✓.
+/// Without [previousLabel] the previous column is left out; without
+/// [showCheck] the ✓ column (match the [SetRow]s below).
 class SetTableHeader extends StatelessWidget {
   const SetTableHeader({
     super.key,
@@ -26,12 +35,14 @@ class SetTableHeader extends StatelessWidget {
     required this.previousLabel,
     required this.weightLabel,
     required this.repsLabel,
+    this.showCheck = true,
   });
 
   final String setLabel;
-  final String previousLabel;
+  final String? previousLabel;
   final String weightLabel;
   final String repsLabel;
+  final bool showCheck;
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +53,14 @@ class SetTableHeader extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(width: AzmSize.setCellMinWidth, child: cell(setLabel)),
-          Expanded(flex: SetRowColumns.previousFlex, child: cell(previousLabel)),
+          if (previousLabel != null) Expanded(flex: SetRowColumns.previousFlex, child: cell(previousLabel!)),
           Expanded(flex: SetRowColumns.valueFlex, child: cell(weightLabel)),
           Expanded(flex: SetRowColumns.valueFlex, child: cell(repsLabel)),
-          SizedBox(
-            width: AzmSize.setCellMinWidth,
-            child: Icon(Icons.check_rounded, size: AzmSize.tabBarBadgeDisc, color: context.colors.textTertiary),
-          ),
+          if (showCheck)
+            SizedBox(
+              width: AzmSize.setCellMinWidth,
+              child: Icon(Icons.check_rounded, size: AzmSize.tabBarBadgeDisc, color: context.colors.textTertiary),
+            ),
         ],
       ),
     );
@@ -57,6 +69,12 @@ class SetTableHeader extends StatelessWidget {
 
 /// One set: `[type label] [previous] [weight] [reps] [✓]` (DESIGN.md → SetRow).
 /// Pure view: all values are pre-formatted, every action is a callback.
+///
+/// The one set row of the app: the live workout uses every column; a past
+/// workout leaves out ✓ ([onToggleComplete] null: every set there is done);
+/// the routine editor also leaves out previous ([previousText] null).
+/// Swipe toward the end edge deletes. Value cells are keyed
+/// `set-weight-<setId>` / `set-reps-<setId>` (tests).
 class SetRow extends StatelessWidget {
   const SetRow({
     super.key,
@@ -79,6 +97,7 @@ class SetRow extends StatelessWidget {
     required this.completeLabel,
     this.activeField,
     this.isPr = false,
+    this.labelSemantics,
   });
 
   /// Stable id of the set (swipe-to-delete key).
@@ -86,8 +105,8 @@ class SetRow extends StatelessWidget {
   final String label;
   final SetLabelKind labelKind;
 
-  /// e.g. `60 × 8`; the no-data dash when there is none.
-  final String previousText;
+  /// e.g. `60 × 8`; the no-data dash when there is none; null = no column.
+  final String? previousText;
 
   /// Current values, empty when not entered yet (the hint shows instead).
   final String weightText;
@@ -102,10 +121,14 @@ class SetRow extends StatelessWidget {
   final VoidCallback? onPreviousTap;
   final VoidCallback onWeightTap;
   final VoidCallback onRepsTap;
-  final VoidCallback onToggleComplete;
+  /// Null = no ✓ column.
+  final VoidCallback? onToggleComplete;
   final VoidCallback onDelete;
   final String deleteLabel;
-  final String completeLabel;
+  final String? completeLabel;
+
+  /// Screen-reader label of the type chip (default: [label]).
+  final String? labelSemantics;
 
   @override
   Widget build(BuildContext context) {
@@ -120,24 +143,26 @@ class SetRow extends StatelessWidget {
       color: completed ? c.setDoneTint : c.card,
       child: Row(
         children: [
-          _LabelCell(label: label, kind: labelKind, onTap: onLabelTap),
-          Expanded(
-            flex: SetRowColumns.previousFlex,
-            child: AzmPressable(
-              onTap: onPreviousTap,
-              child: Center(
-                child: Text(
-                  previousText,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AzmType.secondaryStrong.copyWith(color: c.textTertiary),
+          _LabelCell(label: label, kind: labelKind, onTap: onLabelTap, semanticLabel: labelSemantics ?? label),
+          if (previousText != null)
+            Expanded(
+              flex: SetRowColumns.previousFlex,
+              child: AzmPressable(
+                onTap: onPreviousTap,
+                child: Center(
+                  child: Text(
+                    previousText!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AzmType.secondaryStrong.copyWith(color: c.textTertiary),
+                  ),
                 ),
               ),
             ),
-          ),
           Expanded(
             flex: SetRowColumns.valueFlex,
             child: _ValueCell(
+              key: ValueKey('set-weight-$setId'),
               text: weightText,
               hint: weightHint,
               active: activeField == SetField.weight,
@@ -148,6 +173,7 @@ class SetRow extends StatelessWidget {
           Expanded(
             flex: SetRowColumns.valueFlex,
             child: _ValueCell(
+              key: ValueKey('set-reps-$setId'),
               text: repsText,
               hint: repsHint,
               active: activeField == SetField.reps,
@@ -156,7 +182,8 @@ class SetRow extends StatelessWidget {
               badge: isPr ? const PrBadge() : null,
             ),
           ),
-          _CheckCell(completed: completed, onTap: onToggleComplete, semanticLabel: completeLabel),
+          if (onToggleComplete != null)
+            _CheckCell(completed: completed, onTap: onToggleComplete!, semanticLabel: completeLabel ?? ''),
         ],
       ),
     );
@@ -184,11 +211,35 @@ class SetRow extends StatelessWidget {
 }
 
 class _LabelCell extends StatelessWidget {
-  const _LabelCell({required this.label, required this.kind, required this.onTap});
+  const _LabelCell({required this.label, required this.kind, required this.onTap, required this.semanticLabel});
 
   final String label;
   final SetLabelKind kind;
   final VoidCallback onTap;
+  final String semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: AzmSize.setCellMinWidth,
+      child: AzmPressable(
+        onTap: onTap,
+        semanticLabel: semanticLabel,
+        child: Center(
+          child: SetLabelChip(label: label, kind: kind),
+        ),
+      ),
+    );
+  }
+}
+
+/// The set label chip: the number, or the type letter (warm-up amber;
+/// failure never red). Also used by the set type menu.
+class SetLabelChip extends StatelessWidget {
+  const SetLabelChip({super.key, required this.label, required this.kind});
+
+  final String label;
+  final SetLabelKind kind;
 
   @override
   Widget build(BuildContext context) {
@@ -198,27 +249,19 @@ class _LabelCell extends StatelessWidget {
       SetLabelKind.normal => (c.textSecondary, c.fill),
       SetLabelKind.other => (c.textPrimary, c.fill),
     };
-    return SizedBox(
-      width: AzmSize.setCellMinWidth,
-      child: AzmPressable(
-        onTap: onTap,
-        semanticLabel: label,
-        child: Center(
-          child: Container(
-            width: AzmSize.headerButton,
-            height: AzmSize.headerButton,
-            alignment: AlignmentDirectional.center,
-            decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(AzmRadius.segment)),
-            child: ExcludeSemantics(child: Text(label, style: AzmType.controlLabel.copyWith(color: fg))),
-          ),
-        ),
-      ),
+    return Container(
+      width: AzmSize.headerButton,
+      height: AzmSize.headerButton,
+      alignment: AlignmentDirectional.center,
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(AzmRadius.segment)),
+      child: ExcludeSemantics(child: Text(label, style: AzmType.controlLabel.copyWith(color: fg))),
     );
   }
 }
 
 class _ValueCell extends StatelessWidget {
   const _ValueCell({
+    super.key,
     required this.text,
     required this.hint,
     required this.active,

@@ -4,21 +4,19 @@ import 'package:intl/intl.dart';
 import '../../../core/db/app_database.dart';
 import '../../../core/l10n/exercise_names.dart';
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/utils/units.dart';
-import '../../../core/widgets/set_row.dart';
 import '../data/history_format.dart';
 
 /// Display helpers of the history feature. Storage stays kg; conversion
 /// happens only here. Western digits in both languages.
 extension HistoryText on AppLocalizations {
-  String unitLabel(WeightUnit u) => u == WeightUnit.kg ? historyUnitKg : historyUnitLb;
-
   /// "62.5 kg" (left-to-right isolate, never reorders to "kg 62.5").
-  String weight(double kg, WeightUnit u) => ltr(historyWeightValue(weightNumber(kg, u), unitLabel(u)));
+  String weight(double kg, WeightUnit u) => ltr(historyWeightValue(setWeightNumber(kg, u), weightUnitLabel(u)));
 
   /// "60 × 8" / "60 kg × 8", weight first in both languages.
   String setValue(WorkoutSet s, WeightUnit u, {bool withUnit = true}) => ltr(historySetValue(
-        withUnit ? weight(s.weightKg, u) : weightNumber(s.weightKg, u),
+        withUnit ? weight(s.weightKg, u) : setWeightNumber(s.weightKg, u),
         AzmNumbers.integer(s.reps),
       ));
 
@@ -43,20 +41,6 @@ extension HistoryText on AppLocalizations {
   String workoutCount(int n) => historyWorkoutCount(n, AzmNumbers.integer(n));
 
   String setCount(int n) => historySetCount(n, AzmNumbers.integer(n));
-
-  String setLabel(SetType type, int? number) => switch (type) {
-        SetType.normal => number == null ? '' : AzmNumbers.integer(number),
-        SetType.warmup => historySetTypeWarmupShort,
-        SetType.drop => historySetTypeDropShort,
-        SetType.failure => historySetTypeFailureShort,
-      };
-
-  String setTypeName(SetType type) => switch (type) {
-        SetType.normal => historySetTypeNormal,
-        SetType.warmup => historySetTypeWarmup,
-        SetType.drop => historySetTypeDrop,
-        SetType.failure => historySetTypeFailure,
-      };
 }
 
 /// Wraps a numeric expression in a Unicode left-to-right isolate so the bidi
@@ -65,27 +49,6 @@ String ltr(String s) => '\u2066$s\u2069';
 
 /// First-strong isolate for names (English names inside Arabic UI).
 String isolate(String s) => '\u2068$s\u2069';
-
-/// Weight number in the display unit, 0.1 precision: `62.5`, `100`.
-String weightNumber(double kg, WeightUnit u) => AzmNumbers.decimal(Units.toDisplay(kg, u));
-
-/// As typed in the keypad (no separators): `62.5`, `100`.
-String weightInput(double kg, WeightUnit u) {
-  final v = Units.toDisplay(kg, u);
-  return v == v.roundToDouble() ? v.toInt().toString() : v.toStringAsFixed(1);
-}
-
-SetLabelKind labelKind(SetType t) => switch (t) {
-      SetType.normal => SetLabelKind.normal,
-      SetType.warmup => SetLabelKind.warmup,
-      SetType.drop || SetType.failure => SetLabelKind.other,
-    };
-
-/// Normal sets count 1, 2, 3…; other types get null (they show a letter).
-List<int?> normalNumbers(Iterable<SetType> types) {
-  var n = 0;
-  return [for (final t in types) t == SetType.normal ? ++n : null];
-}
 
 /// Primary/secondary names, or "Unknown exercise (id)".
 ExerciseNames namesOrUnknown(BuildContext context, Exercise? e, String id) =>

@@ -69,23 +69,6 @@
   "@routinesEditorEmpty": {
     "description": "Hint in the editor while the routine has no exercises."
   },
-  "routinesColSet": "سِت",
-  "@routinesColSet": {
-    "description": "Set table column: set number / type."
-  },
-  "routinesColWeight": "{unit}",
-  "@routinesColWeight": {
-    "description": "Set table column: target weight, shows the unit (kg/lb).",
-    "placeholders": {
-      "unit": {
-        "type": "String"
-      }
-    }
-  },
-  "routinesColReps": "عدّات",
-  "@routinesColReps": {
-    "description": "Set table column: target reps."
-  },
   "routinesUnitKg": "kg",
   "@routinesUnitKg": {
     "description": "Kilogram unit label."
@@ -94,21 +77,9 @@
   "@routinesUnitLb": {
     "description": "Pound unit label."
   },
-  "routinesNoTarget": "—",
-  "@routinesNoTarget": {
-    "description": "Placeholder of an empty target (no data)."
-  },
   "routinesAddSet": "ضيف سِت",
   "@routinesAddSet": {
     "description": "Adds a target set to an exercise."
-  },
-  "routinesDeleteSet": "امسح السِت",
-  "@routinesDeleteSet": {
-    "description": "Semantics label of swipe-to-delete on a target set."
-  },
-  "routinesSetTypeTitle": "نوع السِت",
-  "@routinesSetTypeTitle": {
-    "description": "Title of the set type menu."
   },
   "routinesRestValue": "راحة {time}",
   "@routinesRestValue": {
@@ -205,30 +176,6 @@
   "routinesKeypadReps": "العدّات المطلوبة",
   "@routinesKeypadReps": {
     "description": "Keypad title while editing target reps."
-  },
-  "routinesKeypadNext": "التالي",
-  "@routinesKeypadNext": {
-    "description": "Keypad key: next field."
-  },
-  "routinesKeypadDone": "تم",
-  "@routinesKeypadDone": {
-    "description": "Keypad key on the last field."
-  },
-  "routinesKeypadBackspace": "امسح رقم",
-  "@routinesKeypadBackspace": {
-    "description": "Semantics label of the keypad backspace."
-  },
-  "routinesKeypadHide": "اقفل الكيبورد",
-  "@routinesKeypadHide": {
-    "description": "Semantics label of the keypad close key."
-  },
-  "routinesKeypadDecrease": "نقّص",
-  "@routinesKeypadDecrease": {
-    "description": "Semantics label of the keypad minus key."
-  },
-  "routinesKeypadIncrease": "زوّد",
-  "@routinesKeypadIncrease": {
-    "description": "Semantics label of the keypad plus key."
   },
   "routinesProgramDays": "{count, plural, =1{يوم واحد في الأسبوع} =2{يومين في الأسبوع} few{{countText} أيام في الأسبوع} other{{countText} يوم في الأسبوع}}",
   "@routinesProgramDays": {

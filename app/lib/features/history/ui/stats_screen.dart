@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/media/exercise_media.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/azm_theme.dart';
@@ -105,7 +106,7 @@ class _Totals extends StatelessWidget {
           HistoryStat(label: l.historyStatSets, value: AzmNumbers.integer(data.setCount)),
           HistoryStat(
             label: l.historyStatLifted,
-            value: lifted <= 0 ? l.historyNoData : l.historyWeightValue(l.compact(lifted), l.unitLabel(unit)),
+            value: lifted <= 0 ? l.historyNoData : l.historyWeightValue(l.compact(lifted), l.weightUnitLabel(unit)),
           ),
         ],
       ),

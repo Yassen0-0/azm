@@ -14,7 +14,7 @@ ExerciseHistorySource createExerciseHistorySource(AppDatabase db) => HistoryExer
 /// [DbExerciseHistorySource] (completed sets of finished workouts; warm-ups
 /// shown but never records), plus:
 /// - sets with no reps are not history (a past workout being edited can hold
-///   one for a moment; `HistoryRepository.tidy` removes it on leave);
+///   one until the user fills it in or swipes it away);
 /// - it only emits when the result changes, so ticking sets in the ACTIVE
 ///   workout doesn't rebuild every exercise detail and library badge.
 /// Edits of past workouts are live: every stream re-reads the DB on change.

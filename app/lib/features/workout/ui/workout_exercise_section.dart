@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/media/exercise_media.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
@@ -48,7 +49,7 @@ class WorkoutExerciseSection extends StatelessWidget {
     final c = context.colors;
     final l = context.l10n;
     final names = namesFor(context, detail.exercise, detail.entry.exerciseId);
-    final numbers = normalSetNumbers(detail.sets);
+    final numbers = normalSetNumbers(detail.sets.map((s) => s.type));
 
     return Container(
       margin: const EdgeInsetsDirectional.only(bottom: AzmSpace.listGap),
@@ -85,10 +86,10 @@ class WorkoutExerciseSection extends StatelessWidget {
             ),
           ),
           SetTableHeader(
-            setLabel: l.workoutColSet,
-            previousLabel: l.workoutColPrevious,
-            weightLabel: l.unitLabel(unit),
-            repsLabel: l.workoutColReps,
+            setLabel: l.commonSetColSet,
+            previousLabel: l.commonSetColPrevious,
+            weightLabel: l.weightUnitLabel(unit),
+            repsLabel: l.commonSetColReps,
           ),
           const SizedBox(height: AzmSpace.xxs),
           for (var i = 0; i < detail.sets.length; i++) _row(context, i, numbers[i]),
@@ -134,13 +135,13 @@ class WorkoutExerciseSection extends StatelessWidget {
     return SetRow(
       key: ValueKey(s.id),
       setId: s.id,
-      label: l.setLabelFor(s.type, number),
+      label: l.setLabel(s.type, number),
       labelKind: setLabelKind(s.type),
-      previousText: hasPrev ? l.setValue(prev!, unit) : l.workoutNoData,
-      weightText: s.weightKg > 0 || s.completedAt != null ? weightNumber(s.weightKg, unit) : '',
+      previousText: hasPrev ? l.setValue(prev!, unit) : l.commonNoData,
+      weightText: s.weightKg > 0 || s.completedAt != null ? setWeightNumber(s.weightKg, unit) : '',
       repsText: s.reps > 0 || s.completedAt != null ? '${s.reps}' : '',
-      weightHint: hasPrev ? weightNumber(prev!.weightKg, unit) : l.workoutNoData,
-      repsHint: hasPrev ? '${prev!.reps}' : l.workoutNoData,
+      weightHint: hasPrev ? setWeightNumber(prev!.weightKg, unit) : l.commonNoData,
+      repsHint: hasPrev ? '${prev!.reps}' : l.commonNoData,
       completed: s.completedAt != null,
       isPr: detail.prs.containsKey(i),
       activeField: active,
@@ -150,8 +151,8 @@ class WorkoutExerciseSection extends StatelessWidget {
       onRepsTap: () => actions.onFieldTap(detail, s, SetField.reps),
       onToggleComplete: () => actions.onToggleComplete(detail, s, hasPrev ? prev : null),
       onDelete: () => actions.onDeleteSet(s),
-      deleteLabel: l.workoutDeleteSet,
-      completeLabel: l.workoutCompleteSet,
+      deleteLabel: l.commonSetDelete,
+      completeLabel: l.commonSetComplete,
     );
   }
 }

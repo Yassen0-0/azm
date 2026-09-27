@@ -4,33 +4,14 @@ import '../../../core/db/app_database.dart';
 import '../../../core/l10n/exercise_names.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/azm_theme.dart';
-import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_pressable.dart';
-import '../../../core/widgets/set_row.dart';
 
 // Feature-local widgets and formatting for routines, programs and onboarding.
-// (Features never import another feature's ui/, so the few pieces shared in
-// spirit with the workout screens are re-implemented here on core widgets.)
+// (Set rows, the keypad and set-type labels are the shared core ones:
+// core/widgets/set_row.dart, set_keypad.dart, set_type_sheet.dart and
+// core/l10n/set_labels.dart.)
 
 extension RoutinesFormat on AppLocalizations {
-  String routinesUnit(WeightUnit unit) => unit == WeightUnit.kg ? routinesUnitKg : routinesUnitLb;
-
-  /// Set label: number for normal sets, the type letter otherwise (same
-  /// letters as the workout: ح/W, د/D, ف/F).
-  String routinesSetLabel(SetType type, int? number) => switch (type) {
-        SetType.normal => '${number ?? ''}',
-        SetType.warmup => workoutSetTypeWarmupShort,
-        SetType.drop => workoutSetTypeDropShort,
-        SetType.failure => workoutSetTypeFailureShort,
-      };
-
-  String routinesSetTypeName(SetType type) => switch (type) {
-        SetType.normal => workoutSetTypeNormal,
-        SetType.warmup => workoutSetTypeWarmup,
-        SetType.drop => workoutSetTypeDrop,
-        SetType.failure => workoutSetTypeFailure,
-      };
-
   /// e.g. `3 × 8–12` (left-to-right in both languages).
   String routinesSetsRepsRange(int sets, int repsMin, int repsMax) => ltrIsolate(routinesSetsReps(
         AzmNumbers.integer(sets),
@@ -46,27 +27,6 @@ String ltrIsolate(String s) => '\u2066$s\u2069';
 
 /// Rest as `m:ss` (Western digits).
 String formatRest(int seconds) => '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}';
-
-/// Weight number in the display unit, trailing zeros dropped.
-String routineWeightNumber(double kg, WeightUnit unit) => AzmNumbers.decimal(Units.toDisplay(kg, unit));
-
-/// Weight as typed on the keypad (no thousands separator).
-String routineWeightInput(double kg, WeightUnit unit) {
-  final v = Units.toDisplay(kg, unit);
-  return v == v.roundToDouble() ? v.toInt().toString() : v.toStringAsFixed(1);
-}
-
-/// Normal sets count 1, 2, 3…; other types get null (they show a letter).
-List<int?> routineSetNumbers(List<RoutineSet> sets) {
-  var n = 0;
-  return [for (final s in sets) s.type == SetType.normal ? ++n : null];
-}
-
-SetLabelKind routineLabelKind(SetType t) => switch (t) {
-      SetType.normal => SetLabelKind.normal,
-      SetType.warmup => SetLabelKind.warmup,
-      SetType.drop || SetType.failure => SetLabelKind.other,
-    };
 
 /// Primary/secondary names, or "Unknown exercise (id)".
 ExerciseNames routineNamesFor(BuildContext context, Exercise? e, String exerciseId) =>
@@ -237,24 +197,6 @@ Future<T?> _sheet<T>(BuildContext context, {required String title, required List
       ),
     );
 
-/// Set type menu. Returns the chosen type.
-Future<SetType?> showRoutineSetTypeSheet(BuildContext context, SetType current) {
-  final l = context.l10n;
-  return _sheet<SetType>(
-    context,
-    title: l.routinesSetTypeTitle,
-    children: (ctx) => [
-      for (final t in SetType.values)
-        RoutinesSheetAction(
-          label: l.routinesSetTypeName(t),
-          selected: t == current,
-          leading: RoutineSetLabelChip(label: l.routinesSetLabel(t, 1), kind: routineLabelKind(t)),
-          onTap: () => Navigator.pop(ctx, t),
-        ),
-    ],
-  );
-}
-
 /// Rest choices offered for a per-exercise override (seconds).
 const List<int> kRestChoices = [30, 45, 60, 90, 120, 150, 180, 240, 300];
 
@@ -411,29 +353,4 @@ Future<bool> routinesConfirm(
     },
   );
   return ok ?? false;
-}
-
-/// The 36px set label chip (number, or amber ح/W for warm-ups).
-class RoutineSetLabelChip extends StatelessWidget {
-  const RoutineSetLabelChip({super.key, required this.label, required this.kind});
-
-  final String label;
-  final SetLabelKind kind;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final (fg, bg) = switch (kind) {
-      SetLabelKind.warmup => (c.warmupText, c.warmupTint),
-      SetLabelKind.normal => (c.textSecondary, c.fill),
-      SetLabelKind.other => (c.textPrimary, c.fill),
-    };
-    return Container(
-      width: AzmSize.headerButton,
-      height: AzmSize.headerButton,
-      alignment: AlignmentDirectional.center,
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(AzmRadius.segment)),
-      child: Text(label, style: AzmType.controlLabel.copyWith(color: fg)),
-    );
-  }
 }

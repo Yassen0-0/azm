@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
@@ -108,7 +109,7 @@ class _SummaryBody extends StatelessWidget {
               const SizedBox(height: AzmSpace.xs),
               LiftedCounter(
                 value: Units.toDisplay(lifted, unit),
-                unit: l.unitLabel(unit),
+                unit: l.weightUnitLabel(unit),
                 size: LiftedCounterSize.summary,
                 comparison: l.comparison(lifted),
                 fromZero: true,

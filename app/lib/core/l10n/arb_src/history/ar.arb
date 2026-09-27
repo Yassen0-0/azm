@@ -96,14 +96,6 @@
       }
     }
   },
-  "historyUnitKg": "kg",
-  "@historyUnitKg": {
-    "description": "Weight unit: kilograms (kept in Latin letters, as written in Egyptian gyms)."
-  },
-  "historyUnitLb": "lb",
-  "@historyUnitLb": {
-    "description": "Weight unit: pounds."
-  },
   "historyWeightValue": "{value} {unit}",
   "@historyWeightValue": {
     "description": "A weight with its unit, e.g. 62.5 kg.",
@@ -246,50 +238,6 @@
   "@historyStatWorkouts": {
     "description": "Stat label: number of finished workouts."
   },
-  "historyColSet": "سِت",
-  "@historyColSet": {
-    "description": "Set-table column: set number / type."
-  },
-  "historyColPrevious": "السابق",
-  "@historyColPrevious": {
-    "description": "Set-table column: same set in the workout before this one."
-  },
-  "historyColReps": "عدّات",
-  "@historyColReps": {
-    "description": "Set-table column / keypad title: repetitions."
-  },
-  "historySetTypeTitle": "نوع السِت",
-  "@historySetTypeTitle": {
-    "description": "Set type sheet title."
-  },
-  "historySetTypeNormal": "عادي",
-  "@historySetTypeNormal": {
-    "description": "Set type: normal."
-  },
-  "historySetTypeWarmup": "إحماء",
-  "@historySetTypeWarmup": {
-    "description": "Set type: warm-up."
-  },
-  "historySetTypeDrop": "دروب سِت",
-  "@historySetTypeDrop": {
-    "description": "Set type: drop set."
-  },
-  "historySetTypeFailure": "للفشل",
-  "@historySetTypeFailure": {
-    "description": "Set type: to failure (never shown in red)."
-  },
-  "historySetTypeWarmupShort": "ح",
-  "@historySetTypeWarmupShort": {
-    "description": "Set label of a warm-up set (amber)."
-  },
-  "historySetTypeDropShort": "د",
-  "@historySetTypeDropShort": {
-    "description": "Set label of a drop set."
-  },
-  "historySetTypeFailureShort": "ف",
-  "@historySetTypeFailureShort": {
-    "description": "Set label of a failure set."
-  },
   "historyAddSet": "ضيف سِت",
   "@historyAddSet": {
     "description": "Button under an exercise's sets."
@@ -306,50 +254,9 @@
   "@historyRemoveExercise": {
     "description": "Exercise menu action."
   },
-  "historyDeleteSet": "امسح السِت",
-  "@historyDeleteSet": {
-    "description": "Swipe-to-delete label of a set."
-  },
-  "historyCompleteSet": "علّم السِت خلصان",
-  "@historyCompleteSet": {
-    "description": "Screen-reader label of the ✓ cell."
-  },
-  "historyKeypadWeight": "الوزن ({unit})",
-  "@historyKeypadWeight": {
-    "description": "Keypad title when editing a weight.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
-      }
-    }
-  },
-  "historyKeypadNext": "التالي",
-  "@historyKeypadNext": {
-    "description": "Keypad key: go to the next value."
-  },
-  "historyDone": "تم",
-  "@historyDone": {
-    "description": "Keypad key on the last value."
-  },
-  "historyKeypadBackspace": "امسح رقم",
-  "@historyKeypadBackspace": {
-    "description": "Keypad backspace (screen-reader label)."
-  },
-  "historyKeypadHide": "اقفل الكيبورد",
-  "@historyKeypadHide": {
-    "description": "Keypad hide key (screen-reader label)."
-  },
-  "historyKeypadDecrease": "نقّص",
-  "@historyKeypadDecrease": {
-    "description": "Keypad minus-step key (screen-reader label)."
-  },
-  "historyKeypadIncrease": "زوّد",
-  "@historyKeypadIncrease": {
-    "description": "Keypad plus-step key (screen-reader label)."
-  },
-  "historyEditHint": "أي تعديل بيتحفظ على طول. السِت من غير ✓ أو من غير عدّات بيتشال لما تخرج.",
+  "historyEditHint": "التعديلات بتتحفظ على طول. اسحب السِت للآخر عشان تمسحه.",
   "@historyEditHint": {
-    "description": "Note at the top of a past workout."
+    "description": "Hint at the top of a past workout being edited: edits are saved immediately; deleting a set is a swipe toward the end edge (the only way; nothing is removed automatically)."
   },
   "historyNotFound": "التمرين ده مش موجود",
   "@historyNotFound": {

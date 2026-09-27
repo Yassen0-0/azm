@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_pressable.dart';
@@ -101,7 +102,7 @@ class CompactLiftedNumber extends StatelessWidget {
             ),
           ),
           const SizedBox(width: AzmSpace.xxs),
-          Text(l.unitLabel(unit), style: AzmType.rowTitle.copyWith(color: c.textSecondary)),
+          Text(l.weightUnitLabel(unit), style: AzmType.rowTitle.copyWith(color: c.textSecondary)),
         ],
       ),
     );

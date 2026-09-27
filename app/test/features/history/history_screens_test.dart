@@ -145,6 +145,50 @@ void main() {
     await tearDownApp(tester);
   });
 
+  testWidgets('past workout: no ✓, delete is swipe-only, nothing removed on leaving', (tester) async {
+    late String w;
+    await pumpApp(tester, seed: () async {
+      w = await seedWorkout(db, name: 'Push', startedAt: now.subtract(const Duration(days: 1)), exercises: {
+        '0025': [n(60, 8), n(60, 6), n(60, 5)],
+      });
+    });
+    container.read(appRouterProvider).push(AppRoutes.pastWorkoutFor(w));
+    await settle(tester);
+    expect(find.byType(SetRow), findsNWidgets(3));
+    // No ✓ anywhere: every set of a finished workout is done.
+    expect(find.byIcon(Icons.check_rounded), findsNothing);
+    for (final row in tester.widgetList<SetRow>(find.byType(SetRow))) {
+      expect(row.onToggleComplete, isNull);
+    }
+
+    // Emptying reps (keypad backspace) keeps the set: it is not silently dropped.
+    final ids = await setIds(db, w, '0025');
+    await tester.tap(find.byKey(ValueKey('set-reps-${ids[2]}')));
+    await settle(tester);
+    await tester.tap(find.bySemanticsLabel('Delete digit'));
+    await settle(tester);
+    expect((await db.select(db.workoutSets).get()).firstWhere((s) => s.id == ids[2]).reps, 0);
+    await tester.tap(find.bySemanticsLabel('Close keypad'));
+    await settle(tester);
+
+    // Swipe toward the end edge deletes that one set.
+    await tester.drag(find.byKey(ValueKey('set-weight-${ids[1]}')), const Offset(600, 0));
+    await settle(tester);
+    expect(find.byType(SetRow), findsNWidgets(2));
+    expect((await db.select(db.workoutSets).get()).map((s) => s.id).toSet(), {ids[0], ids[2]});
+
+    // Leave and come back: the 0-rep set is still there, all sets still done.
+    container.read(appRouterProvider).pop();
+    await settle(tester);
+    container.read(appRouterProvider).push(AppRoutes.pastWorkoutFor(w));
+    await settle(tester);
+    final rows = await db.select(db.workoutSets).get();
+    expect(rows.map((s) => s.id).toSet(), {ids[0], ids[2]});
+    expect(rows.every((s) => s.completedAt != null), isTrue);
+    expect(find.byType(SetRow), findsNWidgets(2));
+    await tearDownApp(tester);
+  });
+
   testWidgets('Arabic: rename from the menu, RTL labels', (tester) async {
     late String w;
     await pumpApp(tester, lang: LanguagePref.ar, seed: () async {

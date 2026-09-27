@@ -28,6 +28,103 @@
   "@commonBack": {
     "description": "Semantics label for a back button."
   },
+  "commonSetColSet": "سِت",
+  "@commonSetColSet": {
+    "description": "Set-table column header: set number / type label (SetRow, shared by workout, history, routines)."
+  },
+  "commonSetColPrevious": "السابق",
+  "@commonSetColPrevious": {
+    "description": "Set-table column header: same set in the last workout."
+  },
+  "commonSetColReps": "عدّات",
+  "@commonSetColReps": {
+    "description": "Set-table column header: repetitions. Also the keypad title when editing reps."
+  },
+  "commonUnitKg": "kg",
+  "@commonUnitKg": {
+    "description": "Weight unit label (kept Latin in Arabic, as in the SPEC). Set-table column header and keypad title."
+  },
+  "commonUnitLb": "lb",
+  "@commonUnitLb": {
+    "description": "Weight unit label (kept Latin in Arabic). Set-table column header and keypad title."
+  },
+  "commonNoData": "—",
+  "@commonNoData": {
+    "description": "Placeholder for a missing value (no previous set, empty keypad value)."
+  },
+  "commonSetTypeTitle": "نوع السِت",
+  "@commonSetTypeTitle": {
+    "description": "Title of the set type menu (tap on a set label)."
+  },
+  "commonSetTypeNormal": "عادي",
+  "@commonSetTypeNormal": {
+    "description": "Set type: normal working set."
+  },
+  "commonSetTypeWarmup": "إحماء",
+  "@commonSetTypeWarmup": {
+    "description": "Set type: warm-up."
+  },
+  "commonSetTypeDrop": "دروب سِت",
+  "@commonSetTypeDrop": {
+    "description": "Set type: drop set (gym slang)."
+  },
+  "commonSetTypeFailure": "للفشل",
+  "@commonSetTypeFailure": {
+    "description": "Set type: to failure."
+  },
+  "commonSetTypeWarmupShort": "ح",
+  "@commonSetTypeWarmupShort": {
+    "description": "One-letter label of a warm-up set: ح (from إحماء; owner decision 2026-09-26 — إ looked like '!'). Shown in amber."
+  },
+  "commonSetTypeDropShort": "د",
+  "@commonSetTypeDropShort": {
+    "description": "One-letter label of a drop set (from دروب)."
+  },
+  "commonSetTypeFailureShort": "ف",
+  "@commonSetTypeFailureShort": {
+    "description": "One-letter label of a failure set (from فشل). Never shown in red."
+  },
+  "commonSetDelete": "امسح السِت",
+  "@commonSetDelete": {
+    "description": "Semantics label / swipe action: delete a set."
+  },
+  "commonSetComplete": "علّم السِت خلصان",
+  "@commonSetComplete": {
+    "description": "Semantics label of the ✓ button of a set in the live workout."
+  },
+  "commonKeypadWeight": "الوزن ({unit})",
+  "@commonKeypadWeight": {
+    "description": "Keypad preview label when editing a weight.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "commonKeypadNext": "التالي",
+  "@commonKeypadNext": {
+    "description": "Keypad key: go to the next field."
+  },
+  "commonKeypadDone": "تم",
+  "@commonKeypadDone": {
+    "description": "Keypad key on the last field: close the keypad."
+  },
+  "commonKeypadBackspace": "امسح رقم",
+  "@commonKeypadBackspace": {
+    "description": "Semantics label of the keypad backspace key."
+  },
+  "commonKeypadHide": "اقفل الكيبورد",
+  "@commonKeypadHide": {
+    "description": "Semantics label of the key that hides the keypad."
+  },
+  "commonKeypadDecrease": "نقّص",
+  "@commonKeypadDecrease": {
+    "description": "Semantics label of the keypad − step key."
+  },
+  "commonKeypadIncrease": "زوّد",
+  "@commonKeypadIncrease": {
+    "description": "Semantics label of the keypad + step key."
+  },
   "exercisesSearchHint": "ابحث بالعربي أو English",
   "@exercisesSearchHint": {
     "description": "Hint in the exercise search box (Arabic, slang or English all work)."
@@ -236,18 +333,6 @@
   "exercisesHistoryEmpty": "لسه ملعبتش التمرين ده. سجّل أول مجموعة وتاريخك هيظهر هنا.",
   "@exercisesHistoryEmpty": {
     "description": "Detail: empty state when there is no history for the exercise."
-  },
-  "exercisesSetLabelWarmup": "ح",
-  "@exercisesSetLabelWarmup": {
-    "description": "Short label of a warm-up set in the history list: ح (from إحماء; owner decision 2026-09-26, same as the workout set label)."
-  },
-  "exercisesSetLabelDrop": "د",
-  "@exercisesSetLabelDrop": {
-    "description": "Short label of a drop set in the history list."
-  },
-  "exercisesSetLabelFailure": "ف",
-  "@exercisesSetLabelFailure": {
-    "description": "Short label of a failure set in the history list."
   },
   "exercisesMuscleAbs": "بطن",
   "@exercisesMuscleAbs": {
@@ -697,14 +782,6 @@
       }
     }
   },
-  "historyUnitKg": "kg",
-  "@historyUnitKg": {
-    "description": "Weight unit: kilograms (kept in Latin letters, as written in Egyptian gyms)."
-  },
-  "historyUnitLb": "lb",
-  "@historyUnitLb": {
-    "description": "Weight unit: pounds."
-  },
   "historyWeightValue": "{value} {unit}",
   "@historyWeightValue": {
     "description": "A weight with its unit, e.g. 62.5 kg.",
@@ -847,50 +924,6 @@
   "@historyStatWorkouts": {
     "description": "Stat label: number of finished workouts."
   },
-  "historyColSet": "سِت",
-  "@historyColSet": {
-    "description": "Set-table column: set number / type."
-  },
-  "historyColPrevious": "السابق",
-  "@historyColPrevious": {
-    "description": "Set-table column: same set in the workout before this one."
-  },
-  "historyColReps": "عدّات",
-  "@historyColReps": {
-    "description": "Set-table column / keypad title: repetitions."
-  },
-  "historySetTypeTitle": "نوع السِت",
-  "@historySetTypeTitle": {
-    "description": "Set type sheet title."
-  },
-  "historySetTypeNormal": "عادي",
-  "@historySetTypeNormal": {
-    "description": "Set type: normal."
-  },
-  "historySetTypeWarmup": "إحماء",
-  "@historySetTypeWarmup": {
-    "description": "Set type: warm-up."
-  },
-  "historySetTypeDrop": "دروب سِت",
-  "@historySetTypeDrop": {
-    "description": "Set type: drop set."
-  },
-  "historySetTypeFailure": "للفشل",
-  "@historySetTypeFailure": {
-    "description": "Set type: to failure (never shown in red)."
-  },
-  "historySetTypeWarmupShort": "ح",
-  "@historySetTypeWarmupShort": {
-    "description": "Set label of a warm-up set (amber)."
-  },
-  "historySetTypeDropShort": "د",
-  "@historySetTypeDropShort": {
-    "description": "Set label of a drop set."
-  },
-  "historySetTypeFailureShort": "ف",
-  "@historySetTypeFailureShort": {
-    "description": "Set label of a failure set."
-  },
   "historyAddSet": "ضيف سِت",
   "@historyAddSet": {
     "description": "Button under an exercise's sets."
@@ -907,50 +940,9 @@
   "@historyRemoveExercise": {
     "description": "Exercise menu action."
   },
-  "historyDeleteSet": "امسح السِت",
-  "@historyDeleteSet": {
-    "description": "Swipe-to-delete label of a set."
-  },
-  "historyCompleteSet": "علّم السِت خلصان",
-  "@historyCompleteSet": {
-    "description": "Screen-reader label of the ✓ cell."
-  },
-  "historyKeypadWeight": "الوزن ({unit})",
-  "@historyKeypadWeight": {
-    "description": "Keypad title when editing a weight.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
-      }
-    }
-  },
-  "historyKeypadNext": "التالي",
-  "@historyKeypadNext": {
-    "description": "Keypad key: go to the next value."
-  },
-  "historyDone": "تم",
-  "@historyDone": {
-    "description": "Keypad key on the last value."
-  },
-  "historyKeypadBackspace": "امسح رقم",
-  "@historyKeypadBackspace": {
-    "description": "Keypad backspace (screen-reader label)."
-  },
-  "historyKeypadHide": "اقفل الكيبورد",
-  "@historyKeypadHide": {
-    "description": "Keypad hide key (screen-reader label)."
-  },
-  "historyKeypadDecrease": "نقّص",
-  "@historyKeypadDecrease": {
-    "description": "Keypad minus-step key (screen-reader label)."
-  },
-  "historyKeypadIncrease": "زوّد",
-  "@historyKeypadIncrease": {
-    "description": "Keypad plus-step key (screen-reader label)."
-  },
-  "historyEditHint": "أي تعديل بيتحفظ على طول. السِت من غير ✓ أو من غير عدّات بيتشال لما تخرج.",
+  "historyEditHint": "التعديلات بتتحفظ على طول. اسحب السِت للآخر عشان تمسحه.",
   "@historyEditHint": {
-    "description": "Note at the top of a past workout."
+    "description": "Hint at the top of a past workout being edited: edits are saved immediately; deleting a set is a swipe toward the end edge (the only way; nothing is removed automatically)."
   },
   "historyNotFound": "التمرين ده مش موجود",
   "@historyNotFound": {
@@ -1148,23 +1140,6 @@
   "@routinesEditorEmpty": {
     "description": "Hint in the editor while the routine has no exercises."
   },
-  "routinesColSet": "سِت",
-  "@routinesColSet": {
-    "description": "Set table column: set number / type."
-  },
-  "routinesColWeight": "{unit}",
-  "@routinesColWeight": {
-    "description": "Set table column: target weight, shows the unit (kg/lb).",
-    "placeholders": {
-      "unit": {
-        "type": "String"
-      }
-    }
-  },
-  "routinesColReps": "عدّات",
-  "@routinesColReps": {
-    "description": "Set table column: target reps."
-  },
   "routinesUnitKg": "kg",
   "@routinesUnitKg": {
     "description": "Kilogram unit label."
@@ -1173,21 +1148,9 @@
   "@routinesUnitLb": {
     "description": "Pound unit label."
   },
-  "routinesNoTarget": "—",
-  "@routinesNoTarget": {
-    "description": "Placeholder of an empty target (no data)."
-  },
   "routinesAddSet": "ضيف سِت",
   "@routinesAddSet": {
     "description": "Adds a target set to an exercise."
-  },
-  "routinesDeleteSet": "امسح السِت",
-  "@routinesDeleteSet": {
-    "description": "Semantics label of swipe-to-delete on a target set."
-  },
-  "routinesSetTypeTitle": "نوع السِت",
-  "@routinesSetTypeTitle": {
-    "description": "Title of the set type menu."
   },
   "routinesRestValue": "راحة {time}",
   "@routinesRestValue": {
@@ -1284,30 +1247,6 @@
   "routinesKeypadReps": "العدّات المطلوبة",
   "@routinesKeypadReps": {
     "description": "Keypad title while editing target reps."
-  },
-  "routinesKeypadNext": "التالي",
-  "@routinesKeypadNext": {
-    "description": "Keypad key: next field."
-  },
-  "routinesKeypadDone": "تم",
-  "@routinesKeypadDone": {
-    "description": "Keypad key on the last field."
-  },
-  "routinesKeypadBackspace": "امسح رقم",
-  "@routinesKeypadBackspace": {
-    "description": "Semantics label of the keypad backspace."
-  },
-  "routinesKeypadHide": "اقفل الكيبورد",
-  "@routinesKeypadHide": {
-    "description": "Semantics label of the keypad close key."
-  },
-  "routinesKeypadDecrease": "نقّص",
-  "@routinesKeypadDecrease": {
-    "description": "Semantics label of the keypad minus key."
-  },
-  "routinesKeypadIncrease": "زوّد",
-  "@routinesKeypadIncrease": {
-    "description": "Semantics label of the keypad plus key."
   },
   "routinesProgramDays": "{count, plural, =1{يوم واحد في الأسبوع} =2{يومين في الأسبوع} few{{countText} أيام في الأسبوع} other{{countText} يوم في الأسبوع}}",
   "@routinesProgramDays": {
@@ -1478,26 +1417,6 @@
   "@workoutStatPrs": {
     "description": "Summary stat label: number of personal records."
   },
-  "workoutColSet": "سِت",
-  "@workoutColSet": {
-    "description": "Set-table column header: set number / type."
-  },
-  "workoutColPrevious": "السابق",
-  "@workoutColPrevious": {
-    "description": "Set-table column header: same set in the last workout."
-  },
-  "workoutColReps": "عدّات",
-  "@workoutColReps": {
-    "description": "Set-table column header: repetitions."
-  },
-  "workoutUnitKg": "kg",
-  "@workoutUnitKg": {
-    "description": "Weight unit label for kilograms (kept Latin in Arabic, as said in gyms)."
-  },
-  "workoutUnitLb": "lb",
-  "@workoutUnitLb": {
-    "description": "Weight unit label for pounds."
-  },
   "workoutNoData": "—",
   "@workoutNoData": {
     "description": "Shown where there is no data yet (never 0)."
@@ -1525,38 +1444,6 @@
         "type": "String"
       }
     }
-  },
-  "workoutSetTypeWarmupShort": "ح",
-  "@workoutSetTypeWarmupShort": {
-    "description": "One-letter label of a warm-up set: ح (from إحماء; owner decision 2026-09-26 — إ looked like '!'). Shown in amber."
-  },
-  "workoutSetTypeDropShort": "د",
-  "@workoutSetTypeDropShort": {
-    "description": "One-letter label of a drop set."
-  },
-  "workoutSetTypeFailureShort": "ف",
-  "@workoutSetTypeFailureShort": {
-    "description": "One-letter label of a set to failure."
-  },
-  "workoutSetTypeTitle": "نوع السِت",
-  "@workoutSetTypeTitle": {
-    "description": "Title of the set-type menu (tap the set label)."
-  },
-  "workoutSetTypeNormal": "عادي",
-  "@workoutSetTypeNormal": {
-    "description": "Set type: normal working set."
-  },
-  "workoutSetTypeWarmup": "إحماء",
-  "@workoutSetTypeWarmup": {
-    "description": "Set type: warm-up."
-  },
-  "workoutSetTypeDrop": "دروب سِت",
-  "@workoutSetTypeDrop": {
-    "description": "Set type: drop set."
-  },
-  "workoutSetTypeFailure": "للفشل",
-  "@workoutSetTypeFailure": {
-    "description": "Set type: to failure (intentional, never shown as an error)."
   },
   "workoutAddSet": "ضيف سِت",
   "@workoutAddSet": {
@@ -1590,14 +1477,6 @@
   "@workoutCancel": {
     "description": "Cancel button in dialogs."
   },
-  "workoutDeleteSet": "امسح السِت",
-  "@workoutDeleteSet": {
-    "description": "Semantics label of the swipe-to-delete action on a set."
-  },
-  "workoutCompleteSet": "علّم السِت خلصان",
-  "@workoutCompleteSet": {
-    "description": "Semantics label of the check button on a set row."
-  },
   "workoutUnknownExercise": "تمرين مش معروف ({id})",
   "@workoutUnknownExercise": {
     "description": "Exercise no longer in the catalog.",
@@ -1606,35 +1485,6 @@
         "type": "String"
       }
     }
-  },
-  "workoutKeypadWeight": "الوزن ({unit})",
-  "@workoutKeypadWeight": {
-    "description": "Keypad preview label when editing a weight.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
-      }
-    }
-  },
-  "workoutKeypadNext": "التالي",
-  "@workoutKeypadNext": {
-    "description": "Keypad key: move to the next field."
-  },
-  "workoutKeypadBackspace": "امسح رقم",
-  "@workoutKeypadBackspace": {
-    "description": "Semantics label of the keypad backspace key."
-  },
-  "workoutKeypadHide": "اقفل الكيبورد",
-  "@workoutKeypadHide": {
-    "description": "Semantics label of the keypad close key."
-  },
-  "workoutKeypadDecrease": "نقّص",
-  "@workoutKeypadDecrease": {
-    "description": "Semantics label of the keypad minus step key."
-  },
-  "workoutKeypadIncrease": "زوّد",
-  "@workoutKeypadIncrease": {
-    "description": "Semantics label of the keypad plus step key."
   },
   "workoutRest": "راحة",
   "@workoutRest": {

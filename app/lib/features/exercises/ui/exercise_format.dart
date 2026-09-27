@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/utils/workout_math.dart';
 import '../../../core/widgets/exercise_card.dart' show isolateName;
@@ -25,12 +26,8 @@ abstract final class ExerciseFormat {
       '\u2066${l.exercisesSetValue(weight(l, s.weightKg, u), AzmNumbers.integer(s.reps))}\u2069';
 
   /// Short set-type label for non-normal sets (normal sets use their number).
-  static String? typeLabel(AppLocalizations l, SetType t) => switch (t) {
-    SetType.normal => null,
-    SetType.warmup => l.exercisesSetLabelWarmup,
-    SetType.drop => l.exercisesSetLabelDrop,
-    SetType.failure => l.exercisesSetLabelFailure,
-  };
+  /// Shared with every set table (core/l10n/set_labels.dart).
+  static String? typeLabel(AppLocalizations l, SetType t) => l.setTypeLetter(t);
 
   /// "26 Sep 2026" in the app language, local time, Western digits.
   static String date(BuildContext context, DateTime utc) {

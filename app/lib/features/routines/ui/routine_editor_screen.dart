@@ -1,20 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/media/exercise_media.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_header.dart';
 import '../../../core/widgets/azm_pressable.dart';
-import '../../../core/widgets/set_row.dart' show SetField;
+import '../../../core/widgets/set_keypad.dart';
+import '../../../core/widgets/set_row.dart';
+import '../../../core/widgets/set_type_sheet.dart';
 import '../../../core/widgets/weight_keypad.dart';
 import '../../settings/data/training_settings.dart';
 import '../data/routine_repository.dart';
@@ -44,8 +45,7 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
   /// Set + field on the keypad, its buffer, and whether the next digit
   /// replaces it (freshly selected field).
   ({String setId, SetField field})? _editing;
-  String _buffer = '';
-  bool _fresh = true;
+  final _keypad = SetKeypadBuffer();
 
   RoutineDetail? _detail;
   final _rowKeys = <String, GlobalKey>{};
@@ -202,17 +202,14 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
                     ),
             ),
             if (editing != null && editingSet != null)
-              WeightKeypad(
-                title: editing.field == SetField.weight ? l.routinesKeypadWeight(l.routinesUnit(unit)) : l.routinesKeypadReps,
-                valueText: _buffer.isEmpty ? l.routinesNoTarget : _buffer,
-                allowDecimal: editing.field == SetField.weight,
-                stepText: editing.field == SetField.weight ? AzmNumbers.decimal(Units.keypadStep) : '1',
-                nextLabel: _nextTarget() == null ? l.routinesKeypadDone : l.routinesKeypadNext,
-                backspaceLabel: l.routinesKeypadBackspace,
-                hideLabel: l.routinesKeypadHide,
-                decreaseLabel: l.routinesKeypadDecrease,
-                increaseLabel: l.routinesKeypadIncrease,
+              SetValueKeypad(
+                field: editing.field,
+                unit: unit,
+                buffer: _keypad.text,
+                hasNext: _nextTarget() != null,
                 onKey: _onKey,
+                weightTitle: l.routinesKeypadWeight(l.weightUnitLabel(unit)),
+                repsTitle: l.routinesKeypadReps,
               )
             else
               SizedBox(height: MediaQuery.paddingOf(context).bottom),
@@ -297,7 +294,7 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
   }
 
   Future<void> _pickType(RoutineSet set) async {
-    final type = await showRoutineSetTypeSheet(context, set.type);
+    final type = await showSetTypeSheet(context, set.type);
     if (type != null && type != set.type) await _r.updateSet(set.id, type: type);
   }
 
@@ -316,15 +313,14 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
   }
 
   String _inputText(RoutineSet s, SetField f) => f == SetField.weight
-      ? (s.targetWeightKg == null ? '' : routineWeightInput(s.targetWeightKg!, _unit))
+      ? (s.targetWeightKg == null ? '' : setWeightInput(s.targetWeightKg!, _unit))
       : (s.targetReps == null ? '' : '${s.targetReps}');
 
   void _edit(RoutineSet set, SetField field) {
     FocusScope.of(context).unfocus();
     setState(() {
       _editing = (setId: set.id, field: field);
-      _buffer = _inputText(set, field);
-      _fresh = true;
+      _keypad.load(_inputText(set, field));
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final ctx = _rowKeys[set.id]?.currentContext;
@@ -367,34 +363,13 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
         } else {
           _edit(next.set, next.field);
         }
-      case KeypadStep(:final up):
-        unawaited(HapticFeedback.selectionClick());
-        if (weight) {
-          final kg = Units.stepKg(Units.fromDisplay(double.tryParse(_buffer) ?? 0, unit), unit, up: up);
-          _saveWeight(set, kg);
-          setState(() {
-            _buffer = kg > 0 ? routineWeightInput(kg, unit) : '';
-            _fresh = true;
-          });
-        } else {
-          final reps = ((int.tryParse(_buffer) ?? 0) + (up ? 1 : -1)).clamp(0, 999);
-          _saveReps(set, reps);
-          setState(() {
-            _buffer = reps > 0 ? '$reps' : '';
-            _fresh = true;
-          });
-        }
       default:
-        final r = applyKeypadKey(_buffer, _fresh, key, allowDecimal: weight, maxIntegerDigits: weight ? 4 : 3);
-        setState(() {
-          _buffer = r.buffer;
-          _fresh = r.fresh;
-        });
+        final v = _keypad.apply(key, e.field, unit);
+        setState(() {});
         if (weight) {
-          final v = double.tryParse(r.buffer);
-          _saveWeight(set, v == null ? null : Units.fromDisplay(v, unit));
+          _saveWeight(set, v);
         } else {
-          _saveReps(set, int.tryParse(r.buffer));
+          _saveReps(set, v?.toInt());
         }
     }
   }
@@ -505,11 +480,8 @@ class _ExerciseCard extends StatelessWidget {
     final c = context.colors;
     final l = context.l10n;
     final names = routineNamesFor(context, detail.exercise, detail.entry.exerciseId);
-    final numbers = routineSetNumbers(detail.sets);
+    final numbers = normalSetNumbers(detail.sets.map((s) => s.type));
     final rest = detail.entry.restSeconds;
-    final captionStyle = AzmType.smallStrong.copyWith(color: c.textTertiary);
-    Widget caption(String t) =>
-        Text(t, style: captionStyle, textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis);
 
     return Container(
       margin: const EdgeInsetsDirectional.only(bottom: AzmSpace.listGap),
@@ -565,29 +537,18 @@ class _ExerciseCard extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xs),
-            child: Row(
-              children: [
-                SizedBox(width: AzmSize.setCellMinWidth, child: caption(l.routinesColSet)),
-                Expanded(child: caption(l.routinesColWeight(l.routinesUnit(unit)))),
-                Expanded(child: caption(l.routinesColReps)),
-              ],
-            ),
+          SetTableHeader(
+            setLabel: l.commonSetColSet,
+            previousLabel: null,
+            weightLabel: l.weightUnitLabel(unit),
+            repsLabel: l.commonSetColReps,
+            showCheck: false,
           ),
           const SizedBox(height: AzmSpace.xxs),
           for (var i = 0; i < detail.sets.length; i++)
             KeyedSubtree(
               key: rowKey(detail.sets[i].id),
-              child: _SetRow(
-                set: detail.sets[i],
-                number: numbers[i],
-                unit: unit,
-                active: editing?.setId == detail.sets[i].id ? editing!.field : null,
-                onLabelTap: () => onLabelTap(detail.sets[i]),
-                onField: (f) => onField(detail.sets[i], f),
-                onDelete: () => onDeleteSet(detail.sets[i]),
-              ),
+              child: _targetRow(l, detail.sets[i], numbers[i]),
             ),
           Padding(
             padding: const EdgeInsetsDirectional.all(AzmSpace.md),
@@ -614,124 +575,34 @@ class _ExerciseCard extends StatelessWidget {
       ),
     );
   }
-}
 
-/// One target set: `[type label] [weight] [reps]`; swipe toward the end edge
-/// to delete (mirrors in RTL, like the workout's SetRow).
-class _SetRow extends StatelessWidget {
-  const _SetRow({
-    required this.set,
-    required this.number,
-    required this.unit,
-    required this.active,
-    required this.onLabelTap,
-    required this.onField,
-    required this.onDelete,
-  });
-
-  final RoutineSet set;
-  final int? number;
-  final WeightUnit unit;
-  final SetField? active;
-  final VoidCallback onLabelTap;
-  final ValueChanged<SetField> onField;
-  final VoidCallback onDelete;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final l = context.l10n;
-    final label = l.routinesSetLabel(set.type, number);
+  /// One target set on the shared [SetRow]: no "previous" and no ✓ (a
+  /// routine holds targets, not logged sets); swipe toward the end deletes.
+  Widget _targetRow(AppLocalizations l, RoutineSet set, int? number) {
     final weight = set.targetWeightKg;
     final reps = set.targetReps;
-    final row = Container(
-      color: c.card,
-      constraints: const BoxConstraints(minHeight: AzmSize.setRowMinHeight),
-      padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xs),
-      child: Row(
-        children: [
-          SizedBox(
-            width: AzmSize.setCellMinWidth,
-            child: AzmPressable(
-              onTap: onLabelTap,
-              semanticLabel: l.routinesSetTypeName(set.type),
-              child: Center(
-                child: ExcludeSemantics(child: RoutineSetLabelChip(label: label, kind: routineLabelKind(set.type))),
-              ),
-            ),
-          ),
-          Expanded(
-            child: _ValueCell(
-              key: ValueKey('routine-set-weight-${set.id}'),
-              text: weight == null ? '' : routineWeightNumber(weight, unit),
-              hint: l.routinesNoTarget,
-              active: active == SetField.weight,
-              onTap: () => onField(SetField.weight),
-            ),
-          ),
-          Expanded(
-            child: _ValueCell(
-              key: ValueKey('routine-set-reps-${set.id}'),
-              text: reps == null ? '' : '$reps',
-              hint: l.routinesNoTarget,
-              active: active == SetField.reps,
-              onTap: () => onField(SetField.reps),
-            ),
-          ),
-        ],
-      ),
-    );
-    return Dismissible(
-      key: ValueKey(('routine-set', set.id)),
-      direction: DismissDirection.startToEnd,
-      onDismissed: (_) => onDelete(),
-      background: Container(
-        color: c.destructiveTint,
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xl),
-        alignment: AlignmentDirectional.centerStart,
-        child: Semantics(label: l.routinesDeleteSet, child: Icon(Icons.delete_outline_rounded, color: c.destructive)),
-      ),
-      child: Semantics(
-        customSemanticsActions: {CustomSemanticsAction(label: l.routinesDeleteSet): onDelete},
-        child: row,
-      ),
-    );
-  }
-}
-
-class _ValueCell extends StatelessWidget {
-  const _ValueCell({super.key, required this.text, required this.hint, required this.active, required this.onTap});
-
-  final String text;
-  final String hint;
-  final bool active;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final empty = text.isEmpty;
-    return AzmPressable(
-      onTap: onTap,
-      child: Center(
-        child: AnimatedContainer(
-          duration: AzmMotion.of(context, AzmMotion.micro),
-          margin: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xxs),
-          constraints: const BoxConstraints(minHeight: AzmSize.headerButton),
-          alignment: AlignmentDirectional.center,
-          decoration: BoxDecoration(
-            color: c.fill,
-            borderRadius: BorderRadius.circular(AzmRadius.segment),
-            border: Border.all(color: active ? c.accent : c.fill, width: 1.5),
-          ),
-          child: Text(
-            empty ? hint : text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AzmType.rowNumber.copyWith(color: empty ? c.textNoData : c.textPrimary),
-          ),
-        ),
-      ),
+    final active = editing?.setId == set.id ? editing!.field : null;
+    return SetRow(
+      key: ValueKey(set.id),
+      setId: set.id,
+      label: l.setLabel(set.type, number),
+      labelKind: setLabelKind(set.type),
+      labelSemantics: l.setTypeName(set.type),
+      previousText: null,
+      weightText: weight == null ? '' : setWeightNumber(weight, unit),
+      repsText: reps == null ? '' : AzmNumbers.integer(reps),
+      weightHint: l.commonNoData,
+      repsHint: l.commonNoData,
+      completed: false,
+      activeField: active,
+      onLabelTap: () => onLabelTap(set),
+      onPreviousTap: null,
+      onWeightTap: () => onField(set, SetField.weight),
+      onRepsTap: () => onField(set, SetField.reps),
+      onToggleComplete: null,
+      onDelete: () => onDeleteSet(set),
+      deleteLabel: l.commonSetDelete,
+      completeLabel: null,
     );
   }
 }
