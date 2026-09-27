@@ -86,3 +86,17 @@ _(window E appends here only)_
 ### Brand: icons, splash (window F, round 3)
 
 _(window F appends here only)_
+
+Reference: `brand/exports/review_sheet.png` (every variant) and `docs/screenshots/brand/{android,ios}/` (emulator + simulator captures).
+
+- [ ] **Pixel (Android 13+), stock launcher:** home screen + app drawer icon: black circle, blue plate, white lifter; nothing clipped. Long-press → the same icon in the shortcut popup.
+- [ ] **Pixel, themed icons on** (Wallpaper & style → Themed icons): Azm shows the monochrome mark (plate with its hole, lifter, line) in the wallpaper tint, not the full-colour icon.
+- [ ] **Samsung One UI launcher** (squircle mask) and one other launcher with a different mask (e.g. a teardrop/square): mark centred, nothing cut off, the line's ends inside the mask.
+- [ ] **Android < 12 device if available:** launch window = black + the mark in the centre, no white flash before the first screen.
+- [ ] **Android 12+:** splash = black background + the mark, then the app; with the system in **light** mode too (the splash stays dark by design).
+- [ ] **Rest-timer notification** (tick a set, leave the app, let the rest end): status-bar icon is the white mark (plate + lifter), legible, not a white square; expanded notification shows the same mark.
+- [ ] **iPhone (iOS 18+):** home screen icon in **Light**, **Dark** and **Tinted** (long-press home screen → Edit → Customize): light = black plate square; dark = blue/white mark on the system dark backdrop; tinted = grayscale mark taking the tint.
+- [ ] **iPhone:** Settings → Notifications, Spotlight and the app switcher show the icon sharp (Xcode derives the small sizes from the 1024 image).
+- [ ] **iPhone:** launch screen = black + the mark centred, same size as on Android; no white flash (cold launch after deleting and reinstalling: iOS caches launch screens).
+- [ ] **iPhone launch screen colour:** the plate is the same blue as the app's accent (`#4D9BFF`, e.g. the Next button in onboarding), not a more saturated blue (the simulator capture showed `#239DFF`).
+- [ ] **Small-size legibility on real screens:** at the smallest system sizes (Android notification shade, iOS Settings list 29 pt, Spotlight) the plate and the rising line read; the lifter may read as a white shape at 16–20 px (expected, see `brand/exports/legibility_16-64px.png`).
