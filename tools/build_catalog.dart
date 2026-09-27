@@ -4,7 +4,7 @@
 //   (or: tools/build_catalog.sh)
 //
 // Inputs : data/raw/exercises.json, data/ar/exercise_names_ar.json,
-//          data/programs/programs.json
+//          data/programs/programs.json, data/hidden_exercises.json
 // Outputs: data/catalog/catalog.sqlite            (gitignored build output)
 //          data/catalog/catalog_version.json      (committed: version + input hash)
 //          app/assets/catalog/catalog.sqlite      (bundled into the app)
@@ -27,7 +27,7 @@ import '../app/lib/core/utils/arabic_normalize.dart';
 
 /// Bump when the builder's OUTPUT logic changes (forces a new catalog version
 /// even if the input files did not change).
-const int builderRevision = 1;
+const int builderRevision = 2; // 2: `hidden` column
 
 void main(List<String> args) {
   final root = Directory.fromUri(Platform.script.resolve('..')).absolute.path;
@@ -39,6 +39,12 @@ void main(List<String> args) {
   final ar = arFile.existsSync()
       ? (jsonDecode(arFile.readAsStringSync()) as Map<String, dynamic>)
       : <String, dynamic>{};
+  final hiddenFile = File(p('data/hidden_exercises.json'));
+  // Hidden id → the visible id it duplicates (docs/review/duplicates.md).
+  final hidden = hiddenFile.existsSync()
+      ? ((jsonDecode(hiddenFile.readAsStringSync()) as Map<String, dynamic>)['hidden'] as Map<String, dynamic>)
+          .cast<String, String>()
+      : <String, String>{};
   final programsDoc =
       jsonDecode(File(p('data/programs/programs.json')).readAsStringSync()) as Map<String, dynamic>;
 
@@ -57,6 +63,14 @@ void main(List<String> args) {
     if (m['aliases'] is! List) errors.add('exercise_names_ar.json: $id "aliases" must be a list');
     if (m['reviewed'] is! bool) errors.add('exercise_names_ar.json: $id "reviewed" must be a bool');
   });
+  hidden.forEach((id, keep) {
+    if (!byId.containsKey(id)) errors.add('hidden_exercises.json: unknown id $id');
+    if (!byId.containsKey(keep)) errors.add('hidden_exercises.json: $id duplicates unknown id $keep');
+    if (hidden.containsKey(keep)) errors.add('hidden_exercises.json: $id duplicates $keep, which is hidden too');
+    final nameA = (ar[id] as Map<String, dynamic>?)?['ar'];
+    final nameK = (ar[keep] as Map<String, dynamic>?)?['ar'];
+    if (nameA != nameK) errors.add('hidden_exercises.json: $id ("$nameA") and $keep ("$nameK") must share one Arabic name');
+  });
   final programs = (programsDoc['programs'] as List).cast<Map<String, dynamic>>();
   final programIds = <String>{};
   for (final prog in programs) {
@@ -65,13 +79,15 @@ void main(List<String> args) {
       for (final x in (r['exercises'] as List).cast<Map<String, dynamic>>()) {
         final id = x['exercise_id'] as String;
         if (!byId.containsKey(id)) errors.add('programs.json: ${r['id']} uses unknown exercise $id');
+        if (hidden.containsKey(id)) errors.add('programs.json: ${r['id']} uses hidden exercise $id');
       }
     }
   }
-  // Warnings (not fatal): the same Arabic primary name on two exercises.
+  // Warnings (not fatal): the same Arabic primary name on two VISIBLE exercises.
   final warnings = <String>[];
   final idsByName = <String, List<String>>{};
   ar.forEach((id, v) {
+    if (hidden.containsKey(id)) return;
     final name = normalizeForSearch((v as Map<String, dynamic>)['ar'] as String? ?? '');
     if (name.isNotEmpty) (idsByName[name] ??= []).add(id);
   });
@@ -85,7 +101,8 @@ void main(List<String> args) {
   if (args.contains('--check')) {
     final reviewed = ar.values.where((v) => (v as Map<String, dynamic>)['reviewed'] == true).length;
     stdout.writeln('Catalog inputs OK: ${byId.length} exercises, ${ar.length} with Arabic names '
-        '($reviewed reviewed), ${byId.length - ar.length} still English-only. Nothing written (--check).');
+        '($reviewed reviewed), ${byId.length - ar.length} still English-only, ${hidden.length} hidden, '
+        '${warnings.length} same-name warnings among visible exercises. Nothing written (--check).');
     for (final w in warnings) {
       stdout.writeln('  warning: $w');
     }
@@ -98,6 +115,7 @@ void main(List<String> args) {
     File(p('data/raw/exercises.json')).readAsStringSync(),
     arFile.existsSync() ? arFile.readAsStringSync() : '',
     File(p('data/programs/programs.json')).readAsStringSync(),
+    hiddenFile.existsSync() ? hiddenFile.readAsStringSync() : '',
   ].join('\u0000'))).toString();
   final versionFile = File(p('data/catalog/catalog_version.json'));
   var version = 0;
@@ -128,7 +146,8 @@ void main(List<String> args) {
       instructions_en TEXT NOT NULL,
       instructions_ar TEXT,
       media_id TEXT NOT NULL,
-      search_norm TEXT NOT NULL
+      search_norm TEXT NOT NULL,
+      hidden INTEGER NOT NULL DEFAULT 0
     );
     CREATE TABLE catalog_programs (
       id TEXT NOT NULL PRIMARY KEY,
@@ -138,7 +157,7 @@ void main(List<String> args) {
   ''');
   db.execute('BEGIN');
   db.execute('INSERT INTO catalog_meta (version) VALUES (?)', [version]);
-  final ins = db.prepare('INSERT INTO exercises VALUES (?,?,?,?,?,?,?,?,?,?,?,?)');
+  final ins = db.prepare('INSERT INTO exercises VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
   final sorted = byId.keys.toList()..sort();
   for (final id in sorted) {
     final e = byId[id]!;
@@ -160,6 +179,7 @@ void main(List<String> args) {
       null,
       e['media_id'],
       normalizeForSearch([nameEn, ?nameAr, ...aliases].join(' ')),
+      hidden.containsKey(id) ? 1 : 0,
     ]);
   }
   ins.close();
@@ -183,7 +203,7 @@ void main(List<String> args) {
 
   final kb = (out.lengthSync() / 1024).round();
   stdout.writeln('catalog v$version${hash == previousHash ? ' (unchanged)' : ''}: '
-      '${sorted.length} exercises, ${ar.length} with Arabic names, '
+      '${sorted.length} exercises (${hidden.length} hidden), ${ar.length} with Arabic names, '
       '${programs.length} programs, $kb KB → data/catalog/ + app/assets/catalog/');
 }
 

@@ -297,6 +297,19 @@ class $ExercisesTable extends Exercises
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _hiddenMeta = const VerificationMeta('hidden');
+  @override
+  late final GeneratedColumn<bool> hidden = GeneratedColumn<bool>(
+    'hidden',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("hidden" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -311,6 +324,7 @@ class $ExercisesTable extends Exercises
     instructionsAr,
     mediaId,
     searchNorm,
+    hidden,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -418,6 +432,12 @@ class $ExercisesTable extends Exercises
     } else if (isInserting) {
       context.missing(_searchNormMeta);
     }
+    if (data.containsKey('hidden')) {
+      context.handle(
+        _hiddenMeta,
+        hidden.isAcceptableOrUnknown(data['hidden']!, _hiddenMeta),
+      );
+    }
     return context;
   }
 
@@ -475,6 +495,10 @@ class $ExercisesTable extends Exercises
         DriftSqlType.string,
         data['${effectivePrefix}search_norm'],
       )!,
+      hidden: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}hidden'],
+      )!,
     );
   }
 
@@ -506,6 +530,10 @@ class Exercise extends DataClass implements Insertable<Exercise> {
 
   /// normalizeForSearch(name_en + name_ar + aliases).
   final String searchNorm;
+
+  /// Duplicate of another exercise (data/hidden_exercises.json): never listed
+  /// or searched, but still resolvable by id for existing user data.
+  final bool hidden;
   const Exercise({
     required this.id,
     required this.nameEn,
@@ -519,6 +547,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     this.instructionsAr,
     required this.mediaId,
     required this.searchNorm,
+    required this.hidden,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -539,6 +568,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     }
     map['media_id'] = Variable<String>(mediaId);
     map['search_norm'] = Variable<String>(searchNorm);
+    map['hidden'] = Variable<bool>(hidden);
     return map;
   }
 
@@ -560,6 +590,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           : Value(instructionsAr),
       mediaId: Value(mediaId),
       searchNorm: Value(searchNorm),
+      hidden: Value(hidden),
     );
   }
 
@@ -581,6 +612,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       instructionsAr: serializer.fromJson<String?>(json['instructionsAr']),
       mediaId: serializer.fromJson<String>(json['mediaId']),
       searchNorm: serializer.fromJson<String>(json['searchNorm']),
+      hidden: serializer.fromJson<bool>(json['hidden']),
     );
   }
   @override
@@ -599,6 +631,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       'instructionsAr': serializer.toJson<String?>(instructionsAr),
       'mediaId': serializer.toJson<String>(mediaId),
       'searchNorm': serializer.toJson<String>(searchNorm),
+      'hidden': serializer.toJson<bool>(hidden),
     };
   }
 
@@ -615,6 +648,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     Value<String?> instructionsAr = const Value.absent(),
     String? mediaId,
     String? searchNorm,
+    bool? hidden,
   }) => Exercise(
     id: id ?? this.id,
     nameEn: nameEn ?? this.nameEn,
@@ -630,6 +664,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
         : this.instructionsAr,
     mediaId: mediaId ?? this.mediaId,
     searchNorm: searchNorm ?? this.searchNorm,
+    hidden: hidden ?? this.hidden,
   );
   Exercise copyWithCompanion(ExercisesCompanion data) {
     return Exercise(
@@ -653,6 +688,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
       searchNorm: data.searchNorm.present
           ? data.searchNorm.value
           : this.searchNorm,
+      hidden: data.hidden.present ? data.hidden.value : this.hidden,
     );
   }
 
@@ -670,7 +706,8 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           ..write('instructionsEn: $instructionsEn, ')
           ..write('instructionsAr: $instructionsAr, ')
           ..write('mediaId: $mediaId, ')
-          ..write('searchNorm: $searchNorm')
+          ..write('searchNorm: $searchNorm, ')
+          ..write('hidden: $hidden')
           ..write(')'))
         .toString();
   }
@@ -689,6 +726,7 @@ class Exercise extends DataClass implements Insertable<Exercise> {
     instructionsAr,
     mediaId,
     searchNorm,
+    hidden,
   );
   @override
   bool operator ==(Object other) =>
@@ -705,7 +743,8 @@ class Exercise extends DataClass implements Insertable<Exercise> {
           other.instructionsEn == this.instructionsEn &&
           other.instructionsAr == this.instructionsAr &&
           other.mediaId == this.mediaId &&
-          other.searchNorm == this.searchNorm);
+          other.searchNorm == this.searchNorm &&
+          other.hidden == this.hidden);
 }
 
 class ExercisesCompanion extends UpdateCompanion<Exercise> {
@@ -721,6 +760,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
   final Value<String?> instructionsAr;
   final Value<String> mediaId;
   final Value<String> searchNorm;
+  final Value<bool> hidden;
   final Value<int> rowid;
   const ExercisesCompanion({
     this.id = const Value.absent(),
@@ -735,6 +775,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     this.instructionsAr = const Value.absent(),
     this.mediaId = const Value.absent(),
     this.searchNorm = const Value.absent(),
+    this.hidden = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ExercisesCompanion.insert({
@@ -750,6 +791,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     this.instructionsAr = const Value.absent(),
     required String mediaId,
     required String searchNorm,
+    this.hidden = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        nameEn = Value(nameEn),
@@ -772,6 +814,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     Expression<String>? instructionsAr,
     Expression<String>? mediaId,
     Expression<String>? searchNorm,
+    Expression<bool>? hidden,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -787,6 +830,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
       if (instructionsAr != null) 'instructions_ar': instructionsAr,
       if (mediaId != null) 'media_id': mediaId,
       if (searchNorm != null) 'search_norm': searchNorm,
+      if (hidden != null) 'hidden': hidden,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -804,6 +848,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     Value<String?>? instructionsAr,
     Value<String>? mediaId,
     Value<String>? searchNorm,
+    Value<bool>? hidden,
     Value<int>? rowid,
   }) {
     return ExercisesCompanion(
@@ -819,6 +864,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
       instructionsAr: instructionsAr ?? this.instructionsAr,
       mediaId: mediaId ?? this.mediaId,
       searchNorm: searchNorm ?? this.searchNorm,
+      hidden: hidden ?? this.hidden,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -862,6 +908,9 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
     if (searchNorm.present) {
       map['search_norm'] = Variable<String>(searchNorm.value);
     }
+    if (hidden.present) {
+      map['hidden'] = Variable<bool>(hidden.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -883,6 +932,7 @@ class ExercisesCompanion extends UpdateCompanion<Exercise> {
           ..write('instructionsAr: $instructionsAr, ')
           ..write('mediaId: $mediaId, ')
           ..write('searchNorm: $searchNorm, ')
+          ..write('hidden: $hidden, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -4097,6 +4147,7 @@ typedef $$ExercisesTableCreateCompanionBuilder = ExercisesCompanion Function({
   Value<String?> instructionsAr,
   required String mediaId,
   required String searchNorm,
+  Value<bool> hidden,
   Value<int> rowid,
 });
 typedef $$ExercisesTableUpdateCompanionBuilder = ExercisesCompanion Function({
@@ -4112,6 +4163,7 @@ typedef $$ExercisesTableUpdateCompanionBuilder = ExercisesCompanion Function({
   Value<String?> instructionsAr,
   Value<String> mediaId,
   Value<String> searchNorm,
+  Value<bool> hidden,
   Value<int> rowid,
 });
 
@@ -4181,6 +4233,11 @@ class $$ExercisesTableFilterComposer
 
   ColumnFilters<String> get searchNorm => $composableBuilder(
     column: $table.searchNorm,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -4253,6 +4310,11 @@ class $$ExercisesTableOrderingComposer
     column: $table.searchNorm,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get hidden => $composableBuilder(
+    column: $table.hidden,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ExercisesTableAnnotationComposer
@@ -4307,6 +4369,9 @@ class $$ExercisesTableAnnotationComposer
     column: $table.searchNorm,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get hidden =>
+      $composableBuilder(column: $table.hidden, builder: (column) => column);
 }
 
 class $$ExercisesTableTableManager
@@ -4349,6 +4414,7 @@ class $$ExercisesTableTableManager
                 Value<String?> instructionsAr = const Value.absent(),
                 Value<String> mediaId = const Value.absent(),
                 Value<String> searchNorm = const Value.absent(),
+                Value<bool> hidden = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ExercisesCompanion(
                 id: id,
@@ -4363,6 +4429,7 @@ class $$ExercisesTableTableManager
                 instructionsAr: instructionsAr,
                 mediaId: mediaId,
                 searchNorm: searchNorm,
+                hidden: hidden,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -4379,6 +4446,7 @@ class $$ExercisesTableTableManager
                 Value<String?> instructionsAr = const Value.absent(),
                 required String mediaId,
                 required String searchNorm,
+                Value<bool> hidden = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ExercisesCompanion.insert(
                 id: id,
@@ -4393,6 +4461,7 @@ class $$ExercisesTableTableManager
                 instructionsAr: instructionsAr,
                 mediaId: mediaId,
                 searchNorm: searchNorm,
+                hidden: hidden,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

@@ -27,13 +27,13 @@ void main() {
 
   testWidgets('shows the whole catalog by default with a count', (tester) async {
     await openLibrary(tester, LanguagePref.en);
-    expect(find.text('1,324 exercises'), findsOneWidget);
+    expect(find.text('1,291 exercises'), findsOneWidget);
     expect(find.byType(ExerciseCard), findsWidgets);
   });
 
   testWidgets('Arabic count uses a thousands separator and Western digits', (tester) async {
     await openLibrary(tester, LanguagePref.ar);
-    expect(find.text('1,324 تمرين'), findsOneWidget);
+    expect(find.text('1,291 تمرين'), findsOneWidget);
   });
 
   testWidgets('Arabic formal name, Egyptian slang and English all find bench press first', (tester) async {
@@ -44,18 +44,22 @@ void main() {
     }
   });
 
-  testWidgets('Arabic UI: Arabic primary + English secondary; English-only rows show one name', (tester) async {
+  testWidgets('Arabic UI: Arabic primary + English secondary; hidden duplicates never show', (tester) async {
     await openLibrary(tester, LanguagePref.ar);
     await search(tester, 'بنش');
     final card = find.byType(ExerciseCard).first;
     expect(find.descendant(of: card, matching: find.text(isolateName('ضغط بار مستوي'))), findsOneWidget);
     expect(find.descendant(of: card, matching: find.text(isolateName('Barbell Bench Press'))), findsOneWidget);
 
-    // 0001 "3/4 Sit-Up" has no Arabic name → only the English name.
-    await search(tester, '3/4 sit');
-    final only = find.byType(ExerciseCard).first;
-    expect(cardIds().first, '0001');
-    expect(find.descendant(of: only, matching: find.byType(Text)), findsOneWidget);
+    // Every exercise has an Arabic name now (the English-only rule is unit-tested
+    // in test/core/exercise_names_test.dart). 0735 "Sit-Up V. 2" is a hidden
+    // duplicate of 0001 (data/hidden_exercises.json): searching its shared
+    // Arabic name or its own English name never lists it.
+    await search(tester, 'بطن تلات تربع');
+    expect(cardIds(), contains('0001'));
+    expect(cardIds(), isNot(contains('0735')));
+    await search(tester, 'sit-up v. 2');
+    expect(cardIds(), isNot(contains('0735')));
   });
 
   testWidgets('English UI: English primary + Arabic secondary', (tester) async {
@@ -69,7 +73,7 @@ void main() {
   testWidgets('muscle chip filters by target; "All" resets', (tester) async {
     await openLibrary(tester, LanguagePref.en);
     await tapChip(tester, 'Biceps');
-    expect(find.text('151 exercises'), findsOneWidget);
+    expect(find.text('143 exercises'), findsOneWidget);
     final targets = (await db.select(db.exercises).get())
         .where((e) => cardIds().contains(e.id))
         .map((e) => e.target)
@@ -77,7 +81,7 @@ void main() {
     expect(targets, {'biceps'});
 
     await tapChip(tester, 'All');
-    expect(find.text('1,324 exercises'), findsOneWidget);
+    expect(find.text('1,291 exercises'), findsOneWidget);
   });
 
   testWidgets('"More" chip expands the rare muscles inline', (tester) async {
@@ -97,7 +101,7 @@ void main() {
     await tester.tap(find.text('Barbell'));
     await settle(tester);
     expect(find.text('Filter by equipment'), findsNothing);
-    expect(find.text('154 exercises'), findsOneWidget);
+    expect(find.text('150 exercises'), findsOneWidget);
 
     // Combined with a search and a muscle.
     await tapChip(tester, 'Chest');
@@ -116,7 +120,7 @@ void main() {
     expect(find.byType(ExerciseCard), findsNothing);
     await tester.tap(find.text('Clear filters'));
     await settle(tester);
-    expect(find.text('1,324 exercises'), findsOneWidget);
+    expect(find.text('1,291 exercises'), findsOneWidget);
   });
 
   testWidgets('records show a 🏆 badge with the heaviest weight', (tester) async {

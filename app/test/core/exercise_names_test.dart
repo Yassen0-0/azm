@@ -16,6 +16,7 @@ Exercise ex({String? ar}) => Exercise(
   instructionsAr: null,
   mediaId: 'x',
   searchNorm: '',
+  hidden: false,
 );
 
 void main() {

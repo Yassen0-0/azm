@@ -34,6 +34,7 @@ class CatalogData {
             instructionsAr: r['instructions_ar'] as String?,
             mediaId: r['media_id'] as String,
             searchNorm: r['search_norm'] as String,
+            hidden: r.containsKey('hidden') && r['hidden'] == 1, // absent before builder rev 2
           ),
       ];
       final programs = [

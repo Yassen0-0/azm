@@ -32,7 +32,7 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase.open() => AppDatabase(driftDatabase(name: 'azm'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -46,6 +46,11 @@ class AppDatabase extends _$AppDatabase {
             'CREATE INDEX IF NOT EXISTS workout_exercises_exercise '
             'ON workout_exercises (exercise_id)',
           );
+        },
+        onUpgrade: (m, from, to) async {
+          // v2: catalog `exercises.hidden`. Catalog-only; the bundled catalog
+          // (newer version) is re-installed right after opening.
+          if (from < 2) await m.addColumn(exercises, exercises.hidden);
         },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');

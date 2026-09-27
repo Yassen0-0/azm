@@ -86,7 +86,7 @@ void main() {
     await tapExercise(tester, 'barbell bench press', '0025');
     await tester.enterText(find.byType(TextField), '');
     await tapChip(tester, 'Biceps');
-    expect(find.text('151 exercises'), findsOneWidget);
+    expect(find.text('143 exercises'), findsOneWidget);
     await tapChip(tester, 'All');
     await tapExercise(tester, 'barbell bench press', '0025'); // toggles off
     expect(find.text('Add'), findsOneWidget);
@@ -107,7 +107,7 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Clear search'));
     await settle(tester);
     expect(tester.widget<TextField>(field).controller!.text, isEmpty);
-    expect(find.text('1,324 exercises'), findsOneWidget);
+    expect(find.text('1,291 exercises'), findsOneWidget);
 
     await tester.enterText(field, 'barbell full squat');
     await settle(tester);

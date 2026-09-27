@@ -47,7 +47,7 @@ void main() {
     });
   }
 
-  test('holds the whole catalog', () => expect(index.length, 1324));
+  test('holds the whole visible catalog (hidden duplicates excluded)', () => expect(index.length, 1324 - 33));
 
   test('fast: every query well under the 50 ms budget on the host', () {
     for (final q in queries) {

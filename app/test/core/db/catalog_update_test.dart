@@ -17,6 +17,7 @@ Exercise ex(String id, String name) => Exercise(
       instructionsAr: null,
       mediaId: 'm$id',
       searchNorm: name.toLowerCase(),
+      hidden: false,
     );
 
 CatalogData catalog(int version, List<Exercise> exercises) => CatalogData(

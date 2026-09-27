@@ -31,10 +31,11 @@ class CatalogRepository {
   /// Every normalized query token must be a substring of `search_norm`.
   /// Ranking: exact name/alias match → prefix match → substring, then English
   /// name. Empty query → all exercises by English name. Optional filters use
-  /// dataset keys (`target`, `equipment`).
+  /// dataset keys (`target`, `equipment`). Hidden duplicates are never
+  /// returned (lookups by id above still resolve them).
   Future<List<Exercise>> search(String query, {String? target, String? equipment}) async {
     final tokens = searchTokens(query);
-    final q = db.select(db.exercises);
+    final q = db.select(db.exercises)..where((e) => e.hidden.not());
     for (final t in tokens) {
       q.where((e) => e.searchNorm.like('%${_escapeLike(t)}%', escapeChar: r'\'));
     }

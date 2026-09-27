@@ -46,6 +46,10 @@ class Exercises extends Table {
   /// normalizeForSearch(name_en + name_ar + aliases).
   TextColumn get searchNorm => text()();
 
+  /// Duplicate of another exercise (data/hidden_exercises.json): never listed
+  /// or searched, but still resolvable by id for existing user data.
+  BoolColumn get hidden => boolean().withDefault(const Constant(false))();
+
   @override
   Set<Column> get primaryKey => {id};
 }

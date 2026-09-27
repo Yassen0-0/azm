@@ -47,9 +47,19 @@ void main() {
     expect(await top('عقله عكسي'), '1326');
   });
 
-  test('all shipped Arabic names are owner-reviewed', () async {
+  test('every exercise ships an Arabic name', () async {
     final withAr = (await db.select(db.exercises).get()).where((e) => e.nameAr != null);
-    expect(withAr, hasLength(50));
+    expect(withAr, hasLength(1324));
+  });
+
+  test('Egyptian spellings find the same exercise (ظ/ض, ذ/د, ث/ت)', () async {
+    expect(await top('ظهر سفلي'), '0489');
+    expect(await top('ضهر سفلي'), '0489');
+    for (final pair in [('ظهر', 'ضهر'), ('ذراع', 'دراع'), ('فخذ', 'فخد'), ('ثابت', 'تابت')]) {
+      final a = (await repo.search(pair.$1)).map((e) => e.id).toList();
+      expect(a, isNotEmpty, reason: pair.$1);
+      expect((await repo.search(pair.$2)).map((e) => e.id).toList(), a, reason: pair.$2);
+    }
   });
 
   test('removed aliases no longer match', () async {

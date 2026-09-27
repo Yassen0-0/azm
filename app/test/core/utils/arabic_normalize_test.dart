@@ -24,6 +24,17 @@ void main() {
       expect(normalizeForSearch('دائري'), 'دايري');
     });
 
+    test('folds Egyptian spelling variants: ظ → ض, ذ → د, ث → ت', () {
+      expect(normalizeForSearch('ظهر'), 'ضهر');
+      expect(normalizeForSearch('ذراع'), 'دراع');
+      expect(normalizeForSearch('ثقيل'), 'تقيل');
+      expect(normalizeForSearch('فخذ'), normalizeForSearch('فخد'));
+      expect(normalizeForSearch('ظهر سفلي'), normalizeForSearch('ضهر سفلي'));
+      expect(normalizeForSearch('ثلاث'), normalizeForSearch('تلات'));
+      // The target letters themselves are unchanged.
+      expect(normalizeForSearch('ضدت'), 'ضدت');
+    });
+
     test('lowercases Latin and collapses whitespace', () {
       expect(normalizeForSearch('  Bench   PRESS\t\n'), 'bench press');
       expect(normalizeForSearch('RDL'), 'rdl');

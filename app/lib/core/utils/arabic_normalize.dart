@@ -13,6 +13,8 @@
 /// 5. ى → ي
 /// 6. ؤ → و
 /// 7. ئ → ي
+/// 7b. Egyptian spelling variants: ظ → ض, ذ → د, ث → ت
+///     (ظهر/ضهر, ذراع/دراع, ثقيل/تقيل)
 /// 8. lowercase Latin
 /// 9. collapse whitespace, trim
 String normalizeForSearch(String input) {
@@ -64,6 +66,13 @@ int _mapRune(int r) {
       return 0x0648; // و
     case 0x0626: // ئ
       return 0x064A; // ي
+    // 7b: Egyptian colloquial spelling (ظهر → ضهر, ذراع → دراع, ثقيل → تقيل).
+    case 0x0638: // ظ
+      return 0x0636; // ض
+    case 0x0630: // ذ
+      return 0x062F; // د
+    case 0x062B: // ث
+      return 0x062A; // ت
   }
   // 8: ASCII A–Z → a–z. Non-ASCII Latin is left as is (dataset is ASCII).
   if (r >= 0x41 && r <= 0x5A) return r + 0x20;

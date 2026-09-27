@@ -300,6 +300,7 @@ void main() {
             instructionsEn: '[]',
             mediaId: 'x',
             searchNorm: 'barbell bench press',
+            hidden: false,
           ));
       await db.into(db.catalogMeta).insert(const CatalogMetaData(version: 7));
       await seedEverything(db);
