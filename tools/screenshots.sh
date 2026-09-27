@@ -17,7 +17,7 @@
 # Logs: .tooling/tmp/emu-<avd>.log, sim-boot-<set>.log, drive-<feature>-<platform>.log
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
-source "$ROOT/env.sh"
+source "$ROOT/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
 
 FEATURE="${1:?usage: tools/screenshots.sh <feature> [android|ios|both]}"
 WHICH="${2:-both}"

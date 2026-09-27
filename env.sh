@@ -83,5 +83,26 @@ export AZM_XCODE_DERIVED="$T/xcode-derived"
 # The user's own PATH is deliberately dropped: it may point at other Flutter/JDK/
 # Android SDK installs outside ROOT. Xcode is reached via /usr/bin/xcrun.
 export AZM_REAL_PATH="${AZM_REAL_PATH:-$PATH}"
-export PATH="$T/ruby/bin:$T/flutter/bin:$T/flutter/bin/cache/dart-sdk/bin:$PUB_CACHE/bin:$T/gems/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator${JAVA_HOME:+:$JAVA_HOME/bin}:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin"
+export PATH="$T/ruby/bin:$T/gh/current/bin:$T/flutter/bin:$T/flutter/bin/cache/dart-sdk/bin:$PUB_CACHE/bin:$T/gems/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator${JAVA_HOME:+:$JAVA_HOME/bin}:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin"
+# GitHub CLI (in .tooling/gh): config + login token stay inside ROOT.
+export GH_CONFIG_DIR="$AZM_TOOLING/home/.config/gh"
 unset T
+
+# --- Guard (fail fast): the toolchain must come from ROOT ----------------------
+# If `flutter` doesn't resolve inside .tooling (e.g. ~/dev/flutter or a global
+# install), sourcing fails, so `source ./env.sh && <command>` never runs
+# <command>. Scripts: `source "$ROOT/env.sh" || exit 1`. Before the SDK exists
+# (tools/cloud_setup.sh installs it), set AZM_ALLOW_NO_FLUTTER=1 to skip.
+azm_check_sandbox() {
+  _azm_f="$(command -v flutter 2>/dev/null || true)"
+  case "$_azm_f" in
+    "$AZM_TOOLING"/*) unset _azm_f; return 0 ;;
+  esac
+  echo "AZM SANDBOX ERROR: flutter resolves to '${_azm_f:-<not found>}', not inside $AZM_TOOLING." >&2
+  echo "  Mac: run from ROOT as  source ./env.sh && <command>.  Cloud: run tools/cloud_setup.sh first." >&2
+  unset _azm_f
+  return 1
+}
+if [ -z "${AZM_ALLOW_NO_FLUTTER:-}" ]; then
+  azm_check_sandbox || return 1
+fi

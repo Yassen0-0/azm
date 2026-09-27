@@ -11,6 +11,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+source "$ROOT/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
 DIR="$ROOT/app/lib"
 [ -d "$DIR" ] || { echo "no app/lib yet"; exit 0; }
 

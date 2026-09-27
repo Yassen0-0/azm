@@ -25,7 +25,7 @@ fi
 
 AZM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 # shellcheck source=env.sh
-source "$AZM_ROOT_DIR/env.sh"
+source "$AZM_ROOT_DIR/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
 
 export HOME="$AZM_REAL_HOME"
 export AZM_IOS_SIGNING=1

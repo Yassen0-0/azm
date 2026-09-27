@@ -14,7 +14,7 @@
 # Exits 1 on timeout or when the device goes away.
 set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
-source "$ROOT/env.sh"
+source "$ROOT/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
 
 S="${1:?usage: tools/e2e_android_helper.sh <serial> <out.png>}"
 OUT="${2:?usage: tools/e2e_android_helper.sh <serial> <out.png>}"

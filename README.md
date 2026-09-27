@@ -15,6 +15,17 @@ This folder (the **ROOT**) is fully self-contained: code, data, design system, d
 5. **Real-device checklist**: [docs/DEVICE_TEST_CHECKLIST.md](docs/DEVICE_TEST_CHECKLIST.md) (haptics, notifications, share sheet/file picker, launcher icons, performance …).
 6. **Arabic names review**: 1,274 names ship with `reviewed: false` (`data/ar/exercise_names_ar.json`; review tables `docs/review/names_batch_01…13.md`, 109 flagged ⚠️; identical pairs in `docs/review/duplicates.md`). Flip `reviewed` to `true` as you confirm them, then `tools/build_catalog.sh`.
 
+## Get the code
+
+The repository is **private** on GitHub (`Yassen0-0/azm`). **`media/` (the Gym visual images/videos) and `inputs/` are never in the repo**: they're gitignored, licensed dev-only material (docs/LICENSES.md), kept only on the owner's Mac. So is `.tooling/` (every SDK and cache, rebuilt per machine).
+
+```sh
+git clone https://github.com/Yassen0-0/azm.git && cd azm
+```
+
+- **Cloud (Claude Code on the web, Linux):** `tools/cloud_setup.sh` installs the pinned Flutter into `.tooling/flutter`, runs pub get, regenerates every generated file (l10n, Drift, catalog; fails if the committed copies are stale), then `flutter analyze` + `flutter test`. After that: `source ./env.sh && …`. No devices there: see CLAUDE.md → *Cloud / no devices* (device verification is deferred to the Mac, never skipped).
+- **Mac (full setup, devices):** follow [Set up on a fresh Mac](#set-up-on-a-fresh-mac) (or copy an existing ROOT including `.tooling/` and run `tools/relocate.sh`), then always `source ./env.sh && …`. GitHub commands go through `./gh_env` ([below](#github-gh_env)).
+
 **Start here:** [CLAUDE.md](CLAUDE.md) (rules) · [docs/SPEC.md](docs/SPEC.md) (what) · [docs/DESIGN.md](docs/DESIGN.md) (look) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) (how) · [docs/DATA.md](docs/DATA.md) (data) · [docs/LICENSES.md](docs/LICENSES.md) (**media is not ours**) · [docs/PLAN.md](docs/PLAN.md) (backlog) · [docs/DECISIONS_LOG.md](docs/DECISIONS_LOG.md) · [docs/ORIGINAL_BRIEF.md](docs/ORIGINAL_BRIEF.md)
 
 ## Layout
@@ -34,7 +45,8 @@ azm/                     ROOT = git repo root
   media/                 DEV ONLY 1,324 thumbnails + 1,324 GIFs (© Gym visual) — gitignored, never shipped
   brand/                 logo-concept-a.svg → generate.sh (every icon + splash; --check in CI)
   design/                theme.json, theme.css, ReadexPro.ttf (Ather design system, copied from inputs/)
-  tools/                 scripts: build_catalog.sh, gen_l10n.sh, screenshots.sh, check_directionality.sh, e2e_android_helper.sh, check_plan_overlap.dart, serve_media_dev.dart, relocate.sh
+  gh_env                 wrapper for GitHub commands (token in the macOS Keychain)
+  tools/                 scripts: cloud_setup.sh (Linux/cloud), build_catalog.sh, gen_l10n.sh, screenshots.sh, check_directionality.sh, e2e_android_helper.sh, check_plan_overlap.dart, serve_media_dev.dart, relocate.sh
   docs/screenshots/      parity screenshots per feature (android + ios, ar + en)
   app/                   the Flutter project
   inputs/                original files as delivered — gitignored
@@ -43,7 +55,7 @@ azm/                     ROOT = git repo root
 
 ## The sandbox rule
 
-Nothing is read, written, installed or downloaded outside ROOT. The only exceptions are Xcode itself and the system `git`, `curl` and `perl` in `/usr/bin`.
+Nothing is read, written, installed or downloaded outside ROOT. The only exceptions are Xcode itself, the system `git`, `curl` and `perl` in `/usr/bin`, and **credentials in the macOS Keychain** (the GitHub login token). Both Xcode signing and the Keychain need the real HOME, so they run through a wrapper: `./ios_env` for Xcode, `./gh_env` for GitHub (see below).
 
 Always run commands from ROOT like this:
 
@@ -88,6 +100,18 @@ The redirected `HOME` hides your login keychain, Xcode accounts and provisioning
 Everything else (PATH, pub-cache, gems, CocoaPods, Gradle, Flutter settings, TMPDIR) stays inside ROOT. **Not needed** for Android or the iOS Simulator, which use plain `source ./env.sh && ...`.
 
 **Xcode's build cache always goes to the real home.** Every `flutter build ios` / `flutter run` on iOS, **including Simulator builds with plain `env.sh`**, writes Xcode's intermediates to your real `~/Library/Developer/Xcode/DerivedData/Runner-<hash>`: Xcode ignores the redirected `HOME` and Flutter does not pass `-derivedDataPath`. Redirecting it would need a global Xcode preference, which the sandbox rule forbids, so it is accepted as part of the Xcode exception. Simulators and their app data also live in Xcode's `~/Library/Developer/CoreSimulator`. Delete the `Runner-*` folder any time; Xcode rebuilds it.
+
+## GitHub: `./gh_env`
+
+The GitHub CLI lives in `.tooling/gh` (on `env.sh`'s PATH). Its login token is stored in the **macOS Keychain**, which is only reachable with the real HOME, so every command that talks to GitHub goes through the wrapper:
+
+```sh
+./gh_env gh auth login --hostname github.com --git-protocol https --web   # once, in the browser
+./gh_env gh auth status
+./gh_env git push origin main
+```
+
+`gh_env` sources `env.sh`, then restores only `HOME`. gh's non-secret config stays in `.tooling/home/.config/gh` (`GH_CONFIG_DIR`) and git's "global" config in `.tooling/home/.gitconfig` (`GIT_CONFIG_GLOBAL`, so your real `~/.gitconfig` is never read). This repo's local git config uses `gh auth git-credential` for github.com. Tokens are never written to files.
 
 ## The app (`app/`)
 

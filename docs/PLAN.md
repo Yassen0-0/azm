@@ -310,6 +310,8 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **Acceptance:**
   - [ ] `tools/upload_media_r2.dart`: uploads **only licensed** ids (allow-list file) to R2 using credentials from a gitignored `.env`; refuses to run on unlicensed ids; prints the base URL for `MediaResolver`. **Blocked until media is purchased** (LICENSES.md).
   - [x] `tools/serve_media_dev.dart`: local static server for `media/` (dev only), done in Phase 3.
+  - [x] `tools/cloud_setup.sh` (2026-09-27): Linux/cloud setup: pinned Flutter into `.tooling/flutter`, pub get, regenerate + staleness check of all generated files, analyze, tests. Cloud sessions follow CLAUDE.md → *Cloud / no devices* (device verification pending (Mac), never skipped).
+  - [x] Sandbox guard (2026-09-27): `env.sh` fails fast when `flutter` isn't the `.tooling` one; every script sources it with `|| exit 1`. GitHub via `./gh_env` (token in the Keychain).
   - [ ] CI-style `tools/check_all.sh`: `flutter analyze` + `flutter test` (app) + `dart analyze` (tools) + directionality + `build_catalog` (validation, and fail if the committed asset is stale) + `brand/generate.sh --check` (F's suggestion).
   - [x] Verify the iOS build: done 2026-09-26 (simulator build, launch, RTL, font, localized name, first-launch catalog install; screenshots in `docs/screenshots/shell/`).
 

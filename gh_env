@@ -1,0 +1,30 @@
+#!/bin/bash
+# Run ONE GitHub command (gh, or git talking to GitHub) with the Azm sandbox
+# (env.sh) but with the REAL home restored, so the login token can live in the
+# macOS Keychain. Credentials are an allowed exception to the sandbox rule
+# (CLAUDE.md), like Xcode: the Keychain is only reachable with the real HOME.
+#
+#   ./gh_env gh auth login --hostname github.com --git-protocol https --web
+#   ./gh_env gh auth status
+#   ./gh_env git push origin main
+#
+# What stays inside ROOT: gh's non-secret config (GH_CONFIG_DIR =
+# .tooling/home/.config/gh), git's "global" config (GIT_CONFIG_GLOBAL =
+# .tooling/home/.gitconfig, so the real ~/.gitconfig is never read), PATH,
+# TMPDIR and every cache from env.sh. Only the token goes to the Keychain.
+set -euo pipefail
+
+if [ $# -eq 0 ]; then
+  sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
+  exit 64
+fi
+
+AZM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+# shellcheck source=env.sh
+source "$AZM_ROOT_DIR/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
+
+export GIT_CONFIG_GLOBAL="$AZM_TOOLING/home/.gitconfig"
+[ -f "$GIT_CONFIG_GLOBAL" ] || : > "$GIT_CONFIG_GLOBAL"
+export HOME="$AZM_REAL_HOME"
+export AZM_GH_KEYCHAIN=1
+exec "$@"

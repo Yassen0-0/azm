@@ -18,7 +18,7 @@ fi
 
 cd "$ROOT"
 # shellcheck source=../env.sh
-source ./env.sh
+source ./env.sh || exit 1   # fails fast if flutter is not the sandbox one
 T="$ROOT/.tooling"
 step() { printf '\n==> %s\n' "$*"; }
 

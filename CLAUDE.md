@@ -5,8 +5,9 @@ This repo's root **is** the project root (`env.sh`, `docs/`, `app/`, … all liv
 ## Sandbox (highest priority)
 
 - **Never read, write, install or download outside the project root.** That includes `~`, `/tmp`, `/usr/local`, `/opt`, Homebrew, global npm/pip/gem and global git config. `~/dev` holds an older, unrelated toolchain: never use it.
-- **Every shell command starts with `source ./env.sh &&`** (run from the root). All SDKs, caches and temp files live in `.tooling/`. Check `which flutter` points inside the root before Flutter commands.
+- **Every shell command starts with `source ./env.sh &&`** (run from the root). All SDKs, caches and temp files live in `.tooling/`. `env.sh` **fails fast** (so the `&&` stops the command) when `flutter` doesn't resolve inside `.tooling/` (e.g. `~/dev/flutter`), and every script in `tools/` (+ `brand/generate.sh`, `ios_env`, `gh_env`) sources it with `|| exit 1`. Never run `flutter`/`dart` without it.
 - iOS code signing (physical iPhone, `flutter build ios/ipa`, signed `xcodebuild`) → use `./ios_env <command>` instead. Pass `-derivedDataPath .tooling/xcode-derived` to any direct `xcodebuild`.
+- **Two allowed exceptions to the sandbox, both through a real-HOME wrapper:** (1) **Xcode** (code signing, DerivedData) → `./ios_env`; (2) **credentials in the macOS Keychain** (GitHub token) → `./gh_env gh …` / `./gh_env git push …`. `gh_env` keeps gh's non-secret config (`GH_CONFIG_DIR`) and git's global config (`GIT_CONFIG_GLOBAL`) inside `.tooling/`; only the token lives in the Keychain. Never store a token in a file (no `--insecure-storage`, no `.env` with tokens), never print one, never ask the owner for one.
 - Anything that needs a global install (brew, sudo, global gem/npm) → **stop and ask the owner.**
 - Never modify shell profiles, global git config or system settings. Never run `git config --global`.
 
@@ -39,6 +40,13 @@ grep -qE 'All tests passed|Some tests failed|Exception' "$LOG" || { echo "TIMEOU
 - **Proof:** a screenshot of **every screen** of the feature on both platforms, in both languages, in `docs/screenshots/<feature>/{android,ios}/`. Generate them with `tools/screenshots.sh <feature>`, which runs `app/integration_test/<feature>_screens_test.dart` (copy `shell_screens_test.dart`). Look at the images: the layout must match across platforms and mirror correctly between languages.
 - Anything that can only be verified on a **real iPhone** (haptics, real notification delivery and sound, background/lock-screen behavior, performance, camera, etc.) goes into `docs/DEVICE_TEST_CHECKLIST.md` for a tester with a real device. Do the same for anything that can't be verified on the Android emulator.
 - Devices: set **A** = AVD `azm_api37` (port 5554) + simulator "Azm iPhone A"; set **B** = AVD `azm_api37_b` (port 5556) + "Azm iPhone B". Each parallel window uses its own set (`AZM_DEVICE_SET=A|B`). Never create, erase or change the owner's other simulators.
+
+## Cloud / no devices (Claude Code on the web, CI)
+
+- **Setup:** `tools/cloud_setup.sh` (installs the pinned Flutter into `.tooling/flutter`, pub get, regenerates l10n + Drift + catalog and fails if the committed copies are stale, then analyze + tests). After it, commands use `source ./env.sh && …` as on the Mac.
+- **Do only:** code, `flutter analyze`, `dart analyze` (tools), unit/widget tests (`flutter test`), `tools/check_directionality.sh`, `tools/build_catalog.sh --check`, `tools/gen_l10n.sh`. No emulators, simulators, `flutter drive`, `tools/screenshots.sh`, `brand/generate.sh` (macOS AppKit) or `./ios_env`.
+- **Never skip the Platform Parity Rule — defer it.** A feature done in the cloud is **not done**: mark it in `docs/PLAN.md` as `[~] code done (cloud, <date>) — device verification pending (Mac)` and list exactly what the Mac session must run (`tools/screenshots.sh <feature>`, E2E, checklist items). Only a Mac session with both platforms may flip it to `[x]`.
+- Don't commit screenshots from the cloud (there are none to take) and don't delete existing ones.
 
 ## Before any task
 

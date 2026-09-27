@@ -11,7 +11,7 @@
 # See brand/README.md for the source contract and the list of outputs.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
-source "$ROOT/env.sh"
+source "$ROOT/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
 cd "$ROOT"
 
 SVG=brand/logo-concept-a.svg
