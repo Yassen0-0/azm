@@ -134,7 +134,19 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Windows C (routines + onboarding, set A) and D (history, set B) defined; routes, slots, first-run gate, history-source hook and ARB fragments pre-registered (see *Parallel windows*); `test/core/router/pre_registered_routes_test.dart`.
 - [x] `tools/check_plan_overlap.dart C D` → OK. analyze, test (153), directionality pass. No visible UI change (both slots render nothing), so parity screenshots were not regenerated.
 
-## 2. C window — Routines, ready programs, onboarding  (branch `feature/routines`, device set **A**) — [x] done 2026-09-27 (window C), not merged yet
+## 1d. INTEGRATION round 2 — merge routines + history (main) — [x] done 2026-09-27
+
+- [x] Merged `feature/routines` then `feature/history`; only generated l10n conflicted (re-ran `tools/gen_l10n.sh`); docs auto-merged per section. Logged in DECISIONS_LOG.
+- [x] Past workout editing: no ✓ (every set done), delete = swipe only, no removal on leaving (`HistoryRepository.tidy` gone; added exercises logged via `logUnticked`).
+- [x] One `SetRow` / keypad (`SetKeypadBuffer`, `SetValueKeypad`) / set-type sheet in `core/widgets`, labels in `core/l10n/set_labels.dart` + `commonSet…`/`commonKeypad…` strings; duplicates removed from workout, history, routines (and exercises' set letters).
+- [x] `LiftedCounter(compact: true)` (`core/l10n/compact_number.dart`, ألف/مليون/مليار, K/M/B above 100,000); History header uses it.
+- [x] Drift watch audit: three dummy `SELECT 1` streams replaced by real joins; rule in CLAUDE.md; `test/core/db/watch_queries_audit_test.dart`.
+- [x] Picker "second search": not reproducible on either platform; controller-driven search fix for text changes without `onChanged`; regression tests.
+- [x] E2E full journey (onboarding kg → ready program → routine ▶ → log → finish → History → edit → PRs recompute) passes on Android + iOS, ar + en (`workout_flow`).
+- [x] Every screenshot suite re-run on both platforms (device set A) and reviewed: shell, exercises, workout, workout_flow, routines, onboarding, history — all `exit 0` with "All tests passed", every image regenerated (except the manual launcher captures in `shell/`).
+- [x] analyze clean, `flutter test` 214 passing, directionality OK; worktrees removed (branches kept); devices + Gradle stopped.
+
+## 2. C window — Routines, ready programs, onboarding  (branch `feature/routines`, device set **A**) — [x] done 2026-09-27 (window C), merged 2026-09-27
 
 - **Goal:** build a routine once, start it in one tap; copy a ready program into "my routines"; first-run onboarding (unit + optional ready program).
 - **Owns (only these):**
@@ -179,7 +191,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [x] Tests: search UI (Arabic, slang, English, filters), picker returns ordered ids, names logic in cards, detail with and without history.
   - [x] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh exercises`, covering library (default, a search in Arabic, filtered), equipment sheet, picker with 3 selected, detail with no media (fallback) and with seeded history, in ar + en on both platforms. (With the dev media server + `AZM_MEDIA_ALLOW_ALL`, media may appear in LOCAL screenshots only. **Never commit screenshots that show Gym visual media**, see LICENSES.md; commit the fallback versions.)
 
-## 4. D window — History, stats, PRs, all-time Lifted  (branch `feature/history`, device set **B**) — [x] done 2026-09-27 (window D), not merged yet
+## 4. D window — History, stats, PRs, all-time Lifted  (branch `feature/history`, device set **B**) — [x] done 2026-09-27 (window D), merged 2026-09-27
 
 - **Goal:** see every past workout (list + calendar), fix a logged mistake, watch totals and records grow.
 - **Owns (only these):**
@@ -259,9 +271,9 @@ _Pre-registered for round 2 (2026-09-27): the @history request above (override h
 
 _(append here only)_
 
-- **@all / @history (window C, 2026-09-27): Drift shares stream queries with identical SQL, whatever their `readsFrom`.** `WorkoutRepository.watchDetail` uses `customSelect('SELECT 1', readsFrom: …)`; another `'SELECT 1'` watch with different tables silently stops the workout detail from updating. Use a unique SQL text per tick query (routines use `SELECT 1 AS routines_list_tick` / `routine_detail_tick`). Suggest the integrator also renames the workout's to `SELECT 1 AS workout_detail_tick` for safety.
+- ~~@all / @history (window C, 2026-09-27): Drift shares stream queries with identical SQL, whatever their `readsFrom` …~~ **Resolved at integration (2026-09-27):** no tick queries remain; every watch reads real tables (CLAUDE.md rule + audit test).
 
 ### Requests from D (history), round 2
 
 _(append here only)_
-- @core/widgets (D, 2026-09-27, optional): `LiftedCounter` could take a `format` callback so the History header can use it with the compact form (`1.2M kg`). Until then history has `CompactLiftedNumber` (same layout/motion) in `features/history/ui/history_widgets.dart`.
+- ~~@core/widgets (D, 2026-09-27, optional): `LiftedCounter` could take a `format` callback …~~ **Resolved at integration (2026-09-27):** `LiftedCounter(compact: true)`; `CompactLiftedNumber` removed.

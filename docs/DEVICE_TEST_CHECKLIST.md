@@ -67,8 +67,14 @@ _(window C appends here only)_
 ### History (window D, round 2)
 
 _(window D appends here only)_
-- [ ] Edit a past workout on a phone: keypad edits, "Add set", swipe-to-delete (toward the end edge) and ✓ feel like the live workout; leave the screen → unticked/empty sets are gone, History card and exercise detail show the new values at once. (history, 2026-09-27)
-- [ ] Kill the app while editing a past workout with an unticked set → reopen that workout: the unticked set has been removed; nothing else changed. (history, 2026-09-27)
+- [ ] Edit a past workout on a phone: keypad edits, "Add set" and swipe-to-delete (toward the end edge) feel like the live workout; there is no ✓ column; leaving the screen removes nothing; the History card and exercise detail show the new values at once. (history, 2026-09-27; ✓/removal wording updated by the integrator 2026-09-27)
+- [ ] Add an exercise to a past workout, kill the app at once, reopen that workout: the new exercise's sets are there and logged (values from the workout before, or 0 × 0); nothing was removed. (history, 2026-09-27; rewritten by the integrator 2026-09-27: sets are logged, never removed)
 - [ ] Performance with a long history (1–2 years, ~300 workouts): History tab, calendar month switching and Stats open without visible lag; logging sets in the active workout stays smooth while the History tab is alive. (history, 2026-09-27)
 - [ ] Device in a UTC+2/+3 time zone: a workout started just after midnight shows on that day in the calendar and in that week in Stats; the calendar week starts on Saturday in Arabic, Sunday in English. (history, 2026-09-27)
 - [ ] VoiceOver / TalkBack: calendar days read the full date and the workout count; the 🏆 badge on a card reads "N personal records". (history, 2026-09-27)
+
+### Integration round 2 (2026-09-27)
+
+- [ ] The keypad's ± key gives a light selection haptic on every screen that edits sets (live workout, past workout, routine editor), same feel everywhere. (integrator, 2026-09-27)
+- [ ] Library/picker search on a real keyboard: type, use the keyboard's undo (iOS shake / three-finger swipe, Android keyboard undo) — the result list follows the text in the field every time; × clears and the full list returns. (integrator, 2026-09-27)
+- [ ] History header with a large all-time total (e.g. a restored backup over 100,000 kg): shows `450K kg` / `1.2M kg` in English and `450 ألف kg` / `1.2 مليون kg` in Arabic, reading right-to-left, and counts up smoothly on change. (integrator, 2026-09-27)
