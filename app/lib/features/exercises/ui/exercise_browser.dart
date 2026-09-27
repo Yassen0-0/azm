@@ -45,14 +45,21 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
   @override
   void initState() {
     super.initState();
+    // The results follow the field's TEXT, whatever changed it: typing, the ×
+    // button, keyboard undo, or a programmatic edit. (onChanged alone misses
+    // the last two, which left a stale list behind.)
+    _text.addListener(_onText);
     _run();
   }
 
   @override
   void dispose() {
+    _text.removeListener(_onText);
     _text.dispose();
     super.dispose();
   }
+
+  void _onText() => _update(_query.copyWith(text: _text.text));
 
   void _update(ExerciseQuery q) {
     if (q == _query) return;
@@ -110,10 +117,7 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
           child: Row(
             children: [
               Expanded(
-                child: _SearchField(
-                  controller: _text,
-                  onChanged: (t) => _update(_query.copyWith(text: t)),
-                ),
+                child: _SearchField(controller: _text),
               ),
               const SizedBox(width: AzmSpace.xs),
               _EquipmentButton(active: _query.equipment != null, onTap: _pickEquipment),
@@ -179,49 +183,38 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
   }
 }
 
-class _SearchField extends StatefulWidget {
-  const _SearchField({required this.controller, required this.onChanged});
+class _SearchField extends StatelessWidget {
+  const _SearchField({required this.controller});
 
+  /// Search runs from the controller's listener (see _ExerciseBrowserState).
   final TextEditingController controller;
-  final ValueChanged<String> onChanged;
 
-  @override
-  State<_SearchField> createState() => _SearchFieldState();
-}
-
-class _SearchFieldState extends State<_SearchField> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final c = context.colors;
-    final hasText = widget.controller.text.isNotEmpty;
     return SizedBox(
       height: AzmSize.input,
-      child: TextField(
-        controller: widget.controller,
-        onChanged: (t) {
-          setState(() {});
-          widget.onChanged(t);
-        },
-        textInputAction: TextInputAction.search,
-        autocorrect: false,
-        style: AzmType.body.copyWith(color: c.textPrimary),
-        cursorColor: c.accent,
-        decoration: InputDecoration(
-          hintText: l10n.exercisesSearchHint,
-          contentPadding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.md),
-          prefixIcon: Icon(Icons.search_rounded, color: c.textTertiary, size: AzmSize.icon),
-          suffixIcon: hasText
-              ? AzmPressable(
-                  semanticLabel: l10n.exercisesSearchClear,
-                  onTap: () {
-                    widget.controller.clear();
-                    setState(() {});
-                    widget.onChanged('');
-                  },
-                  child: Icon(Icons.close_rounded, color: c.textTertiary, size: AzmSize.icon - AzmSpace.xxs),
-                )
-              : null,
+      child: ValueListenableBuilder<TextEditingValue>(
+        valueListenable: controller,
+        builder: (context, value, _) => TextField(
+          controller: controller,
+          textInputAction: TextInputAction.search,
+          autocorrect: false,
+          style: AzmType.body.copyWith(color: c.textPrimary),
+          cursorColor: c.accent,
+          decoration: InputDecoration(
+            hintText: l10n.exercisesSearchHint,
+            contentPadding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.md),
+            prefixIcon: Icon(Icons.search_rounded, color: c.textTertiary, size: AzmSize.icon),
+            suffixIcon: value.text.isNotEmpty
+                ? AzmPressable(
+                    semanticLabel: l10n.exercisesSearchClear,
+                    onTap: controller.clear,
+                    child: Icon(Icons.close_rounded, color: c.textTertiary, size: AzmSize.icon - AzmSpace.xxs),
+                  )
+                : null,
+          ),
         ),
       ),
     );

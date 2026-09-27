@@ -92,4 +92,45 @@ void main() {
     expect(find.text('Add'), findsOneWidget);
     expect(result(), isNull);
   });
+
+  // Regression (window C's note): a second search after clearing must refresh
+  // the results. Drives the field through the platform text-input channel and
+  // the × button, like a user.
+  testWidgets('search → clear (×) → search again → results update', (tester) async {
+    await openPicker(tester);
+    final field = find.byType(TextField);
+    await tester.enterText(field, 'barbell bench press');
+    await settle(tester);
+    expect(find.byKey(const ValueKey('0025')), findsOneWidget);
+    expect(find.byKey(const ValueKey('0043')), findsNothing);
+
+    await tester.tap(find.bySemanticsLabel('Clear search'));
+    await settle(tester);
+    expect(tester.widget<TextField>(field).controller!.text, isEmpty);
+    expect(find.text('1324 exercises'), findsOneWidget);
+
+    await tester.enterText(field, 'barbell full squat');
+    await settle(tester);
+    expect(find.byKey(const ValueKey('0043')), findsOneWidget);
+    expect(find.byKey(const ValueKey('0025')), findsNothing);
+
+    // And a third, replacing the text without clearing first.
+    await tester.enterText(field, 'rdl');
+    await settle(tester);
+    expect(find.byKey(const ValueKey('0085')), findsOneWidget);
+    expect(find.byKey(const ValueKey('0043')), findsNothing);
+  });
+
+  testWidgets('results follow the field text even when it changes without onChanged', (tester) async {
+    await openPicker(tester);
+    final field = find.byType(TextField);
+    await tester.enterText(field, 'barbell bench press');
+    await settle(tester);
+    // A text change that doesn't come through onChanged (programmatic, or an
+    // IME update the field doesn't report) must still refresh the list.
+    tester.widget<TextField>(field).controller!.text = 'barbell full squat';
+    await settle(tester);
+    expect(find.byKey(const ValueKey('0043')), findsOneWidget);
+    expect(find.byKey(const ValueKey('0025')), findsNothing);
+  });
 }
