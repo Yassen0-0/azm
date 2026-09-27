@@ -601,6 +601,378 @@
   "@exercisesBodyPartNeck": {
     "description": "Dataset body part \"neck\" (localized label, owner-reviewed 2026-09-26)."
   },
+  "onboardingStep": "خطوة {step} من {total}",
+  "@onboardingStep": {
+    "description": "Progress label at the top of onboarding.",
+    "placeholders": {
+      "step": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingWelcome": "أهلاً بيك في عزم",
+  "@onboardingWelcome": {
+    "description": "Small heading on the first onboarding step."
+  },
+  "onboardingUnitTitle": "بتشيل بالكيلو ولا بالباوند؟",
+  "@onboardingUnitTitle": {
+    "description": "Title of the unit step."
+  },
+  "onboardingUnitBody": "تقدر تغيّرها بعدين من الإعدادات.",
+  "@onboardingUnitBody": {
+    "description": "Body of the unit step."
+  },
+  "onboardingUnitKg": "كيلو",
+  "@onboardingUnitKg": {
+    "description": "Unit option (kg)."
+  },
+  "onboardingUnitLb": "باوند",
+  "@onboardingUnitLb": {
+    "description": "Unit option (lb)."
+  },
+  "onboardingUnitExample": "مثلاً بنش {weight}",
+  "@onboardingUnitExample": {
+    "description": "Example under a unit option; weight = e.g. 60 kg (kept left-to-right).",
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingNext": "التالي",
+  "@onboardingNext": {
+    "description": "Button: next onboarding step."
+  },
+  "onboardingProgramTitle": "تحب تبدأ ببرنامج جاهز؟",
+  "@onboardingProgramTitle": {
+    "description": "Title of the ready program step."
+  },
+  "onboardingProgramBody": "أيامه هتتضاف لروتيناتك وتقدر تعدّل فيها براحتك.",
+  "@onboardingProgramBody": {
+    "description": "Body of the ready program step."
+  },
+  "onboardingStartWithProgram": "ضيف البرنامج وابدأ",
+  "@onboardingStartWithProgram": {
+    "description": "Primary button when a program is selected."
+  },
+  "onboardingSkip": "تخطّى، وابدأ من غير برنامج",
+  "@onboardingSkip": {
+    "description": "Button that finishes onboarding without a program."
+  },
+  "routinesMyRoutines": "روتيناتي",
+  "@routinesMyRoutines": {
+    "description": "Section title on the Workout tab."
+  },
+  "routinesNew": "روتين جديد",
+  "@routinesNew": {
+    "description": "Button that creates a routine; also the editor title for a new routine."
+  },
+  "routinesEmptyTitle": "لسه معندكش روتين",
+  "@routinesEmptyTitle": {
+    "description": "Empty state title under My routines."
+  },
+  "routinesEmptyBody": "اعمل الروتين مرة واحدة وابدأه بضغطة واحدة. أو خد برنامج جاهز.",
+  "@routinesEmptyBody": {
+    "description": "Empty state body under My routines."
+  },
+  "routinesExerciseCount": "{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{countText} تمارين} other{{countText} تمرين}}",
+  "@routinesExerciseCount": {
+    "description": "Number of exercises in a routine card. countText = count with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesStart": "ابدأ {name}",
+  "@routinesStart": {
+    "description": "Semantics label of the play button on a routine card.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesReadyPrograms": "برامج جاهزة",
+  "@routinesReadyPrograms": {
+    "description": "Entry to the ready programs list; screen title."
+  },
+  "routinesReadyProgramsHint": "خد برنامج مجرّب وعدّل فيه براحتك",
+  "@routinesReadyProgramsHint": {
+    "description": "Subtitle of the ready programs entry."
+  },
+  "routinesUntitled": "روتين من غير اسم",
+  "@routinesUntitled": {
+    "description": "Shown for a routine whose name is empty."
+  },
+  "routinesEditTitle": "تعديل الروتين",
+  "@routinesEditTitle": {
+    "description": "Editor title for an existing routine."
+  },
+  "routinesNameHint": "اسم الروتين",
+  "@routinesNameHint": {
+    "description": "Hint of the routine name field."
+  },
+  "routinesNotesHint": "ملاحظات (اختياري)",
+  "@routinesNotesHint": {
+    "description": "Hint of the routine notes field."
+  },
+  "routinesAddExercises": "ضيف تمارين",
+  "@routinesAddExercises": {
+    "description": "Button that opens the exercise picker in the routine editor."
+  },
+  "routinesEditorEmpty": "ضيف تمارين الروتين، وحدّد السِتات المطلوبة لكل تمرين.",
+  "@routinesEditorEmpty": {
+    "description": "Hint in the editor while the routine has no exercises."
+  },
+  "routinesColSet": "سِت",
+  "@routinesColSet": {
+    "description": "Set table column: set number / type."
+  },
+  "routinesColWeight": "{unit}",
+  "@routinesColWeight": {
+    "description": "Set table column: target weight, shows the unit (kg/lb).",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesColReps": "عدّات",
+  "@routinesColReps": {
+    "description": "Set table column: target reps."
+  },
+  "routinesUnitKg": "kg",
+  "@routinesUnitKg": {
+    "description": "Kilogram unit label."
+  },
+  "routinesUnitLb": "lb",
+  "@routinesUnitLb": {
+    "description": "Pound unit label."
+  },
+  "routinesNoTarget": "—",
+  "@routinesNoTarget": {
+    "description": "Placeholder of an empty target (no data)."
+  },
+  "routinesAddSet": "ضيف سِت",
+  "@routinesAddSet": {
+    "description": "Adds a target set to an exercise."
+  },
+  "routinesDeleteSet": "امسح السِت",
+  "@routinesDeleteSet": {
+    "description": "Semantics label of swipe-to-delete on a target set."
+  },
+  "routinesSetTypeTitle": "نوع السِت",
+  "@routinesSetTypeTitle": {
+    "description": "Title of the set type menu."
+  },
+  "routinesRestValue": "راحة {time}",
+  "@routinesRestValue": {
+    "description": "Rest override chip on a routine exercise, e.g. Rest 2:30.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesRestDefault": "راحة {time} (الافتراضي)",
+  "@routinesRestDefault": {
+    "description": "Rest chip when the exercise uses the default rest from settings.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesRestTitle": "وقت الراحة",
+  "@routinesRestTitle": {
+    "description": "Title of the rest time menu."
+  },
+  "routinesRestUseDefault": "الافتراضي من الإعدادات ({time})",
+  "@routinesRestUseDefault": {
+    "description": "Rest menu option that removes the override.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesExerciseOptions": "اختيارات التمرين",
+  "@routinesExerciseOptions": {
+    "description": "Semantics label of the ⋯ button on an exercise card."
+  },
+  "routinesReorder": "رتّب التمارين",
+  "@routinesReorder": {
+    "description": "Exercise menu: opens drag-to-reorder."
+  },
+  "routinesRemoveExercise": "شيل التمرين",
+  "@routinesRemoveExercise": {
+    "description": "Exercise menu: removes the exercise from the routine."
+  },
+  "routinesRemoveExerciseTitle": "تشيل التمرين ده؟",
+  "@routinesRemoveExerciseTitle": {
+    "description": "Confirmation title before removing an exercise."
+  },
+  "routinesRemoveExerciseBody": "السِتات بتاعته هتتشال من الروتين.",
+  "@routinesRemoveExerciseBody": {
+    "description": "Confirmation body before removing an exercise."
+  },
+  "routinesRemove": "شيل",
+  "@routinesRemove": {
+    "description": "Confirm button: remove an exercise."
+  },
+  "routinesDelete": "امسح الروتين",
+  "@routinesDelete": {
+    "description": "Button at the bottom of the editor."
+  },
+  "routinesDeleteTitle": "تمسح الروتين ده؟",
+  "@routinesDeleteTitle": {
+    "description": "Confirmation title before deleting a routine."
+  },
+  "routinesDeleteBody": "التمارين اللي عملتها بيه هتفضل في السجل.",
+  "@routinesDeleteBody": {
+    "description": "Confirmation body before deleting a routine."
+  },
+  "routinesDeleteConfirm": "امسح",
+  "@routinesDeleteConfirm": {
+    "description": "Confirm button: delete a routine."
+  },
+  "routinesCancel": "إلغاء",
+  "@routinesCancel": {
+    "description": "Cancel button in dialogs."
+  },
+  "routinesDone": "تم",
+  "@routinesDone": {
+    "description": "Closes a sheet (reorder)."
+  },
+  "routinesStartWorkout": "ابدأ التمرين",
+  "@routinesStartWorkout": {
+    "description": "Primary button in the editor: starts a workout from this routine."
+  },
+  "routinesKeypadWeight": "الوزن المطلوب ({unit})",
+  "@routinesKeypadWeight": {
+    "description": "Keypad title while editing a target weight.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesKeypadReps": "العدّات المطلوبة",
+  "@routinesKeypadReps": {
+    "description": "Keypad title while editing target reps."
+  },
+  "routinesKeypadNext": "التالي",
+  "@routinesKeypadNext": {
+    "description": "Keypad key: next field."
+  },
+  "routinesKeypadDone": "تم",
+  "@routinesKeypadDone": {
+    "description": "Keypad key on the last field."
+  },
+  "routinesKeypadBackspace": "امسح رقم",
+  "@routinesKeypadBackspace": {
+    "description": "Semantics label of the keypad backspace."
+  },
+  "routinesKeypadHide": "اقفل الكيبورد",
+  "@routinesKeypadHide": {
+    "description": "Semantics label of the keypad close key."
+  },
+  "routinesKeypadDecrease": "نقّص",
+  "@routinesKeypadDecrease": {
+    "description": "Semantics label of the keypad minus key."
+  },
+  "routinesKeypadIncrease": "زوّد",
+  "@routinesKeypadIncrease": {
+    "description": "Semantics label of the keypad plus key."
+  },
+  "routinesProgramDays": "{count, plural, =1{يوم واحد في الأسبوع} =2{يومين في الأسبوع} few{{countText} أيام في الأسبوع} other{{countText} يوم في الأسبوع}}",
+  "@routinesProgramDays": {
+    "description": "Program frequency. countText = count with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesProgramRoutineCount": "{count, plural, =1{روتين واحد} =2{روتينين} few{{countText} روتينات} other{{countText} روتين}}",
+  "@routinesProgramRoutineCount": {
+    "description": "Number of routines (days) in a program. countText = count with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesLevelBeginner": "مبتدئ",
+  "@routinesLevelBeginner": {
+    "description": "Program level."
+  },
+  "routinesLevelIntermediate": "متوسط",
+  "@routinesLevelIntermediate": {
+    "description": "Program level."
+  },
+  "routinesProgramAdd": "ضيفه لروتيناتي",
+  "@routinesProgramAdd": {
+    "description": "Primary button on a program preview: copies each day as a routine."
+  },
+  "routinesProgramAdded": "{count, plural, =1{اتضاف روتين واحد لروتيناتك} =2{اتضاف روتينين لروتيناتك} few{اتضاف {countText} روتينات لروتيناتك} other{اتضاف {countText} روتين لروتيناتك}}",
+  "@routinesProgramAdded": {
+    "description": "Toast after copying a program. countText = count with Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesSetsReps": "{sets} × {reps}",
+  "@routinesSetsReps": {
+    "description": "Sets × reps range of a program exercise, e.g. 3 × 8–12.",
+    "placeholders": {
+      "sets": {
+        "type": "String"
+      },
+      "reps": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesProgramMissing": "البرنامج ده مش موجود.",
+  "@routinesProgramMissing": {
+    "description": "Shown when a program id is not in the catalog."
+  },
+  "routinesListSeparator": "، ",
+  "@routinesListSeparator": {
+    "description": "Separator between exercise names in a routine card preview."
+  },
+  "routinesResumed": "فيه تمرين شغال، ففتحناهولك.",
+  "@routinesResumed": {
+    "description": "Toast when starting a routine while another workout is active."
+  },
+  "routinesUnknownExercise": "تمرين مش معروف ({id})",
+  "@routinesUnknownExercise": {
+    "description": "Name of an exercise that left the catalog.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
   "settingsTitle": "الإعدادات",
   "@settingsTitle": {
     "description": "Settings screen title."

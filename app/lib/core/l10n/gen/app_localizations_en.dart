@@ -456,6 +456,278 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exercisesBodyPartNeck => 'Neck';
 
   @override
+  String onboardingStep(String step, String total) {
+    return 'Step $step of $total';
+  }
+
+  @override
+  String get onboardingWelcome => 'Welcome to Azm';
+
+  @override
+  String get onboardingUnitTitle => 'Which unit do you lift in?';
+
+  @override
+  String get onboardingUnitBody => 'You can change it later in settings.';
+
+  @override
+  String get onboardingUnitKg => 'Kilograms';
+
+  @override
+  String get onboardingUnitLb => 'Pounds';
+
+  @override
+  String onboardingUnitExample(String weight) {
+    return 'e.g. bench $weight';
+  }
+
+  @override
+  String get onboardingNext => 'Next';
+
+  @override
+  String get onboardingProgramTitle => 'Start with a ready program?';
+
+  @override
+  String get onboardingProgramBody =>
+      'Its days are added to your routines, and you can edit them any time.';
+
+  @override
+  String get onboardingStartWithProgram => 'Add program and start';
+
+  @override
+  String get onboardingSkip => 'Skip, start empty';
+
+  @override
+  String get routinesMyRoutines => 'My routines';
+
+  @override
+  String get routinesNew => 'New routine';
+
+  @override
+  String get routinesEmptyTitle => 'No routines yet';
+
+  @override
+  String get routinesEmptyBody =>
+      'Build a routine once, then start it in one tap. Or copy a ready program.';
+
+  @override
+  String routinesExerciseCount(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText exercises',
+      one: '1 exercise',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String routinesStart(String name) {
+    return 'Start $name';
+  }
+
+  @override
+  String get routinesReadyPrograms => 'Ready programs';
+
+  @override
+  String get routinesReadyProgramsHint =>
+      'Copy a proven plan, then make it yours';
+
+  @override
+  String get routinesUntitled => 'Untitled routine';
+
+  @override
+  String get routinesEditTitle => 'Edit routine';
+
+  @override
+  String get routinesNameHint => 'Routine name';
+
+  @override
+  String get routinesNotesHint => 'Notes (optional)';
+
+  @override
+  String get routinesAddExercises => 'Add exercises';
+
+  @override
+  String get routinesEditorEmpty =>
+      'Add the exercises of this routine. You set the target sets for each one.';
+
+  @override
+  String get routinesColSet => 'Set';
+
+  @override
+  String routinesColWeight(String unit) {
+    return '$unit';
+  }
+
+  @override
+  String get routinesColReps => 'Reps';
+
+  @override
+  String get routinesUnitKg => 'kg';
+
+  @override
+  String get routinesUnitLb => 'lb';
+
+  @override
+  String get routinesNoTarget => '—';
+
+  @override
+  String get routinesAddSet => 'Add set';
+
+  @override
+  String get routinesDeleteSet => 'Delete set';
+
+  @override
+  String get routinesSetTypeTitle => 'Set type';
+
+  @override
+  String routinesRestValue(String time) {
+    return 'Rest $time';
+  }
+
+  @override
+  String routinesRestDefault(String time) {
+    return 'Rest $time (default)';
+  }
+
+  @override
+  String get routinesRestTitle => 'Rest time';
+
+  @override
+  String routinesRestUseDefault(String time) {
+    return 'Default from settings ($time)';
+  }
+
+  @override
+  String get routinesExerciseOptions => 'Exercise options';
+
+  @override
+  String get routinesReorder => 'Reorder exercises';
+
+  @override
+  String get routinesRemoveExercise => 'Remove exercise';
+
+  @override
+  String get routinesRemoveExerciseTitle => 'Remove this exercise?';
+
+  @override
+  String get routinesRemoveExerciseBody =>
+      'Its target sets are removed from the routine.';
+
+  @override
+  String get routinesRemove => 'Remove';
+
+  @override
+  String get routinesDelete => 'Delete routine';
+
+  @override
+  String get routinesDeleteTitle => 'Delete this routine?';
+
+  @override
+  String get routinesDeleteBody =>
+      'Workouts you already did with it stay in your history.';
+
+  @override
+  String get routinesDeleteConfirm => 'Delete';
+
+  @override
+  String get routinesCancel => 'Cancel';
+
+  @override
+  String get routinesDone => 'Done';
+
+  @override
+  String get routinesStartWorkout => 'Start workout';
+
+  @override
+  String routinesKeypadWeight(String unit) {
+    return 'Target weight ($unit)';
+  }
+
+  @override
+  String get routinesKeypadReps => 'Target reps';
+
+  @override
+  String get routinesKeypadNext => 'Next';
+
+  @override
+  String get routinesKeypadDone => 'Done';
+
+  @override
+  String get routinesKeypadBackspace => 'Delete digit';
+
+  @override
+  String get routinesKeypadHide => 'Close keypad';
+
+  @override
+  String get routinesKeypadDecrease => 'Decrease';
+
+  @override
+  String get routinesKeypadIncrease => 'Increase';
+
+  @override
+  String routinesProgramDays(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText days a week',
+      one: '1 day a week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String routinesProgramRoutineCount(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText routines',
+      one: '1 routine',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get routinesLevelBeginner => 'Beginner';
+
+  @override
+  String get routinesLevelIntermediate => 'Intermediate';
+
+  @override
+  String get routinesProgramAdd => 'Add to my routines';
+
+  @override
+  String routinesProgramAdded(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countText routines added to My routines',
+      one: '1 routine added to My routines',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String routinesSetsReps(String sets, String reps) {
+    return '$sets × $reps';
+  }
+
+  @override
+  String get routinesProgramMissing => 'This program isn\'t available.';
+
+  @override
+  String get routinesListSeparator => ', ';
+
+  @override
+  String get routinesResumed =>
+      'A workout is already running, so we opened it.';
+
+  @override
+  String routinesUnknownExercise(String id) {
+    return 'Unknown exercise ($id)';
+  }
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

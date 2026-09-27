@@ -938,6 +938,432 @@ abstract class AppLocalizations {
   /// **'رقبة'**
   String get exercisesBodyPartNeck;
 
+  /// Progress label at the top of onboarding.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطوة {step} من {total}'**
+  String onboardingStep(String step, String total);
+
+  /// Small heading on the first onboarding step.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلاً بيك في عزم'**
+  String get onboardingWelcome;
+
+  /// Title of the unit step.
+  ///
+  /// In ar, this message translates to:
+  /// **'بتشيل بالكيلو ولا بالباوند؟'**
+  String get onboardingUnitTitle;
+
+  /// Body of the unit step.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدر تغيّرها بعدين من الإعدادات.'**
+  String get onboardingUnitBody;
+
+  /// Unit option (kg).
+  ///
+  /// In ar, this message translates to:
+  /// **'كيلو'**
+  String get onboardingUnitKg;
+
+  /// Unit option (lb).
+  ///
+  /// In ar, this message translates to:
+  /// **'باوند'**
+  String get onboardingUnitLb;
+
+  /// Example under a unit option; weight = e.g. 60 kg (kept left-to-right).
+  ///
+  /// In ar, this message translates to:
+  /// **'مثلاً بنش {weight}'**
+  String onboardingUnitExample(String weight);
+
+  /// Button: next onboarding step.
+  ///
+  /// In ar, this message translates to:
+  /// **'التالي'**
+  String get onboardingNext;
+
+  /// Title of the ready program step.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحب تبدأ ببرنامج جاهز؟'**
+  String get onboardingProgramTitle;
+
+  /// Body of the ready program step.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيامه هتتضاف لروتيناتك وتقدر تعدّل فيها براحتك.'**
+  String get onboardingProgramBody;
+
+  /// Primary button when a program is selected.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف البرنامج وابدأ'**
+  String get onboardingStartWithProgram;
+
+  /// Button that finishes onboarding without a program.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخطّى، وابدأ من غير برنامج'**
+  String get onboardingSkip;
+
+  /// Section title on the Workout tab.
+  ///
+  /// In ar, this message translates to:
+  /// **'روتيناتي'**
+  String get routinesMyRoutines;
+
+  /// Button that creates a routine; also the editor title for a new routine.
+  ///
+  /// In ar, this message translates to:
+  /// **'روتين جديد'**
+  String get routinesNew;
+
+  /// Empty state title under My routines.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه معندكش روتين'**
+  String get routinesEmptyTitle;
+
+  /// Empty state body under My routines.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعمل الروتين مرة واحدة وابدأه بضغطة واحدة. أو خد برنامج جاهز.'**
+  String get routinesEmptyBody;
+
+  /// Number of exercises in a routine card. countText = count with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{countText} تمارين} other{{countText} تمرين}}'**
+  String routinesExerciseCount(int count, String countText);
+
+  /// Semantics label of the play button on a routine card.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ {name}'**
+  String routinesStart(String name);
+
+  /// Entry to the ready programs list; screen title.
+  ///
+  /// In ar, this message translates to:
+  /// **'برامج جاهزة'**
+  String get routinesReadyPrograms;
+
+  /// Subtitle of the ready programs entry.
+  ///
+  /// In ar, this message translates to:
+  /// **'خد برنامج مجرّب وعدّل فيه براحتك'**
+  String get routinesReadyProgramsHint;
+
+  /// Shown for a routine whose name is empty.
+  ///
+  /// In ar, this message translates to:
+  /// **'روتين من غير اسم'**
+  String get routinesUntitled;
+
+  /// Editor title for an existing routine.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الروتين'**
+  String get routinesEditTitle;
+
+  /// Hint of the routine name field.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الروتين'**
+  String get routinesNameHint;
+
+  /// Hint of the routine notes field.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get routinesNotesHint;
+
+  /// Button that opens the exercise picker in the routine editor.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف تمارين'**
+  String get routinesAddExercises;
+
+  /// Hint in the editor while the routine has no exercises.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف تمارين الروتين، وحدّد السِتات المطلوبة لكل تمرين.'**
+  String get routinesEditorEmpty;
+
+  /// Set table column: set number / type.
+  ///
+  /// In ar, this message translates to:
+  /// **'سِت'**
+  String get routinesColSet;
+
+  /// Set table column: target weight, shows the unit (kg/lb).
+  ///
+  /// In ar, this message translates to:
+  /// **'{unit}'**
+  String routinesColWeight(String unit);
+
+  /// Set table column: target reps.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّات'**
+  String get routinesColReps;
+
+  /// Kilogram unit label.
+  ///
+  /// In ar, this message translates to:
+  /// **'kg'**
+  String get routinesUnitKg;
+
+  /// Pound unit label.
+  ///
+  /// In ar, this message translates to:
+  /// **'lb'**
+  String get routinesUnitLb;
+
+  /// Placeholder of an empty target (no data).
+  ///
+  /// In ar, this message translates to:
+  /// **'—'**
+  String get routinesNoTarget;
+
+  /// Adds a target set to an exercise.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف سِت'**
+  String get routinesAddSet;
+
+  /// Semantics label of swipe-to-delete on a target set.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح السِت'**
+  String get routinesDeleteSet;
+
+  /// Title of the set type menu.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع السِت'**
+  String get routinesSetTypeTitle;
+
+  /// Rest override chip on a routine exercise, e.g. Rest 2:30.
+  ///
+  /// In ar, this message translates to:
+  /// **'راحة {time}'**
+  String routinesRestValue(String time);
+
+  /// Rest chip when the exercise uses the default rest from settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'راحة {time} (الافتراضي)'**
+  String routinesRestDefault(String time);
+
+  /// Title of the rest time menu.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الراحة'**
+  String get routinesRestTitle;
+
+  /// Rest menu option that removes the override.
+  ///
+  /// In ar, this message translates to:
+  /// **'الافتراضي من الإعدادات ({time})'**
+  String routinesRestUseDefault(String time);
+
+  /// Semantics label of the ⋯ button on an exercise card.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيارات التمرين'**
+  String get routinesExerciseOptions;
+
+  /// Exercise menu: opens drag-to-reorder.
+  ///
+  /// In ar, this message translates to:
+  /// **'رتّب التمارين'**
+  String get routinesReorder;
+
+  /// Exercise menu: removes the exercise from the routine.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيل التمرين'**
+  String get routinesRemoveExercise;
+
+  /// Confirmation title before removing an exercise.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشيل التمرين ده؟'**
+  String get routinesRemoveExerciseTitle;
+
+  /// Confirmation body before removing an exercise.
+  ///
+  /// In ar, this message translates to:
+  /// **'السِتات بتاعته هتتشال من الروتين.'**
+  String get routinesRemoveExerciseBody;
+
+  /// Confirm button: remove an exercise.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيل'**
+  String get routinesRemove;
+
+  /// Button at the bottom of the editor.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح الروتين'**
+  String get routinesDelete;
+
+  /// Confirmation title before deleting a routine.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمسح الروتين ده؟'**
+  String get routinesDeleteTitle;
+
+  /// Confirmation body before deleting a routine.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمارين اللي عملتها بيه هتفضل في السجل.'**
+  String get routinesDeleteBody;
+
+  /// Confirm button: delete a routine.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح'**
+  String get routinesDeleteConfirm;
+
+  /// Cancel button in dialogs.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get routinesCancel;
+
+  /// Closes a sheet (reorder).
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get routinesDone;
+
+  /// Primary button in the editor: starts a workout from this routine.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ التمرين'**
+  String get routinesStartWorkout;
+
+  /// Keypad title while editing a target weight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن المطلوب ({unit})'**
+  String routinesKeypadWeight(String unit);
+
+  /// Keypad title while editing target reps.
+  ///
+  /// In ar, this message translates to:
+  /// **'العدّات المطلوبة'**
+  String get routinesKeypadReps;
+
+  /// Keypad key: next field.
+  ///
+  /// In ar, this message translates to:
+  /// **'التالي'**
+  String get routinesKeypadNext;
+
+  /// Keypad key on the last field.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get routinesKeypadDone;
+
+  /// Semantics label of the keypad backspace.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح رقم'**
+  String get routinesKeypadBackspace;
+
+  /// Semantics label of the keypad close key.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقفل الكيبورد'**
+  String get routinesKeypadHide;
+
+  /// Semantics label of the keypad minus key.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقّص'**
+  String get routinesKeypadDecrease;
+
+  /// Semantics label of the keypad plus key.
+  ///
+  /// In ar, this message translates to:
+  /// **'زوّد'**
+  String get routinesKeypadIncrease;
+
+  /// Program frequency. countText = count with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{يوم واحد في الأسبوع} =2{يومين في الأسبوع} few{{countText} أيام في الأسبوع} other{{countText} يوم في الأسبوع}}'**
+  String routinesProgramDays(int count, String countText);
+
+  /// Number of routines (days) in a program. countText = count with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{روتين واحد} =2{روتينين} few{{countText} روتينات} other{{countText} روتين}}'**
+  String routinesProgramRoutineCount(int count, String countText);
+
+  /// Program level.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبتدئ'**
+  String get routinesLevelBeginner;
+
+  /// Program level.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط'**
+  String get routinesLevelIntermediate;
+
+  /// Primary button on a program preview: copies each day as a routine.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيفه لروتيناتي'**
+  String get routinesProgramAdd;
+
+  /// Toast after copying a program. countText = count with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{اتضاف روتين واحد لروتيناتك} =2{اتضاف روتينين لروتيناتك} few{اتضاف {countText} روتينات لروتيناتك} other{اتضاف {countText} روتين لروتيناتك}}'**
+  String routinesProgramAdded(int count, String countText);
+
+  /// Sets × reps range of a program exercise, e.g. 3 × 8–12.
+  ///
+  /// In ar, this message translates to:
+  /// **'{sets} × {reps}'**
+  String routinesSetsReps(String sets, String reps);
+
+  /// Shown when a program id is not in the catalog.
+  ///
+  /// In ar, this message translates to:
+  /// **'البرنامج ده مش موجود.'**
+  String get routinesProgramMissing;
+
+  /// Separator between exercise names in a routine card preview.
+  ///
+  /// In ar, this message translates to:
+  /// **'، '**
+  String get routinesListSeparator;
+
+  /// Toast when starting a routine while another workout is active.
+  ///
+  /// In ar, this message translates to:
+  /// **'فيه تمرين شغال، ففتحناهولك.'**
+  String get routinesResumed;
+
+  /// Name of an exercise that left the catalog.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمرين مش معروف ({id})'**
+  String routinesUnknownExercise(String id);
+
   /// Settings screen title.
   ///
   /// In ar, this message translates to:
