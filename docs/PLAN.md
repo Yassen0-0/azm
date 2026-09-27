@@ -11,19 +11,48 @@
 
 ## Parallel windows (how to run two agents at once)
 
-Two windows in the **same checkout** would overwrite each other's `app/build`, `.dart_tool` and generated files, and install onto the same devices. So each window gets its **own git worktree + branch + device set**:
+Two windows in the **same checkout** would overwrite each other's `app/build`, `.dart_tool` and generated files, and install onto the same devices. So each window gets its **own git worktree + branch + device set**.
+
+**Round 2 (2026-09-27): window C = routines + onboarding (§2), window D = history + stats + PRs (§4).**
+
+| Window | Task | Branch / worktree | Device set | Screenshot features |
+|---|---|---|---|---|
+| **C** | §2 Routines, ready programs, onboarding | `feature/routines` · `.worktrees/routines` | **A** (`azm_api37` :5554 + "Azm iPhone A") | `routines`, `onboarding` |
+| **D** | §4 History, stats, PRs, Lifted total | `feature/history` · `.worktrees/history` | **B** (`azm_api37_b` :5556 + "Azm iPhone B") | `history` |
 
 ```sh
 # from ROOT, once per window (worktrees live inside ROOT, gitignored):
-git worktree add .worktrees/exercises -b feature/exercises
-git worktree add .worktrees/workout   -b feature/workout
+git worktree add .worktrees/routines -b feature/routines
+git worktree add .worktrees/history  -b feature/history
 # open Claude Code in ROOT/.worktrees/<name>. Its env.sh finds the shared ROOT/.tooling automatically.
-# exercises window: export AZM_DEVICE_SET=A   (azm_api37 + "Azm iPhone A")
-# workout window:   export AZM_DEVICE_SET=B   (azm_api37_b + "Azm iPhone B")
+# C (routines) window: export AZM_DEVICE_SET=A   (azm_api37 + "Azm iPhone A")
+# D (history) window:  export AZM_DEVICE_SET=B   (azm_api37_b + "Azm iPhone B")
 # first command in a new worktree: source ./env.sh && cd app && flutter pub get
+# ownership check (must print OK): source ./env.sh && dart run tools/check_plan_overlap.dart C D
 ```
 
-Merging (owner, or one window after both are done): commit in each worktree → from ROOT `git merge feature/exercises` then `git merge feature/workout`. Because ownership doesn't overlap, the only conflicts can be in **generated** files. Resolve them by taking either side and re-running `tools/gen_l10n.sh` (+ `build_runner` if needed). Then run the full definition of done on `main`, and `git worktree remove .worktrees/<name>`.
+**Pre-registered on `main` for round 2** (so neither window edits a shared or frozen file). Keep every class name, constructor and function signature below; replace the placeholder bodies.
+
+| What | Frozen side (done, don't edit) | Owner's side (placeholder → implement) |
+|---|---|---|
+| Route `AppRoutes.onboarding` | router; **initial location** = onboarding while `onboardingDoneAtLaunchProvider` is false | C: `features/onboarding/ui/onboarding_screen.dart` `OnboardingScreen()` |
+| First-run gate | `bootstrapApp()` overrides `onboardingDoneAtLaunchProvider` with `await loadOnboardingDone(db)`; runs with `settingsOverride` (screenshots, integration tests) always count as done | C: `features/onboarding/data/onboarding_gate.dart` `loadOnboardingDone(AppDatabase)` (placeholder returns `true`) + `onboardingDoneAtLaunchProvider` |
+| Routes `routineNew`, `routineEditorFor(id)` | router | C: `features/routines/ui/routine_editor_screen.dart` `RoutineEditorScreen({String? routineId})` |
+| Routes `programs`, `programFor(id)` | router | C: `features/routines/ui/{programs_screen,program_detail_screen}.dart` `ProgramsScreen()`, `ProgramDetailScreen({required programId})` |
+| Workout-tab slot | `WorkoutHomeScreen` renders `const RoutinesHomeSection()` under the Start/Resume card | C: `features/routines/ui/routines_home_section.dart` |
+| Route `pastWorkoutFor(id)` | router | D: `features/history/ui/past_workout_screen.dart` `PastWorkoutScreen({required workoutId})` |
+| Route `stats` | router | D: `features/history/ui/stats_screen.dart` `StatsScreen()` |
+| Route `exerciseHistoryFor(id)` | router | D: `features/history/ui/exercise_history_screen.dart` `ExerciseHistoryScreen({required exerciseId})` |
+| Exercise-detail slot ("See all history") | `ExerciseDetailScreen` renders `ExerciseHistoryLinkSlot(exerciseId:, sessionCount:)` under its recent sessions | D: `features/history/ui/exercise_history_link_slot.dart` |
+| Exercise history hook (Request from exercises) | `bootstrapApp()` overrides `exerciseHistorySourceProvider` with `createExerciseHistorySource(db)` | D: `features/history/data/history_exercise_source.dart` (default returns `DbExerciseHistorySource`) |
+| ARB fragments | `tools/gen_l10n.sh` picks up every folder | C: `arb_src/routines/` (`routines…`) + `arb_src/onboarding/` (`onboarding…`); D: `arb_src/history/` (`history…`) |
+| Shared docs | per-window sections already created | append only inside your own section of `docs/DECISIONS_LOG.md`, `docs/DEVICE_TEST_CHECKLIST.md` and *Requests* below |
+
+`test/core/router/pre_registered_routes_test.dart` (core) checks that every route above opens its screen. Keep it passing.
+
+**Shared, read-only for both** (use, never edit): `features/workout/**` (`WorkoutRepository`: `startEmpty`, `active`, `loadDetail`/`watchDetail`, `updateSet`, `setCompleted`, `deleteSet`, `previousSets`, `prBests`, …), `features/exercises/**` (picker contract, `exerciseHistoryProvider`, `exerciseRecordsProvider`), `features/settings/**` (`TrainingSettingsWriter`, `weightUnitProvider`, `defaultRestSecondsProvider`), `core/widgets/**` (incl. `SetRow`, `WeightKeypad`, `LiftedCounter`), `core/{db,utils,theme,l10n,router,media}`. Write your own queries in your own `data/` folder. Need a change there (new theme token, DB index, repository method, …)? Add it to *Requests* and work around it; the integrator applies it at merge.
+
+Merging (owner, or one window after both are done): commit in each worktree → from ROOT `git merge feature/routines` then `git merge feature/history`. Because ownership doesn't overlap, the only conflicts can be in **generated** files. Resolve them by taking either side and re-running `tools/gen_l10n.sh` (+ `build_runner` if needed). Then run the full definition of done on `main`, and `git worktree remove .worktrees/<name>`.
 
 ---
 
@@ -99,14 +128,31 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Parity screenshots regenerated on both platforms: `workout` (2 new screens: finish dialog, exact-alarm sheet), `exercises`, `workout_flow`.
 - [x] Definition of done on `main`; worktrees removed (branches kept).
 
-## 2. `app/lib/features/routines/**` — Routines & ready programs
+## 1c. Round 2 setup (main) — [x] done 2026-09-27
 
-- **Owns:** `app/lib/features/routines/**`, `app/test/features/routines/**`, `app/lib/core/l10n/arb_src/routines/**`, `app/integration_test/routines_screens_test.dart`, `docs/screenshots/routines/**` (needs a routine-editor route → Request)
+- [x] `tools/e2e_android_helper.sh` committed (bounded waits) + README.
+- [x] Windows C (routines + onboarding, set A) and D (history, set B) defined; routes, slots, first-run gate, history-source hook and ARB fragments pre-registered (see *Parallel windows*); `test/core/router/pre_registered_routes_test.dart`.
+- [x] `tools/check_plan_overlap.dart C D` → OK. analyze, test (153), directionality pass. No visible UI change (both slots render nothing), so parity screenshots were not regenerated.
+
+## 2. C window — Routines, ready programs, onboarding  (branch `feature/routines`, device set **A**) — [ ]
+
+- **Goal:** build a routine once, start it in one tap; copy a ready program into "my routines"; first-run onboarding (unit + optional ready program).
+- **Owns (only these):**
+  - `app/lib/features/routines/**` (pre-registered: `ui/routines_home_section.dart`, `ui/routine_editor_screen.dart`, `ui/programs_screen.dart`, `ui/program_detail_screen.dart`)
+  - `app/lib/features/onboarding/**` (pre-registered: `ui/onboarding_screen.dart`, `data/onboarding_gate.dart`)
+  - `app/lib/core/l10n/arb_src/routines/{ar,en}.arb` (keys `routines…`), `app/lib/core/l10n/arb_src/onboarding/{ar,en}.arb` (keys `onboarding…`)
+  - `app/test/features/routines/**`, `app/test/features/onboarding/**`
+  - `app/integration_test/routines_screens_test.dart`, `app/integration_test/onboarding_screens_test.dart`
+  - `docs/screenshots/routines/**`, `docs/screenshots/onboarding/**`
+- **Uses, read-only:** tables `routines`/`routine_exercises`/`routine_sets` (yours to write), `workouts`/`workout_exercises`/`workout_sets` (write only to create the workout started from a routine; honour the one-active-workout rule like `WorkoutRepository.startEmpty`), `CatalogRepository.programs()`, picker contract (`context.push<List<String>>(AppRoutes.exercisePicker)`), `TrainingSettingsWriter` (unit in onboarding), `AppDatabase.writeSetting` for `onboarding_done` only, `SetRow`/`WeightKeypad`, `context.namesOf`, tokens.
 - **Acceptance:**
-  - [ ] Routine list (Workout tab section) and editor: name, notes, add exercises (multi-select picker), target sets (type, reps, optional weight), rest override, drag to reorder, delete.
-  - [ ] Start routine in one tap → active workout prefilled.
-  - [ ] Ready programs list (`CatalogRepository.programs()`) → "Add to my routines" copies them as editable routines, names in the app language; `target_reps` = range max (DATA.md).
-  - [ ] Onboarding hook: the program chosen in onboarding is copied on finish.
+  - [ ] Workout tab (`RoutinesHomeSection`): "My routines" list (name, exercise count, ▶ start) + entry to ready programs; empty state with "New routine". The Start/Resume card above stays as is.
+  - [ ] Routine editor (`routineNew` / `routineEditorFor(id)`): name, notes, add exercises (multi-select picker), target sets (type, reps, optional weight via `WeightKeypad`, display unit), per-exercise rest override, drag to reorder, delete set/exercise/routine (with confirmation). Every edit persisted immediately.
+  - [ ] Start routine in one tap → active workout prefilled (`workouts.routine_id` set; set rows from the targets; *previous* still shown by the workout screen); if a workout is already active, resume it instead of starting a second one.
+  - [ ] Ready programs (`programs` → `programFor(id)`): list + preview (days, exercises in the app language, sets × reps range) → "Add to my routines" copies each day as an editable routine; `target_reps` = range max (DATA.md). Copying twice creates independent copies.
+  - [ ] Onboarding (first run only, ≤ 2 screens, `AppRoutes.onboarding`): 1) unit kg/lb (`TrainingSettingsWriter.setWeightUnit`); 2) optional ready program (copied with the same logic) or Skip. Finish writes `onboarding_done` = `true` and `context.go(AppRoutes.workout)`. Implement `loadOnboardingDone` (missing/false → onboarding). Existing users with data: logged decision.
+  - [ ] Tests: routine CRUD + reorder persistence, program copy (names per language, `target_reps` = max), start-from-routine prefill + one-active rule, onboarding gate + finish.
+  - [ ] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh routines` (Workout tab with routines, empty state, editor with sets, picker return, programs list, program preview, active workout started from a routine) and `AZM_DEVICE_SET=A tools/screenshots.sh onboarding` (both steps; open with `ScreenStep.go(…, AppRoutes.onboarding)`), ar + en, both platforms. Checklist items for anything device-only.
 
 ## 3. EXERCISES window — library, picker, detail  (branch `feature/exercises`, device set **A**) — DONE 2026-09-26 (awaiting merge)
 
@@ -127,14 +173,21 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [x] Tests: search UI (Arabic, slang, English, filters), picker returns ordered ids, names logic in cards, detail with and without history.
   - [x] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh exercises`, covering library (default, a search in Arabic, filtered), equipment sheet, picker with 3 selected, detail with no media (fallback) and with seeded history, in ar + en on both platforms. (With the dev media server + `AZM_MEDIA_ALLOW_ALL`, media may appear in LOCAL screenshots only. **Never commit screenshots that show Gym visual media**, see LICENSES.md; commit the fallback versions.)
 
-## 4. `app/lib/features/history/**` — History, stats, PRs
+## 4. D window — History, stats, PRs, all-time Lifted  (branch `feature/history`, device set **B**) — [ ]
 
-- **Owns:** `app/lib/features/history/**`, `app/test/features/history/**`, `app/lib/core/l10n/arb_src/history/**`, `app/integration_test/history_screens_test.dart`, `docs/screenshots/history/**` (needs a past-workout route → Request)
+- **Goal:** see every past workout (list + calendar), fix a logged mistake, watch totals and records grow.
+- **Owns (only these):**
+  - `app/lib/features/history/**` (pre-registered: `ui/history_screen.dart` (History tab), `ui/past_workout_screen.dart`, `ui/stats_screen.dart`, `ui/exercise_history_screen.dart`, `ui/exercise_history_link_slot.dart`, `data/history_exercise_source.dart`)
+  - `app/lib/core/l10n/arb_src/history/{ar,en}.arb` (keys `history…`)
+  - `app/test/features/history/**`, `app/integration_test/history_screens_test.dart`, `docs/screenshots/history/**`
+- **Uses, read-only:** tables `workouts`/`workout_exercises`/`workout_sets` (edit FINISHED workouts only; never touch the active one), `WorkoutRepository` read/update methods, `ExerciseHistorySource`/`DbExerciseHistorySource`, `detectPrs`/`PrBests`/`liftedKg`/`liftedComparison`/`epley1Rm`, `Units` + `weightUnitProvider`, `SetRow`/`WeightKeypad`/`LiftedCounter`, `ExerciseThumbnail`, `context.namesOf`, tokens.
 - **Acceptance:**
-  - [ ] List of workout cards (name, date, duration, Lifted, PR count, best set per exercise) + calendar view toggle.
-  - [ ] All-time Lifted header ("شِلت لحد دلوقتي …"), with compact number formatting (e.g. 1.2 مليون / 1.2M).
-  - [ ] Past workout detail, editable (same SetRow components); edits recompute PRs.
-  - [ ] Stats: workouts per week, total sets, per-exercise PR list.
+  - [ ] History tab (`HistoryScreen`): all-time Lifted header ("شِلت لحد دلوقتي 1.2 مليون kg" / "Lifted so far: 1.2M kg", compact formatting, Western digits; formatter lives in `features/history/`), list of workout cards (name, date, duration, Lifted, PR count, best set per exercise), list ↔ calendar toggle (month grid, days with workouts marked, tap a day → its workouts; week starts per locale), entry to Stats. Empty state.
+  - [ ] Past workout detail (`pastWorkoutFor(id)`), editable with the same `SetRow` components: weights/reps/type/add/delete sets, rename, delete workout (confirmation). Persisted immediately; Lifted, PR counts and records recompute (PRs = SPEC rules, evaluated chronologically, so editing an old workout can change later PRs).
+  - [ ] Stats (`stats`): workouts per week (chart, `AzmSize.chart*` tokens), total workouts/sets/Lifted, per-exercise PR list (heaviest, e1RM, best volume) → exercise detail.
+  - [ ] Exercise history hook: implement `createExerciseHistorySource` if your rules differ from the default (edited workouts are already live through the DB streams); `ExerciseHistoryLinkSlot` shows "See all history" when `sessionCount` > 10 (the detail shows 10) → `exerciseHistoryFor(id)` full list.
+  - [ ] Tests: lifted total + compact formatting (ar/en), PR recompute after an edit, calendar grouping by local day, stats per week, past-workout edits persisted.
+  - [ ] Parity: `AZM_DEVICE_SET=B tools/screenshots.sh history` (list with seeded workouts, calendar, past workout detail + keypad, stats, exercise full history, exercise detail with the "See all" link, empty state), ar + en, both platforms. Seed finished workouts in your own test (dedicated devices only).
 
 ## 5. `app/lib/features/settings/**` — Settings, onboarding, backup
 
@@ -142,7 +195,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **Acceptance:**
   - [x] Language (System/العربية/English) + theme (dark/light), persisted (Phase 2/3).
   - [ ] Unit (kg/lb), default rest time, backup export/import, Licenses page (MIT dataset + OFL font + Gym visual attribution when media is shown).
-  - [ ] Onboarding (first run, ≤ 2 screens): unit; optional ready program.
+  - Onboarding moved to §2 (window C, round 2); it writes the unit through `TrainingSettingsWriter`.
   - [ ] Backup export via the share sheet (format in DATA.md); import with confirmation replaces user tables; round-trip test.
 
 ## 6. `data/ar/**` — Arabic names for the remaining exercises
@@ -189,8 +242,16 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 
 _(Cross-folder requests go here: "@owner-of-X: need Y". Remove when handled.)_
 
-- **@history:** per-exercise history for the detail screen and the library 🏆 badges goes through `ExerciseHistorySource` (`features/exercises/data/exercise_history.dart`). Override `exerciseHistorySourceProvider` if you need other rules (e.g. edited workouts). A "see all history" route from the detail screen would need a new route. (exercises, 2026-09-26)
 - @brand (window B, 2026-09-26): the Android notification icon `res/drawable/ic_stat_azm.xml` is a placeholder dumbbell; replace with the final monochrome mark.
 - **@settings (integrator, 2026-09-26):** the unit / default-rest UI (settings screen + onboarding) must write through `TrainingSettingsWriter` (`features/settings/data/training_settings.dart`); every reader already watches `weightUnitProvider` / `defaultRestSecondsProvider`.
 
 _Resolved at integration (2026-09-26): theme tokens `AzmSize.chartHeight/exerciseMedia/chartStroke/chartDot`; shared `weightUnitProvider` + `defaultRestSecondsProvider` (settings owns writing); `timezone` direct dependency; new settings keys documented in DATA.md._
+_Pre-registered for round 2 (2026-09-27): the @history request above (override hook `createExerciseHistorySource`, route `exerciseHistoryFor(id)`, slot `ExerciseHistoryLinkSlot`), plus the routes, slots and ARB fragments listed under *Parallel windows*._
+
+### Requests from C (routines + onboarding), round 2
+
+_(append here only)_
+
+### Requests from D (history), round 2
+
+_(append here only)_

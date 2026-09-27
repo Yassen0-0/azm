@@ -229,3 +229,15 @@ Every assumption or judgment call made while building Azm, newest last. Format: 
 ## Parallel round 2 setup (2026-09-27)
 
 - **2026-09-27 — E2E host helper committed as `tools/e2e_android_helper.sh`** (was `.tooling/tmp/`, see the 2026-09-26 entry; `tools/` unfrozen for this one move). Its waits are now bounded (10 min for the install, 10 min for the system screen, exit 1 on timeout) per CLAUDE.md → Waiting and polling; it takes `<serial> <out.png>` and sources `env.sh` itself. Usage in README → *Android E2E run with system screens*.
+- **2026-09-27 — Round 2 split: C = routines + onboarding (set A), D = history + stats + PRs (set B).** Onboarding moved from §5 (settings) to C because its optional-program step reuses C's program-copy logic; it writes the unit through settings' `TrainingSettingsWriter`, so settings keeps sole ownership of those keys.
+- **2026-09-27 — Round 2 pre-registration on `main`** (details in PLAN → *Parallel windows*): routes `onboarding`, `routineNew`, `routineEditorFor`, `programs`, `programFor`, `pastWorkoutFor`, `stats`, `exerciseHistoryFor` (`/exercise-history/:id`, not `/exercise/:id/history`, so it never shadows the detail route) with placeholder screens; slots `RoutinesHomeSection` (Workout tab) and `ExerciseHistoryLinkSlot` (exercise detail); `bootstrapApp()` overrides `exerciseHistorySourceProvider` with the history-owned `createExerciseHistorySource`; ARB fragment `arb_src/onboarding/`.
+- **2026-09-27 — First-run gate = router initial location, not a redirect.** `bootstrapApp()` reads `loadOnboardingDone(db)` once before the first frame; the router starts on `/onboarding` when false. No redirect runs on every navigation, and onboarding finishes with `context.go(workout)`. Runs with `settingsOverride` (all screenshot/integration tests) always count as done, so existing parity suites never land on onboarding. The placeholder returns `true` until window C implements it.
+- **2026-09-27 — Ownership check script `tools/check_plan_overlap.dart`.** It parses the *Owns* bullets of the given PLAN sections and fails if two windows' paths overlap (pattern level, and every tracked/new file matched by more than one window) or if a window owns a frozen or generated path.
+
+## Window C — routines + onboarding (round 2, branch `feature/routines`)
+
+_(window C appends here only)_
+
+## Window D — history, stats, PRs (round 2, branch `feature/history`)
+
+_(window D appends here only)_

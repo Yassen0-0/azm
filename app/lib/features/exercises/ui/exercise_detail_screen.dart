@@ -16,6 +16,7 @@ import '../../../core/widgets/azm_header.dart';
 import '../../../core/widgets/azm_placeholder.dart';
 import '../../../core/widgets/exercise_card.dart' show isolateName;
 import '../../../core/widgets/muscle_chips.dart';
+import '../../history/ui/exercise_history_link_slot.dart';
 import '../../settings/data/training_settings.dart';
 import '../data/exercise_history.dart';
 import '../data/exercise_labels.dart';
@@ -128,6 +129,8 @@ class _DetailBody extends ConsumerWidget {
             if (i > 0) const SizedBox(height: AzmSpace.listGap),
             _SessionCard(session: s, unit: unit),
           ],
+        // History window slot: "See all history".
+        ExerciseHistoryLinkSlot(exerciseId: e.id, sessionCount: history.sessions.length),
         _SectionTitle(l10n.exercisesDetailInstructions),
         _Card(
           child: Column(

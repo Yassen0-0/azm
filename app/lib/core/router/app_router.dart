@@ -5,7 +5,15 @@ import 'package:go_router/go_router.dart';
 import '../../features/exercises/ui/exercise_detail_screen.dart';
 import '../../features/exercises/ui/exercise_picker_screen.dart';
 import '../../features/exercises/ui/exercises_screen.dart';
+import '../../features/history/ui/exercise_history_screen.dart';
 import '../../features/history/ui/history_screen.dart';
+import '../../features/history/ui/past_workout_screen.dart';
+import '../../features/history/ui/stats_screen.dart';
+import '../../features/onboarding/data/onboarding_gate.dart';
+import '../../features/onboarding/ui/onboarding_screen.dart';
+import '../../features/routines/ui/program_detail_screen.dart';
+import '../../features/routines/ui/programs_screen.dart';
+import '../../features/routines/ui/routine_editor_screen.dart';
 import '../../features/settings/ui/settings_screen.dart';
 import '../../features/workout/ui/active_workout_bar_slot.dart';
 import '../../features/workout/ui/active_workout_screen.dart';
@@ -39,6 +47,38 @@ abstract final class AppRoutes {
   /// Post-workout summary: `context.go(AppRoutes.workoutSummaryFor(id))`.
   static const String workoutSummary = '/workout-summary/:id';
   static String workoutSummaryFor(String id) => '/workout-summary/$id';
+
+  // ── Round 2, routines + onboarding window (C) ──
+
+  /// First-run onboarding; the initial location while `onboarding_done` is unset.
+  static const String onboarding = '/onboarding';
+
+  /// Routine editor for a NEW routine.
+  static const String routineNew = '/routine-editor';
+
+  /// Routine editor for an existing routine: `context.push(AppRoutes.routineEditorFor(id))`.
+  static const String routineEditor = '/routine-editor/:id';
+  static String routineEditorFor(String id) => '/routine-editor/$id';
+
+  /// Ready programs list.
+  static const String programs = '/programs';
+
+  /// One ready program: `context.push(AppRoutes.programFor(id))`.
+  static const String programDetail = '/program/:id';
+  static String programFor(String id) => '/program/$id';
+
+  // ── Round 2, history window (D) ──
+
+  /// Past (finished) workout, editable: `context.push(AppRoutes.pastWorkoutFor(id))`.
+  static const String pastWorkout = '/past-workout/:id';
+  static String pastWorkoutFor(String id) => '/past-workout/$id';
+
+  /// Stats (workouts per week, total sets, per-exercise PRs).
+  static const String stats = '/stats';
+
+  /// Full history of one exercise: `context.push(AppRoutes.exerciseHistoryFor(id))`.
+  static const String exerciseHistory = '/exercise-history/:id';
+  static String exerciseHistoryFor(String id) => '/exercise-history/$id';
 }
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -46,7 +86,8 @@ final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     navigatorKey: _rootKey,
-    initialLocation: AppRoutes.workout,
+    // First run → onboarding (read once; bootstrapApp sets it before the first frame).
+    initialLocation: ref.read(onboardingDoneAtLaunchProvider) ? AppRoutes.workout : AppRoutes.onboarding,
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(shell: shell),
@@ -104,6 +145,48 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder: (_, state) =>
             WorkoutSummaryScreen(workoutId: state.pathParameters['id']!),
+      ),
+      // Round 2 (C): onboarding, routines, programs.
+      GoRoute(
+        path: AppRoutes.onboarding,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.routineNew,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const RoutineEditorScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.routineEditor,
+        parentNavigatorKey: _rootKey,
+        builder: (_, state) => RoutineEditorScreen(routineId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: AppRoutes.programs,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const ProgramsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.programDetail,
+        parentNavigatorKey: _rootKey,
+        builder: (_, state) => ProgramDetailScreen(programId: state.pathParameters['id']!),
+      ),
+      // Round 2 (D): history.
+      GoRoute(
+        path: AppRoutes.pastWorkout,
+        parentNavigatorKey: _rootKey,
+        builder: (_, state) => PastWorkoutScreen(workoutId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: AppRoutes.stats,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const StatsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.exerciseHistory,
+        parentNavigatorKey: _rootKey,
+        builder: (_, state) => ExerciseHistoryScreen(exerciseId: state.pathParameters['id']!),
       ),
     ],
   );

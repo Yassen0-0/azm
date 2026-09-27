@@ -23,7 +23,7 @@ azm/                     ROOT = git repo root
   media/                 DEV ONLY 1,324 thumbnails + 1,324 GIFs (© Gym visual) — gitignored, never shipped
   brand/                 logo-concept-a.svg + icon export to-dos
   design/                theme.json, theme.css, ReadexPro.ttf (Ather design system, copied from inputs/)
-  tools/                 scripts: build_catalog.sh, gen_l10n.sh, screenshots.sh, check_directionality.sh, e2e_android_helper.sh, serve_media_dev.dart, relocate.sh
+  tools/                 scripts: build_catalog.sh, gen_l10n.sh, screenshots.sh, check_directionality.sh, e2e_android_helper.sh, check_plan_overlap.dart, serve_media_dev.dart, relocate.sh
   docs/screenshots/      parity screenshots per feature (android + ios, ar + en)
   app/                   the Flutter project
   inputs/                original files as delivered — gitignored
@@ -112,7 +112,7 @@ AZM_DEVICE_SET=B tools/screenshots.sh workout ios      # one platform
 ```
 `screenshots.sh` boots the set's emulator (headless) and simulator if they're not running, then runs `app/integration_test/<feature>_screens_test.dart` with `flutter drive`. The app language is forced by the test, so the device language doesn't matter. On a machine without these devices, recreate them: `avdmanager create avd -n azm_api37_b -k "system-images;android-37.0;google_apis_playstore;arm64-v8a" -d pixel_8` and `xcrun simctl create "Azm iPhone B" com.apple.CoreSimulator.SimDeviceType.iPhone-17 com.apple.CoreSimulator.SimRuntime.iOS-27-0`.
 
-**Parallel agent windows** use git worktrees inside ROOT (`.worktrees/<name>`, gitignored). `env.sh` in a worktree finds the shared `ROOT/.tooling` by itself. Setup and merge steps: docs/PLAN.md → *Parallel windows*.
+**Parallel agent windows** use git worktrees inside ROOT (`.worktrees/<name>`, gitignored). `env.sh` in a worktree finds the shared `ROOT/.tooling` by itself. Setup and merge steps: docs/PLAN.md → *Parallel windows*. Before starting a round, check that the windows own disjoint paths: `source ./env.sh && dart run tools/check_plan_overlap.dart C D` (reads the *Owns* bullets of those PLAN sections; also fails on frozen or generated paths).
 
 **Exercise media in dev** (see docs/LICENSES.md, media is not ours to ship):
 ```sh

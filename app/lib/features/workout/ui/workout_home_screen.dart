@@ -11,11 +11,12 @@ import '../../../core/theme/azm_theme.dart';
 import '../../../core/widgets/azm_pressable.dart';
 import '../../../core/widgets/azm_tab_page.dart';
 import '../../../core/widgets/rest_timer_bar.dart';
+import '../../routines/ui/routines_home_section.dart';
 import '../data/workout_repository.dart';
 import 'workout_format.dart';
 
 /// Workout tab: big "Start workout" (empty workout → active workout in one
-/// tap), or the running workout. Routines/programs come with the routines task.
+/// tap), or the running workout; routines/programs below (RoutinesHomeSection).
 class WorkoutHomeScreen extends ConsumerWidget {
   const WorkoutHomeScreen({super.key});
 
@@ -29,6 +30,8 @@ class WorkoutHomeScreen extends ConsumerWidget {
         padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.pageMargin, AzmSpace.md, AzmSpace.pageMargin, 0),
         children: [
           if (active == null) const _StartCard() else _ActiveCard(workout: active),
+          // Routines window slot: my routines + ready programs.
+          const RoutinesHomeSection(),
         ],
       ),
     );

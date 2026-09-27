@@ -55,3 +55,11 @@ Emulator/Simulator can't prove these; check on real phones (both platforms unles
 - [ ] Android 12–13 phone (exact alarms granted by default): no sheet ever appears. (integrator, 2026-09-26)
 - [ ] Finish with unticked sets on a real phone: the three-button dialog fits (buttons stack vertically in both languages) and "Mark all done" fills empty sets from "previous" as expected. (integrator, 2026-09-26)
 - [ ] Low-end Android phone: "Start workout" opens the active workout every time (the stale-provider bounce fixed at integration never reappears). (integrator, 2026-09-26)
+
+### Routines + onboarding (window C, round 2)
+
+_(window C appends here only)_
+
+### History (window D, round 2)
+
+_(window D appends here only)_
