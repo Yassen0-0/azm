@@ -10,6 +10,27 @@ This repo's root **is** the project root (`env.sh`, `docs/`, `app/`, … all liv
 - Anything that needs a global install (brew, sudo, global gem/npm) → **stop and ask the owner.**
 - Never modify shell profiles, global git config or system settings. Never run `git config --global`.
 
+## Waiting and polling (permanent)
+
+- **Never use an unbounded wait loop** (`until …; do sleep; done`, `while true`, `tail -f` with no end). Every wait/poll has a **timeout** (default max 30 min) or a max iteration count.
+- **On timeout: print the last 50 lines of the log and stop.** Don't retry blindly and don't leave the loop or its command running.
+- The loop's exit test must match **failure states too** (`Some tests failed`, `Exception`, the process having exited), not only success.
+- macOS has **no `timeout`/`gtimeout`**, and installing coreutils would break the sandbox rule. A bare `timeout …` fails with "command not found" and looks like silence. Use these instead:
+
+```sh
+LOG=.tooling/tmp/run.log
+# Run a long command with a 30-min cap:
+( <command> >"$LOG" 2>&1 ) & pid=$!
+for i in $(seq 1 360); do kill -0 "$pid" 2>/dev/null || break; sleep 5; done
+if kill -0 "$pid" 2>/dev/null; then kill "$pid"; echo "TIMEOUT (30 min)"; tail -50 "$LOG"; exit 1; fi
+
+# Wait for a log condition, max 30 min:
+for i in $(seq 1 360); do grep -qE 'All tests passed|Some tests failed|Exception' "$LOG" && break; sleep 5; done
+grep -qE 'All tests passed|Some tests failed|Exception' "$LOG" || { echo "TIMEOUT (30 min)"; tail -50 "$LOG"; exit 1; }
+```
+
+- Before ending a session, stop any background loops and `flutter drive`/emulator helpers you started. Leave devices from the other window's set alone.
+
 ## PLATFORM PARITY RULE (permanent)
 
 **Android and iOS are equal first-class targets.** The owner has no physical iPhone, so the **iOS Simulator is the iOS test device**.
