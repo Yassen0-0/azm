@@ -234,7 +234,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [ ] Tests: round-trip (export → wipe → import → identical rows), every validation failure leaves the DB untouched, version handling, unit/rest writer, licences screen renders in ar + en.
   - [ ] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh settings` (settings with all groups, unit/rest pickers, import confirmation, an import error, licences), ar + en, both platforms. Checklist items: real share sheet targets (Files, Drive, WhatsApp), picking from Files/Downloads, large backups.
 
-## 6. G window — Arabic names for the remaining exercises  (branch `feature/arabic-names`, no devices) — [ ]
+## 6. G window — Arabic names for the remaining exercises  (branch `feature/arabic-names`, no devices) — [x] done 2026-09-27 (window G), awaiting merge + owner review
 
 - **Goal:** Egyptian-gym Arabic name + slang aliases for the remaining **1,274** exercises (50 done in Phase 3, owner-reviewed).
 - **Owns (only these):**
@@ -242,8 +242,8 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **No app code, no builds, no devices.** Don't touch `app/**` (the catalog asset is generated), `tools/**` or `data/catalog/**`.
 - **How:** batches of 100 ordered by likely usage (barbell/dumbbell/cable/machine staples and the variants of the first 50 first; stretches and rare equipment last). Every new entry `{"ar": "…", "aliases": [...], "reviewed": false}`. Follow the conventions of the reviewed 50 (Egyptian gym words, e.g. بنش، سكوات، دمبل، سميث، كابل، مرزبة، بار زد; English loanwords in Arabic script where gyms use them). After each batch: `source ./env.sh && tools/build_catalog.sh --check` must print OK (resolve every same-name warning or log why it's intended), then commit that batch alone, listing its ids in the commit message for native review.
 - **Acceptance:**
-  - [ ] Batch 1 … [ ] Batch 13 (final): all 1,324 exercises have an Arabic name; `--check` reports 0 English-only.
-  - [ ] Log naming conventions and any judgement calls in DECISIONS_LOG → Window G.
+  - [x] Batch 1 … [x] Batch 13 (final): all 1,324 exercises have an Arabic name; `--check` reports 0 English-only, 0 same-name warnings. Review tables: `docs/review/names_batch_01.md` … `_13.md` (109 names flagged ⚠️).
+  - [x] Log naming conventions and any judgement calls in DECISIONS_LOG → Window G.
   - [ ] Owner review pass later (flip `reviewed` to `true`), not this window.
   - [ ] Later (not this round): `instructions_ar`.
 
