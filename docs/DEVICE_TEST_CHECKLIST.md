@@ -82,6 +82,12 @@ _(window D appends here only)_
 ### Settings, backup, licences (window E, round 3)
 
 _(window E appends here only)_
+- [ ] Export on a real phone (both platforms): the share sheet opens with `azm-backup-YYYYMMDD-HHmm.json`; save it to **Files / Downloads**, send it to **Google Drive** and to **WhatsApp** (as a document). The saved file opens as readable JSON. On iPad the sheet is anchored to the Export row. (window E, 2026-09-27)
+- [ ] Import on a real phone: pick the backup from **Files** (iOS), **Downloads** and **Drive** (Android document picker), and from a WhatsApp-received copy. The confirmation shows the right date and counts; after Restore, routines, history, PRs, unit, rest time, language and theme match the source phone. (window E, 2026-09-27)
+- [ ] Round trip across phones: export on phone A (with a few months of history), import on phone B (fresh install, after onboarding) and on another platform (Android → iOS and back): History totals, calendar, stats and PRs are identical. (window E, 2026-09-27)
+- [ ] Large backup (e.g. 2+ years, 500 workouts, ~15,000 sets): export and import each finish within a few seconds with no ANR/jank; the busy spinner shows on the row meanwhile. (window E, 2026-09-27)
+- [ ] Import errors on a device: pick a photo/PDF (→ "isn't a JSON file"), some other `.json` (→ "isn't an Azm backup"), a backup edited to `"version": 2` (→ "newer version"), a truncated backup (→ "isn't a JSON file" or "damaged"). Each time the data is unchanged. Try importing during a workout → refused. (window E, 2026-09-27)
+- [ ] Licences → "Open-source packages" on a release/profile build lists **every** package (flutter, drift, go_router, …) plus "exercises-dataset (Hasan Emir Yıldırım)" and "Readex Pro font"; tapping them shows the MIT and OFL texts. (Integration tests can't show the package list: the test binding never loads NOTICES.) (window E, 2026-09-27)
 
 ### Brand: icons, splash (window F, round 3)
 

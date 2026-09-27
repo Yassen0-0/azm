@@ -215,7 +215,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [x] Parity: `AZM_DEVICE_SET=B tools/screenshots.sh history` (list with seeded workouts, calendar, past workout detail + keypad, stats, exercise full history, exercise detail with the "See all" link, empty state), ar + en, both platforms. Seed finished workouts in your own test (dedicated devices only).
   - Notes: all logic in `features/history/{data,ui}`; decisions in DECISIONS_LOG → Window D. Proof: `docs/screenshots/history/{android,ios}/` (11 screens × ar/en). Tests: `test/features/history/` (26; full suite 179 green). Screenshot suite waits (max 20 s) for the seeded list on slow hosts.
 
-## 5. E window — Settings, backup, licences  (branch `feature/settings`, device set **A**) — [ ]
+## 5. E window — Settings, backup, licences  (branch `feature/settings`, device set **A**) — [x] done 2026-09-27 (window E), not merged
 
 - **Goal:** every user preference in one place, a backup the user can trust, and honest attributions.
 - **Owns (only these):**
@@ -227,12 +227,18 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **Uses, read-only:** `AppDatabase` (all user tables + `settings` for backup; catalog tables are never exported or written), `appSettingsProvider`, `share_plus`, `file_picker`, `path_provider`, `docs/DATA.md` (backup format), `docs/LICENSES.md` (licence facts), `core/widgets`, tokens.
 - **Acceptance:**
   - [x] Language (System/العربية/English) + theme (dark/light), persisted (Phase 2/3). Keep working.
-  - [ ] Unit kg/lb and default rest time (choices + current value), written ONLY through `TrainingSettingsWriter`; every open screen updates live (they watch `weightUnitProvider` / `defaultRestSecondsProvider`).
-  - [ ] Backup **export**: JSON per DATA.md (`format`, `version: 1`, `exported_at`, `app_version`, settings + all user tables), file `azm-backup-YYYYMMDD-HHmm.json`, shared via the system share sheet (`share_plus`).
-  - [ ] Backup **import**: pick a `.json` (`file_picker`) → **validate before touching anything** (format marker, known version, required tables, types, UUIDs, FK consistency, enum values) → confirmation dialog with counts → replace the user tables in ONE transaction (all or nothing). Clear error messages for: not JSON, not an Azm backup, newer version, corrupt data. Decide + log: import while a workout is active; rest-timer settings keys; which settings keys are restored.
-  - [ ] Licences page (`AppRoutes.licenses`): exercise dataset (MIT), Readex Pro (OFL), Gym visual attribution line (only relevant when media is shown), plus Flutter's package licences (`showLicensePage` / `LicenseRegistry`). Texts per `docs/LICENSES.md`; never edit that file.
-  - [ ] Tests: round-trip (export → wipe → import → identical rows), every validation failure leaves the DB untouched, version handling, unit/rest writer, licences screen renders in ar + en.
-  - [ ] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh settings` (settings with all groups, unit/rest pickers, import confirmation, an import error, licences), ar + en, both platforms. Checklist items: real share sheet targets (Files, Drive, WhatsApp), picking from Files/Downloads, large backups.
+  - [x] Unit kg/lb and default rest time (choices + current value), written ONLY through `TrainingSettingsWriter`; every open screen updates live (they watch `weightUnitProvider` / `defaultRestSecondsProvider`).
+  - [x] Backup **export**: JSON per DATA.md (`format`, `version: 1`, `exported_at`, `app_version`, settings + all user tables), file `azm-backup-YYYYMMDD-HHmm.json`, shared via the system share sheet (`share_plus`).
+  - [x] Backup **import**: pick a `.json` (`file_picker`) → **validate before touching anything** (format marker, known version, required tables, types, UUIDs, FK consistency, enum values) → confirmation dialog with counts → replace the user tables in ONE transaction (all or nothing). Clear error messages for: not JSON, not an Azm backup, newer version, corrupt data. Decide + log: import while a workout is active; rest-timer settings keys; which settings keys are restored.
+  - [x] Licences page (`AppRoutes.licenses`): exercise dataset (MIT), Readex Pro (OFL), Gym visual attribution line (only relevant when media is shown), plus Flutter's package licences (`showLicensePage` / `LicenseRegistry`). Texts per `docs/LICENSES.md`; never edit that file.
+  - [x] Tests: round-trip (export → wipe → import → identical rows), every validation failure leaves the DB untouched, version handling, unit/rest writer, licences screen renders in ar + en.
+  - [x] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh settings` (settings with all groups, unit/rest pickers, import confirmation, an import error, licences), ar + en, both platforms. Checklist items: real share sheet targets (Files, Drive, WhatsApp), picking from Files/Downloads, large backups.
+- **Merge notes (window E, 2026-09-27):**
+  - New/changed files only under `features/settings/**`, `arb_src/settings/`, `test/features/settings/**`, `integration_test/settings_screens_test.dart`, `docs/screenshots/settings/**` (+ own doc sections). Generated l10n conflicts: take either side, re-run `tools/gen_l10n.sh`.
+  - Backup: `data/backup/backup_codec.dart` (pure encode + strict validation), `backup_service.dart` (snapshot / one-transaction restore, refuses during an active workout), `backup_files.dart` (share_plus + file_picker behind `backupFilesProvider`, faked in tests). UI flow in `ui/backup_flow.dart`. `AppSettingsController.reload()` applies an imported language/theme live.
+  - Tests: `test/features/settings/` 39 (round trip export → wipe → import identical incl. a second DB and an active workout; every rejection leaves the DB byte-identical; mid-transaction failure rolls back; catalog untouched; UI flows incl. errors + active-workout refusal; unit/rest writer; licences ar + en). Full suite 248 passing.
+  - Screenshot suite `settings`: 9 screens × ar/en × Android/iOS. The confirmation/error dialogs are opened with an in-memory backup: the device DB only gets unit = kg, rest = 1:30.
+  - Decisions in DECISIONS_LOG → Window E (import during a workout, restored settings keys, file shape, validation rules, app_version).
 
 ## 6. G window — Arabic names for the remaining exercises  (branch `feature/arabic-names`, no devices) — [ ]
 
@@ -312,6 +318,8 @@ _(append here only)_
 ### Requests from E (settings), round 3
 
 _(append here only)_
+- @owner/integrator (E, 2026-09-27, optional): add `package_info_plus` so backups record the real build version; until then `kAppVersion` in `features/settings/data/backup/backup_service.dart` must be bumped with pubspec `version:`.
+- @docs/DATA.md (E, 2026-09-27): add the details of *Backup format* as implemented (DECISIONS_LOG → Window E): `settings` = decoded values for `locale`/`theme`/`unit`/`default_rest_seconds` only; rows use the snake_case columns listed above; UTC ISO-8601 timestamps with ms; strict validation; import refused during an active workout.
 
 ### Requests from F (brand), round 3
 
