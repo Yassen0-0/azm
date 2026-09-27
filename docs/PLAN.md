@@ -13,46 +13,47 @@
 
 Two windows in the **same checkout** would overwrite each other's `app/build`, `.dart_tool` and generated files, and install onto the same devices. So each window gets its **own git worktree + branch + device set**.
 
-**Round 2 (2026-09-27): window C = routines + onboarding (§2), window D = history + stats + PRs (§4).**
+**Round 3 (2026-09-27, final v1 round): window E = settings + backup + licences (§5), window F = brand pipeline + count separator (§7), window G = Arabic names (§6).** Round 1–2 windows are merged (see §1b, §1d; their pre-registration is recorded in DECISIONS_LOG).
 
 | Window | Task | Branch / worktree | Device set | Screenshot features |
 |---|---|---|---|---|
-| **C** | §2 Routines, ready programs, onboarding | `feature/routines` · `.worktrees/routines` | **A** (`azm_api37` :5554 + "Azm iPhone A") | `routines`, `onboarding` |
-| **D** | §4 History, stats, PRs, Lifted total | `feature/history` · `.worktrees/history` | **B** (`azm_api37_b` :5556 + "Azm iPhone B") | `history` |
+| **E** | §5 Settings: unit, default rest, language, theme, backup export/import, licences | `feature/settings` · `.worktrees/settings` | **A** (`azm_api37` :5554 + "Azm iPhone A") | `settings` |
+| **F** | §7 Brand: icon + splash pipeline from one SVG; exercise count `1,324` | `feature/brand` · `.worktrees/brand` | **B** (`azm_api37_b` :5556 + "Azm iPhone B") | `exercises` (+ launcher/splash captures in `docs/screenshots/brand/`) |
+| **G** | §6 Arabic names for the remaining 1,274 exercises | `feature/arabic-names` · `.worktrees/arabic-names` | **none** (no app code, no builds, no devices) | — |
 
 ```sh
 # from ROOT, once per window (worktrees live inside ROOT, gitignored):
-git worktree add .worktrees/routines -b feature/routines
-git worktree add .worktrees/history  -b feature/history
+git worktree add .worktrees/settings     -b feature/settings
+git worktree add .worktrees/brand        -b feature/brand
+git worktree add .worktrees/arabic-names -b feature/arabic-names
 # open Claude Code in ROOT/.worktrees/<name>. Its env.sh finds the shared ROOT/.tooling automatically.
-# C (routines) window: export AZM_DEVICE_SET=A   (azm_api37 + "Azm iPhone A")
-# D (history) window:  export AZM_DEVICE_SET=B   (azm_api37_b + "Azm iPhone B")
-# first command in a new worktree: source ./env.sh && cd app && flutter pub get
-# ownership check (must print OK): source ./env.sh && dart run tools/check_plan_overlap.dart C D
+# E (settings) window: export AZM_DEVICE_SET=A   (azm_api37 + "Azm iPhone A")
+# F (brand) window:    export AZM_DEVICE_SET=B   (azm_api37_b + "Azm iPhone B")
+# G (arabic-names):    no devices, no flutter builds. Validate with: tools/build_catalog.sh --check
+# first command in E/F worktrees: source ./env.sh && cd app && flutter pub get
+# ownership check (must print OK): source ./env.sh && dart run tools/check_plan_overlap.dart E F G
 ```
 
-**Pre-registered on `main` for round 2** (so neither window edits a shared or frozen file). Keep every class name, constructor and function signature below; replace the placeholder bodies.
+**Pre-registered on `main` for round 3** (so no window edits a shared or frozen file). Keep every class name, constructor and signature below; replace placeholder bodies.
 
-| What | Frozen side (done, don't edit) | Owner's side (placeholder → implement) |
+| What | Frozen side (done, don't edit) | Owner's side |
 |---|---|---|
-| Route `AppRoutes.onboarding` | router; **initial location** = onboarding while `onboardingDoneAtLaunchProvider` is false | C: `features/onboarding/ui/onboarding_screen.dart` `OnboardingScreen()` |
-| First-run gate | `bootstrapApp()` overrides `onboardingDoneAtLaunchProvider` with `await loadOnboardingDone(db)`; runs with `settingsOverride` (screenshots, integration tests) always count as done | C: `features/onboarding/data/onboarding_gate.dart` `loadOnboardingDone(AppDatabase)` (placeholder returns `true`) + `onboardingDoneAtLaunchProvider` |
-| Routes `routineNew`, `routineEditorFor(id)` | router | C: `features/routines/ui/routine_editor_screen.dart` `RoutineEditorScreen({String? routineId})` |
-| Routes `programs`, `programFor(id)` | router | C: `features/routines/ui/{programs_screen,program_detail_screen}.dart` `ProgramsScreen()`, `ProgramDetailScreen({required programId})` |
-| Workout-tab slot | `WorkoutHomeScreen` renders `const RoutinesHomeSection()` under the Start/Resume card | C: `features/routines/ui/routines_home_section.dart` |
-| Route `pastWorkoutFor(id)` | router | D: `features/history/ui/past_workout_screen.dart` `PastWorkoutScreen({required workoutId})` |
-| Route `stats` | router | D: `features/history/ui/stats_screen.dart` `StatsScreen()` |
-| Route `exerciseHistoryFor(id)` | router | D: `features/history/ui/exercise_history_screen.dart` `ExerciseHistoryScreen({required exerciseId})` |
-| Exercise-detail slot ("See all history") | `ExerciseDetailScreen` renders `ExerciseHistoryLinkSlot(exerciseId:, sessionCount:)` under its recent sessions | D: `features/history/ui/exercise_history_link_slot.dart` |
-| Exercise history hook (Request from exercises) | `bootstrapApp()` overrides `exerciseHistorySourceProvider` with `createExerciseHistorySource(db)` | D: `features/history/data/history_exercise_source.dart` (default returns `DbExerciseHistorySource`) |
-| ARB fragments | `tools/gen_l10n.sh` picks up every folder | C: `arb_src/routines/` (`routines…`) + `arb_src/onboarding/` (`onboarding…`); D: `arb_src/history/` (`history…`) |
-| Shared docs | per-window sections already created | append only inside your own section of `docs/DECISIONS_LOG.md`, `docs/DEVICE_TEST_CHECKLIST.md` and *Requests* below |
+| Route `AppRoutes.licenses` (`/settings/licenses`, pushed on the root navigator) | router | E: `features/settings/ui/licenses_screen.dart` `LicensesScreen()` (placeholder) |
+| Backup dependencies | `pubspec.yaml`: `share_plus ^13.3.0` (export via the share sheet), `file_picker ^13.1.0` (import a `.json`). Verified: iOS simulator build (Swift Package Manager, still no CocoaPods) and Android debug APK build | E uses them from `features/settings/**` only |
+| Backup format | `docs/DATA.md` → *Backup format* (`"format": "azm-backup"`, `"version": 1`) | E implements it; a format change goes to *Requests* (DATA.md is shared) |
+| Training settings writer | — | E owns `features/settings/data/training_settings.dart`: **the only writer** of `unit` / `default_rest_seconds` (onboarding already calls `TrainingSettingsWriter`; keep its API: `setWeightUnit`, `setDefaultRestSeconds`, `weightUnitProvider`, `defaultRestSecondsProvider`, `parseWeightUnit`, `parseDefaultRestSeconds`, `kDefaultRestSeconds`) |
+| Notification icon contract | `features/workout/data/rest_notifications.dart` uses the Android drawable name **`ic_stat_azm`** | F regenerates `res/drawable/ic_stat_azm.xml` (same name, monochrome, white on transparent); keep `res/raw/keep.xml` |
+| Launcher name | `res/values{,-ar}/strings.xml` (`عزم` / `Azm`), iOS `CFBundleDisplayName` in the `.lproj` files | F may regenerate resources in `res/**` but must keep those strings unchanged |
+| SVG rasteriser | — | F: macOS AppKit renders `brand/logo-concept-a.svg` faithfully (`NSImage(contentsOfFile:)` → `NSBitmapImageRep` → PNG, checked 2026-09-27 at 1024 px). Use it (a Swift script run by `swift`/`swiftc`) or `sips`; **nothing may be installed** (no brew/npm/pip/gem, no global packages). The pipeline lives in `brand/` and is run by `brand/generate.sh` (sources `env.sh`) |
+| Catalog check-only mode | `tools/build_catalog.sh --check` validates `data/ar` against the catalog (unknown ids, missing `ar`, bad `aliases`/`reviewed`; warns on the same Arabic name on two ids) and prints coverage. **Writes nothing** | G runs it after every batch; the integrator rebuilds `app/assets/catalog/*` + `data/catalog/catalog_version.json` at merge |
+| ARB fragments | `tools/gen_l10n.sh` picks up every folder | E: `arb_src/settings/` (`settings…`); F: `arb_src/exercises/` (`exercises…`) |
+| Shared docs | per-window sections created | append only inside your own section of `docs/DECISIONS_LOG.md`, `docs/DEVICE_TEST_CHECKLIST.md` and *Requests* below |
 
-`test/core/router/pre_registered_routes_test.dart` (core) checks that every route above opens its screen. Keep it passing.
+`test/core/router/pre_registered_routes_test.dart` (core) checks that every pre-registered route opens its screen. Keep it passing.
 
-**Shared, read-only for both** (use, never edit): `features/workout/**` (`WorkoutRepository`: `startEmpty`, `active`, `loadDetail`/`watchDetail`, `updateSet`, `setCompleted`, `deleteSet`, `previousSets`, `prBests`, …), `features/exercises/**` (picker contract, `exerciseHistoryProvider`, `exerciseRecordsProvider`), `features/settings/**` (`TrainingSettingsWriter`, `weightUnitProvider`, `defaultRestSecondsProvider`), `core/widgets/**` (incl. `SetRow`, `WeightKeypad`, `LiftedCounter`), `core/{db,utils,theme,l10n,router,media}`. Write your own queries in your own `data/` folder. Need a change there (new theme token, DB index, repository method, …)? Add it to *Requests* and work around it; the integrator applies it at merge.
+**Shared, read-only for all** (use, never edit): everything not listed under your *Owns*, in particular `app/pubspec.yaml`, `app/lib/core/**`, `app/lib/{app,main,bootstrap}.dart`, `features/{workout,history,routines,onboarding}/**`, `app/android/app/src/main/AndroidManifest.xml`, `app/android/app/build.gradle*`, `app/ios/Runner/{Info.plist,AppDelegate.swift}`, `app/ios/Runner.xcodeproj/**`, `tools/**`, `docs/{SPEC,DESIGN,ARCHITECTURE,DATA,LICENSES}.md`. Need a change there? *Requests*; the integrator applies it at merge.
 
-Merging (owner, or one window after both are done): commit in each worktree → from ROOT `git merge feature/routines` then `git merge feature/history`. Because ownership doesn't overlap, the only conflicts can be in **generated** files. Resolve them by taking either side and re-running `tools/gen_l10n.sh` (+ `build_runner` if needed). Then run the full definition of done on `main`, and `git worktree remove .worktrees/<name>`.
+Merging (owner or integrator, after all three are done): commit in each worktree → from ROOT `git merge feature/arabic-names`, `git merge feature/settings`, `git merge feature/brand`. Ownership doesn't overlap, so conflicts can only be in **generated** files: take either side and re-run `tools/gen_l10n.sh`. Then `tools/build_catalog.sh` (full build: new Arabic names → new catalog version), the full definition of done on `main`, and `git worktree remove .worktrees/<name>`.
 
 ---
 
@@ -83,7 +84,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 
 ---
 
-## 1. WORKOUT window — logging, rest timer, summary  (branch `feature/workout`, device set **B**) — [x] done 2026-09-26 (window B), not merged yet
+## 1. WORKOUT window — logging, rest timer, summary  (branch `feature/workout`, device set **B**) — [x] done 2026-09-26 (window B), merged 2026-09-26
 
 - **Goal:** the core loop: start (empty or from a routine), log sets, rest, finish, see the summary. North star: app open → first set logged in ≤ 3 taps.
 - **Owns (only these):**
@@ -146,6 +147,12 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Every screenshot suite re-run on both platforms (device set A) and reviewed: shell, exercises, workout, workout_flow, routines, onboarding, history — all `exit 0` with "All tests passed", every image regenerated (except the manual launcher captures in `shell/`).
 - [x] analyze clean, `flutter test` 214 passing, directionality OK; worktrees removed (branches kept); devices + Gradle stopped.
 
+## 1e. Round 3 setup (main) — [x] done 2026-09-27
+
+- [x] Windows E (settings, set A), F (brand, set B), G (Arabic names, no devices) defined; `tools/check_plan_overlap.dart E F G` → OK.
+- [x] Pre-registered: route `AppRoutes.licenses` + `LicensesScreen` placeholder; `share_plus` + `file_picker` (iOS simulator + Android debug builds verified, still no CocoaPods); `tools/build_catalog.sh --check`; per-window sections in DECISIONS_LOG, DEVICE_TEST_CHECKLIST and Requests.
+- [x] analyze, test (214), directionality pass. No visible UI change, so parity screenshots were not regenerated.
+
 ## 2. C window — Routines, ready programs, onboarding  (branch `feature/routines`, device set **A**) — [x] done 2026-09-27 (window C), merged 2026-09-27
 
 - **Goal:** build a routine once, start it in one tap; copy a ready program into "my routines"; first-run onboarding (unit + optional ready program).
@@ -172,7 +179,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - `routines_flow_test.dart` imports `FakeRestAlarm` from `test/features/workout/workout_test_helpers.dart` (read-only use).
   - See *Requests from C*: Drift `SELECT 1` stream sharing (affects any new watch query).
 
-## 3. EXERCISES window — library, picker, detail  (branch `feature/exercises`, device set **A**) — DONE 2026-09-26 (awaiting merge)
+## 3. EXERCISES window — library, picker, detail  (branch `feature/exercises`, device set **A**) — DONE 2026-09-26, merged 2026-09-26
 
 - **Goal:** find any exercise fast in Arabic, Egyptian slang or English; pick several for a workout/routine; see an exercise's details and your own history with it.
 - **Owns (only these):**
@@ -208,32 +215,56 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [x] Parity: `AZM_DEVICE_SET=B tools/screenshots.sh history` (list with seeded workouts, calendar, past workout detail + keypad, stats, exercise full history, exercise detail with the "See all" link, empty state), ar + en, both platforms. Seed finished workouts in your own test (dedicated devices only).
   - Notes: all logic in `features/history/{data,ui}`; decisions in DECISIONS_LOG → Window D. Proof: `docs/screenshots/history/{android,ios}/` (11 screens × ar/en). Tests: `test/features/history/` (26; full suite 179 green). Screenshot suite waits (max 20 s) for the seeded list on slow hosts.
 
-## 5. `app/lib/features/settings/**` — Settings, onboarding, backup
+## 5. E window — Settings, backup, licences  (branch `feature/settings`, device set **A**) — [ ]
 
-- **Owns:** `app/lib/features/settings/**`, `app/test/features/settings/**`, `app/lib/core/l10n/arb_src/settings/**`, `app/integration_test/settings_screens_test.dart`, `docs/screenshots/settings/**`
+- **Goal:** every user preference in one place, a backup the user can trust, and honest attributions.
+- **Owns (only these):**
+  - `app/lib/features/settings/**` (existing: `data/app_settings.dart`, `data/training_settings.dart`, `ui/settings_screen.dart`; pre-registered: `ui/licenses_screen.dart`)
+  - `app/lib/core/l10n/arb_src/settings/{ar,en}.arb` (keys `settings…`)
+  - `app/test/features/settings/**`
+  - `app/integration_test/settings_screens_test.dart`
+  - `docs/screenshots/settings/**`
+- **Uses, read-only:** `AppDatabase` (all user tables + `settings` for backup; catalog tables are never exported or written), `appSettingsProvider`, `share_plus`, `file_picker`, `path_provider`, `docs/DATA.md` (backup format), `docs/LICENSES.md` (licence facts), `core/widgets`, tokens.
 - **Acceptance:**
-  - [x] Language (System/العربية/English) + theme (dark/light), persisted (Phase 2/3).
-  - [ ] Unit (kg/lb), default rest time, backup export/import, Licenses page (MIT dataset + OFL font + Gym visual attribution when media is shown).
-  - Onboarding moved to §2 (window C, round 2); it writes the unit through `TrainingSettingsWriter`.
-  - [ ] Backup export via the share sheet (format in DATA.md); import with confirmation replaces user tables; round-trip test.
+  - [x] Language (System/العربية/English) + theme (dark/light), persisted (Phase 2/3). Keep working.
+  - [ ] Unit kg/lb and default rest time (choices + current value), written ONLY through `TrainingSettingsWriter`; every open screen updates live (they watch `weightUnitProvider` / `defaultRestSecondsProvider`).
+  - [ ] Backup **export**: JSON per DATA.md (`format`, `version: 1`, `exported_at`, `app_version`, settings + all user tables), file `azm-backup-YYYYMMDD-HHmm.json`, shared via the system share sheet (`share_plus`).
+  - [ ] Backup **import**: pick a `.json` (`file_picker`) → **validate before touching anything** (format marker, known version, required tables, types, UUIDs, FK consistency, enum values) → confirmation dialog with counts → replace the user tables in ONE transaction (all or nothing). Clear error messages for: not JSON, not an Azm backup, newer version, corrupt data. Decide + log: import while a workout is active; rest-timer settings keys; which settings keys are restored.
+  - [ ] Licences page (`AppRoutes.licenses`): exercise dataset (MIT), Readex Pro (OFL), Gym visual attribution line (only relevant when media is shown), plus Flutter's package licences (`showLicensePage` / `LicenseRegistry`). Texts per `docs/LICENSES.md`; never edit that file.
+  - [ ] Tests: round-trip (export → wipe → import → identical rows), every validation failure leaves the DB untouched, version handling, unit/rest writer, licences screen renders in ar + en.
+  - [ ] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh settings` (settings with all groups, unit/rest pickers, import confirmation, an import error, licences), ar + en, both platforms. Checklist items: real share sheet targets (Files, Drive, WhatsApp), picking from Files/Downloads, large backups.
 
-## 6. `data/ar/**` — Arabic names for the remaining exercises
+## 6. G window — Arabic names for the remaining exercises  (branch `feature/arabic-names`, no devices) — [ ]
 
-- **Owns:** `data/ar/exercise_names_ar.json` (append-only per batch; never rename existing keys)
-- **Goal:** Egyptian-gym Arabic name + slang aliases for the remaining **1,274** exercises (50 done in Phase 3), in **batches of 100** ordered by likely usage (barbell/dumbbell/cable/machine staples first; stretches and rare equipment last). All new entries `reviewed: false`. After each batch run `tools/build_catalog.sh` (validates ids, bumps the catalog version, refreshes the app asset) and commit the updated asset + `catalog_version.json`.
-- **Acceptance per batch:** 100 new ids; each has `ar` + ≥ 0 aliases; ids validated by `build_catalog`; list the batch in the PR/commit message for native review.
-- [ ] Batch 1 … [ ] Batch 13 (final). Start with the variants of the first 50 (incline/decline/smith/cable versions, other curls/rows/presses) so related exercises read consistently.
-- [ ] Owner review pass: flip `reviewed` to `true` after human review.
-- [ ] Later: `instructions_ar` translation (separate task, same batching).
-
-## 7. `brand/**` — Icon and splash exports
-
-- **Owns:** `brand/**`, and on hand-off `app/android/app/src/main/res/mipmap-*`, `app/ios/Runner/Assets.xcassets/AppIcon.appiconset` (coordinate with whoever owns `app/` scaffolding)
+- **Goal:** Egyptian-gym Arabic name + slang aliases for the remaining **1,274** exercises (50 done in Phase 3, owner-reviewed).
+- **Owns (only these):**
+  - `data/ar/**` (in practice `data/ar/exercise_names_ar.json`: add entries; never rename or change the 50 reviewed ones)
+- **No app code, no builds, no devices.** Don't touch `app/**` (the catalog asset is generated), `tools/**` or `data/catalog/**`.
+- **How:** batches of 100 ordered by likely usage (barbell/dumbbell/cable/machine staples and the variants of the first 50 first; stretches and rare equipment last). Every new entry `{"ar": "…", "aliases": [...], "reviewed": false}`. Follow the conventions of the reviewed 50 (Egyptian gym words, e.g. بنش، سكوات، دمبل، سميث، كابل، مرزبة، بار زد; English loanwords in Arabic script where gyms use them). After each batch: `source ./env.sh && tools/build_catalog.sh --check` must print OK (resolve every same-name warning or log why it's intended), then commit that batch alone, listing its ids in the commit message for native review.
 - **Acceptance:**
-  - [ ] Refine `logo-concept-a.svg` (owner approval).
-  - [ ] Android adaptive icon (foreground + background) + **monochrome** layer; legacy mipmaps; Play 512×512.
-  - [ ] iOS 1024 icon with **light, dark, tinted** variants.
-  - [ ] Splash (Android 12 splash API + iOS launch screen), dark background.
+  - [ ] Batch 1 … [ ] Batch 13 (final): all 1,324 exercises have an Arabic name; `--check` reports 0 English-only.
+  - [ ] Log naming conventions and any judgement calls in DECISIONS_LOG → Window G.
+  - [ ] Owner review pass later (flip `reviewed` to `true`), not this window.
+  - [ ] Later (not this round): `instructions_ar`.
+
+## 7. F window — Brand pipeline + count separator  (branch `feature/brand`, device set **B**) — [ ]
+
+- **Goal:** every icon and splash asset generated from ONE source, `brand/logo-concept-a.svg`: replace the SVG, run one command, and everything regenerates.
+- **Owns (only these):**
+  - `brand/**` (pipeline scripts, intermediate SVGs, `exports/`, README)
+  - `app/android/app/src/main/res/**` (mipmaps, adaptive + monochrome icon, `drawable/ic_stat_azm.xml`, splash drawables/styles incl. `values-v31`; keep `raw/keep.xml` and the `strings.xml` app names unchanged)
+  - `app/ios/Runner/Assets.xcassets/**` (AppIcon with light/dark/tinted, LaunchImage)
+  - `app/ios/Runner/Base.lproj/LaunchScreen.storyboard`
+  - `app/lib/features/exercises/ui/exercise_browser.dart` (count label only)
+  - `app/lib/core/l10n/arb_src/exercises/{ar,en}.arb` (keys `exercises…`)
+  - `app/test/features/exercises/**`
+  - `docs/screenshots/exercises/**`, `docs/screenshots/brand/**`
+- **Acceptance:**
+  - [ ] `brand/generate.sh` (sources `env.sh`, bounded, idempotent) regenerates from the SVG: Android legacy `mipmap-*` (mdpi → xxxhdpi), adaptive icon (`mipmap-anydpi-v26`, foreground in the 66 dp safe zone of 108 dp + background) + **monochrome** layer (Android 13+ themed icons), notification icon `ic_stat_azm` (monochrome), Play Store 512 × 512 (`brand/exports/`); iOS 1024 AppIcon **light, dark, tinted** (Contents.json appearances; no transparency on light); splash: Android 12+ splash API icon + pre-12 `launch_background`, iOS LaunchScreen + LaunchImage, dark background.
+  - [ ] Colours only from the design system (`design/theme.json` / `AzmColors`): black plate, white strokes, accent blue; splash background = the dark page background. No new colours.
+  - [ ] Proof that it regenerates: a test/check (e.g. `brand/generate.sh --check` or a unit test in `brand/`) that fails when committed assets differ from a fresh run; demonstrate once by changing the SVG, regenerating, reviewing, then restoring.
+  - [ ] Exercise count label with a thousands separator in both languages (`1,324 exercises` / `1,324 تمرين`), Western digits; test updated (`exercise_picker_test.dart` expects `1324 exercises` today).
+  - [ ] Parity: launcher icon (home screen, themed-icon on Android 13+, iOS dark + tinted home screen), notification icon, splash captured on the emulator + simulator into `docs/screenshots/brand/{android,ios}/`; `AZM_DEVICE_SET=B tools/screenshots.sh exercises` re-run (new count), ar + en. Checklist: icon on real launchers (Pixel, Samsung, iPhone), small-size legibility, splash on real devices.
 
 ## 8. `tools/**` — Scripts
 
@@ -277,3 +308,15 @@ _(append here only)_
 
 _(append here only)_
 - ~~@core/widgets (D, 2026-09-27, optional): `LiftedCounter` could take a `format` callback …~~ **Resolved at integration (2026-09-27):** `LiftedCounter(compact: true)`; `CompactLiftedNumber` removed.
+
+### Requests from E (settings), round 3
+
+_(append here only)_
+
+### Requests from F (brand), round 3
+
+_(append here only)_
+
+### Requests from G (Arabic names), round 3
+
+_(append here only)_

@@ -78,3 +78,11 @@ _(window D appends here only)_
 - [ ] The keypad's ± key gives a light selection haptic on every screen that edits sets (live workout, past workout, routine editor), same feel everywhere. (integrator, 2026-09-27)
 - [ ] Library/picker search on a real keyboard: type, use the keyboard's undo (iOS shake / three-finger swipe, Android keyboard undo) — the result list follows the text in the field every time; × clears and the full list returns. (integrator, 2026-09-27)
 - [ ] History header with a large all-time total (e.g. a restored backup over 100,000 kg): shows `450K kg` / `1.2M kg` in English and `450 ألف kg` / `1.2 مليون kg` in Arabic, reading right-to-left, and counts up smoothly on change. (integrator, 2026-09-27)
+
+### Settings, backup, licences (window E, round 3)
+
+_(window E appends here only)_
+
+### Brand: icons, splash (window F, round 3)
+
+_(window F appends here only)_

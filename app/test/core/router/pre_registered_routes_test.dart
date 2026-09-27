@@ -3,6 +3,7 @@ import 'package:azm/core/router/app_router.dart';
 import 'package:azm/features/history/ui/exercise_history_screen.dart';
 import 'package:azm/features/history/ui/past_workout_screen.dart';
 import 'package:azm/features/history/ui/stats_screen.dart';
+import 'package:azm/features/settings/ui/licenses_screen.dart';
 import 'package:azm/features/onboarding/data/onboarding_gate.dart';
 import 'package:azm/features/onboarding/ui/onboarding_screen.dart';
 import 'package:azm/features/routines/ui/program_detail_screen.dart';
@@ -50,5 +51,7 @@ void main() {
     expect((await open<PastWorkoutScreen>(AppRoutes.pastWorkoutFor('w1'))).workoutId, 'w1');
     await open<StatsScreen>(AppRoutes.stats);
     expect((await open<ExerciseHistoryScreen>(AppRoutes.exerciseHistoryFor('0001'))).exerciseId, '0001');
+    // Round 3 (settings window E).
+    await open<LicensesScreen>(AppRoutes.licenses);
   });
 }

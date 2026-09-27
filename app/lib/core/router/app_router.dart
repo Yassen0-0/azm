@@ -14,6 +14,7 @@ import '../../features/onboarding/ui/onboarding_screen.dart';
 import '../../features/routines/ui/program_detail_screen.dart';
 import '../../features/routines/ui/programs_screen.dart';
 import '../../features/routines/ui/routine_editor_screen.dart';
+import '../../features/settings/ui/licenses_screen.dart';
 import '../../features/settings/ui/settings_screen.dart';
 import '../../features/workout/ui/active_workout_bar_slot.dart';
 import '../../features/workout/ui/active_workout_screen.dart';
@@ -79,6 +80,11 @@ abstract final class AppRoutes {
   /// Full history of one exercise: `context.push(AppRoutes.exerciseHistoryFor(id))`.
   static const String exerciseHistory = '/exercise-history/:id';
   static String exerciseHistoryFor(String id) => '/exercise-history/$id';
+
+  // ── Round 3, settings window (E) ──
+
+  /// Licences and attributions, pushed from Settings.
+  static const String licenses = '/settings/licenses';
 }
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -123,6 +129,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.settings,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.licenses,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const LicensesScreen(),
       ),
       GoRoute(
         path: AppRoutes.exerciseDetail,

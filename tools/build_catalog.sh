@@ -3,4 +3,4 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 source "$ROOT/env.sh"
-cd "$ROOT/tools" && dart run build_catalog.dart
+cd "$ROOT/tools" && dart run build_catalog.dart "$@"   # --check = validate only

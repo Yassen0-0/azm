@@ -10,6 +10,9 @@
 //          app/assets/catalog/catalog.sqlite      (bundled into the app)
 //          app/assets/catalog/catalog_version.txt (bundled; cheap version check)
 //
+//   --check : validate the inputs and print coverage, write NOTHING (for the
+//             Arabic-names window; the integrator rebuilds the asset at merge).
+//
 // The version is bumped ONLY when the input hash changes. The app replaces its
 // catalog tables when the bundled version is newer (docs/DATA.md).
 import 'dart:convert';
@@ -65,9 +68,28 @@ void main(List<String> args) {
       }
     }
   }
+  // Warnings (not fatal): the same Arabic primary name on two exercises.
+  final warnings = <String>[];
+  final idsByName = <String, List<String>>{};
+  ar.forEach((id, v) {
+    final name = normalizeForSearch((v as Map<String, dynamic>)['ar'] as String? ?? '');
+    if (name.isNotEmpty) (idsByName[name] ??= []).add(id);
+  });
+  idsByName.forEach((name, ids) {
+    if (ids.length > 1) warnings.add('same Arabic name on ${ids.join(', ')}');
+  });
   if (errors.isNotEmpty) {
     stderr.writeln('Catalog validation FAILED:\n  ${errors.join('\n  ')}');
     exit(1);
+  }
+  if (args.contains('--check')) {
+    final reviewed = ar.values.where((v) => (v as Map<String, dynamic>)['reviewed'] == true).length;
+    stdout.writeln('Catalog inputs OK: ${byId.length} exercises, ${ar.length} with Arabic names '
+        '($reviewed reviewed), ${byId.length - ar.length} still English-only. Nothing written (--check).');
+    for (final w in warnings) {
+      stdout.writeln('  warning: $w');
+    }
+    return;
   }
 
   // ---- Version --------------------------------------------------------------
