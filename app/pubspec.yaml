@@ -2,7 +2,9 @@ name: azm
 description: "Azm - Gym Tracker"
 publish_to: "none"
 
-version: 1.0.0+1
+# <version>+<build>: the SINGLE source of the build number. <build> is the NEXT
+# tester build; tools/release_apk.sh releases it, tags it, then bumps it.
+version: 1.0.0-rc1+1
 
 environment:
   sdk: ^3.13.4

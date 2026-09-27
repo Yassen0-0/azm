@@ -14,6 +14,14 @@
 
 cmd="$(/usr/bin/jq -r '.tool_input.command // empty' 2>/dev/null)"
 [ -n "$cmd" ] || exit 0
+# Heredoc bodies are data (scripts, docs, messages), not commands: drop them
+# so e.g. a Markdown snippet mentioning `flutter test` isn't blocked.
+cmd="$(printf '%s\n' "$cmd" | /usr/bin/awk '
+  tag != "" { if ($0 ~ "^[[:space:]]*" tag "[[:space:]]*$") tag = ""; next }
+  { print
+    if (match($0, /<<-?[[:space:]]*["\047]?[A-Za-z_][A-Za-z0-9_]*["\047]?/)) {
+      t = substr($0, RSTART, RLENGTH); sub(/<<-?[[:space:]]*/, "", t); gsub(/["\047]/, "", t); tag = t
+    } }')"
 
 # `flutter` / `dart` in command position: at the start, or after ; & | ( ` $(
 # or an opening quote (bash -c '…'); a path prefix counts too
@@ -34,7 +42,7 @@ fi
   hookSpecificOutput: {
     hookEventName: "PreToolUse",
     permissionDecision: "deny",
-    permissionDecisionReason: "Azm sandbox (CLAUDE.md): flutter/dart must run with the ROOT toolchain. Start the command with `source ./env.sh && …` (run from the project root), or use ./ios_env / ./gh_env. A bare flutter/dart would use ~/dev/flutter."
+    permissionDecisionReason: "Azm sandbox (CLAUDE.md): flutter/dart must run with the ROOT toolchain. Start the command with `source ./env.sh && …` (run from the project root), or use ./ios_env / ./gh_env. A bare flutter/dart would use ~/dev/flutter. (False positive, e.g. the word in a message? Prefixing source ./env.sh && is harmless.)"
   }
 }'
 exit 0

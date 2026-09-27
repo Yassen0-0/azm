@@ -2,6 +2,7 @@
 /.tooling/
 /.worktrees/
 /inputs/
+/dist/
 /media/
 /data/catalog/*.sqlite
 /data/catalog/*.sqlite-*

@@ -112,3 +112,9 @@ Reference: `brand/exports/review_sheet.png` (every variant) and `docs/screenshot
 - [ ] **Upgrade install on a real phone** (both platforms): install a pre-round-3 build, log a workout with an exercise that is now hidden (e.g. 0077 "Barbell Rear Lunge V. 2"), then install this build over it. The app opens, the old workout still shows that exercise's name in History, and the library no longer lists 0077 (1,291 exercises).
 - [ ] **App version on a release/TestFlight build:** Settings → About and Licences show the store version; an exported backup's `app_version` is `version+build` of that build (e.g. `1.0.0+1`).
 - [ ] **Search with Egyptian spellings on a real keyboard (Gboard + iOS Arabic):** ضهر / ظهر, دراع / ذراع, تقيل / ثقيل, فخد / فخذ return the same exercises.
+
+### Tester APK (2026-09-27)
+
+- [ ] **Install from the GitHub release on a real Android phone:** open the private release page logged in, download `azm-1.0.0-rc1-<build>.apk`, allow "Install unknown apps" for the browser/Files, install. Play Protect may warn about an unknown developer: "Install anyway". The app opens, onboarding shows.
+- [ ] **Update path:** with build N installed and some workouts logged, install build N+1 from its release: it installs as an update (no uninstall), data is kept, About shows the new version.
+- [ ] **Rest notification on the real phone from the release build:** tick a set, lock the phone, the notification arrives on time with the white Azm mark (status bar + lock screen), sound/vibration per the system settings.

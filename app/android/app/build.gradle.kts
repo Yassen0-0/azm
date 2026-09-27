@@ -1,3 +1,10 @@
+// Release signing (tools/release_apk.sh): the upload keystore and its password
+// come ONLY from environment variables, set by the release script from
+// .tooling/secrets + the macOS Keychain. Nothing secret is in this repo.
+// Without them (e.g. `flutter run --release`) release builds use debug signing;
+// tools/release_apk.sh verifies the certificate, so such an APK is never published.
+val azmUploadKeystore: String? = System.getenv("AZM_UPLOAD_KEYSTORE")
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -30,11 +37,24 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (azmUploadKeystore != null) {
+            create("upload") {
+                storeFile = file(azmUploadKeystore)
+                storePassword = System.getenv("AZM_UPLOAD_STORE_PASSWORD")
+                keyAlias = System.getenv("AZM_UPLOAD_KEY_ALIAS") ?: "azm-upload"
+                keyPassword = System.getenv("AZM_UPLOAD_STORE_PASSWORD") // PKCS12: same password
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (azmUploadKeystore != null) {
+                signingConfigs.getByName("upload")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }

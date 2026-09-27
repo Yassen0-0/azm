@@ -46,7 +46,8 @@ azm/                     ROOT = git repo root
   brand/                 logo-concept-a.svg → generate.sh (every icon + splash; --check in CI)
   design/                theme.json, theme.css, ReadexPro.ttf (Ather design system, copied from inputs/)
   gh_env                 wrapper for GitHub commands (token in the macOS Keychain)
-  tools/                 scripts: cloud_setup.sh (Linux/cloud), build_catalog.sh, gen_l10n.sh, screenshots.sh, check_directionality.sh, e2e_android_helper.sh, check_plan_overlap.dart, serve_media_dev.dart, relocate.sh
+  dist/                  release APKs (gitignored)
+  tools/                 scripts: release_apk.sh + upload_key.sh (tester APKs), cloud_setup.sh (Linux/cloud), build_catalog.sh, gen_l10n.sh, screenshots.sh, check_directionality.sh, e2e_android_helper.sh, check_plan_overlap.dart, serve_media_dev.dart, relocate.sh
   docs/screenshots/      parity screenshots per feature (android + ios, ar + en)
   app/                   the Flutter project
   inputs/                original files as delivered — gitignored
@@ -114,6 +115,30 @@ The GitHub CLI lives in `.tooling/gh` (on `env.sh`'s PATH). Its login token is s
 ```
 
 `gh_env` sources `env.sh`, then restores only `HOME`. gh's non-secret config stays in `.tooling/home/.config/gh` (`GH_CONFIG_DIR`) and git's "global" config in `.tooling/home/.gitconfig` (`GIT_CONFIG_GLOBAL`, so your real `~/.gitconfig` is never read). This repo's local git config uses `gh auth git-credential` for github.com. Tokens are never written to files.
+
+## Tester APK releases (owner only)
+
+Private GitHub prereleases on `Yassen0-0/azm`, one universal APK each: `v<version>-b<build>` with `azm-<version>-<build>.apk` attached.
+
+```sh
+# once per release: write docs/release_notes/v1.0.0-rc1-b<build>.md (Arabic + English), commit, push
+source ./env.sh && tools/release_apk.sh --build-only   # build + verify only (dist/, gitignored)
+source ./env.sh && tools/release_apk.sh                # build + verify + tag + prerelease + bump
+```
+
+- **Version:** `app/pubspec.yaml` `version: 1.0.0-rc1+<build>` is the single source; `<build>` is the next tester build. The script releases it, tags that commit, then bumps it and commits.
+- **Checks before publishing:** signed with the upload key (certificate SHA-256), versionCode/versionName match pubspec, the asset list is printed and contains nothing from `media/` (path, GIF/video type, or SHA-256 match against every file in `media/`). The repo must be private.
+- **Install on a phone:** download the APK from the release page (logged in to GitHub), allow "Install unknown apps" for the browser/Files app, open it. Later builds install over it as updates.
+
+### Upload key: DON'T LOSE IT
+
+`.tooling/secrets/azm-upload.jks` (gitignored, never pushed) signs every tester build; its password is only in the **macOS Keychain** (service `azm.android.upload`), read with the real HOME like `./gh_env`. **Losing the keystore or its password means installed copies can never be updated**: Android refuses an update signed with a different key, so every tester would have to uninstall (losing their data unless they exported a backup) and reinstall. (For Google Play later, this becomes the *upload* key of Play App Signing, which can be reset through Google; sideloaded tester installs can't.)
+
+```sh
+source ./env.sh && tools/upload_key.sh info     # fingerprints only
+tools/upload_key.sh backup                      # YOU run it in Terminal; you type the zip password
+```
+`backup` writes `.tooling/secrets/azm-upload-key-backup-YYYYMMDD.zip` (keystore + its password, zip-encrypted with the password you type). **Copy it to Google Drive and to the SSD**, and keep the zip password somewhere else (a password manager). Restore: unzip, put the `.jks` back in `.tooling/secrets/`, and add the password to the Keychain with the command in the zip's README.
 
 ## The app (`app/`)
 
