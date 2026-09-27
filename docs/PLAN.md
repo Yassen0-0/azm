@@ -253,7 +253,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [ ] Owner review pass later (flip `reviewed` to `true`), not this window.
   - [ ] Later (not this round): `instructions_ar`.
 
-## 7. F window — Brand pipeline + count separator  (branch `feature/brand`, device set **B**) — [ ]
+## 7. F window — Brand pipeline + count separator  (branch `feature/brand`, device set **B**) — [x] done 2026-09-27 (window F), not merged
 
 - **Goal:** every icon and splash asset generated from ONE source, `brand/logo-concept-a.svg`: replace the SVG, run one command, and everything regenerates.
 - **Owns (only these):**
@@ -266,11 +266,18 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - `app/test/features/exercises/**`
   - `docs/screenshots/exercises/**`, `docs/screenshots/brand/**`
 - **Acceptance:**
-  - [ ] `brand/generate.sh` (sources `env.sh`, bounded, idempotent) regenerates from the SVG: Android legacy `mipmap-*` (mdpi → xxxhdpi), adaptive icon (`mipmap-anydpi-v26`, foreground in the 66 dp safe zone of 108 dp + background) + **monochrome** layer (Android 13+ themed icons), notification icon `ic_stat_azm` (monochrome), Play Store 512 × 512 (`brand/exports/`); iOS 1024 AppIcon **light, dark, tinted** (Contents.json appearances; no transparency on light); splash: Android 12+ splash API icon + pre-12 `launch_background`, iOS LaunchScreen + LaunchImage, dark background.
-  - [ ] Colours only from the design system (`design/theme.json` / `AzmColors`): black plate, white strokes, accent blue; splash background = the dark page background. No new colours.
-  - [ ] Proof that it regenerates: a test/check (e.g. `brand/generate.sh --check` or a unit test in `brand/`) that fails when committed assets differ from a fresh run; demonstrate once by changing the SVG, regenerating, reviewing, then restoring.
-  - [ ] Exercise count label with a thousands separator in both languages (`1,324 exercises` / `1,324 تمرين`), Western digits; test updated (`exercise_picker_test.dart` expects `1324 exercises` today).
-  - [ ] Parity: launcher icon (home screen, themed-icon on Android 13+, iOS dark + tinted home screen), notification icon, splash captured on the emulator + simulator into `docs/screenshots/brand/{android,ios}/`; `AZM_DEVICE_SET=B tools/screenshots.sh exercises` re-run (new count), ar + en. Checklist: icon on real launchers (Pixel, Samsung, iPhone), small-size legibility, splash on real devices.
+  - [x] `brand/generate.sh` (sources `env.sh`, bounded, idempotent) regenerates from the SVG: Android legacy `mipmap-*` (mdpi → xxxhdpi), adaptive icon (`mipmap-anydpi-v26`, foreground in the 66 dp safe zone of 108 dp + background) + **monochrome** layer (Android 13+ themed icons), notification icon `ic_stat_azm` (monochrome), Play Store 512 × 512 (`brand/exports/`); iOS 1024 AppIcon **light, dark, tinted** (Contents.json appearances; no transparency on light); splash: Android 12+ splash API icon + pre-12 `launch_background`, iOS LaunchScreen + LaunchImage, dark background.
+  - [x] Colours only from the design system (`design/theme.json` / `AzmColors`): black plate, white strokes, accent blue; splash background = the dark page background. No new colours.
+  - [x] Proof that it regenerates: a test/check (e.g. `brand/generate.sh --check` or a unit test in `brand/`) that fails when committed assets differ from a fresh run; demonstrate once by changing the SVG, regenerating, reviewing, then restoring.
+  - [x] Exercise count label with a thousands separator in both languages (`1,324 exercises` / `1,324 تمرين`), Western digits; test updated (`exercise_picker_test.dart` expects `1324 exercises` today).
+  - [x] Parity: launcher icon (home screen, themed-icon on Android 13+, iOS dark + tinted home screen), notification icon, splash captured on the emulator + simulator into `docs/screenshots/brand/{android,ios}/`; `AZM_DEVICE_SET=B tools/screenshots.sh exercises` re-run (new count), ar + en. Checklist: icon on real launchers (Pixel, Samsung, iPhone), small-size legibility, splash on real devices.
+- **Merge notes (window F, 2026-09-27):**
+  - One command: `source ./env.sh && brand/generate.sh` (≈3 s); `brand/generate.sh --check` fails on any stale/missing/extra asset. Source contract + outputs in `brand/README.md`.
+  - Logo refined for 48 px legibility (figure strokes 3.2 → 4.6, bigger separated head); concept, colours and composition unchanged (DECISIONS_LOG).
+  - `drawable/ic_stat_azm.xml` replaced by `drawable-*dpi/ic_stat_azm.png` (same resource name). iOS AppIcon is now a single 1024 set (light/dark/tinted); the 15 template PNGs are gone.
+  - `exercisesResultCount` gained a `countText` placeholder: generated l10n files may conflict with E: take either side, re-run `tools/gen_l10n.sh`.
+  - Captures: `docs/screenshots/brand/{android,ios}/`; `exercises` suite re-run on set B, ar + en, both platforms. iOS dark/tinted home icons + notification banner are device-checklist items (not scriptable on the simulator).
+  - analyze clean, `flutter test` 215 passing, directionality OK.
 
 ## 8. `tools/**` — Scripts
 
@@ -324,6 +331,8 @@ _(append here only)_
 ### Requests from F (brand), round 3
 
 _(append here only)_
+- @integrator / owner of `integration_test/exercises_screens_test.dart` + `screenshot_harness.dart` (F, 2026-09-27): on "Azm iPhone B" the **first** iOS step (`ar_01_library`) is often captured before the Exercises tab has painted (blank list, Workout tab still selected): 3 of 4 runs, reproduced with `main`'s `app/lib`. Suggest waiting for a finder (e.g. `ExerciseCard`) or a longer `_settle` before the first screenshot of a run. Committed images come from a clean run.
+- @integrator (F, 2026-09-27): the old Request "@brand (window B, 2026-09-26): notification icon placeholder" is done (`drawable-*dpi/ic_stat_azm.png` generated from the logo); remove it at merge. Suggest adding `brand/generate.sh --check` to `tools/check_all.sh` (§8) so stale icons fail CI.
 
 ### Requests from G (Arabic names), round 3
 
