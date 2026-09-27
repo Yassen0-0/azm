@@ -23,7 +23,7 @@ The repository is **private** on GitHub (`Yassen0-0/azm`). **`media/` (the Gym v
 git clone https://github.com/Yassen0-0/azm.git && cd azm
 ```
 
-- **Cloud (Claude Code on the web, Linux):** `tools/cloud_setup.sh` installs the pinned Flutter into `.tooling/flutter`, runs pub get, regenerates every generated file (l10n, Drift, catalog; fails if the committed copies are stale), then `flutter analyze` + `flutter test`. After that: `source ./env.sh && …`. No devices there: see CLAUDE.md → *Cloud / no devices* (device verification is deferred to the Mac, never skipped).
+- **Cloud (Claude Code on the web, Linux):** `tools/cloud_setup.sh` installs missing system packages with `apt-get` (git, curl, unzip, xz-utils, libsqlite3-dev; allowed in an ephemeral cloud container only, never on the Mac), then the pinned Flutter into `.tooling/flutter`, runs pub get, regenerates every generated file (l10n, Drift, catalog; fails if the committed copies are stale), then `flutter analyze` + `flutter test`. After that: `source ./env.sh && …`. No devices there: see CLAUDE.md → *Cloud / no devices* (device verification is deferred to the Mac, never skipped).
 - **Mac (full setup, devices):** follow [Set up on a fresh Mac](#set-up-on-a-fresh-mac) (or copy an existing ROOT including `.tooling/` and run `tools/relocate.sh`), then always `source ./env.sh && …`. GitHub commands go through `./gh_env` ([below](#github-gh_env)).
 
 **Start here:** [CLAUDE.md](CLAUDE.md) (rules) · [docs/SPEC.md](docs/SPEC.md) (what) · [docs/DESIGN.md](docs/DESIGN.md) (look) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) (how) · [docs/DATA.md](docs/DATA.md) (data) · [docs/LICENSES.md](docs/LICENSES.md) (**media is not ours**) · [docs/PLAN.md](docs/PLAN.md) (backlog) · [docs/DECISIONS_LOG.md](docs/DECISIONS_LOG.md) · [docs/ORIGINAL_BRIEF.md](docs/ORIGINAL_BRIEF.md)
@@ -62,6 +62,8 @@ Always run commands from ROOT like this:
 ```sh
 source ./env.sh && flutter doctor
 ```
+
+**Guard rails:** `env.sh` fails when `flutter` isn't the `.tooling` one (so `source ./env.sh && <cmd>` stops), and a Claude Code PreToolUse hook (`.claude/settings.json` → `tools/hooks/require_env_sh.sh`) blocks any agent Bash command on the Mac that runs `flutter`/`dart` without `source ./env.sh` (or `./ios_env` / `./gh_env`) in the same command. The hook does nothing on Linux.
 
 `env.sh` (paths are relative to its own location):
 

@@ -9,9 +9,11 @@
 #   tools/cloud_setup.sh              # full run (idempotent; re-running skips the SDK download)
 #   tools/cloud_setup.sh --no-tests   # setup + codegen check only
 #
-# Needs: bash, git, curl, unzip, xz (standard on the cloud image). Nothing is
-# installed outside ROOT. Device work (screenshots, E2E) is Mac-only:
-# CLAUDE.md → "Cloud / no devices".
+# System packages: in a cloud/Linux container (ephemeral) the script installs
+# what it needs with apt-get (git, curl, unzip, xz-utils, libsqlite3-dev),
+# which CLAUDE.md allows there. On the Mac it NEVER installs anything; it only
+# checks and stops. Everything else lives in ROOT/.tooling. Device work
+# (screenshots, E2E) is Mac-only: CLAUDE.md → "Cloud / no devices".
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "$ROOT"
@@ -22,6 +24,35 @@ RUN_TESTS=1
 [ "${1:-}" = "--no-tests" ] && RUN_TESTS=0
 
 step() { echo; echo "==> $*"; }
+
+# ---- 0. System packages (cloud container only) --------------------------------
+missing_pkgs=()
+needed="git:git curl:curl unzip:unzip"
+[ "$(uname -s)" = Linux ] && needed="$needed xz:xz-utils" # Flutter's Linux downloads are .tar.xz
+for tool_pkg in $needed; do
+  command -v "${tool_pkg%%:*}" >/dev/null 2>&1 || missing_pkgs+=("${tool_pkg##*:}")
+done
+if [ "$(uname -s)" = Linux ]; then
+  # SQLite for the Drift tests (package:sqlite3 loads libsqlite3.so if its own
+  # build hook can't provide a library).
+  if ! { ldconfig -p 2>/dev/null | grep -q 'libsqlite3\.so'; }; then missing_pkgs+=(libsqlite3-dev); fi
+  if [ ${#missing_pkgs[@]} -gt 0 ]; then
+    step "Cloud container: installing system packages ${missing_pkgs[*]} (apt-get; allowed in the cloud only, never on the Mac: CLAUDE.md)"
+    command -v apt-get >/dev/null 2>&1 || { echo "FAILED: need ${missing_pkgs[*]} but apt-get isn't available; install them with this image's package manager."; exit 1; }
+    SUDO=""
+    if [ "$(id -u)" != 0 ]; then
+      command -v sudo >/dev/null 2>&1 || { echo "FAILED: need root or sudo to apt-get install ${missing_pkgs[*]}."; exit 1; }
+      SUDO="sudo"
+    fi
+    $SUDO apt-get update -qq
+    $SUDO env DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends "${missing_pkgs[@]}"
+  else
+    step "System packages present (git, curl, unzip, xz, libsqlite3)"
+  fi
+elif [ ${#missing_pkgs[@]} -gt 0 ]; then
+  echo "FAILED: missing ${missing_pkgs[*]}. On the Mac nothing is installed automatically (sandbox rule): ask the owner."
+  exit 1
+fi
 
 # .tooling must exist before env.sh is sourced (it looks for it next to itself).
 mkdir -p .tooling/tmp .tooling/home .tooling/pub-cache
