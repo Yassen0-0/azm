@@ -1,3 +1,4 @@
+import 'package:azm/core/l10n/compact_number.dart';
 import 'package:azm/core/l10n/l10n.dart';
 import 'package:azm/features/history/data/history_format.dart';
 import 'package:azm/features/history/ui/history_text.dart';
@@ -24,14 +25,14 @@ void main() {
     test('Arabic and English wording, Western digits in both', () {
       final ar = lookupAppLocalizations(AzmLocales.ar);
       final en = lookupAppLocalizations(AzmLocales.en);
-      expect(ar.compact(1200000), '1.2 مليون');
-      expect(en.compact(1200000), '1.2M');
-      expect(ar.compact(450000), '450 ألف');
-      expect(en.compact(450000), '450K');
-      expect(ar.compact(84500), '84,500');
+      expect(ar.compactNumberText(1200000), '1.2 مليون');
+      expect(en.compactNumberText(1200000), '1.2M');
+      expect(ar.compactNumberText(450000), '450 ألف');
+      expect(en.compactNumberText(450000), '450K');
+      expect(ar.compactNumberText(84500), '84,500');
       expect(ar.historyLiftedSoFar, 'شِلت لحد دلوقتي');
       expect(en.historyLiftedSoFar, 'Lifted so far');
-      for (final s in [ar.compact(1234567890), ar.duration(const Duration(minutes: 75))]) {
+      for (final s in [ar.compactNumberText(1234567890), ar.duration(const Duration(minutes: 75))]) {
         expect(RegExp('[٠-٩]').hasMatch(s), isFalse, reason: s);
       }
       expect(ar.duration(const Duration(minutes: 75)), '1 س 15 د');

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/db/app_database.dart';
+import '../../../core/l10n/compact_number.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/l10n/set_labels.dart';
 import '../../../core/media/exercise_media.dart';
@@ -106,7 +107,7 @@ class _Totals extends StatelessWidget {
           HistoryStat(label: l.historyStatSets, value: AzmNumbers.integer(data.setCount)),
           HistoryStat(
             label: l.historyStatLifted,
-            value: lifted <= 0 ? l.historyNoData : l.historyWeightValue(l.compact(lifted), l.weightUnitLabel(unit)),
+            value: lifted <= 0 ? l.historyNoData : l.historyWeightValue(l.compactNumberText(lifted), l.weightUnitLabel(unit)),
           ),
         ],
       ),

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/l10n/l10n.dart';
-import '../../../core/l10n/set_labels.dart';
 import '../../../core/theme/azm_theme.dart';
-import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_pressable.dart';
-import 'history_text.dart';
 
 /// Card surface (the card is the elevation: no shadows).
 class HistoryCard extends StatelessWidget {
@@ -68,46 +64,6 @@ class HistoryStat extends StatelessWidget {
   }
 }
 
-/// The all-time Lifted number in compact form (`1.2M kg`), counting up to
-/// each new value with motion `value` (600 ms). Starts at its value (no
-/// count-up from 0 every time the tab opens); reduced motion jumps.
-/// Same layout as `LiftedCounter` (history size), which can't format compactly.
-class CompactLiftedNumber extends StatelessWidget {
-  const CompactLiftedNumber({super.key, required this.kg, required this.unit});
-
-  final double kg;
-  final WeightUnit unit;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final l = context.l10n;
-    final v = Units.toDisplay(kg, unit);
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: v, end: v),
-      duration: AzmMotion.of(context, AzmMotion.valueDuration),
-      curve: AzmMotion.value,
-      builder: (context, x, _) => Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.baseline,
-        textBaseline: TextBaseline.alphabetic,
-        children: [
-          Flexible(
-            child: Text(
-              // No LTR isolate: "165 ألف" must read right-to-left in Arabic.
-              v <= 0 ? l.historyNoData : l.compact(x),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AzmType.liftedNumber.copyWith(color: v <= 0 ? c.textNoData : c.textPrimary),
-            ),
-          ),
-          const SizedBox(width: AzmSpace.xxs),
-          Text(l.weightUnitLabel(unit), style: AzmType.rowTitle.copyWith(color: c.textSecondary)),
-        ],
-      ),
-    );
-  }
-}
 
 /// Two-option segmented control (fill track, card thumb, radius segment).
 class HistorySegmented<T> extends StatelessWidget {

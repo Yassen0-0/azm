@@ -278,6 +278,24 @@ abstract class AppLocalizations {
   /// **'زوّد'**
   String get commonKeypadIncrease;
 
+  /// Compact number in thousands (e.g. 450K). value has Western digits. Shared compact number format (LiftedCounter compact: true), used above 100,000.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} ألف'**
+  String commonCompactThousand(String value);
+
+  /// Compact number in millions (e.g. 1.2M). Shared compact number format (LiftedCounter compact: true), used above 100,000.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} مليون'**
+  String commonCompactMillion(String value);
+
+  /// Compact number in billions. Shared compact number format (LiftedCounter compact: true), used above 100,000.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} مليار'**
+  String commonCompactBillion(String value);
+
   /// Hint in the exercise search box (Arabic, slang or English all work).
   ///
   /// In ar, this message translates to:
@@ -1063,24 +1081,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'شِلت لحد دلوقتي'**
   String get historyLiftedSoFar;
-
-  /// Compact number in thousands (e.g. 450K). value has Western digits.
-  ///
-  /// In ar, this message translates to:
-  /// **'{value} ألف'**
-  String historyCompactThousand(String value);
-
-  /// Compact number in millions (e.g. 1.2M).
-  ///
-  /// In ar, this message translates to:
-  /// **'{value} مليون'**
-  String historyCompactMillion(String value);
-
-  /// Compact number in billions.
-  ///
-  /// In ar, this message translates to:
-  /// **'{value} مليار'**
-  String historyCompactBillion(String value);
 
   /// Number of finished workouts. countText = count with Western digits.
   ///

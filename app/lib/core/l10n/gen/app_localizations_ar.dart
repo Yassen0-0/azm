@@ -102,6 +102,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonKeypadIncrease => 'زوّد';
 
   @override
+  String commonCompactThousand(String value) {
+    return '$value ألف';
+  }
+
+  @override
+  String commonCompactMillion(String value) {
+    return '$value مليون';
+  }
+
+  @override
+  String commonCompactBillion(String value) {
+    return '$value مليار';
+  }
+
+  @override
   String get exercisesSearchHint => 'ابحث بالعربي أو English';
 
   @override
@@ -520,21 +535,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get historyLiftedSoFar => 'شِلت لحد دلوقتي';
-
-  @override
-  String historyCompactThousand(String value) {
-    return '$value ألف';
-  }
-
-  @override
-  String historyCompactMillion(String value) {
-    return '$value مليون';
-  }
-
-  @override
-  String historyCompactBillion(String value) {
-    return '$value مليار';
-  }
 
   @override
   String historyWorkoutCount(int count, String countText) {

@@ -1,9 +1,6 @@
 {
   "@@locale": "en",
   "historyLiftedSoFar": "Lifted so far",
-  "historyCompactThousand": "{value}K",
-  "historyCompactMillion": "{value}M",
-  "historyCompactBillion": "{value}B",
   "historyWorkoutCount": "{count, plural, =0{No workouts} =1{1 workout} other{{countText} workouts}}",
   "historySetCount": "{count, plural, =0{No sets} =1{1 set} other{{countText} sets}}",
   "historyOpenStats": "Stats",

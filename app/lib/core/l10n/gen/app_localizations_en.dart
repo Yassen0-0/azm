@@ -102,6 +102,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonKeypadIncrease => 'Increase';
 
   @override
+  String commonCompactThousand(String value) {
+    return '${value}K';
+  }
+
+  @override
+  String commonCompactMillion(String value) {
+    return '${value}M';
+  }
+
+  @override
+  String commonCompactBillion(String value) {
+    return '${value}B';
+  }
+
+  @override
   String get exercisesSearchHint => 'Search exercises';
 
   @override
@@ -519,21 +534,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get historyLiftedSoFar => 'Lifted so far';
-
-  @override
-  String historyCompactThousand(String value) {
-    return '${value}K';
-  }
-
-  @override
-  String historyCompactMillion(String value) {
-    return '${value}M';
-  }
-
-  @override
-  String historyCompactBillion(String value) {
-    return '${value}B';
-  }
 
   @override
   String historyWorkoutCount(int count, String countText) {

@@ -125,6 +125,33 @@
   "@commonKeypadIncrease": {
     "description": "Semantics label of the keypad + step key."
   },
+  "commonCompactThousand": "{value} ألف",
+  "@commonCompactThousand": {
+    "description": "Compact number in thousands (e.g. 450K). value has Western digits. Shared compact number format (LiftedCounter compact: true), used above 100,000.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "commonCompactMillion": "{value} مليون",
+  "@commonCompactMillion": {
+    "description": "Compact number in millions (e.g. 1.2M). Shared compact number format (LiftedCounter compact: true), used above 100,000.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "commonCompactBillion": "{value} مليار",
+  "@commonCompactBillion": {
+    "description": "Compact number in billions. Shared compact number format (LiftedCounter compact: true), used above 100,000.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "exercisesSearchHint": "ابحث بالعربي أو English",
   "@exercisesSearchHint": {
     "description": "Hint in the exercise search box (Arabic, slang or English all work)."
@@ -689,33 +716,6 @@
   "historyLiftedSoFar": "شِلت لحد دلوقتي",
   "@historyLiftedSoFar": {
     "description": "History header label above the all-time Lifted total (sum of weight x reps of every completed set)."
-  },
-  "historyCompactThousand": "{value} ألف",
-  "@historyCompactThousand": {
-    "description": "Compact number in thousands (e.g. 450K). value has Western digits.",
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "historyCompactMillion": "{value} مليون",
-  "@historyCompactMillion": {
-    "description": "Compact number in millions (e.g. 1.2M).",
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "historyCompactBillion": "{value} مليار",
-  "@historyCompactBillion": {
-    "description": "Compact number in billions.",
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
   },
   "historyWorkoutCount": "{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{countText} تمارين} other{{countText} تمرين}}",
   "@historyWorkoutCount": {

@@ -4,33 +4,6 @@
   "@historyLiftedSoFar": {
     "description": "History header label above the all-time Lifted total (sum of weight x reps of every completed set)."
   },
-  "historyCompactThousand": "{value} ألف",
-  "@historyCompactThousand": {
-    "description": "Compact number in thousands (e.g. 450K). value has Western digits.",
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "historyCompactMillion": "{value} مليون",
-  "@historyCompactMillion": {
-    "description": "Compact number in millions (e.g. 1.2M).",
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "historyCompactBillion": "{value} مليار",
-  "@historyCompactBillion": {
-    "description": "Compact number in billions.",
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
   "historyWorkoutCount": "{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{countText} تمارين} other{{countText} تمرين}}",
   "@historyWorkoutCount": {
     "description": "Number of finished workouts. countText = count with Western digits.",

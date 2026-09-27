@@ -124,5 +124,32 @@
   "commonKeypadIncrease": "زوّد",
   "@commonKeypadIncrease": {
     "description": "Semantics label of the keypad + step key."
+  },
+  "commonCompactThousand": "{value} ألف",
+  "@commonCompactThousand": {
+    "description": "Compact number in thousands (e.g. 450K). value has Western digits. Shared compact number format (LiftedCounter compact: true), used above 100,000.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "commonCompactMillion": "{value} مليون",
+  "@commonCompactMillion": {
+    "description": "Compact number in millions (e.g. 1.2M). Shared compact number format (LiftedCounter compact: true), used above 100,000.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "commonCompactBillion": "{value} مليار",
+  "@commonCompactBillion": {
+    "description": "Compact number in billions. Shared compact number format (LiftedCounter compact: true), used above 100,000.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   }
 }

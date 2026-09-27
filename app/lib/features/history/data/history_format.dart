@@ -1,31 +1,5 @@
-import '../../../core/l10n/l10n.dart';
-
 // Pure formatting and calendar helpers of the history feature (unit-tested).
 // Western digits in both languages (AzmNumbers).
-
-/// Scale suffix of a compact number.
-enum CompactScale { none, thousand, million, billion }
-
-/// A compact number: [number] (Western digits) + [scale], e.g. ("1.2", million).
-typedef CompactNumber = ({String number, CompactScale scale});
-
-/// Compact form of a big total (the all-time Lifted):
-/// - below 100,000: the full integer with separators (`84,500`), so normal
-///   totals stay exact;
-/// - thousands: integer thousands (`450` K);
-/// - millions / billions: one decimal, trailing `.0` dropped (`1.2` M, `3` M).
-/// Rounding that reaches the next scale moves up (999,999 → `1` M).
-CompactNumber compactNumber(double value) {
-  final v = value < 0 ? 0.0 : value;
-  if (v < 100000) return (number: AzmNumbers.integer(v), scale: CompactScale.none);
-  final k = (v / 1000).round();
-  if (k < 1000) return (number: AzmNumbers.integer(k), scale: CompactScale.thousand);
-  final m = _round1(v / 1e6);
-  if (m < 1000) return (number: AzmNumbers.decimal(m), scale: CompactScale.million);
-  return (number: AzmNumbers.decimal(_round1(v / 1e9)), scale: CompactScale.billion);
-}
-
-double _round1(double v) => (v * 10).roundToDouble() / 10;
 
 /// Local calendar day (midnight, local time) of a UTC timestamp. [toLocal]
 /// is injectable for tests (fixed offsets).

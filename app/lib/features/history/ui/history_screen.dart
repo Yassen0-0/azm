@@ -4,11 +4,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/l10n/l10n.dart';
+import '../../../core/l10n/set_labels.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_pressable.dart';
 import '../../../core/widgets/azm_tab_page.dart';
+import '../../../core/widgets/lifted_counter.dart';
 import '../../settings/data/training_settings.dart';
 import '../data/history_format.dart';
 import '../data/history_models.dart';
@@ -162,7 +164,13 @@ class _LiftedHeader extends StatelessWidget {
         children: [
           Text(l.historyLiftedSoFar, style: AzmType.statLabel.copyWith(color: c.textSecondary)),
           const SizedBox(height: AzmSpace.xxs),
-          CompactLiftedNumber(kg: data.liftedKg, unit: unit),
+          LiftedCounter(
+            value: Units.toDisplay(data.liftedKg, unit),
+            unit: l.weightUnitLabel(unit),
+            size: LiftedCounterSize.history,
+            compact: true,
+            zeroText: l.historyNoData,
+          ),
           const SizedBox(height: AzmSpace.md),
           Row(
             children: [

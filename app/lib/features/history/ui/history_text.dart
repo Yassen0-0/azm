@@ -6,7 +6,6 @@ import '../../../core/l10n/exercise_names.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/l10n/set_labels.dart';
 import '../../../core/utils/units.dart';
-import '../data/history_format.dart';
 
 /// Display helpers of the history feature. Storage stays kg; conversion
 /// happens only here. Western digits in both languages.
@@ -19,17 +18,6 @@ extension HistoryText on AppLocalizations {
         withUnit ? weight(s.weightKg, u) : setWeightNumber(s.weightKg, u),
         AzmNumbers.integer(s.reps),
       ));
-
-  /// Compact big total: `84,500` / `450K` / `1.2M` (`1.2 مليون`).
-  String compact(double value) {
-    final c = compactNumber(value);
-    return switch (c.scale) {
-      CompactScale.none => c.number,
-      CompactScale.thousand => historyCompactThousand(c.number),
-      CompactScale.million => historyCompactMillion(c.number),
-      CompactScale.billion => historyCompactBillion(c.number),
-    };
-  }
 
   /// "55 min" / "1 h 5 min".
   String duration(Duration d) {

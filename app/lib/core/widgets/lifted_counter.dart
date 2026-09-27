@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/compact_number.dart';
 import '../l10n/l10n.dart';
 import '../theme/azm_theme.dart';
 
@@ -18,6 +19,10 @@ enum LiftedCounterSize {
 /// Lifted (شِلت) number + unit + optional comparison line. Counts up to each
 /// new [value] with motion `value` (600 ms); reduced motion jumps.
 /// [value] is already in the display unit.
+///
+/// [compact] (History's all-time total): above 100,000 the number is shortened
+/// to `450K` / `1.2M` / `2B` (Arabic `450 ألف` / `1.2 مليون` / `2 مليار`),
+/// exact below that ([compactNumber]).
 class LiftedCounter extends StatelessWidget {
   const LiftedCounter({
     super.key,
@@ -26,6 +31,8 @@ class LiftedCounter extends StatelessWidget {
     this.size = LiftedCounterSize.header,
     this.comparison,
     this.fromZero = false,
+    this.compact = false,
+    this.zeroText,
   });
 
   final double value;
@@ -35,6 +42,12 @@ class LiftedCounter extends StatelessWidget {
 
   /// Count up from 0 on first build (summary); otherwise start at [value].
   final bool fromZero;
+
+  /// Compact form above 100,000 (see class doc).
+  final bool compact;
+
+  /// Shown instead of `0` (in the no-data colour) when [value] ≤ 0, e.g. `—`.
+  final String? zeroText;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +73,13 @@ class LiftedCounter extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(AzmNumbers.integer(v), style: numberStyle.copyWith(color: c.textPrimary)),
+              Text(
+                value <= 0 && zeroText != null
+                    ? zeroText!
+                    : (compact ? context.l10n.compactNumberText(v) : AzmNumbers.integer(v)),
+                maxLines: 1,
+                style: numberStyle.copyWith(color: value <= 0 && zeroText != null ? c.textNoData : c.textPrimary),
+              ),
               const SizedBox(width: AzmSpace.xxs),
               Text(unit, style: unitStyle.copyWith(color: c.textSecondary)),
             ],

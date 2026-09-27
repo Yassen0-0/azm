@@ -29,5 +29,8 @@
   "commonKeypadBackspace": "Delete digit",
   "commonKeypadHide": "Close keypad",
   "commonKeypadDecrease": "Decrease",
-  "commonKeypadIncrease": "Increase"
+  "commonKeypadIncrease": "Increase",
+  "commonCompactThousand": "{value}K",
+  "commonCompactMillion": "{value}M",
+  "commonCompactBillion": "{value}B"
 }
