@@ -165,8 +165,10 @@ class _DayCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(names.primary, style: AzmType.rowTitleSmall.copyWith(color: c.textPrimary)),
-                          if (names.secondary != null)
+                          if (names.secondary != null) ...[
+                            const SizedBox(height: AzmSpace.opticalInset),
                             Text(names.secondary!, style: AzmType.small.copyWith(color: c.textSecondary)),
+                          ],
                         ],
                       );
                     }),

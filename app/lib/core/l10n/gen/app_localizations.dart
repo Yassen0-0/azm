@@ -974,17 +974,11 @@ abstract class AppLocalizations {
   /// **'باوند'**
   String get onboardingUnitLb;
 
-  /// Example under the kg option.
+  /// Example under a unit option; weight = e.g. 60 kg (kept left-to-right).
   ///
   /// In ar, this message translates to:
-  /// **'مثلاً بنش 60 kg'**
-  String get onboardingUnitKgExample;
-
-  /// Example under the lb option.
-  ///
-  /// In ar, this message translates to:
-  /// **'مثلاً بنش 135 lb'**
-  String get onboardingUnitLbExample;
+  /// **'مثلاً بنش {weight}'**
+  String onboardingUnitExample(String weight);
 
   /// Button: next onboarding step.
   ///

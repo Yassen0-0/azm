@@ -633,13 +633,14 @@
   "@onboardingUnitLb": {
     "description": "Unit option (lb)."
   },
-  "onboardingUnitKgExample": "مثلاً بنش 60 kg",
-  "@onboardingUnitKgExample": {
-    "description": "Example under the kg option."
-  },
-  "onboardingUnitLbExample": "مثلاً بنش 135 lb",
-  "@onboardingUnitLbExample": {
-    "description": "Example under the lb option."
+  "onboardingUnitExample": "مثلاً بنش {weight}",
+  "@onboardingUnitExample": {
+    "description": "Example under a unit option; weight = e.g. 60 kg (kept left-to-right).",
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
   },
   "onboardingNext": "التالي",
   "@onboardingNext": {

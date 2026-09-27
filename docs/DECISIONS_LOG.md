@@ -239,6 +239,22 @@ Every assumption or judgment call made while building Azm, newest last. Format: 
 
 _(window C appends here only)_
 
+- **2026-09-27 — Routines data lives in `features/routines/data/`** (`RoutineRepository`, `ready_programs.dart`). Onboarding reuses its `copyProgram` (a feature may import another feature's `data/`); UI widgets are never shared across `routines/` ↔ `onboarding/`, so onboarding has its own small button/option widgets.
+- **2026-09-27 — Drift stream queries with identical SQL are shared regardless of `readsFrom`.** The workout feature watches `customSelect('SELECT 1', readsFrom: workout tables)`; a second `'SELECT 1'` with other tables silently replaced its table set and the active workout stopped updating (caught by `finish_and_exact_alarm_test`). Routines use unique SQL (`SELECT 1 AS routines_list_tick` / `routine_detail_tick`) + a regression test. Any future "tick" query must use its own SQL text (noted for window D in PLAN → Requests).
+- **2026-09-27 — New routine = a DB row created when the editor opens** (every edit persisted immediately, no Save button). Leaving it untouched (no name, notes or exercises) deletes it on close. An empty name is shown as "Untitled routine" and a workout started from it gets that name.
+- **2026-09-27 — New routine exercise = 3 normal sets without targets.** `Add set` copies the last set's targets as a normal set. Target weight is optional (null = "—"); target reps 0 is stored as null. The keypad writes on every key, weight → reps → next set.
+- **2026-09-27 — Start from a routine:** one workout set per target set (type, reps = target reps or 0). Weight = target weight, else the weight of the same set index in the last finished workout with that exercise, else 0 — otherwise ✓ on a set with target reps would log 0 kg (the workout's ✓ only fills from "previous" when reps are empty). Exercise notes are copied. `routine_id` is set, so the workout's per-exercise rest override comes from the routine. If any workout is active it is resumed untouched (toast "A workout is already running…").
+- **2026-09-27 — Start buttons:** ▶ on each routine card (1 tap from the Workout tab; disabled while the routine has no exercises) and "Start workout" in the editor header (replaces the editor with the active workout).
+- **2026-09-27 — Program copy:** each day → one routine appended to *My routines* in program order, named with the day name in the current app language (no program prefix: "Push (chest, shoulders, triceps)" / "Upper A" are already distinct); `target_reps` = range max, `rest_seconds` copied, sets normal. After "Add to my routines" the app goes to the Workout tab with a count toast.
+- **2026-09-27 — Rest override choices:** default (from settings) or 0:30 · 0:45 · 1:00 · 1:30 · 2:00 · 2:30 · 3:00 · 4:00 · 5:00.
+- **2026-09-27 — Onboarding:** step 1 unit (kg preselected; saved via `TrainingSettingsWriter` on Next and again on finish), step 2 optional program (none preselected) → "Add program and start" or "Skip, start empty". Finish writes `onboarding_done = true` then `context.go(workout)`. Android back / the back button on step 2 returns to step 1.
+- **2026-09-27 — Existing users with data:** `loadOnboardingDone` returns true (and writes the flag) when `onboarding_done` is missing but any workout or routine exists, so people who used the app before onboarding shipped never see it.
+- **2026-09-27 — Set-type letters and names in the routine editor reuse the workout's ARB keys** (`workoutSetType*`), so ح/W, د/D, ف/F can never drift apart between the routine editor and the workout. Everything else is in `arb_src/routines` / `arb_src/onboarding`.
+
+- **2026-09-27 — Disabled buttons use `textTertiary` for their label/icon** on `actionDisabled` (the accent-on colour was unreadable there): routine editor Start pill, empty-routine ▶, onboarding "Add program and start" before a choice.
+- **2026-09-27 — Screenshot suite `routines` uses the real exercise picker** for "picker return" (one search, two picks). A second `enterText` search in the same run did not refresh the picker's results on the emulator, so the step picks both from one query; noted for the exercises owner to check whether the search field ignores a programmatic second query.
+- **2026-09-27 — Numbers with units inside Arabic sentences are wrapped in a left-to-right isolate** (onboarding "مثلاً بنش 60 kg" rendered as "kg 60" without it; program "4 × 6–8" likewise).
+
 ## Window D — history, stats, PRs (round 2, branch `feature/history`)
 
 _(window D appends here only)_

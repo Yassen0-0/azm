@@ -105,7 +105,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             key: const ValueKey('onboarding-unit-kg'),
             title: l.onboardingUnitKg,
             unitLabel: l.routinesUnitKg,
-            example: l.onboardingUnitKgExample,
+            example: l.onboardingUnitExample(_ltr('${AzmNumbers.integer(60)} ${l.routinesUnitKg}')),
             selected: _unit == WeightUnit.kg,
             onTap: () => setState(() => _unit = WeightUnit.kg),
           ),
@@ -114,7 +114,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             key: const ValueKey('onboarding-unit-lb'),
             title: l.onboardingUnitLb,
             unitLabel: l.routinesUnitLb,
-            example: l.onboardingUnitLbExample,
+            example: l.onboardingUnitExample(_ltr('${AzmNumbers.integer(135)} ${l.routinesUnitLb}')),
             selected: _unit == WeightUnit.lb,
             onTap: () => setState(() => _unit = WeightUnit.lb),
           ),
@@ -210,6 +210,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     if (mounted) context.go(AppRoutes.workout);
   }
 }
+
+/// Keeps a number + unit left-to-right inside Arabic text.
+String _ltr(String s) => '\u2066$s\u2069';
 
 class _Progress extends StatelessWidget {
   const _Progress({required this.step, required this.total});
@@ -321,7 +324,7 @@ class _WideButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final bg = onTap == null ? c.actionDisabled : (primary ? c.accent : c.fill);
-    final fg = primary ? c.onAccent : c.textPrimary;
+    final fg = onTap == null ? c.textTertiary : (primary ? c.onAccent : c.textPrimary);
     return AzmPressable(
       onTap: onTap,
       semanticLabel: label,

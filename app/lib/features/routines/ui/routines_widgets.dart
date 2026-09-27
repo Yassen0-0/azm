@@ -93,7 +93,7 @@ class RoutinesWideButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final bg = onTap == null ? c.actionDisabled : (primary ? c.accent : (destructive ? Colors.transparent : c.fill));
-    final fg = primary ? c.onAccent : (destructive ? c.destructiveText : c.textPrimary);
+    final fg = onTap == null ? c.textTertiary : (primary ? c.onAccent : (destructive ? c.destructiveText : c.textPrimary));
     return AzmPressable(
       onTap: onTap,
       semanticLabel: label,

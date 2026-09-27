@@ -477,10 +477,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get onboardingUnitLb => 'باوند';
 
   @override
-  String get onboardingUnitKgExample => 'مثلاً بنش 60 kg';
-
-  @override
-  String get onboardingUnitLbExample => 'مثلاً بنش 135 lb';
+  String onboardingUnitExample(String weight) {
+    return 'مثلاً بنش $weight';
+  }
 
   @override
   String get onboardingNext => 'التالي';

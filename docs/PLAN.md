@@ -134,7 +134,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Windows C (routines + onboarding, set A) and D (history, set B) defined; routes, slots, first-run gate, history-source hook and ARB fragments pre-registered (see *Parallel windows*); `test/core/router/pre_registered_routes_test.dart`.
 - [x] `tools/check_plan_overlap.dart C D` → OK. analyze, test (153), directionality pass. No visible UI change (both slots render nothing), so parity screenshots were not regenerated.
 
-## 2. C window — Routines, ready programs, onboarding  (branch `feature/routines`, device set **A**) — [ ]
+## 2. C window — Routines, ready programs, onboarding  (branch `feature/routines`, device set **A**) — [x] done 2026-09-27 (window C), not merged yet
 
 - **Goal:** build a routine once, start it in one tap; copy a ready program into "my routines"; first-run onboarding (unit + optional ready program).
 - **Owns (only these):**
@@ -146,13 +146,19 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - `docs/screenshots/routines/**`, `docs/screenshots/onboarding/**`
 - **Uses, read-only:** tables `routines`/`routine_exercises`/`routine_sets` (yours to write), `workouts`/`workout_exercises`/`workout_sets` (write only to create the workout started from a routine; honour the one-active-workout rule like `WorkoutRepository.startEmpty`), `CatalogRepository.programs()`, picker contract (`context.push<List<String>>(AppRoutes.exercisePicker)`), `TrainingSettingsWriter` (unit in onboarding), `AppDatabase.writeSetting` for `onboarding_done` only, `SetRow`/`WeightKeypad`, `context.namesOf`, tokens.
 - **Acceptance:**
-  - [ ] Workout tab (`RoutinesHomeSection`): "My routines" list (name, exercise count, ▶ start) + entry to ready programs; empty state with "New routine". The Start/Resume card above stays as is.
-  - [ ] Routine editor (`routineNew` / `routineEditorFor(id)`): name, notes, add exercises (multi-select picker), target sets (type, reps, optional weight via `WeightKeypad`, display unit), per-exercise rest override, drag to reorder, delete set/exercise/routine (with confirmation). Every edit persisted immediately.
-  - [ ] Start routine in one tap → active workout prefilled (`workouts.routine_id` set; set rows from the targets; *previous* still shown by the workout screen); if a workout is already active, resume it instead of starting a second one.
-  - [ ] Ready programs (`programs` → `programFor(id)`): list + preview (days, exercises in the app language, sets × reps range) → "Add to my routines" copies each day as an editable routine; `target_reps` = range max (DATA.md). Copying twice creates independent copies.
-  - [ ] Onboarding (first run only, ≤ 2 screens, `AppRoutes.onboarding`): 1) unit kg/lb (`TrainingSettingsWriter.setWeightUnit`); 2) optional ready program (copied with the same logic) or Skip. Finish writes `onboarding_done` = `true` and `context.go(AppRoutes.workout)`. Implement `loadOnboardingDone` (missing/false → onboarding). Existing users with data: logged decision.
-  - [ ] Tests: routine CRUD + reorder persistence, program copy (names per language, `target_reps` = max), start-from-routine prefill + one-active rule, onboarding gate + finish.
-  - [ ] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh routines` (Workout tab with routines, empty state, editor with sets, picker return, programs list, program preview, active workout started from a routine) and `AZM_DEVICE_SET=A tools/screenshots.sh onboarding` (both steps; open with `ScreenStep.go(…, AppRoutes.onboarding)`), ar + en, both platforms. Checklist items for anything device-only.
+  - [x] Workout tab (`RoutinesHomeSection`): "My routines" list (name, exercise count, ▶ start) + entry to ready programs; empty state with "New routine". The Start/Resume card above stays as is.
+  - [x] Routine editor (`routineNew` / `routineEditorFor(id)`): name, notes, add exercises (multi-select picker), target sets (type, reps, optional weight via `WeightKeypad`, display unit), per-exercise rest override, drag to reorder, delete set/exercise/routine (with confirmation). Every edit persisted immediately.
+  - [x] Start routine in one tap → active workout prefilled (`workouts.routine_id` set; set rows from the targets; *previous* still shown by the workout screen); if a workout is already active, resume it instead of starting a second one.
+  - [x] Ready programs (`programs` → `programFor(id)`): list + preview (days, exercises in the app language, sets × reps range) → "Add to my routines" copies each day as an editable routine; `target_reps` = range max (DATA.md). Copying twice creates independent copies.
+  - [x] Onboarding (first run only, ≤ 2 screens, `AppRoutes.onboarding`): 1) unit kg/lb (`TrainingSettingsWriter.setWeightUnit`); 2) optional ready program (copied with the same logic) or Skip. Finish writes `onboarding_done` = `true` and `context.go(AppRoutes.workout)`. Implement `loadOnboardingDone` (missing/false → onboarding). Existing users with data: logged decision.
+  - [x] Tests: routine CRUD + reorder persistence, program copy (names per language, `target_reps` = max), start-from-routine prefill + one-active rule, onboarding gate + finish.
+  - [x] Parity: `AZM_DEVICE_SET=A tools/screenshots.sh routines` (Workout tab with routines, empty state, editor with sets, picker return, programs list, program preview, active workout started from a routine) and `AZM_DEVICE_SET=A tools/screenshots.sh onboarding` (both steps; open with `ScreenStep.go(…, AppRoutes.onboarding)`), ar + en, both platforms. Checklist items for anything device-only.
+- **Merge notes (window C, 2026-09-27):**
+  - New files only under `features/routines/**`, `features/onboarding/**`, their tests, ARB fragments, integration tests and screenshots. Generated l10n files will conflict with D: take either side, re-run `tools/gen_l10n.sh`.
+  - Tests: `test/features/routines/` (repository, start-from-routine, program copy, stream-collision regression, widget flows) and `test/features/onboarding/`; full suite 173 passing on the branch.
+  - Screenshot suites: `routines` (10 screens) and `onboarding` (4 screens), ar + en, Android + iOS.
+  - `routines_flow_test.dart` imports `FakeRestAlarm` from `test/features/workout/workout_test_helpers.dart` (read-only use).
+  - See *Requests from C*: Drift `SELECT 1` stream sharing (affects any new watch query).
 
 ## 3. EXERCISES window — library, picker, detail  (branch `feature/exercises`, device set **A**) — DONE 2026-09-26 (awaiting merge)
 
@@ -251,6 +257,8 @@ _Pre-registered for round 2 (2026-09-27): the @history request above (override h
 ### Requests from C (routines + onboarding), round 2
 
 _(append here only)_
+
+- **@all / @history (window C, 2026-09-27): Drift shares stream queries with identical SQL, whatever their `readsFrom`.** `WorkoutRepository.watchDetail` uses `customSelect('SELECT 1', readsFrom: …)`; another `'SELECT 1'` watch with different tables silently stops the workout detail from updating. Use a unique SQL text per tick query (routines use `SELECT 1 AS routines_list_tick` / `routine_detail_tick`). Suggest the integrator also renames the workout's to `SELECT 1 AS workout_detail_tick` for safety.
 
 ### Requests from D (history), round 2
 

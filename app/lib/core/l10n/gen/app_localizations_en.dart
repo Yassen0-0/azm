@@ -476,10 +476,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingUnitLb => 'Pounds';
 
   @override
-  String get onboardingUnitKgExample => 'e.g. bench 60 kg';
-
-  @override
-  String get onboardingUnitLbExample => 'e.g. bench 135 lb';
+  String onboardingUnitExample(String weight) {
+    return 'e.g. bench $weight';
+  }
 
   @override
   String get onboardingNext => 'Next';

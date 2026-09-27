@@ -59,6 +59,10 @@ Emulator/Simulator can't prove these; check on real phones (both platforms unles
 ### Routines + onboarding (window C, round 2)
 
 _(window C appends here only)_
+- [ ] Routine editor on a real phone: tapping the name/notes fields opens the system keyboard; tapping a weight/reps cell closes it and shows the WeightKeypad (never both). The keypad's step haptic is felt. (window C, 2026-09-27)
+- [ ] Swipe a target set toward the end edge to delete it (right in English, left in Arabic) on both platforms; drag-to-reorder exercises in the sheet feels smooth. (window C, 2026-09-27)
+- [ ] Fresh install on a real phone (both platforms): onboarding appears once; after finishing, killing and reopening the app lands on the Workout tab. Updating over an install that already has workouts skips onboarding. (window C, 2026-09-27)
+- [ ] Start a routine, kill the app during the workout, reopen: the prefilled workout resumes exactly (targets, routine rest times). (window C, 2026-09-27)
 
 ### History (window D, round 2)
 

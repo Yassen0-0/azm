@@ -161,7 +161,7 @@ class _RoutineCard extends ConsumerWidget {
                   color: count == 0 ? c.actionDisabled : c.accent,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.play_arrow_rounded, color: c.onAccent, size: AzmSize.icon),
+                child: Icon(Icons.play_arrow_rounded, color: count == 0 ? c.textTertiary : c.onAccent, size: AzmSize.icon),
               ),
             ),
           ),

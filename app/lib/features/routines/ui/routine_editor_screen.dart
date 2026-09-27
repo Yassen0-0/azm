@@ -456,9 +456,9 @@ class _Header extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.play_arrow_rounded, color: c.onAccent, size: AzmSize.icon - AzmSpace.xxs),
+                      Icon(Icons.play_arrow_rounded, color: onStart == null ? c.textTertiary : c.onAccent, size: AzmSize.icon - AzmSpace.xxs),
                       const SizedBox(width: AzmSpace.xxs),
-                      Text(l.routinesStartWorkout, style: AzmType.pillLabel.copyWith(color: c.onAccent)),
+                      Text(l.routinesStartWorkout, style: AzmType.pillLabel.copyWith(color: onStart == null ? c.textTertiary : c.onAccent)),
                     ],
                   ),
                 ),
@@ -553,6 +553,7 @@ class _ExerciseCard extends StatelessWidget {
                 onTap: onRest,
                 semanticLabel: l.routinesRestTitle,
                 child: Center(
+                  widthFactor: 1,
                   child: RoutinesPill(
                     icon: Icons.timer_outlined,
                     accent: rest != null,
