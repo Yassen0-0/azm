@@ -83,4 +83,4 @@ Read `docs/SPEC.md`, `docs/DESIGN.md`, `docs/ARCHITECTURE.md` (and `docs/DATA.md
 ## Git & licensing
 
 - Commit locally with the repo-local identity. **Never push.** Never rewrite published history.
-- **Never touch the media licensing rules** in `docs/LICENSES.md`. `media/` is dev-only and gitignored: never commit it, upload it, ship it, or feed it to AI image/animation generation.
+- **Never touch the media licensing rules** in `docs/LICENSES.md`. `media/` is dev-only and gitignored: never commit it to azm, upload it, ship it, or feed it to AI image/animation generation. The owner's only exceptions (LICENSES.md → *Owner's private copy*): the PRIVATE owner-only repo `Yassen0-0/azm-media` (`tools/fetch_media.sh`) and the owner-only `personal` flavor (`tools/release_personal.sh`, released in azm-media only). Never add collaborators to azm-media, never make either repo public, never commit screenshots that show media.

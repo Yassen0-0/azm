@@ -48,6 +48,13 @@ flutter:
     # Built by tools/build_catalog.dart — never edit by hand.
     - assets/catalog/catalog.sqlite
     - assets/catalog/catalog_version.txt
+    # OWNER-ONLY personal flavor: tools/release_personal.sh copies the private
+    # media into these folders for that one build (gitignored, removed after).
+    # Never part of a normal/public build (docs/LICENSES.md).
+    - path: assets/media/images/
+      flavors: [personal]
+    - path: assets/media/videos/
+      flavors: [personal]
 
   fonts:
     # Readex Pro is the ONLY family (variable, wght 200-700). Drive the axis

@@ -8,6 +8,9 @@
 #
 #   tools/cloud_setup.sh              # full run (idempotent; re-running skips the SDK download)
 #   tools/cloud_setup.sh --no-tests   # setup + codegen check only
+#   tools/cloud_setup.sh --with-media # ALSO fetch the owner's private media
+#                                     # (tools/fetch_media.sh). Off by default:
+#                                     # the cloud doesn't need media.
 #
 # System packages: in a cloud/Linux container (ephemeral) the script installs
 # what it needs with apt-get (git, curl, unzip, xz-utils, libsqlite3-dev),
@@ -21,7 +24,14 @@ cd "$ROOT"
 FLUTTER_VERSION="3.47.5"
 FLUTTER_COMMIT="6a19cca56475dbfba1478ee68d7bd0c2ef891da1" # README → Pinned toolchain
 RUN_TESTS=1
-[ "${1:-}" = "--no-tests" ] && RUN_TESTS=0
+WITH_MEDIA=0
+for arg in "$@"; do
+  case "$arg" in
+    --no-tests) RUN_TESTS=0 ;;
+    --with-media) WITH_MEDIA=1 ;;
+    *) echo "unknown option: $arg (use --no-tests, --with-media)"; exit 64 ;;
+  esac
+done
 
 step() { echo; echo "==> $*"; }
 
@@ -109,6 +119,11 @@ tools/check_directionality.sh
 if [ "$RUN_TESTS" = 1 ]; then
   step "flutter test (unit + widget; integration tests need devices → Mac)"
   (cd app && flutter test)
+fi
+
+if [ "$WITH_MEDIA" = 1 ]; then
+  step "Media (opt-in): tools/fetch_media.sh"
+  tools/fetch_media.sh
 fi
 
 step "cloud setup OK. Device verification (screenshots, E2E) is pending on the Mac: see CLAUDE.md."

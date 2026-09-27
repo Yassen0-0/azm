@@ -16,13 +16,23 @@
 
 Rules for every agent and human:
 
-1. `media/` is **dev-only** and **gitignored**. Never commit it to any repo, never force-add it.
-2. **Never upload** `media/` (or any file from it) to a public URL, CDN, R2 bucket, issue, gist, chat or artifact.
-3. **Never ship** it: not in app assets, not in a build, not in screenshots for the stores.
+1. `media/` is **dev-only** and **gitignored**. Never commit it to the azm repo (or any other repo), never force-add it. *Only exception: the owner's private `Yassen0-0/azm-media` repo (see "Owner's private copy" below).*
+2. **Never upload** `media/` (or any file from it) to a public URL, CDN, R2 bucket, issue, gist, chat or artifact. *Only exception: the private `azm-media` repo and its releases (owner only).*
+3. **Never ship** it: not in app assets, not in a build, not in screenshots for the stores or committed to azm. *Only exception: the owner-only `personal` Android flavor built by `tools/release_personal.sh` for the owner's own phone.* Tester and store builds never contain media (`tools/release_apk.sh` aborts if they do).
 4. **Never use the media as input to AI image, animation or video generation** (explicitly forbidden by Gym visual's terms). This includes "reference", "style", tracing and upscaling.
 5. Dev use (local screens, a local static server on your own machine) is fine while building.
 6. Any media shown in the app must carry the attribution "© Gym visual — https://gymvisual.com/" (exercise detail screen + Licenses screen).
-7. These rules may only be changed by the project owner. Agents must not edit this section.
+7. These rules may only be changed by the project owner. Agents must not edit this section. *(The owner changed rules 1–3 on 2026-09-27 to add the private-copy exceptions below.)*
+
+## Owner's private copy (owner's decision, 2026-09-27)
+
+**Still no licence.** Keeping a private copy and bundling it in a personal build doesn't license anything; it only keeps the unlicensed use private and personal. The owner decided to accept that for the owner's own phone.
+
+- **`Yassen0-0/azm-media`** (GitHub, **PRIVATE**) holds `images/` + `videos/` exactly as in `media/`. **Owner only: never add collaborators, never make it public, never share a link, file or clone.** `tools/fetch_media.sh` clones/pulls it into `media/` (still gitignored in azm).
+- **Personal flavor** (`tools/release_personal.sh`): Android `app.azm.gym.personal`, launcher "عزم تجريبي / Azm Dev", media bundled (works offline), "© Gym visual — https://gymvisual.com/" shown with it. Its APK is released **only in `azm-media`**, never in azm, never sent to anyone, never installed on anyone else's phone.
+- Every script that touches GitHub aborts unless **both** `azm` and `azm-media` report PRIVATE and `azm-media` has no collaborator besides the owner (`tools/lib/github_guard.sh`).
+- **Public/tester/store builds show media only after a Gym visual licence is bought**, and then only the licensed files, from R2 (launch plan below). Screenshots of the personal build are never committed to azm.
+- Rule 4 still applies: never feed any of it to AI image/animation/video generation.
 
 ## Launch plan for media
 

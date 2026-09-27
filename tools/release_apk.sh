@@ -22,6 +22,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "$ROOT"
 source "$ROOT/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
+source "$ROOT/tools/lib/github_guard.sh"
 
 MODE=publish
 [ "${1:-}" = "--build-only" ] && MODE=build
@@ -58,11 +59,15 @@ if [ "$MODE" = publish ]; then
     git log --no-merges --format='  - %s' ${p:+"$p"..HEAD} | head -40
     exit 1
   fi
-  [ "$("$GH" gh repo view "$REPO" --json visibility -q .visibility)" = PRIVATE ] || fail "$REPO is not private"
+  azm_require_private_repos   # azm AND azm-media PRIVATE, azm-media owner-only
 fi
 
 # ---- Build (signed with the upload key) -----------------------------------------
 step "Build universal release APK"
+# Tester builds NEVER contain media: the personal flavor's asset folders must
+# be empty here (tools/release_personal.sh cleans them up after its build).
+leftover="$(find app/assets/media -type f ! -name .gitkeep | head -3)"
+[ -z "$leftover" ] || fail "media files in app/assets/media (e.g. $leftover): remove them; tester builds never include media"
 [ -f "$AZM_TOOLING/secrets/azm-upload.jks" ] || fail "no upload keystore (tools/upload_key.sh create)"
 EXPECTED_CERT="$(tools/upload_key.sh sha256)"
 [ -n "$EXPECTED_CERT" ] || fail "can't read the upload key password from the Keychain"
@@ -130,7 +135,7 @@ git tag -a "$TAG" -m "Azm $NAME tester build $BUILD"
   --title "Azm $NAME — tester build $BUILD" --notes-file "$NOTES" >/dev/null
 URL="$("$GH" gh release view "$TAG" --repo "$REPO" --json url,isPrerelease -q 'select(.isPrerelease) | .url')"
 [ -n "$URL" ] || fail "release $TAG not found as a prerelease"
-[ "$("$GH" gh repo view "$REPO" --json visibility -q .visibility)" = PRIVATE ] || fail "$REPO is not private"
+azm_require_private_repos
 
 step "Next build number"
 NEXT=$((BUILD + 1))

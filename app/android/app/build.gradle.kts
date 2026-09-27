@@ -37,6 +37,21 @@ android {
         versionName = flutter.versionName
     }
 
+    // OWNER-ONLY "personal" flavor (tools/release_personal.sh passes
+    // -PazmPersonal=true): bundles the private media copy, installs next to the
+    // tester app (.personal), launcher "عزم تجريبي" / "Azm Dev". Defined ONLY
+    // when asked for, so every normal build (flutter run/test/drive, iOS,
+    // tools/release_apk.sh) stays flavorless and can never include media.
+    if (project.hasProperty("azmPersonal")) {
+        flavorDimensions += "edition"
+        productFlavors {
+            create("personal") {
+                dimension = "edition"
+                applicationIdSuffix = ".personal"
+            }
+        }
+    }
+
     signingConfigs {
         if (azmUploadKeystore != null) {
             create("upload") {

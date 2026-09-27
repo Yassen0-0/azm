@@ -25,4 +25,14 @@ void main() {
     final r = MediaResolver(MediaConfig.fromEnvironment());
     expect(r.thumbnailUrl('0025', 'abc'), isNull);
   });
+
+  test('personal flavor (bundled): local asset paths, no allow-list, no network', () {
+    const r = MediaResolver(MediaConfig(bundled: true));
+    expect(r.thumbnailUrl('0025', '2gPfomN'), 'asset:assets/media/images/0025-2gPfomN.jpg');
+    expect(r.gifUrl('0025', '2gPfomN'), 'asset:assets/media/videos/0025-2gPfomN.gif');
+  });
+
+  test('a normal (non-personal) build is never in bundled mode', () {
+    expect(MediaConfig.fromEnvironment().bundled, isFalse);
+  });
 }

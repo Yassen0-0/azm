@@ -17,7 +17,7 @@ This folder (the **ROOT**) is fully self-contained: code, data, design system, d
 
 ## Get the code
 
-The repository is **private** on GitHub (`Yassen0-0/azm`). **`media/` (the Gym visual images/videos) and `inputs/` are never in the repo**: they're gitignored, licensed dev-only material (docs/LICENSES.md), kept only on the owner's Mac. So is `.tooling/` (every SDK and cache, rebuilt per machine).
+The repository is **private** on GitHub (`Yassen0-0/azm`). **`media/` (the Gym visual images/videos) and `inputs/` are never in this repo** (the owner's media copy is in the separate private `Yassen0-0/azm-media`, see *Personal build with media*): they're gitignored, licensed dev-only material (docs/LICENSES.md), kept only on the owner's Mac. So is `.tooling/` (every SDK and cache, rebuilt per machine).
 
 ```sh
 git clone https://github.com/Yassen0-0/azm.git && cd azm
@@ -139,6 +139,17 @@ source ./env.sh && tools/upload_key.sh info     # fingerprints only
 tools/upload_key.sh backup                      # YOU run it in Terminal; you type the zip password
 ```
 `backup` writes `.tooling/secrets/azm-upload-key-backup-YYYYMMDD.zip` (keystore + its password, zip-encrypted with the password you type). **Copy it to Google Drive and to the SSD**, and keep the zip password somewhere else (a password manager). Restore: unzip, put the `.jks` back in `.tooling/secrets/`, and add the password to the Keychain with the command in the zip's README.
+
+## Personal build with media (owner only)
+
+The exercise images/GIFs (© Gym visual, **not licensed**, docs/LICENSES.md) live in a second **PRIVATE, owner-only** repo, `Yassen0-0/azm-media`, never in azm.
+
+```sh
+source ./env.sh && tools/fetch_media.sh                 # clone/pull azm-media into media/ (gitignored)
+source ./env.sh && tools/release_personal.sh --build-only
+source ./env.sh && tools/release_personal.sh            # release personal-b<N> in azm-media (never in azm)
+```
+The `personal` Android flavor (`app.azm.gym.personal`, "عزم تجريبي / Azm Dev") bundles the media so it works offline at the gym and installs next to the tester app. **It's for the owner's phone only: never share the APK or the release link, never add collaborators to azm-media, never make it public.** Every script checks that both repos are PRIVATE and aborts otherwise. Tester/store builds never contain media (`tools/release_apk.sh` aborts); public builds show media only after a Gym visual licence is bought. The cloud doesn't fetch media unless `tools/cloud_setup.sh --with-media`.
 
 ## The app (`app/`)
 

@@ -21,13 +21,15 @@ class ExerciseThumbnail extends ConsumerWidget {
       size: size,
       child: url == null
           ? _Fallback(size: size)
-          : CachedNetworkImage(
-              imageUrl: url,
-              fit: BoxFit.cover,
-              fadeInDuration: AzmMotion.of(context, AzmMotion.micro),
-              placeholder: (_, _) => _Fallback(size: size),
-              errorWidget: (_, _, _) => _Fallback(size: size),
-            ),
+          : url.startsWith(MediaConfig.assetScheme)
+              ? _BundledImage(path: url.substring(MediaConfig.assetScheme.length), fit: BoxFit.cover, size: size)
+              : CachedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.cover,
+                  fadeInDuration: AzmMotion.of(context, AzmMotion.micro),
+                  placeholder: (_, _) => _Fallback(size: size),
+                  errorWidget: (_, _, _) => _Fallback(size: size),
+                ),
     );
   }
 }
@@ -47,14 +49,34 @@ class ExerciseAnimation extends ConsumerWidget {
       size: size,
       child: url == null
           ? _Fallback(size: size)
-          : CachedNetworkImage(
-              imageUrl: url,
-              fit: BoxFit.contain,
-              placeholder: (_, _) => _Fallback(size: size),
-              errorWidget: (_, _, _) => _Fallback(size: size),
-            ),
+          : url.startsWith(MediaConfig.assetScheme)
+              ? _BundledImage(path: url.substring(MediaConfig.assetScheme.length), fit: BoxFit.contain, size: size)
+              : CachedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.contain,
+                  placeholder: (_, _) => _Fallback(size: size),
+                  errorWidget: (_, _, _) => _Fallback(size: size),
+                ),
     );
   }
+}
+
+/// Media bundled as an app asset (owner-only personal flavor): works offline.
+/// A missing file shows the fallback, like a failed download.
+class _BundledImage extends StatelessWidget {
+  const _BundledImage({required this.path, required this.fit, required this.size});
+
+  final String path;
+  final BoxFit fit;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Image.asset(
+        path,
+        fit: fit,
+        gaplessPlayback: true,
+        errorBuilder: (_, _, _) => _Fallback(size: size),
+      );
 }
 
 class _Frame extends StatelessWidget {

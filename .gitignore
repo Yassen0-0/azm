@@ -4,6 +4,8 @@
 /inputs/
 /dist/
 /media/
+/app/assets/media/*/*
+!/app/assets/media/*/.gitkeep
 /data/catalog/*.sqlite
 /data/catalog/*.sqlite-*
 
