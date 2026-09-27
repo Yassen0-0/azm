@@ -8,7 +8,7 @@ import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_header.dart';
 import '../data/app_settings.dart';
-import '../data/backup/backup_service.dart';
+import '../data/app_version.dart';
 import '../data/training_settings.dart';
 import 'backup_flow.dart';
 import 'settings_widgets.dart';
@@ -197,7 +197,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   const SizedBox(height: AzmSpace.xxxl),
                   SettingsGroup(
                     heading: l10n.settingsAbout,
-                    footer: l10n.settingsVersion(kAppVersion.split('+').first),
+                    footer: switch (ref.watch(appVersionProvider).value) {
+                      final v? => l10n.settingsVersion(v.version),
+                      null => null,
+                    },
                     children: [
                       SettingsNavRow(
                         key: const ValueKey('settings-licenses'),

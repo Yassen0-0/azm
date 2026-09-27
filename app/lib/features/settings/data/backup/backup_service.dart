@@ -4,10 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/db/app_database.dart';
 import 'backup_codec.dart';
 
-/// App version written into backups (`app_version`). Mirrors `version:` in
-/// pubspec.yaml; no package_info dependency in v1 (DECISIONS_LOG → Window E).
-const String kAppVersion = '1.0.0+1';
-
 /// Import refused because a workout is running (DECISIONS_LOG → Window E).
 class ActiveWorkoutBlocksImport implements Exception {
   const ActiveWorkoutBlocksImport();
@@ -21,7 +17,8 @@ class BackupService {
   final AppDatabase db;
 
   /// Everything the backup holds, as currently stored.
-  Future<BackupContents> snapshot({required DateTime exportedAt, String appVersion = kAppVersion}) =>
+  /// [appVersion] is the running build (`appVersionProvider` → `AppVersion.full`).
+  Future<BackupContents> snapshot({required DateTime exportedAt, required String appVersion}) =>
       db.transaction(() async {
         final settingRows =
             await (db.select(db.settings)..where((s) => s.key.isIn(kBackupSettingsKeys))).get();
@@ -41,8 +38,8 @@ class BackupService {
       });
 
   /// The backup file text for "now".
-  Future<String> exportText({required DateTime now}) async =>
-      encodeBackup(await snapshot(exportedAt: now));
+  Future<String> exportText({required DateTime now, required String appVersion}) async =>
+      encodeBackup(await snapshot(exportedAt: now, appVersion: appVersion));
 
   /// True while a workout is running (import is refused then).
   Future<bool> hasActiveWorkout() async {

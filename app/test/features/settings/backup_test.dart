@@ -21,7 +21,7 @@ void main() {
       final service = BackupService(db);
       final before = normalized(await dumpUserData(db));
 
-      final text = await service.exportText(now: t(9));
+      final text = await service.exportText(now: t(9), appVersion: '1.2.3+4');
       await wipe(db);
       // Device state written after the wipe survives the import untouched.
       await db.writeSetting('onboarding_done', 'true');
@@ -36,7 +36,7 @@ void main() {
 
     test('import into a fresh database (another phone) restores the same rows', () async {
       await seedEverything(db);
-      final text = await BackupService(db).exportText(now: t(9));
+      final text = await BackupService(db).exportText(now: t(9), appVersion: '1.2.3+4');
       final expected = normalized(await dumpUserData(db));
 
       final other = memoryDb();
@@ -51,7 +51,7 @@ void main() {
       await seedEverything(db, activeWorkout: true);
       final service = BackupService(db);
       final before = normalized(await dumpUserData(db));
-      final contents = decodeBackup(await service.exportText(now: t(9)));
+      final contents = decodeBackup(await service.exportText(now: t(9), appVersion: '1.2.3+4'));
       expect(contents.hasActiveWorkout, isTrue);
       await wipe(db);
       await db.writeSetting('onboarding_done', 'true');
@@ -62,11 +62,11 @@ void main() {
 
     test('file matches docs/DATA.md: marker, version, meta, settings, six tables', () async {
       await seedEverything(db);
-      final json = _json(await BackupService(db).exportText(now: t(9, 14, 30)));
+      final json = _json(await BackupService(db).exportText(now: t(9, 14, 30), appVersion: '1.2.3+4'));
       expect(json['format'], 'azm-backup');
       expect(json['version'], 1);
       expect(json['exported_at'], '2026-09-09T14:30:00.000Z');
-      expect(json['app_version'], kAppVersion);
+      expect(json['app_version'], '1.2.3+4');
       expect(json['settings'], {'locale': 'ar', 'theme': 'light', 'unit': 'lb', 'default_rest_seconds': 120});
       for (final table in [
         'routines',
@@ -97,7 +97,7 @@ void main() {
 
     test('an empty database exports and imports as empty', () async {
       final service = BackupService(db);
-      final text = await service.exportText(now: t(9));
+      final text = await service.exportText(now: t(9), appVersion: '1.2.3+4');
       final contents = decodeBackup(text);
       expect(contents.routines, isEmpty);
       expect(contents.settings, isEmpty);
@@ -304,7 +304,7 @@ void main() {
           ));
       await db.into(db.catalogMeta).insert(const CatalogMetaData(version: 7));
       await seedEverything(db);
-      final text = await BackupService(db).exportText(now: t(9));
+      final text = await BackupService(db).exportText(now: t(9), appVersion: '1.2.3+4');
       expect(text, isNot(contains('Barbell Bench Press')));
       await BackupService(db).restore(decodeBackup(text));
       expect(await db.select(db.exercises).get(), hasLength(1));

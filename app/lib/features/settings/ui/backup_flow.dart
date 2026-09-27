@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../data/app_settings.dart';
+import '../data/app_version.dart';
 import '../data/backup/backup_codec.dart';
 import '../data/backup/backup_files.dart';
 import '../data/backup/backup_service.dart';
@@ -16,7 +17,8 @@ Future<bool> runBackupExport(BuildContext context, WidgetRef ref, {Rect? origin}
   final failed = context.l10n.settingsExportFailed;
   try {
     final now = DateTime.now();
-    final text = await ref.read(backupServiceProvider).exportText(now: now.toUtc());
+    final version = await ref.read(appVersionProvider.future);
+    final text = await ref.read(backupServiceProvider).exportText(now: now.toUtc(), appVersion: version.full);
     await ref.read(backupFilesProvider).share(fileName: backupFileName(now), text: text, origin: origin);
     return true;
   } catch (_) {

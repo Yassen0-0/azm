@@ -71,6 +71,7 @@ Timestamps are **UTC**, stored as ISO-8601 text with milliseconds (Drift option 
 | `instructions_ar` | TEXT NULL (JSON array of steps) | future translation |
 | `media_id` | TEXT NOT NULL | used by `MediaResolver` (file stem `<id>-<media_id>`) |
 | `search_norm` | TEXT NOT NULL | normalized `name_en + name_ar + aliases_ar`, space-joined |
+| `hidden` | BOOL NOT NULL DEFAULT false | duplicate of another exercise (`data/hidden_exercises.json`): never listed, searched or offered in the picker, but still resolved by id so old routines/history keep their names. Added in schema v2 (catalog-only `addColumn`) |
 
 **`catalog_programs`**
 | column | type | notes |
@@ -104,20 +105,23 @@ Settings keys (values JSON-encoded): `locale` (`"system"`\|`"ar"`\|`"en"`, imple
 ```
 data/raw/exercises.json ─┐
                          ├─ tools/build_catalog.dart ─► data/catalog/catalog.sqlite ─► app/assets/catalog/catalog.sqlite
-data/ar/exercise_names_ar.json ─┘         (uses the shared normalizer)
+data/ar/exercise_names_ar.json ─┤         (uses the shared normalizer)
+data/programs/programs.json ────┤
+data/hidden_exercises.json ─────┘
 ```
 
 Run: `tools/build_catalog.sh` (or `source ./env.sh && (cd tools && dart run build_catalog.dart)`). `tools/` is a small pure-Dart package (`sqlite3`, `crypto`) and imports the app's normalizer by relative path.
 
-1. `build_catalog` reads the three inputs and **validates** them: unique ids; every Arabic entry and every program exercise references an existing id; each Arabic entry has `ar`, `aliases` and `reviewed`. Any error fails the build.
+1. `build_catalog` reads the four inputs and **validates** them: unique ids; every Arabic entry and every program exercise references an existing id; each Arabic entry has `ar`, `aliases` and `reviewed`; every hidden id and the id it duplicates exist, share one Arabic name, the kept id isn't hidden, and no program uses a hidden id. Any error fails the build. Same Arabic name on two **visible** exercises is a warning. `--check` validates and prints coverage + warnings, writing nothing.
+   `data/hidden_exercises.json` = `{"hidden": {"<hidden id>": "<kept id>", …}}`, from the truly-identical pairs reviewed in `docs/review/duplicates.md` (33 ids in catalog v3).
 2. It builds rows: `name_en` = Title Case of the dataset name (acronyms kept: EZ, POV, RDL; the `в°` → `°` encoding glitch fixed), `instructions_en` = `instruction_steps.en`, `search_norm` = normalized `name_en + name_ar + aliases`.
-3. **Version:** `data/catalog/catalog_version.json` holds `{version, input_sha256}`. The hash covers the three input files + `builderRevision`, and the version is incremented only when it changes, so re-running is idempotent.
+3. **Version:** `data/catalog/catalog_version.json` holds `{version, input_sha256}`. The hash covers the four input files + `builderRevision`, and the version is incremented only when it changes, so re-running is idempotent.
 4. It writes `data/catalog/catalog.sqlite` (tables `catalog_meta`, `exercises`, `catalog_programs`) and copies it plus `catalog_version.txt` into `app/assets/catalog/`.
 5. **App on launch** (`CatalogInstaller.installBundledIfNeeded`, before the first frame): reads the bundled `catalog_version.txt`. Only if the DB has no catalog or an older one, it copies the asset DB to a temp file, reads it, and in **one transaction** deletes and re-inserts `exercises`, `catalog_programs` and `catalog_meta`. User tables are never touched (unit test `catalog_update_test.dart` compares every user table before/after).
 
 ## Arabic search normalization
 
-One function, `normalizeForSearch(String) → String`, in `app/lib/core/utils/normalize.dart`. It is pure Dart and is also imported by `tools/build_catalog.dart`. The index and the query go through the **same** function.
+One function, `normalizeForSearch(String) → String`, in `app/lib/core/utils/arabic_normalize.dart`. It is pure Dart and is also imported by `tools/build_catalog.dart`. The index and the query go through the **same** function.
 
 Steps, in order:
 1. Remove **tashkeel** (Arabic diacritics U+064B–U+065F, U+0670 superscript alef, U+06D6–U+06ED Quranic marks).
@@ -127,6 +131,7 @@ Steps, in order:
 5. `ى` → `ي`
 6. `ؤ` → `و`
 7. `ئ` → `ي`
+7b. Egyptian spelling variants: `ظ` → `ض`, `ذ` → `د`, `ث` → `ت` (ظهر/ضهر, ذراع/دراع, ثقيل/تقيل, فخذ/فخد all match).
 8. Lowercase Latin.
 9. Collapse whitespace runs to one space and trim.
 
@@ -168,4 +173,26 @@ Examples: `ضَغْطُ بارٍ` → `ضغط بار`; `رفرفة جانبي` �
 
 ## Backup format (export/import)
 
-A single JSON file `azm-backup-YYYYMMDD-HHmm.json`: `{ "format": "azm-backup", "version": 1, "exported_at": …, "app_version": …, "settings": {…}, "routines": [...], "routine_exercises": [...], "routine_sets": [...], "workouts": [...], "workout_exercises": [...], "workout_sets": [...] }`. Catalog data is not included. Import replaces user tables after a confirmation dialog (merge by UUID is a v2 idea).
+A single UTF-8 JSON file named `azm-backup-YYYYMMDD-HHmm.json` (**local** time of the export), shared through the system share sheet. Code: `features/settings/data/backup/` (`backup_codec.dart` = pure encode + validation, `backup_service.dart` = snapshot / one-transaction restore). Catalog data is never included (it ships with the app); import replaces the user tables after a confirmation dialog (merge by UUID is a v2 idea).
+
+```jsonc
+{
+ "format": "azm-backup",            // marker; anything else → "not an Azm backup"
+ "version": 1,                      // file format version (integer ≥ 1); > 1 → "newer version"
+ "exported_at": "2026-09-27T18:09:00.001Z",
+ "app_version": "1.0.0+1",          // the build that wrote it (package_info_plus: version+build); informational only
+ "settings": { "locale": "ar", "theme": "dark", "unit": "kg", "default_rest_seconds": 90 },
+ "routines":          [{ "id", "name", "notes", "sort", "created_at", "updated_at" }],
+ "routine_exercises": [{ "id", "routine_id", "exercise_id", "sort", "rest_seconds", "notes" }],
+ "routine_sets":      [{ "id", "routine_exercise_id", "sort", "type", "target_reps", "target_weight_kg" }],
+ "workouts":          [{ "id", "routine_id", "name", "started_at", "ended_at", "status", "notes" }],
+ "workout_exercises": [{ "id", "workout_id", "exercise_id", "sort", "notes" }],
+ "workout_sets":      [{ "id", "workout_exercise_id", "sort", "type", "weight_kg", "reps", "completed_at" }]
+}
+```
+
+- **Rows** use the snake_case column names of the user tables above; every column is present (nullable ones as `null`), no other columns. Rows are sorted by `id`; the file is pretty-printed (1-space indent).
+- **Values:** timestamps are UTC ISO-8601 with milliseconds (`…Z`, exactly as stored); `type` ∈ `normal|warmup|drop|failure`, `status` ∈ `active|finished`; weights are **kg** as JSON numbers (finite, ≥ 0); integers are JSON integers; ids are UUID v4; `exercise_id` is a catalog id (not checked against the catalog: history survives catalog changes, and hidden ids still resolve).
+- **Settings:** only `locale`, `theme`, `unit`, `default_rest_seconds`, as **decoded** JSON values (not the stored JSON strings). Device state is never exported nor overwritten: `onboarding_done`, `workout_notifications_asked`, `workout_exact_alarms_asked`, `active_rest_*`. On import a restorable key missing from the file is deleted (back to its default); unknown keys are ignored; an invalid value for a known key = corrupt.
+- **Import = validate everything first, then one transaction.** Order: not JSON (incl. non-UTF-8) → not an Azm backup → `version` → `exported_at` / `app_version` → settings → each table (columns, types, UUID v4, enums, `rest_seconds` > 0 or null, reps ≥ 0) → unique ids per table → every FK resolves (`workouts.routine_id` has no FK: may point to a deleted routine) → at most one `active` workout. Only then the confirmation dialog with counts; the replace deletes and re-inserts all user tables in ONE Drift transaction (all or nothing). Import is refused while a workout is running. A backup exported mid-workout restores that workout as active.
+- **Compatibility:** a build reads every `version` ≤ its own `kBackupVersion` and rejects newer ones. Bump `version` for any change to this shape (and keep reading older versions).

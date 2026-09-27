@@ -31,8 +31,10 @@ SOFTWARE.
 The exercise images and animations are NOT covered by this license: they are
 © Gym visual (https://gymvisual.com/) and shown only when licensed.''';
 
+// First line = the copyright string (name ID 0) of the bundled font itself,
+// assets/fonts/ReadexPro.ttf (test: settings_screen_test → font name table).
 const String _readexOfl = '''
-Copyright 2021 The Readex Pro Project Authors (https://github.com/ThomasJockin/readexpro)
+Copyright 2019 The Readex Pro Project Authors (https://github.com/ThomasJockin/readexpro)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

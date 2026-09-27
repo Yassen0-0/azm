@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/widgets/azm_header.dart';
-import '../data/backup/backup_service.dart' show kAppVersion;
+import '../data/app_version.dart';
 import '../data/license_texts.dart';
 import 'settings_widgets.dart';
 
 /// Licences and attributions (exercise dataset MIT, Readex Pro OFL, Gym visual
 /// attribution, package licences). Route: AppRoutes.licenses.
 /// Texts follow docs/LICENSES.md → Attribution texts.
-class LicensesScreen extends StatelessWidget {
+class LicensesScreen extends ConsumerWidget {
   const LicensesScreen({super.key});
 
-  void _openPackages(BuildContext context) {
+  void _openPackages(BuildContext context, WidgetRef ref) {
     registerAzmLicenses();
     showLicensePage(
       context: context,
       applicationName: context.l10n.appName,
-      applicationVersion: kAppVersion.split('+').first,
+      applicationVersion: ref.read(appVersionProvider).value?.version,
       useRootNavigator: true,
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(appVersionProvider); // resolved before "Open-source packages" is tapped
     final l10n = context.l10n;
     final c = context.colors;
     return Scaffold(
@@ -78,7 +80,7 @@ class LicensesScreen extends StatelessWidget {
                         icon: Icons.code_rounded,
                         title: l10n.settingsLicensesPackages,
                         subtitle: l10n.settingsLicensesPackagesBody,
-                        onTap: () => _openPackages(context),
+                        onTap: () => _openPackages(context, ref),
                       ),
                     ],
                   ),

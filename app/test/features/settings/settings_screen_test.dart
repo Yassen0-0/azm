@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:azm/app.dart';
 import 'package:azm/core/db/app_database.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'backup_test_helpers.dart';
 
@@ -49,6 +51,14 @@ void main() {
   late String backupText; // seedEverything data: 2 routines, 2 workouts, 4 sets, locale ar
 
   setUpAll(() async => backupText = await validBackupText());
+  // The real build version comes from the platform (package_info_plus).
+  setUp(() => PackageInfo.setMockInitialValues(
+        appName: 'Azm',
+        packageName: 'app.azm.gym',
+        version: '7.8.9',
+        buildNumber: '42',
+        buildSignature: '',
+      ));
 
   Future<void> pumpSettings(WidgetTester tester, {LanguagePref lang = LanguagePref.en, Future<void> Function()? seed}) async {
     tester.view.physicalSize = const Size(1170, 2532);
@@ -134,6 +144,14 @@ void main() {
       expect(files.shared.single.fileName, matches(RegExp(r'^azm-backup-\d{8}-\d{4}\.json$')));
       final c = decodeBackup(files.shared.single.text);
       expect((c.routines.length, c.workouts.length, c.workoutSets.length), (2, 2, 4));
+      expect(c.appVersion, '7.8.9+42');
+    });
+
+    testWidgets('About shows the running build version', (tester) async {
+      await pumpSettings(tester);
+      final list = find.descendant(of: find.byKey(const ValueKey('settings-list')), matching: find.byType(Scrollable));
+      await tester.scrollUntilVisible(find.text('Version 7.8.9'), 200, scrollable: list.first);
+      expect(find.text('Version 7.8.9'), findsOneWidget);
     });
   });
 
@@ -249,5 +267,36 @@ void main() {
       expect(text, contains('Hasan Emir Yıldırım'));
       expect(text, contains('SIL OPEN FONT LICENSE Version 1.1'));
     });
+
+    test('the Readex Pro copyright line is the one in the bundled font file', () async {
+      final copyright = _fontNameRecord(File('assets/fonts/ReadexPro.ttf').readAsBytesSync(), 0);
+      expect(copyright, startsWith('Copyright '));
+      registerAzmLicenses();
+      final entries = await LicenseRegistry.licenses.toList();
+      final font = entries.singleWhere((e) => e.packages.contains(kFontLicenseName));
+      expect(font.paragraphs.first.text.trim(), copyright);
+    });
   });
+}
+
+/// Name record [nameId] (Windows platform, US English) of a TrueType font's
+/// `name` table. 0 = copyright notice.
+String _fontNameRecord(Uint8List font, int nameId) {
+  final d = ByteData.sublistView(font);
+  final tables = d.getUint16(4);
+  for (var i = 0; i < tables; i++) {
+    final rec = 12 + 16 * i;
+    if (String.fromCharCodes(font.sublist(rec, rec + 4)) != 'name') continue;
+    final off = d.getUint32(rec + 8);
+    final count = d.getUint16(off + 2);
+    final strings = off + d.getUint16(off + 4);
+    for (var j = 0; j < count; j++) {
+      final r = off + 6 + 12 * j;
+      if (d.getUint16(r) != 3 || d.getUint16(r + 4) != 0x409 || d.getUint16(r + 6) != nameId) continue;
+      final start = strings + d.getUint16(r + 10);
+      final len = d.getUint16(r + 8);
+      return String.fromCharCodes([for (var k = 0; k < len; k += 2) d.getUint16(start + k)]);
+    }
+  }
+  throw StateError('no name record $nameId');
 }
