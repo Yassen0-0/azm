@@ -48,7 +48,10 @@ Future<void> _wipe(ProviderContainer c) async {
 Future<String> _seedCustom(ProviderContainer c) async {
   final repo = c.read(routineRepositoryProvider);
   final ar = _lang(c) == 'ar';
-  final id = await repo.create(name: ar ? 'يوم الصدر والرجل' : 'Chest & legs', notes: ar ? 'زوّد 2.5 كل أسبوع' : '+2.5 kg every week');
+  final id = await repo.create(
+    name: ar ? 'يوم الصدر والرجل' : 'Chest & legs',
+    notes: ar ? 'زوّد 2.5 كل أسبوع' : '+2.5 kg every week',
+  );
   await repo.addExercises(id, ['0025', '0043', '0292']);
   final d = (await repo.loadDetail(id))!;
   final bench = d.exercises[0], squat = d.exercises[1], row = d.exercises[2];
@@ -124,7 +127,8 @@ void main() {
     ScreenStep('picker_return', (tester, c, router) async {
       final list = await c.read(routineRepositoryProvider).loadRoutines();
       final armsName = _lang(c) == 'ar' ? 'دراع' : 'Arms';
-      final arms = list.where((r) => r.routine.name == armsName).firstOrNull?.routine.id ??
+      final arms =
+          list.where((r) => r.routine.name == armsName).firstOrNull?.routine.id ??
           await c.read(routineRepositoryProvider).create(name: armsName);
       unawaited(router.push(AppRoutes.routineEditorFor(arms)));
       await _pumpFor(tester);
@@ -136,12 +140,17 @@ void main() {
       await tester.enterText(find.descendant(of: picker, matching: find.byType(TextField)).first, 'barbell curl');
       await _pumpFor(tester, 600);
       FocusManager.instance.primaryFocus?.unfocus();
+      // Wait (max 10 s) for the search results, then scroll each pick into
+      // view: every row has two names now, so the 2nd pick can be below the
+      // lazily built part of the list on a short screen.
+      final first = find.descendant(of: picker, matching: find.byKey(const ValueKey('0031')));
+      for (var i = 0; i < 50 && first.evaluate().isEmpty; i++) {
+        await _pumpFor(tester, 200);
+      }
+      final results = find.descendant(of: picker, matching: find.byType(Scrollable)).last;
       for (final id in ['0031', '0070']) {
         final row = find.descendant(of: picker, matching: find.byKey(ValueKey(id)));
-        for (var i = 0; i < 50 && row.evaluate().isEmpty; i++) {
-          await _pumpFor(tester, 200); // max 10 s for the search results
-        }
-        await tester.ensureVisible(row.first);
+        await tester.scrollUntilVisible(row, 150, scrollable: results, maxScrolls: 40);
         await _pumpFor(tester, 300);
         await tester.tap(row.first);
         await _pumpFor(tester, 300);

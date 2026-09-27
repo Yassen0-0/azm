@@ -164,7 +164,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Pre-registered: route `AppRoutes.licenses` + `LicensesScreen` placeholder; `share_plus` + `file_picker` (iOS simulator + Android debug builds verified, still no CocoaPods); `tools/build_catalog.sh --check`; per-window sections in DECISIONS_LOG, DEVICE_TEST_CHECKLIST and Requests.
 - [x] analyze, test (214), directionality pass. No visible UI change, so parity screenshots were not regenerated.
 
-## 1f. INTEGRATION round 3 — final v1 merge (main) — [~] IN PROGRESS (integrator, 2026-09-27)
+## 1f. INTEGRATION round 3 — final v1 merge (main) — [x] done 2026-09-27 (tag `v1.0.0-rc1`)
 
 - [x] Gradle stopped, all devices shut down first; device set **A** only.
 - [x] Merged `feature/arabic-names` → `feature/settings` → `feature/brand`: no conflicts; `tools/gen_l10n.sh` re-run (identical output). Logged.
@@ -174,9 +174,9 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Licences: Readex Pro copyright read from the font's `name` table (2019, not 2021) + test.
 - [x] Flaky blank first iOS exercises capture: bounded wait for real cards.
 - [x] E2E full journey + backup export → wipe → import step (code).
-- [ ] Every screenshot suite + E2E re-run on both platforms, ar + en; images reviewed.
+- [x] Every screenshot suite + E2E re-run on both platforms, ar + en (set A): 16/16 green after fixing 3 test-side failures (DECISIONS_LOG); images reviewed; 10 stale Android E2E images removed.
 - [x] analyze, tests, directionality, `brand/generate.sh --check`, `check_plan_overlap.dart E F G`.
-- [ ] Commit, tag `v1.0.0-rc1` (local), worktrees removed (branches kept), Gradle + devices stopped.
+- [x] Commit, tag `v1.0.0-rc1` (local, never pushed), worktrees removed (branches kept), Gradle + devices stopped.
 
 ## 2. C window — Routines, ready programs, onboarding  (branch `feature/routines`, device set **A**) — [x] done 2026-09-27 (window C), merged 2026-09-27
 

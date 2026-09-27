@@ -327,13 +327,19 @@ void main() {
       await db.delete(db.routines).go();
       await db.writeSetting(kOnboardingDoneKey, jsonEncode(false));
       await db.writeSetting(TrainingSettingsKeys.unit, jsonEncode('lb'));
+      // The backup carries `locale` and import applies it live: store this
+      // run's language so the round trip in step 8 keeps it.
+      await db.writeSetting(SettingsKeys.locale, jsonEncode(lang.name));
       await db.writeSetting(WorkoutSettingsKeys.notificationsAsked, jsonEncode(true));
       await db.writeSetting(WorkoutSettingsKeys.exactAlarmsAsked, jsonEncode(true));
       // One earlier finished workout (3 days ago): squat 3 × (100 × 5), bench
       // 3 × (80 × 5). "Previous" (and the routine prefill) is per set index.
       final earlier = DateTime.now().toUtc().subtract(const Duration(days: 3));
+      // Real UUID v4 ids, like every user record (the backup step validates them).
+      final earlierId = newUuid();
+      final earlierEx = [newUuid(), newUuid()];
       await db.into(db.workouts).insert(WorkoutsCompanion.insert(
-            id: const Value('e2e-earlier'),
+            id: Value(earlierId),
             name: 'Earlier',
             startedAt: Value(earlier),
             endedAt: Value(earlier.add(const Duration(minutes: 40))),
@@ -341,14 +347,14 @@ void main() {
           ));
       for (final (i, ex, kg) in [(0, '0043', 100.0), (1, '0025', 80.0)]) {
         await db.into(db.workoutExercises).insert(WorkoutExercisesCompanion.insert(
-              id: Value('e2e-earlier-$i'),
-              workoutId: 'e2e-earlier',
+              id: Value(earlierEx[i]),
+              workoutId: earlierId,
               exerciseId: ex,
               sort: Value(i),
             ));
         for (var n = 0; n < 3; n++) {
           await db.into(db.workoutSets).insert(WorkoutSetsCompanion.insert(
-                workoutExerciseId: 'e2e-earlier-$i',
+                workoutExerciseId: earlierEx[i],
                 sort: Value(n),
                 weightKg: Value(kg),
                 reps: const Value(5),
@@ -520,7 +526,7 @@ void main() {
       final version = await container.read(appVersionProvider.future);
       expect(exported.appVersion, version.full);
       expect(version.version, isNotEmpty);
-      expect(exported.workouts.map((x) => x.id), containsAll(<String>['e2e-earlier', w.id]));
+      expect(exported.workouts.map((x) => x.id), containsAll(<String>[earlierId, w.id]));
       await screenshot('settings_exported');
 
       // Wipe every user table and change a restorable setting.
@@ -539,14 +545,15 @@ void main() {
       await screenshot('import_confirm');
       await tester.tap(find.byKey(const ValueKey('settings-import-confirm')));
       await _pump(tester, 1500);
-      await _waitFor(tester, find.text(l.settingsImportDone), 'import done');
+      await _waitFor(tester, find.byType(SnackBar), 'import done');
+      expect(find.text(l.settingsImportDone), findsOneWidget);
       expect(await _userDataDump(db), before);
       expect(await db.readSetting(TrainingSettingsKeys.unit), jsonEncode('kg'));
       await screenshot('import_done');
 
       router.pop();
       await _pump(tester);
-      await tester.tap(find.text(l.shellTabHistory));
+      router.go(AppRoutes.history);
       await _waitFor(tester, find.byKey(ValueKey(w.id)), 'history card after import', tries: 200);
       expect(find.byKey(ValueKey(w.id)), findsOneWidget);
       expect(await prSets(), 1);

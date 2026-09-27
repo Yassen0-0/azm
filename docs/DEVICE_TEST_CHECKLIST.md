@@ -106,3 +106,9 @@ Reference: `brand/exports/review_sheet.png` (every variant) and `docs/screenshot
 - [ ] **iPhone:** launch screen = black + the mark centred, same size as on Android; no white flash (cold launch after deleting and reinstalling: iOS caches launch screens).
 - [ ] **iPhone launch screen colour:** the plate is the same blue as the app's accent (`#4D9BFF`, e.g. the Next button in onboarding), not a more saturated blue (the simulator capture showed `#239DFF`).
 - [ ] **Small-size legibility on real screens:** at the smallest system sizes (Android notification shade, iOS Settings list 29 pt, Spotlight) the plate and the rising line read; the lifter may read as a white shape at 16–20 px (expected, see `brand/exports/legibility_16-64px.png`).
+
+### Integration round 3 (2026-09-27)
+
+- [ ] **Upgrade install on a real phone** (both platforms): install a pre-round-3 build, log a workout with an exercise that is now hidden (e.g. 0077 "Barbell Rear Lunge V. 2"), then install this build over it. The app opens, the old workout still shows that exercise's name in History, and the library no longer lists 0077 (1,291 exercises).
+- [ ] **App version on a release/TestFlight build:** Settings → About and Licences show the store version; an exported backup's `app_version` is `version+build` of that build (e.g. `1.0.0+1`).
+- [ ] **Search with Egyptian spellings on a real keyboard (Gboard + iOS Arabic):** ضهر / ظهر, دراع / ذراع, تقيل / ثقيل, فخد / فخذ return the same exercises.
