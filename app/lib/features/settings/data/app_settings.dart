@@ -96,6 +96,9 @@ class AppSettingsController extends Notifier<AppSettings> {
     state = state.copyWith(theme: value);
     unawaited(ref.read(settingsStoreProvider).write(SettingsKeys.theme, jsonEncode(value.name)));
   }
+
+  /// Re-reads language + theme from the DB (after a backup import replaced them).
+  Future<void> reload() async => state = await AppSettings.load(ref.read(appDatabaseProvider));
 }
 
 final appSettingsProvider =

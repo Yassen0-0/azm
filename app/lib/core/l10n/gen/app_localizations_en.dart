@@ -1004,6 +1004,174 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsThemeLight => 'Light';
 
   @override
+  String get settingsTraining => 'Training';
+
+  @override
+  String get settingsUnit => 'Weight unit';
+
+  @override
+  String get settingsUnitKg => 'Kilograms (kg)';
+
+  @override
+  String get settingsUnitLb => 'Pounds (lb)';
+
+  @override
+  String get settingsUnitValueKg => 'kg';
+
+  @override
+  String get settingsUnitValueLb => 'lb';
+
+  @override
+  String get settingsDefaultRest => 'Default rest time';
+
+  @override
+  String get settingsDefaultRestHint => 'Routines can change it per exercise';
+
+  @override
+  String get settingsBackup => 'Backup';
+
+  @override
+  String get settingsExport => 'Export backup';
+
+  @override
+  String get settingsExportHint =>
+      'Your routines, history and settings in one file';
+
+  @override
+  String get settingsImport => 'Import backup';
+
+  @override
+  String get settingsImportHint => 'Replaces all data on this phone';
+
+  @override
+  String get settingsExportFailed => 'Couldn\'t create the backup. Try again.';
+
+  @override
+  String get settingsImportConfirmTitle => 'Restore this backup?';
+
+  @override
+  String settingsImportFrom(String date) {
+    return 'Backup from $date';
+  }
+
+  @override
+  String settingsImportCountRoutines(String count) {
+    return 'Routines: $count';
+  }
+
+  @override
+  String settingsImportCountWorkouts(String count) {
+    return 'Workouts: $count';
+  }
+
+  @override
+  String settingsImportCountSets(String count) {
+    return 'Sets: $count';
+  }
+
+  @override
+  String get settingsImportWarning =>
+      'Everything on this phone will be replaced by this backup. This can\'t be undone.';
+
+  @override
+  String get settingsImportConfirm => 'Restore';
+
+  @override
+  String get settingsCancel => 'Cancel';
+
+  @override
+  String get settingsOk => 'OK';
+
+  @override
+  String get settingsImportDone => 'Backup restored ✓';
+
+  @override
+  String get settingsImportErrorTitle => 'Couldn\'t import this file';
+
+  @override
+  String get settingsImportErrorNotJson =>
+      'This file isn\'t a backup (it isn\'t a JSON file).';
+
+  @override
+  String get settingsImportErrorNotAzm => 'This file isn\'t an Azm backup.';
+
+  @override
+  String get settingsImportErrorNewer =>
+      'This backup was made by a newer version of Azm. Update the app and try again.';
+
+  @override
+  String get settingsImportErrorCorrupt =>
+      'This backup is damaged or incomplete.';
+
+  @override
+  String get settingsImportErrorRead => 'Couldn\'t read the file.';
+
+  @override
+  String get settingsImportErrorActive =>
+      'Finish or discard your current workout first, then import.';
+
+  @override
+  String get settingsImportUnchanged => 'Your data is unchanged.';
+
+  @override
+  String get settingsAbout => 'About';
+
+  @override
+  String get settingsLicenses => 'Licenses & credits';
+
+  @override
+  String settingsVersion(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get settingsLicensesIntro =>
+      'Azm is built on other people\'s work. Thank you.';
+
+  @override
+  String get settingsLicensesExerciseData => 'Exercise data';
+
+  @override
+  String get settingsLicensesExerciseDataBody =>
+      'English exercise names, muscles, equipment and instructions.';
+
+  @override
+  String get settingsLicensesExerciseDataCredit =>
+      'Exercise data © 2026 Hasan Emir Yıldırım, MIT License';
+
+  @override
+  String get settingsLicensesFont => 'Font';
+
+  @override
+  String get settingsLicensesFontCredit =>
+      'Readex Pro © The Readex Pro Project Authors, SIL OFL 1.1';
+
+  @override
+  String get settingsLicensesMedia => 'Exercise images and animations';
+
+  @override
+  String get settingsLicensesMediaBody =>
+      'Shown only for exercises whose media we have licensed.';
+
+  @override
+  String get settingsLicensesMediaCredit =>
+      '© Gym visual — https://gymvisual.com/';
+
+  @override
+  String get settingsLicensesOurs => 'Arabic names and programs';
+
+  @override
+  String get settingsLicensesOursBody =>
+      'The Egyptian names and ready programs are made by the Azm team.';
+
+  @override
+  String get settingsLicensesPackages => 'Open-source packages';
+
+  @override
+  String get settingsLicensesPackagesBody =>
+      'Full licence texts of every package, including the exercise data and the font.';
+
+  @override
   String get workoutStart => 'Start workout';
 
   @override

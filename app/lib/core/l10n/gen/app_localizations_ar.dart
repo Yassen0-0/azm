@@ -1018,6 +1018,171 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsThemeLight => 'فاتح';
 
   @override
+  String get settingsTraining => 'التمرين';
+
+  @override
+  String get settingsUnit => 'وحدة الوزن';
+
+  @override
+  String get settingsUnitKg => 'كيلو (kg)';
+
+  @override
+  String get settingsUnitLb => 'باوند (lb)';
+
+  @override
+  String get settingsUnitValueKg => 'kg';
+
+  @override
+  String get settingsUnitValueLb => 'lb';
+
+  @override
+  String get settingsDefaultRest => 'وقت الراحة الافتراضي';
+
+  @override
+  String get settingsDefaultRestHint => 'الروتين يقدر يغيّره لكل تمرين';
+
+  @override
+  String get settingsBackup => 'النسخة الاحتياطية';
+
+  @override
+  String get settingsExport => 'صدّر نسخة احتياطية';
+
+  @override
+  String get settingsExportHint => 'روتيناتك وسجلّك وإعداداتك في ملف واحد';
+
+  @override
+  String get settingsImport => 'استرجع نسخة احتياطية';
+
+  @override
+  String get settingsImportHint => 'هيبدّل كل البيانات اللي على الموبايل ده';
+
+  @override
+  String get settingsExportFailed => 'معرفناش نعمل النسخة. جرّب تاني.';
+
+  @override
+  String get settingsImportConfirmTitle => 'تسترجع النسخة دي؟';
+
+  @override
+  String settingsImportFrom(String date) {
+    return 'نسخة من $date';
+  }
+
+  @override
+  String settingsImportCountRoutines(String count) {
+    return 'الروتينات: $count';
+  }
+
+  @override
+  String settingsImportCountWorkouts(String count) {
+    return 'التمارين: $count';
+  }
+
+  @override
+  String settingsImportCountSets(String count) {
+    return 'السِتات: $count';
+  }
+
+  @override
+  String get settingsImportWarning =>
+      'كل اللي على الموبايل ده هيتمسح ويتبدّل بالنسخة دي. مفيش رجوع.';
+
+  @override
+  String get settingsImportConfirm => 'استرجع';
+
+  @override
+  String get settingsCancel => 'إلغاء';
+
+  @override
+  String get settingsOk => 'تمام';
+
+  @override
+  String get settingsImportDone => 'النسخة رجعت ✓';
+
+  @override
+  String get settingsImportErrorTitle => 'مقدرناش نسترجع الملف ده';
+
+  @override
+  String get settingsImportErrorNotJson =>
+      'الملف ده مش نسخة احتياطية (مش ملف JSON).';
+
+  @override
+  String get settingsImportErrorNotAzm => 'الملف ده مش نسخة احتياطية من عزم.';
+
+  @override
+  String get settingsImportErrorNewer =>
+      'النسخة دي معمولة بإصدار أحدث من عزم. حدّث التطبيق وجرّب تاني.';
+
+  @override
+  String get settingsImportErrorCorrupt => 'الملف ده بايظ أو ناقص.';
+
+  @override
+  String get settingsImportErrorRead => 'مقدرناش نقرا الملف.';
+
+  @override
+  String get settingsImportErrorActive =>
+      'خلّص التمرين اللي شغال أو الغيه الأول، وبعدين استرجع النسخة.';
+
+  @override
+  String get settingsImportUnchanged => 'بياناتك زي ما هي، محصلش أي تغيير.';
+
+  @override
+  String get settingsAbout => 'عن عزم';
+
+  @override
+  String get settingsLicenses => 'التراخيص والمصادر';
+
+  @override
+  String settingsVersion(String version) {
+    return 'الإصدار $version';
+  }
+
+  @override
+  String get settingsLicensesIntro => 'عزم مبني على شغل ناس تانية. شكراً ليهم.';
+
+  @override
+  String get settingsLicensesExerciseData => 'بيانات التمارين';
+
+  @override
+  String get settingsLicensesExerciseDataBody =>
+      'أسماء التمارين بالإنجليزي والعضلات والأدوات والتعليمات.';
+
+  @override
+  String get settingsLicensesExerciseDataCredit =>
+      'Exercise data © 2026 Hasan Emir Yıldırım, MIT License';
+
+  @override
+  String get settingsLicensesFont => 'الخط';
+
+  @override
+  String get settingsLicensesFontCredit =>
+      'Readex Pro © The Readex Pro Project Authors, SIL OFL 1.1';
+
+  @override
+  String get settingsLicensesMedia => 'صور وحركات التمارين';
+
+  @override
+  String get settingsLicensesMediaBody =>
+      'بتظهر بس للتمارين اللي معانا ترخيص لصورها.';
+
+  @override
+  String get settingsLicensesMediaCredit =>
+      '© Gym visual — https://gymvisual.com/';
+
+  @override
+  String get settingsLicensesOurs => 'الأسماء العربية والبرامج';
+
+  @override
+  String get settingsLicensesOursBody =>
+      'الأسماء المصري والبرامج الجاهزة من عمل فريق عزم.';
+
+  @override
+  String get settingsLicensesPackages => 'مكتبات مفتوحة المصدر';
+
+  @override
+  String get settingsLicensesPackagesBody =>
+      'النص الكامل لكل التراخيص، ومعاهم بيانات التمارين والخط.';
+
+  @override
   String get workoutStart => 'ابدأ تمرين';
 
   @override

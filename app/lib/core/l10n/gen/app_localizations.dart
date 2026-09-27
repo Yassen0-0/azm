@@ -1790,6 +1790,294 @@ abstract class AppLocalizations {
   /// **'فاتح'**
   String get settingsThemeLight;
 
+  /// Settings group: weight unit and default rest time.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمرين'**
+  String get settingsTraining;
+
+  /// Settings row + sheet title: kg or lb (display only; weights are stored in kg).
+  ///
+  /// In ar, this message translates to:
+  /// **'وحدة الوزن'**
+  String get settingsUnit;
+
+  /// Unit choice: kilograms.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيلو (kg)'**
+  String get settingsUnitKg;
+
+  /// Unit choice: pounds.
+  ///
+  /// In ar, this message translates to:
+  /// **'باوند (lb)'**
+  String get settingsUnitLb;
+
+  /// Short current value of the unit row (Latin 'kg' in both languages, like the rest of the app).
+  ///
+  /// In ar, this message translates to:
+  /// **'kg'**
+  String get settingsUnitValueKg;
+
+  /// Short current value of the unit row (Latin 'lb' in both languages).
+  ///
+  /// In ar, this message translates to:
+  /// **'lb'**
+  String get settingsUnitValueLb;
+
+  /// Settings row + sheet title: default rest between sets (routines can override it per exercise).
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الراحة الافتراضي'**
+  String get settingsDefaultRest;
+
+  /// Small line under the rest sheet title.
+  ///
+  /// In ar, this message translates to:
+  /// **'الروتين يقدر يغيّره لكل تمرين'**
+  String get settingsDefaultRestHint;
+
+  /// Settings group: export / import a JSON backup file.
+  ///
+  /// In ar, this message translates to:
+  /// **'النسخة الاحتياطية'**
+  String get settingsBackup;
+
+  /// Backup row: create the backup file and open the share sheet.
+  ///
+  /// In ar, this message translates to:
+  /// **'صدّر نسخة احتياطية'**
+  String get settingsExport;
+
+  /// Subtitle of the export row.
+  ///
+  /// In ar, this message translates to:
+  /// **'روتيناتك وسجلّك وإعداداتك في ملف واحد'**
+  String get settingsExportHint;
+
+  /// Backup row: pick a backup file and restore it.
+  ///
+  /// In ar, this message translates to:
+  /// **'استرجع نسخة احتياطية'**
+  String get settingsImport;
+
+  /// Subtitle of the import row (warns that import replaces everything).
+  ///
+  /// In ar, this message translates to:
+  /// **'هيبدّل كل البيانات اللي على الموبايل ده'**
+  String get settingsImportHint;
+
+  /// Toast when writing/sharing the backup file fails.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرفناش نعمل النسخة. جرّب تاني.'**
+  String get settingsExportFailed;
+
+  /// Import confirmation dialog title.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسترجع النسخة دي؟'**
+  String get settingsImportConfirmTitle;
+
+  /// First line of the import confirmation: when the backup was made. {date} is a formatted date + time with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخة من {date}'**
+  String settingsImportFrom(String date);
+
+  /// Import confirmation count line. {count} is formatted with Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'الروتينات: {count}'**
+  String settingsImportCountRoutines(String count);
+
+  /// Import confirmation count line: finished + active workouts in the file.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمارين: {count}'**
+  String settingsImportCountWorkouts(String count);
+
+  /// Import confirmation count line: logged sets in the file (same word as the History stat).
+  ///
+  /// In ar, this message translates to:
+  /// **'السِتات: {count}'**
+  String settingsImportCountSets(String count);
+
+  /// Import confirmation warning.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل اللي على الموبايل ده هيتمسح ويتبدّل بالنسخة دي. مفيش رجوع.'**
+  String get settingsImportWarning;
+
+  /// Destructive confirm button of the import dialog.
+  ///
+  /// In ar, this message translates to:
+  /// **'استرجع'**
+  String get settingsImportConfirm;
+
+  /// Cancel button in settings dialogs.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get settingsCancel;
+
+  /// Dismiss button of the import error dialog.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمام'**
+  String get settingsOk;
+
+  /// Toast after a successful import.
+  ///
+  /// In ar, this message translates to:
+  /// **'النسخة رجعت ✓'**
+  String get settingsImportDone;
+
+  /// Title of the import error dialog.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدرناش نسترجع الملف ده'**
+  String get settingsImportErrorTitle;
+
+  /// Import error: the file is not JSON.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف ده مش نسخة احتياطية (مش ملف JSON).'**
+  String get settingsImportErrorNotJson;
+
+  /// Import error: JSON without the Azm backup marker.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف ده مش نسخة احتياطية من عزم.'**
+  String get settingsImportErrorNotAzm;
+
+  /// Import error: the backup version is newer than this app understands.
+  ///
+  /// In ar, this message translates to:
+  /// **'النسخة دي معمولة بإصدار أحدث من عزم. حدّث التطبيق وجرّب تاني.'**
+  String get settingsImportErrorNewer;
+
+  /// Import error: an Azm backup with broken content (types, ids, links).
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف ده بايظ أو ناقص.'**
+  String get settingsImportErrorCorrupt;
+
+  /// Import error: the picked file could not be opened.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدرناش نقرا الملف.'**
+  String get settingsImportErrorRead;
+
+  /// Import refused while a workout is running.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلّص التمرين اللي شغال أو الغيه الأول، وبعدين استرجع النسخة.'**
+  String get settingsImportErrorActive;
+
+  /// Second line of every import error: nothing was modified.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتك زي ما هي، محصلش أي تغيير.'**
+  String get settingsImportUnchanged;
+
+  /// Settings group: licences and version.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن عزم'**
+  String get settingsAbout;
+
+  /// Settings row + licences screen title.
+  ///
+  /// In ar, this message translates to:
+  /// **'التراخيص والمصادر'**
+  String get settingsLicenses;
+
+  /// App version line under the About group. {version} like 1.0.0.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإصدار {version}'**
+  String settingsVersion(String version);
+
+  /// Intro line on the licences screen.
+  ///
+  /// In ar, this message translates to:
+  /// **'عزم مبني على شغل ناس تانية. شكراً ليهم.'**
+  String get settingsLicensesIntro;
+
+  /// Licences card title: the exercise dataset.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات التمارين'**
+  String get settingsLicensesExerciseData;
+
+  /// What the dataset provides.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسماء التمارين بالإنجليزي والعضلات والأدوات والتعليمات.'**
+  String get settingsLicensesExerciseDataBody;
+
+  /// Attribution text from docs/LICENSES.md. Keep it in English, word for word.
+  ///
+  /// In ar, this message translates to:
+  /// **'Exercise data © 2026 Hasan Emir Yıldırım, MIT License'**
+  String get settingsLicensesExerciseDataCredit;
+
+  /// Licences card title: the typeface.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخط'**
+  String get settingsLicensesFont;
+
+  /// Attribution text from docs/LICENSES.md. Keep it in English, word for word.
+  ///
+  /// In ar, this message translates to:
+  /// **'Readex Pro © The Readex Pro Project Authors, SIL OFL 1.1'**
+  String get settingsLicensesFontCredit;
+
+  /// Licences card title: exercise media.
+  ///
+  /// In ar, this message translates to:
+  /// **'صور وحركات التمارين'**
+  String get settingsLicensesMedia;
+
+  /// Media is shown only when licensed (docs/LICENSES.md).
+  ///
+  /// In ar, this message translates to:
+  /// **'بتظهر بس للتمارين اللي معانا ترخيص لصورها.'**
+  String get settingsLicensesMediaBody;
+
+  /// Mandatory media attribution. Keep it word for word.
+  ///
+  /// In ar, this message translates to:
+  /// **'© Gym visual — https://gymvisual.com/'**
+  String get settingsLicensesMediaCredit;
+
+  /// Licences card title: our own content.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسماء العربية والبرامج'**
+  String get settingsLicensesOurs;
+
+  /// Our own content credit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسماء المصري والبرامج الجاهزة من عمل فريق عزم.'**
+  String get settingsLicensesOursBody;
+
+  /// Licences row: opens Flutter's licence page.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتبات مفتوحة المصدر'**
+  String get settingsLicensesPackages;
+
+  /// Subtitle of the open-source packages row.
+  ///
+  /// In ar, this message translates to:
+  /// **'النص الكامل لكل التراخيص، ومعاهم بيانات التمارين والخط.'**
+  String get settingsLicensesPackagesBody;
+
   /// Big primary button on the Workout tab: starts an empty workout.
   ///
   /// In ar, this message translates to:

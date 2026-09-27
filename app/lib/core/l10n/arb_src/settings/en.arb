@@ -7,5 +7,88 @@
   "settingsLanguageEnglish": "English",
   "settingsTheme": "Appearance",
   "settingsThemeDark": "Dark",
-  "settingsThemeLight": "Light"
+  "settingsThemeLight": "Light",
+  "settingsTraining": "Training",
+  "settingsUnit": "Weight unit",
+  "settingsUnitKg": "Kilograms (kg)",
+  "settingsUnitLb": "Pounds (lb)",
+  "settingsUnitValueKg": "kg",
+  "settingsUnitValueLb": "lb",
+  "settingsDefaultRest": "Default rest time",
+  "settingsDefaultRestHint": "Routines can change it per exercise",
+  "settingsBackup": "Backup",
+  "settingsExport": "Export backup",
+  "settingsExportHint": "Your routines, history and settings in one file",
+  "settingsImport": "Import backup",
+  "settingsImportHint": "Replaces all data on this phone",
+  "settingsExportFailed": "Couldn't create the backup. Try again.",
+  "settingsImportConfirmTitle": "Restore this backup?",
+  "settingsImportFrom": "Backup from {date}",
+  "@settingsImportFrom": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportCountRoutines": "Routines: {count}",
+  "@settingsImportCountRoutines": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportCountWorkouts": "Workouts: {count}",
+  "@settingsImportCountWorkouts": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportCountSets": "Sets: {count}",
+  "@settingsImportCountSets": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportWarning": "Everything on this phone will be replaced by this backup. This can't be undone.",
+  "settingsImportConfirm": "Restore",
+  "settingsCancel": "Cancel",
+  "settingsOk": "OK",
+  "settingsImportDone": "Backup restored ✓",
+  "settingsImportErrorTitle": "Couldn't import this file",
+  "settingsImportErrorNotJson": "This file isn't a backup (it isn't a JSON file).",
+  "settingsImportErrorNotAzm": "This file isn't an Azm backup.",
+  "settingsImportErrorNewer": "This backup was made by a newer version of Azm. Update the app and try again.",
+  "settingsImportErrorCorrupt": "This backup is damaged or incomplete.",
+  "settingsImportErrorRead": "Couldn't read the file.",
+  "settingsImportErrorActive": "Finish or discard your current workout first, then import.",
+  "settingsImportUnchanged": "Your data is unchanged.",
+  "settingsAbout": "About",
+  "settingsLicenses": "Licenses & credits",
+  "settingsVersion": "Version {version}",
+  "@settingsVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsLicensesIntro": "Azm is built on other people's work. Thank you.",
+  "settingsLicensesExerciseData": "Exercise data",
+  "settingsLicensesExerciseDataBody": "English exercise names, muscles, equipment and instructions.",
+  "settingsLicensesExerciseDataCredit": "Exercise data © 2026 Hasan Emir Yıldırım, MIT License",
+  "settingsLicensesFont": "Font",
+  "settingsLicensesFontCredit": "Readex Pro © The Readex Pro Project Authors, SIL OFL 1.1",
+  "settingsLicensesMedia": "Exercise images and animations",
+  "settingsLicensesMediaBody": "Shown only for exercises whose media we have licensed.",
+  "settingsLicensesMediaCredit": "© Gym visual — https://gymvisual.com/",
+  "settingsLicensesOurs": "Arabic names and programs",
+  "settingsLicensesOursBody": "The Egyptian names and ready programs are made by the Azm team.",
+  "settingsLicensesPackages": "Open-source packages",
+  "settingsLicensesPackagesBody": "Full licence texts of every package, including the exercise data and the font."
 }
