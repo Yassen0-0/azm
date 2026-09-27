@@ -225,3 +225,7 @@ Every assumption or judgment call made while building Azm, newest last. Format: 
 
 - **2026-09-27 — Stray-process sweep:** only an idle Gradle 9.3.1 daemon (19 h, 0% CPU) was left from old sessions; stopped with `./gradlew --stop`. Kept the set-B devices (`azm_api37_b` on 5556, "Azm iPhone B") because window D uses set B; set A was not running. No flutter/dart/xcodebuild/test-runner processes or wait loops remained.
 - **2026-09-27 — CLAUDE.md "Waiting and polling" rule (owner):** after a background wait loop from an old session ran 12 h 42 m waiting for output that never came. Every wait has a cap (default 30 min) and prints `tail -50` of the log on timeout; loops must also match failure states. Portable snippets are given because macOS has no `timeout` (a bare `timeout …` silently failed in the integration session).
+
+## Parallel round 2 setup (2026-09-27)
+
+- **2026-09-27 — E2E host helper committed as `tools/e2e_android_helper.sh`** (was `.tooling/tmp/`, see the 2026-09-26 entry; `tools/` unfrozen for this one move). Its waits are now bounded (10 min for the install, 10 min for the system screen, exit 1 on timeout) per CLAUDE.md → Waiting and polling; it takes `<serial> <out.png>` and sources `env.sh` itself. Usage in README → *Android E2E run with system screens*.

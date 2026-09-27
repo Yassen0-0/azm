@@ -4,7 +4,7 @@ Hevy-style gym tracker for Android and iOS. Flutter, Arabic-first, fully bilingu
 
 This folder (the **ROOT**) is fully self-contained: code, data, design system, docs **and** every SDK and cache live inside it. It can be moved to another disk (see [Moving the folder](#moving-the-folder)).
 
-> Status: bootstrap complete (Phases 0–3): sandboxed tooling, docs, app skeleton, data layer. Feature work is next. See [docs/PLAN.md](docs/PLAN.md). See [docs/PLAN.md](docs/PLAN.md).
+> Status: bootstrap complete (Phases 0–3): sandboxed tooling, docs, app skeleton, data layer. Feature work is next. See [docs/PLAN.md](docs/PLAN.md).
 
 **Start here:** [CLAUDE.md](CLAUDE.md) (rules) · [docs/SPEC.md](docs/SPEC.md) (what) · [docs/DESIGN.md](docs/DESIGN.md) (look) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) (how) · [docs/DATA.md](docs/DATA.md) (data) · [docs/LICENSES.md](docs/LICENSES.md) (**media is not ours**) · [docs/PLAN.md](docs/PLAN.md) (backlog) · [docs/DECISIONS_LOG.md](docs/DECISIONS_LOG.md) · [docs/ORIGINAL_BRIEF.md](docs/ORIGINAL_BRIEF.md)
 
@@ -23,7 +23,7 @@ azm/                     ROOT = git repo root
   media/                 DEV ONLY 1,324 thumbnails + 1,324 GIFs (© Gym visual) — gitignored, never shipped
   brand/                 logo-concept-a.svg + icon export to-dos
   design/                theme.json, theme.css, ReadexPro.ttf (Ather design system, copied from inputs/)
-  tools/                 scripts: build_catalog.sh, gen_l10n.sh, screenshots.sh, check_directionality.sh, serve_media_dev.dart, relocate.sh
+  tools/                 scripts: build_catalog.sh, gen_l10n.sh, screenshots.sh, check_directionality.sh, e2e_android_helper.sh, serve_media_dev.dart, relocate.sh
   docs/screenshots/      parity screenshots per feature (android + ios, ar + en)
   app/                   the Flutter project
   inputs/                original files as delivered — gitignored
@@ -121,6 +121,14 @@ source ./env.sh && cd app && flutter run \
   --dart-define=AZM_MEDIA_BASE_URL=http://10.0.2.2:8080 --dart-define=AZM_MEDIA_ALLOW_ALL=true
 ```
 (`10.0.2.2` = the Mac from the Android emulator; use the Mac's LAN IP for a phone.) Without these defines every exercise shows the fallback icon, which is the default and the release behaviour until licensed media exists.
+
+**Android E2E run with system screens** (`workout_flow`): a Flutter test can't tap system dialogs or press Back on a system activity, so start the host helper first, then drive:
+```sh
+source ./env.sh && tools/e2e_android_helper.sh emulator-5556 docs/screenshots/workout_flow/android/en_02b_exact_alarm_system_screen.png &
+source ./env.sh && cd app && flutter drive --driver=test_driver/integration_test.dart \
+  --target=integration_test/workout_flow_screens_test.dart -d emulator-5556 --dart-define=AZM_E2E_OPEN_ALARM_SETTINGS=true
+```
+The helper grants `POST_NOTIFICATIONS` as soon as the app is installed, then captures the "Alarms & reminders" screen and presses Back. Both waits are capped at 10 min (exit 1 on timeout). Use the serial of your own device set (A = `emulator-5554`, B = `emulator-5556`).
 
 ### Package versions (locked in `app/pubspec.lock`)
 
