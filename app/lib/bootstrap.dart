@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 
 import 'core/db/app_database.dart';
 import 'core/db/catalog_installer.dart';
@@ -14,7 +15,8 @@ import 'features/settings/data/app_settings.dart';
 ///
 /// [settingsOverride] forces settings (e.g. language) without persisting them;
 /// such runs (screenshots, integration tests) also skip onboarding.
-Future<ProviderContainer> bootstrapApp({AppSettings? settingsOverride}) async {
+/// [overrides] are appended (integration tests: e.g. a fake share sheet).
+Future<ProviderContainer> bootstrapApp({AppSettings? settingsOverride, List<Override> overrides = const []}) async {
   final db = AppDatabase.open();
   await CatalogInstaller(db).installBundledIfNeeded();
   final settings = settingsOverride ?? await AppSettings.load(db);
@@ -28,6 +30,7 @@ Future<ProviderContainer> bootstrapApp({AppSettings? settingsOverride}) async {
       initialAppSettingsProvider.overrideWithValue(settings),
       onboardingDoneAtLaunchProvider.overrideWithValue(onboardingDone),
       exerciseHistorySourceProvider.overrideWith((ref) => createExerciseHistorySource(ref.watch(appDatabaseProvider))),
+      ...overrides,
     ],
   );
 }

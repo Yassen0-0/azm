@@ -6,7 +6,9 @@
 // 2. Full journey: onboarding (kg) → add a ready program (Full Body 3×) →
 //    start "Full Body A" from the Workout tab (prefilled) → log sets → finish
 //    ("Remove them") → History shows it → edit that past workout → PRs
-//    recompute (one earlier workout is seeded so PRs have something to beat).
+//    recompute (one earlier workout is seeded so PRs have something to beat)
+//    → Settings: back up (export) → wipe all user data → import that backup
+//    → every user row is back, identical, and History shows the workouts.
 //    Screenshots: <lang>_jNN_<name>.
 // Run on both platforms with:   tools/screenshots.sh workout_flow
 // Proof images land in docs/screenshots/workout_flow/<platform>/.
@@ -33,6 +35,10 @@ import 'package:azm/features/exercises/ui/exercise_detail_screen.dart';
 import 'package:azm/features/history/data/history_repository.dart';
 import 'package:azm/features/history/ui/past_workout_screen.dart';
 import 'package:azm/features/onboarding/data/onboarding_gate.dart';
+import 'package:azm/features/settings/data/app_version.dart';
+import 'package:azm/features/settings/data/backup/backup_codec.dart';
+import 'package:azm/features/settings/data/backup/backup_files.dart';
+import 'package:azm/features/settings/data/backup/backup_service.dart';
 import 'package:azm/features/settings/data/training_settings.dart';
 import 'package:azm/features/settings/data/app_settings.dart';
 import 'package:azm/features/workout/data/rest_timer.dart';
@@ -95,6 +101,27 @@ Future<void> _typeOnKeypad(WidgetTester tester, String digits) async {
     await tester.pump(const Duration(milliseconds: 50));
   }
 }
+
+/// Stands in for the system share sheet and file picker (no system UI in
+/// tests): export keeps the file, import "picks" that same file.
+class _FileBox implements BackupFiles {
+  String? fileName;
+  String? text;
+
+  @override
+  Future<void> share({required String fileName, required String text, Rect? origin}) async {
+    this.fileName = fileName;
+    this.text = text;
+  }
+
+  @override
+  Future<String?> pickText() async => text;
+}
+
+/// Every user row + the restorable settings, as backup JSON with fixed meta
+/// (so two dumps compare equal when the data is identical).
+Future<String> _userDataDump(AppDatabase db) async =>
+    encodeBackup(await BackupService(db).snapshot(exportedAt: DateTime.utc(2000), appVersion: '-'));
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -275,7 +302,11 @@ void main() {
     });
 
     testWidgets('full journey ($platform, ${lang.name})', (tester) async {
-      final container = await bootstrapApp(settingsOverride: AppSettings(language: lang));
+      final files = _FileBox();
+      final container = await bootstrapApp(
+        settingsOverride: AppSettings(language: lang),
+        overrides: [backupFilesProvider.overrideWithValue(files)],
+      );
       addTearDown(container.dispose);
       final db = container.read(appDatabaseProvider);
       addTearDown(() => unawaited(db.close()));
@@ -459,6 +490,67 @@ void main() {
       router.pop();
       await _pump(tester);
       await screenshot('history_after_edit');
+
+      // 8. Backup round trip through Settings: export → wipe → import.
+      final before = await _userDataDump(db);
+      Future<void> tapSetting(String key) async {
+        final f = find.byKey(ValueKey(key));
+        await _waitFor(tester, find.byKey(const ValueKey('settings-list')), 'settings');
+        await tester.scrollUntilVisible(
+          f,
+          200,
+          scrollable: find
+              .descendant(of: find.byKey(const ValueKey('settings-list')), matching: find.byType(Scrollable))
+              .first,
+        );
+        await _pump(tester, 300);
+        await tester.tap(f);
+        await _pump(tester);
+      }
+
+      unawaited(router.push(AppRoutes.settings));
+      await _pump(tester);
+      await tapSetting('settings-export');
+      for (var i = 0; i < 50 && files.text == null; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(files.fileName, matches(RegExp(r'^azm-backup-\d{8}-\d{4}\.json$')));
+      final exported = decodeBackup(files.text!);
+      // The real build version from the platform, not a constant.
+      final version = await container.read(appVersionProvider.future);
+      expect(exported.appVersion, version.full);
+      expect(version.version, isNotEmpty);
+      expect(exported.workouts.map((x) => x.id), containsAll(<String>['e2e-earlier', w.id]));
+      await screenshot('settings_exported');
+
+      // Wipe every user table and change a restorable setting.
+      await db.transaction(() async {
+        await db.delete(db.workouts).go();
+        await db.delete(db.routines).go();
+      });
+      await db.writeSetting(TrainingSettingsKeys.unit, jsonEncode('lb'));
+      expect(await db.select(db.workoutSets).get(), isEmpty);
+      expect(await db.select(db.routineExercises).get(), isEmpty);
+
+      await tapSetting('settings-import');
+      await _waitFor(tester, find.byKey(const ValueKey('settings-import-confirm')), 'import confirmation');
+      expect(find.text(l.settingsImportCountRoutines('2')), findsOneWidget);
+      expect(find.text(l.settingsImportCountWorkouts('2')), findsOneWidget);
+      await screenshot('import_confirm');
+      await tester.tap(find.byKey(const ValueKey('settings-import-confirm')));
+      await _pump(tester, 1500);
+      await _waitFor(tester, find.text(l.settingsImportDone), 'import done');
+      expect(await _userDataDump(db), before);
+      expect(await db.readSetting(TrainingSettingsKeys.unit), jsonEncode('kg'));
+      await screenshot('import_done');
+
+      router.pop();
+      await _pump(tester);
+      await tester.tap(find.text(l.shellTabHistory));
+      await _waitFor(tester, find.byKey(ValueKey(w.id)), 'history card after import', tries: 200);
+      expect(find.byKey(ValueKey(w.id)), findsOneWidget);
+      expect(await prSets(), 1);
+      await screenshot('history_after_import');
     });
   }
 }

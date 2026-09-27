@@ -36,6 +36,19 @@ Future<void> _pumpFor(WidgetTester tester, [int frames = 20]) async {
   }
 }
 
+/// Waits until [f] is on screen and hit-testable (so its tab is the visible
+/// one), max [max] wall-clock, then pumps a few more frames so the painted
+/// frame is what gets captured. Fails with a clear reason on timeout
+/// (CLAUDE.md → Waiting and polling).
+Future<void> _waitFor(WidgetTester tester, Finder f, {Duration max = const Duration(seconds: 20)}) async {
+  final end = DateTime.now().add(max);
+  while (f.hitTestable().evaluate().isEmpty && DateTime.now().isBefore(end)) {
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+  expect(f.hitTestable(), findsWidgets, reason: 'not on screen after ${max.inSeconds} s');
+  await _pumpFor(tester, 30);
+}
+
 /// Jumps the muscle chip row to its start or end.
 Future<void> _chipsTo(WidgetTester tester, {required bool end}) async {
   final row = find.descendant(of: find.byType(MuscleChips), matching: find.byType(Scrollable)).first;
@@ -140,6 +153,10 @@ void main() => runScreenshotSuite('exercises', [
     await _removeSeed(container.read(appDatabaseProvider));
     await _measureSearch(container);
     router.go(AppRoutes.exercises);
+    // First capture of the run: on a busy iOS simulator the fixed harness
+    // settle could fire before the tab switch + catalog index had painted
+    // (blank list, Workout tab still selected). Wait for real cards.
+    await _waitFor(tester, find.byType(ExerciseCard));
   }),
   ScreenStep('library_more_muscles', (tester, container, router) async {
     final ar = Localizations.localeOf(tester.element(find.byType(TextField).first)).languageCode == 'ar';
