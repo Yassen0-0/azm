@@ -37,12 +37,15 @@
       }
     }
   },
-  "exercisesResultCount": "{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{count} تمارين} many{{count} تمرين} other{{count} تمرين}}",
+  "exercisesResultCount": "{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{countText} تمارين} many{{countText} تمرين} other{{countText} تمرين}}",
   "@exercisesResultCount": {
-    "description": "Number of exercises in the list under the filters.",
+    "description": "Number of exercises in the list under the filters. count picks the plural form; countText is the same number formatted with a thousands separator and Western digits (1,324).",
     "placeholders": {
       "count": {
         "type": "int"
+      },
+      "countText": {
+        "type": "String"
       }
     }
   },

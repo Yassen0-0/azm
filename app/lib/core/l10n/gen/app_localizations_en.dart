@@ -143,11 +143,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String exercisesResultCount(int count) {
+  String exercisesResultCount(int count, String countText) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count exercises',
+      other: '$countText exercises',
       one: '1 exercise',
       zero: 'No exercises',
     );

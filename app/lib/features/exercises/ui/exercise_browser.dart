@@ -269,7 +269,7 @@ class _ResultBar extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                count == null ? '' : l10n.exercisesResultCount(count!),
+                count == null ? '' : l10n.exercisesResultCount(count!, AzmNumbers.integer(count!)),
                 style: AzmType.small.copyWith(color: c.textSecondary),
               ),
             ),

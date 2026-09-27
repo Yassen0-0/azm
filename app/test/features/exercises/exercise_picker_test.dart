@@ -107,7 +107,7 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Clear search'));
     await settle(tester);
     expect(tester.widget<TextField>(field).controller!.text, isEmpty);
-    expect(find.text('1324 exercises'), findsOneWidget);
+    expect(find.text('1,324 exercises'), findsOneWidget);
 
     await tester.enterText(field, 'barbell full squat');
     await settle(tester);

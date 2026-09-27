@@ -344,11 +344,11 @@ abstract class AppLocalizations {
   /// **'شيل فلتر {equipment}'**
   String exercisesRemoveEquipmentFilter(String equipment);
 
-  /// Number of exercises in the list under the filters.
+  /// Number of exercises in the list under the filters. count picks the plural form; countText is the same number formatted with a thousands separator and Western digits (1,324).
   ///
   /// In ar, this message translates to:
-  /// **'{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{count} تمارين} many{{count} تمرين} other{{count} تمرين}}'**
-  String exercisesResultCount(int count);
+  /// **'{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{countText} تمارين} many{{countText} تمرين} other{{countText} تمرين}}'**
+  String exercisesResultCount(int count, String countText);
 
   /// Empty state title when the search/filters match nothing.
   ///

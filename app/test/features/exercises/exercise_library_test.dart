@@ -27,8 +27,13 @@ void main() {
 
   testWidgets('shows the whole catalog by default with a count', (tester) async {
     await openLibrary(tester, LanguagePref.en);
-    expect(find.text('1324 exercises'), findsOneWidget);
+    expect(find.text('1,324 exercises'), findsOneWidget);
     expect(find.byType(ExerciseCard), findsWidgets);
+  });
+
+  testWidgets('Arabic count uses a thousands separator and Western digits', (tester) async {
+    await openLibrary(tester, LanguagePref.ar);
+    expect(find.text('1,324 تمرين'), findsOneWidget);
   });
 
   testWidgets('Arabic formal name, Egyptian slang and English all find bench press first', (tester) async {
@@ -72,7 +77,7 @@ void main() {
     expect(targets, {'biceps'});
 
     await tapChip(tester, 'All');
-    expect(find.text('1324 exercises'), findsOneWidget);
+    expect(find.text('1,324 exercises'), findsOneWidget);
   });
 
   testWidgets('"More" chip expands the rare muscles inline', (tester) async {
@@ -111,7 +116,7 @@ void main() {
     expect(find.byType(ExerciseCard), findsNothing);
     await tester.tap(find.text('Clear filters'));
     await settle(tester);
-    expect(find.text('1324 exercises'), findsOneWidget);
+    expect(find.text('1,324 exercises'), findsOneWidget);
   });
 
   testWidgets('records show a 🏆 badge with the heaviest weight', (tester) async {

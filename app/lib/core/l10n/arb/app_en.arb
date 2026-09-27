@@ -41,7 +41,7 @@
   "exercisesEquipmentSheetTitle": "Filter by equipment",
   "exercisesEquipmentAll": "All equipment",
   "exercisesRemoveEquipmentFilter": "Remove filter {equipment}",
-  "exercisesResultCount": "{count, plural, =0{No exercises} =1{1 exercise} other{{count} exercises}}",
+  "exercisesResultCount": "{count, plural, =0{No exercises} =1{1 exercise} other{{countText} exercises}}",
   "exercisesNoResultsTitle": "No exercises found",
   "exercisesNoResultsBody": "Try another name, or clear the filters.",
   "exercisesClearFilters": "Clear filters",

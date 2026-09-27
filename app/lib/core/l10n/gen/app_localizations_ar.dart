@@ -143,13 +143,13 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String exercisesResultCount(int count) {
+  String exercisesResultCount(int count, String countText) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count تمرين',
-      many: '$count تمرين',
-      few: '$count تمارين',
+      other: '$countText تمرين',
+      many: '$countText تمرين',
+      few: '$countText تمارين',
       two: 'تمرينين',
       one: 'تمرين واحد',
       zero: 'مفيش تمارين',
