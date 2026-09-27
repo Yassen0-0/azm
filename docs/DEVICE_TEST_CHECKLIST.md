@@ -67,3 +67,8 @@ _(window C appends here only)_
 ### History (window D, round 2)
 
 _(window D appends here only)_
+- [ ] Edit a past workout on a phone: keypad edits, "Add set", swipe-to-delete (toward the end edge) and ✓ feel like the live workout; leave the screen → unticked/empty sets are gone, History card and exercise detail show the new values at once. (history, 2026-09-27)
+- [ ] Kill the app while editing a past workout with an unticked set → reopen that workout: the unticked set has been removed; nothing else changed. (history, 2026-09-27)
+- [ ] Performance with a long history (1–2 years, ~300 workouts): History tab, calendar month switching and Stats open without visible lag; logging sets in the active workout stays smooth while the History tab is alive. (history, 2026-09-27)
+- [ ] Device in a UTC+2/+3 time zone: a workout started just after midnight shows on that day in the calendar and in that week in Stats; the calendar week starts on Saturday in Arabic, Sunday in English. (history, 2026-09-27)
+- [ ] VoiceOver / TalkBack: calendar days read the full date and the workout count; the 🏆 badge on a card reads "N personal records". (history, 2026-09-27)
