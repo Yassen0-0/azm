@@ -9,11 +9,22 @@
 
 **Definition of done for every task** (CLAUDE.md): `flutter analyze` + `flutter test` + `tools/check_directionality.sh` pass; **Platform Parity Rule**, meaning `tools/screenshots.sh <feature>` captures every screen on the Android emulator AND the iOS Simulator in Arabic and English into `docs/screenshots/<feature>/`, and the images were reviewed; real-device-only checks added to `docs/DEVICE_TEST_CHECKLIST.md`; assumptions logged in `docs/DECISIONS_LOG.md`; committed locally, never pushed.
 
+## v1 status — FEATURE-COMPLETE (2026-09-27, tag `v1.0.0-rc1`)
+
+All agent feature work for v1 is merged on `main` (§1–§7, integration §1f). Every screen was built and checked on the Android emulator and the iOS Simulator in Arabic and English (`docs/screenshots/`). **Remaining work is the owner's** (details in §10):
+
+1. [ ] **Gym visual media licence** (~150–200 exercises) → record in `docs/LICENSES.md`. Until then the fallback icon shows everywhere (release behaviour).
+2. [ ] **Cloudflare R2 + upload script**: bucket + custom domain; then §8 `tools/upload_media_r2.dart` (blocked on 1).
+3. [ ] **Firebase project + Crashlytics**: project + config files (gitignored); then §9.
+4. [ ] **Apple Developer account + TestFlight** (and Google Play console); signing keys out of git.
+5. [ ] **Real-device checklist**: `docs/DEVICE_TEST_CHECKLIST.md`.
+6. [ ] **Arabic names review**: 1,274 entries are `reviewed: false` (`docs/review/names_batch_*.md`, 109 flagged ⚠️; `docs/review/duplicates.md`).
+
 ## Parallel windows (how to run two agents at once)
 
 Two windows in the **same checkout** would overwrite each other's `app/build`, `.dart_tool` and generated files, and install onto the same devices. So each window gets its **own git worktree + branch + device set**.
 
-**Round 3 (2026-09-27, final v1 round): window E = settings + backup + licences (§5), window F = brand pipeline + count separator (§7), window G = Arabic names (§6).** Round 1–2 windows are merged (see §1b, §1d; their pre-registration is recorded in DECISIONS_LOG).
+**Round 3 (2026-09-27, final v1 round): window E = settings + backup + licences (§5), window F = brand pipeline + count separator (§7), window G = Arabic names (§6).** All rounds are merged (§1b, §1d, §1f); worktrees removed, branches kept. The table below is kept as a record.
 
 | Window | Task | Branch / worktree | Device set | Screenshot features |
 |---|---|---|---|---|
@@ -153,6 +164,20 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Pre-registered: route `AppRoutes.licenses` + `LicensesScreen` placeholder; `share_plus` + `file_picker` (iOS simulator + Android debug builds verified, still no CocoaPods); `tools/build_catalog.sh --check`; per-window sections in DECISIONS_LOG, DEVICE_TEST_CHECKLIST and Requests.
 - [x] analyze, test (214), directionality pass. No visible UI change, so parity screenshots were not regenerated.
 
+## 1f. INTEGRATION round 3 — final v1 merge (main) — [~] IN PROGRESS (integrator, 2026-09-27)
+
+- [x] Gradle stopped, all devices shut down first; device set **A** only.
+- [x] Merged `feature/arabic-names` → `feature/settings` → `feature/brand`: no conflicts; `tools/gen_l10n.sh` re-run (identical output). Logged.
+- [x] Full catalog build **v3**: 1,324 Arabic names ship; 33 duplicates hidden (`data/hidden_exercises.json` → `exercises.hidden`, Drift schema v2): not in library/picker/search, still resolved by id (tested with old user data). `--check`: 0 same-name warnings for visible exercises.
+- [x] Search folds ظ→ض, ذ→د, ث→ت (+ tests); alias `ضهر سفلي` on 0489.
+- [x] `package_info_plus`: backup `app_version` + About + licence page read the real version; backup file format documented in DATA.md.
+- [x] Licences: Readex Pro copyright read from the font's `name` table (2019, not 2021) + test.
+- [x] Flaky blank first iOS exercises capture: bounded wait for real cards.
+- [x] E2E full journey + backup export → wipe → import step (code).
+- [ ] Every screenshot suite + E2E re-run on both platforms, ar + en; images reviewed.
+- [x] analyze, tests, directionality, `brand/generate.sh --check`, `check_plan_overlap.dart E F G`.
+- [ ] Commit, tag `v1.0.0-rc1` (local), worktrees removed (branches kept), Gradle + devices stopped.
+
 ## 2. C window — Routines, ready programs, onboarding  (branch `feature/routines`, device set **A**) — [x] done 2026-09-27 (window C), merged 2026-09-27
 
 - **Goal:** build a routine once, start it in one tap; copy a ready program into "my routines"; first-run onboarding (unit + optional ready program).
@@ -215,7 +240,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [x] Parity: `AZM_DEVICE_SET=B tools/screenshots.sh history` (list with seeded workouts, calendar, past workout detail + keypad, stats, exercise full history, exercise detail with the "See all" link, empty state), ar + en, both platforms. Seed finished workouts in your own test (dedicated devices only).
   - Notes: all logic in `features/history/{data,ui}`; decisions in DECISIONS_LOG → Window D. Proof: `docs/screenshots/history/{android,ios}/` (11 screens × ar/en). Tests: `test/features/history/` (26; full suite 179 green). Screenshot suite waits (max 20 s) for the seeded list on slow hosts.
 
-## 5. E window — Settings, backup, licences  (branch `feature/settings`, device set **A**) — [x] done 2026-09-27 (window E), not merged
+## 5. E window — Settings, backup, licences  (branch `feature/settings`, device set **A**) — [x] done 2026-09-27 (window E), merged 2026-09-27
 
 - **Goal:** every user preference in one place, a backup the user can trust, and honest attributions.
 - **Owns (only these):**
@@ -240,7 +265,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - Screenshot suite `settings`: 9 screens × ar/en × Android/iOS. The confirmation/error dialogs are opened with an in-memory backup: the device DB only gets unit = kg, rest = 1:30.
   - Decisions in DECISIONS_LOG → Window E (import during a workout, restored settings keys, file shape, validation rules, app_version).
 
-## 6. G window — Arabic names for the remaining exercises  (branch `feature/arabic-names`, no devices) — [x] done 2026-09-27 (window G), awaiting merge + owner review
+## 6. G window — Arabic names for the remaining exercises  (branch `feature/arabic-names`, no devices) — [x] done 2026-09-27 (window G), merged 2026-09-27; owner review pending
 
 - **Goal:** Egyptian-gym Arabic name + slang aliases for the remaining **1,274** exercises (50 done in Phase 3, owner-reviewed).
 - **Owns (only these):**
@@ -253,7 +278,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [ ] Owner review pass later (flip `reviewed` to `true`), not this window.
   - [ ] Later (not this round): `instructions_ar`.
 
-## 7. F window — Brand pipeline + count separator  (branch `feature/brand`, device set **B**) — [x] done 2026-09-27 (window F), not merged
+## 7. F window — Brand pipeline + count separator  (branch `feature/brand`, device set **B**) — [x] done 2026-09-27 (window F), merged 2026-09-27
 
 - **Goal:** every icon and splash asset generated from ONE source, `brand/logo-concept-a.svg`: replace the SVG, run one command, and everything regenerates.
 - **Owns (only these):**
@@ -285,7 +310,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - **Acceptance:**
   - [ ] `tools/upload_media_r2.dart`: uploads **only licensed** ids (allow-list file) to R2 using credentials from a gitignored `.env`; refuses to run on unlicensed ids; prints the base URL for `MediaResolver`. **Blocked until media is purchased** (LICENSES.md).
   - [x] `tools/serve_media_dev.dart`: local static server for `media/` (dev only), done in Phase 3.
-  - [ ] CI-style `tools/check_all.sh`: `flutter analyze` + `flutter test` (app) + `dart analyze` (tools) + directionality + `build_catalog` (validation, and fail if the committed asset is stale).
+  - [ ] CI-style `tools/check_all.sh`: `flutter analyze` + `flutter test` (app) + `dart analyze` (tools) + directionality + `build_catalog` (validation, and fail if the committed asset is stale) + `brand/generate.sh --check` (F's suggestion).
   - [x] Verify the iOS build: done 2026-09-26 (simulator build, launch, RTL, font, localized name, first-launch catalog install; screenshots in `docs/screenshots/shell/`).
 
 ## 9. Crashlytics — `app/lib/core/crash/**` + Firebase config
@@ -296,16 +321,19 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 
 ## 10. Owner actions (not agent tasks)
 
-- [ ] Review the 50 Arabic names (Phase 3 report).
-- [ ] Buy the Gym visual license for ~150–200 exercises; record it in LICENSES.md.
-- [ ] Create Cloudflare R2 bucket + custom domain; create Firebase project.
-- [ ] Apple Developer + Google Play accounts; signing keys (kept out of git).
+- [x] Review the 50 Arabic names (Phase 3 report; done 2026-09-26).
+- [ ] **Gym visual media licence**: buy it for ~150–200 exercises; record it in `docs/LICENSES.md` (only the owner edits that file).
+- [ ] **Cloudflare R2 + upload script**: create the bucket + custom domain; an agent then writes `tools/upload_media_r2.dart` (§8) and sets `AZM_MEDIA_BASE_URL`.
+- [ ] **Firebase project + Crashlytics**: create the project, add `google-services.json` / `GoogleService-Info.plist` (gitignored); an agent then does §9.
+- [ ] **Apple Developer account + TestFlight** (+ Google Play console); signing keys kept out of git (`./ios_env flutter build ipa`).
+- [ ] **Real-device checklist**: run `docs/DEVICE_TEST_CHECKLIST.md` on a real iPhone and Android phone.
+- [ ] **Arabic names review**: 1,274 names have `reviewed: false` (`data/ar/exercise_names_ar.json`). Use `docs/review/names_batch_01…13.md` (109 ⚠️) and `docs/review/duplicates.md`; flip `reviewed` → `true`, then `tools/build_catalog.sh` (new catalog version).
 
 ## Requests
 
 _(Cross-folder requests go here: "@owner-of-X: need Y". Remove when handled.)_
 
-- @brand (window B, 2026-09-26): the Android notification icon `res/drawable/ic_stat_azm.xml` is a placeholder dumbbell; replace with the final monochrome mark.
+- ~~@brand (window B, 2026-09-26): notification icon placeholder~~ **Resolved (F, merged 2026-09-27):** `drawable-*dpi/ic_stat_azm.png` generated from the logo.
 - **@settings (integrator, 2026-09-26):** the unit / default-rest UI (settings screen + onboarding) must write through `TrainingSettingsWriter` (`features/settings/data/training_settings.dart`); every reader already watches `weightUnitProvider` / `defaultRestSecondsProvider`.
 
 _Resolved at integration (2026-09-26): theme tokens `AzmSize.chartHeight/exerciseMedia/chartStroke/chartDot`; shared `weightUnitProvider` + `defaultRestSecondsProvider` (settings owns writing); `timezone` direct dependency; new settings keys documented in DATA.md._
@@ -325,18 +353,18 @@ _(append here only)_
 ### Requests from E (settings), round 3
 
 _(append here only)_
-- @owner/integrator (E, 2026-09-27, optional): add `package_info_plus` so backups record the real build version; until then `kAppVersion` in `features/settings/data/backup/backup_service.dart` must be bumped with pubspec `version:`.
-- @docs/DATA.md (E, 2026-09-27): add the details of *Backup format* as implemented (DECISIONS_LOG → Window E): `settings` = decoded values for `locale`/`theme`/`unit`/`default_rest_seconds` only; rows use the snake_case columns listed above; UTC ISO-8601 timestamps with ms; strict validation; import refused during an active workout.
+- ~~@owner/integrator (E): add `package_info_plus`~~ **Resolved at integration (2026-09-27):** `appVersionProvider`, `kAppVersion` removed. Original: add `package_info_plus` so backups record the real build version; until then `kAppVersion` in `features/settings/data/backup/backup_service.dart` must be bumped with pubspec `version:`.
+- ~~@docs/DATA.md (E): backup format details~~ **Resolved at integration (2026-09-27):** DATA.md → *Backup format*. Original: add the details of *Backup format* as implemented (DECISIONS_LOG → Window E): `settings` = decoded values for `locale`/`theme`/`unit`/`default_rest_seconds` only; rows use the snake_case columns listed above; UTC ISO-8601 timestamps with ms; strict validation; import refused during an active workout.
 
 ### Requests from F (brand), round 3
 
 _(append here only)_
-- @integrator / owner of `integration_test/exercises_screens_test.dart` + `screenshot_harness.dart` (F, 2026-09-27): on "Azm iPhone B" the **first** iOS step (`ar_01_library`) is often captured before the Exercises tab has painted (blank list, Workout tab still selected): 3 of 4 runs, reproduced with `main`'s `app/lib`. Suggest waiting for a finder (e.g. `ExerciseCard`) or a longer `_settle` before the first screenshot of a run. Committed images come from a clean run.
-- @integrator (F, 2026-09-27): the old Request "@brand (window B, 2026-09-26): notification icon placeholder" is done (`drawable-*dpi/ic_stat_azm.png` generated from the logo); remove it at merge. Suggest adding `brand/generate.sh --check` to `tools/check_all.sh` (§8) so stale icons fail CI.
+- ~~first iOS exercises capture blank~~ **Resolved at integration (2026-09-27):** the first step waits (max 20 s) for hit-testable `ExerciseCard`s. Original: @integrator / owner of `integration_test/exercises_screens_test.dart` + `screenshot_harness.dart` (F, 2026-09-27): on "Azm iPhone B" the **first** iOS step (`ar_01_library`) is often captured before the Exercises tab has painted (blank list, Workout tab still selected): 3 of 4 runs, reproduced with `main`'s `app/lib`. Suggest waiting for a finder (e.g. `ExerciseCard`) or a longer `_settle` before the first screenshot of a run. Committed images come from a clean run.
+- ~~remove the old @brand request~~ **Done at integration (2026-09-27)**; the `check_all.sh` suggestion is carried into §8. Original: @integrator (F, 2026-09-27): the old Request "@brand (window B, 2026-09-26): notification icon placeholder" is done (`drawable-*dpi/ic_stat_azm.png` generated from the logo); remove it at merge. Suggest adding `brand/generate.sh --check` to `tools/check_all.sh` (§8) so stale icons fail CI.
 
 ### Requests from G (Arabic names), round 3
 
 _(append here only)_
 
-- **Integrator, at merge:** hide the 33 "hide" ids listed in `docs/review/duplicates.md`. Each is truly identical to its "keep" id in the source data and shares its Arabic name. Hiding them makes `tools/build_catalog.sh --check` stop warning about the 32 groups. How to hide (catalog flag or build-time filter) is the integrator's call; G touches `data/ar/**` only.
-- **Owner, at review:** reviewed 0489 (ظهر سفلي) could get the alias `ضهر سفلي` (search doesn't fold ض/ظ). G can't edit reviewed entries.
+- ~~hide the 33 ids~~ **Resolved at integration (2026-09-27):** `data/hidden_exercises.json` → `exercises.hidden`; `--check` 0 same-name warnings. Original: **Integrator, at merge:** hide the 33 "hide" ids listed in `docs/review/duplicates.md`. Each is truly identical to its "keep" id in the source data and shares its Arabic name. Hiding them makes `tools/build_catalog.sh --check` stop warning about the 32 groups. How to hide (catalog flag or build-time filter) is the integrator's call; G touches `data/ar/**` only.
+- ~~0489 alias~~ **Done at integration (2026-09-27)** (owner's instruction): alias `ضهر سفلي` added; search now also folds ظ/ض, ذ/د, ث/ت. Original: **Owner, at review:** reviewed 0489 (ظهر سفلي) could get the alias `ضهر سفلي` (search doesn't fold ض/ظ). G can't edit reviewed entries.
