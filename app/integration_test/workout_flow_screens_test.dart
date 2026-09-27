@@ -1,8 +1,13 @@
-// END-TO-END flow on a real device, in Arabic and English, through the UI only:
-//   Start workout → Add exercise (picker: 3 exercises, selection order) →
-//   log sets with the keypad → ✓ → rest timer (+15, skip) → finish with an
-//   unticked set ("Mark all done") → summary → Exercises tab → detail shows
-//   the new history and records.
+// END-TO-END flows on a real device, in Arabic and English, through the UI:
+// 1. Workout: Start workout → Add exercise (picker: 3 exercises, selection
+//    order) → log sets with the keypad → ✓ → rest timer (+15, skip) → finish
+//    with an unticked set ("Mark all done") → summary → Exercises tab →
+//    detail shows the new history and records.
+// 2. Full journey: onboarding (kg) → add a ready program (Full Body 3×) →
+//    start "Full Body A" from the Workout tab (prefilled) → log sets → finish
+//    ("Remove them") → History shows it → edit that past workout → PRs
+//    recompute (one earlier workout is seeded so PRs have something to beat).
+//    Screenshots: <lang>_jNN_<name>.
 // Run on both platforms with:   tools/screenshots.sh workout_flow
 // Proof images land in docs/screenshots/workout_flow/<platform>/.
 //
@@ -23,13 +28,19 @@ import 'package:azm/bootstrap.dart';
 import 'package:azm/core/db/app_database.dart';
 import 'package:azm/core/l10n/l10n.dart';
 import 'package:azm/core/widgets/set_row.dart';
+import 'package:azm/core/router/app_router.dart';
 import 'package:azm/features/exercises/ui/exercise_detail_screen.dart';
+import 'package:azm/features/history/data/history_repository.dart';
+import 'package:azm/features/history/ui/past_workout_screen.dart';
+import 'package:azm/features/onboarding/data/onboarding_gate.dart';
+import 'package:azm/features/settings/data/training_settings.dart';
 import 'package:azm/features/settings/data/app_settings.dart';
 import 'package:azm/features/workout/data/rest_timer.dart';
 import 'package:azm/features/workout/data/workout_models.dart';
 import 'package:azm/features/workout/data/workout_repository.dart';
 import 'package:azm/features/workout/ui/active_workout_bar_slot.dart';
 import 'package:azm/features/workout/ui/active_workout_screen.dart';
+import 'package:drift/drift.dart' show OrderingTerm, Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -65,8 +76,9 @@ Finder _textWhere(bool Function(String) test) => find.byWidgetPredicate((w) {
     });
 
 /// Pumps until [f] finds something (the catalog index loads asynchronously).
-Future<void> _waitFor(WidgetTester tester, Finder f, String what) async {
-  for (var i = 0; i < 50 && f.evaluate().isEmpty; i++) {
+/// Max [tries] × 100 ms (default 5 s).
+Future<void> _waitFor(WidgetTester tester, Finder f, String what, {int tries = 50}) async {
+  for (var i = 0; i < tries && f.evaluate().isEmpty; i++) {
     await tester.pump(const Duration(milliseconds: 100));
   }
   if (f.evaluate().isEmpty) {
@@ -260,6 +272,193 @@ void main() {
       // Two sets of 60 × 8 in today's session.
       expect(_textWhere((t) => t.contains('60') && t.contains('8') && t.contains('×')), findsWidgets);
       await screenshot('detail_history');
+    });
+
+    testWidgets('full journey ($platform, ${lang.name})', (tester) async {
+      final container = await bootstrapApp(settingsOverride: AppSettings(language: lang));
+      addTearDown(container.dispose);
+      final db = container.read(appDatabaseProvider);
+      addTearDown(() => unawaited(db.close()));
+      final repo = container.read(workoutRepositoryProvider);
+      final l = lookupAppLocalizations(lang == LanguagePref.ar ? AzmLocales.ar : AzmLocales.en);
+      var shot = 0;
+      Future<void> screenshot(String name) async {
+        await _pump(tester, 400);
+        final nn = (++shot).toString().padLeft(2, '0');
+        await binding.takeScreenshot('workout_flow/$platform/${lang.name}_j${nn}_$name');
+        _log('screenshot → j$name');
+      }
+
+      // Clean slate: no workouts/routines, onboarding not done, unit lb (so
+      // choosing kg is a real change), no system prompts or alarm sheet.
+      await container.read(restTimerProvider.notifier).skip();
+      await db.delete(db.workouts).go();
+      await db.delete(db.routines).go();
+      await db.writeSetting(kOnboardingDoneKey, jsonEncode(false));
+      await db.writeSetting(TrainingSettingsKeys.unit, jsonEncode('lb'));
+      await db.writeSetting(WorkoutSettingsKeys.notificationsAsked, jsonEncode(true));
+      await db.writeSetting(WorkoutSettingsKeys.exactAlarmsAsked, jsonEncode(true));
+      // One earlier finished workout (3 days ago): squat 3 × (100 × 5), bench
+      // 3 × (80 × 5). "Previous" (and the routine prefill) is per set index.
+      final earlier = DateTime.now().toUtc().subtract(const Duration(days: 3));
+      await db.into(db.workouts).insert(WorkoutsCompanion.insert(
+            id: const Value('e2e-earlier'),
+            name: 'Earlier',
+            startedAt: Value(earlier),
+            endedAt: Value(earlier.add(const Duration(minutes: 40))),
+            status: const Value(WorkoutStatus.finished),
+          ));
+      for (final (i, ex, kg) in [(0, '0043', 100.0), (1, '0025', 80.0)]) {
+        await db.into(db.workoutExercises).insert(WorkoutExercisesCompanion.insert(
+              id: Value('e2e-earlier-$i'),
+              workoutId: 'e2e-earlier',
+              exerciseId: ex,
+              sort: Value(i),
+            ));
+        for (var n = 0; n < 3; n++) {
+          await db.into(db.workoutSets).insert(WorkoutSetsCompanion.insert(
+                workoutExerciseId: 'e2e-earlier-$i',
+                sort: Value(n),
+                weightKg: Value(kg),
+                reps: const Value(5),
+                completedAt: Value(earlier.add(Duration(minutes: 5 + n))),
+              ));
+        }
+      }
+
+      tester.testTextInput.register();
+      addTearDown(tester.testTextInput.unregister);
+      await tester.pumpWidget(UncontrolledProviderScope(container: container, child: const AzmApp()));
+      await _pump(tester, 1200);
+      if (!Platform.isIOS) await binding.convertFlutterSurfaceToImage();
+      final router = container.read(appRouterProvider);
+
+      // 1. Onboarding: kg → Next → Full Body 3× → "Add program and start".
+      router.go(AppRoutes.onboarding);
+      await _waitFor(tester, find.byKey(const ValueKey('onboarding-unit-kg')), 'onboarding');
+      await tester.tap(find.byKey(const ValueKey('onboarding-unit-kg')));
+      await _pump(tester, 300);
+      await screenshot('onboarding_kg');
+      await tester.tap(find.byKey(const ValueKey('onboarding-next')));
+      await _pump(tester);
+      final program = find.byKey(const ValueKey('onboarding-program-full_body_3x'));
+      await _waitFor(tester, program, 'program list');
+      await tester.ensureVisible(program);
+      await _pump(tester, 300);
+      await tester.tap(program);
+      await _pump(tester, 300);
+      await screenshot('onboarding_program');
+      await tester.tap(find.byKey(const ValueKey('onboarding-start-program')));
+      await _pump(tester, 1500);
+      expect(await db.readSetting(TrainingSettingsKeys.unit), jsonEncode('kg'));
+      expect(await db.readSetting(kOnboardingDoneKey), jsonEncode(true));
+      final routines = await (db.select(db.routines)..orderBy([(r) => OrderingTerm(expression: r.sort)])).get();
+      expect(routines, hasLength(2)); // Full Body 3×: days A and B, alternated
+
+      // 2. Workout tab: "My routines" → ▶ on Full Body A (first).
+      final start = find.byKey(ValueKey('routine-start-${routines.first.id}'));
+      await _waitFor(tester, start, 'routine start button', tries: 100);
+      await screenshot('workout_tab_routines');
+      await tester.ensureVisible(start);
+      await _pump(tester, 300);
+      await tester.tap(start);
+      await _waitFor(tester, find.text(l.workoutFinish), 'active workout from routine', tries: 100);
+      final w = (await repo.active())!;
+      expect(w.routineId, routines.first.id);
+      var d = (await repo.loadDetail(w.id))!;
+      expect([for (final e in d.exercises) e.entry.exerciseId], ['0043', '0025', '0027', '0405', '0294', '0274']);
+      final squat = d.exercises.first.sets;
+      // Prefilled: target reps 8, weight from the earlier workout (100 kg).
+      expect([for (final s in squat) (s.weightKg, s.reps)], [(100.0, 8), (100.0, 8), (100.0, 8)]);
+      await screenshot('active_from_routine');
+
+      // 3. Log: ✓ set 1 as prefilled; set 2 via the keypad (105 × 5) then ✓.
+      Future<void> tick(String setId) async {
+        final row = find.byKey(ValueKey(setId));
+        await tester.ensureVisible(row);
+        await _pump(tester, 300);
+        await tester.tap(find.descendant(of: row, matching: find.bySemanticsLabel(l.commonSetComplete)));
+        await _pump(tester);
+        if (find.text(l.workoutRestSkip).evaluate().isNotEmpty) {
+          await tester.tap(find.text(l.workoutRestSkip));
+          await _pump(tester, 300);
+        }
+      }
+
+      await tick(squat[0].id);
+      await tester.tap(find.byKey(ValueKey('set-weight-${squat[1].id}')));
+      await _pump(tester, 300);
+      await _typeOnKeypad(tester, '105');
+      await tester.tap(find.text(l.commonKeypadNext));
+      await tester.pump(const Duration(milliseconds: 100));
+      await _typeOnKeypad(tester, '5');
+      await tester.tap(find.bySemanticsLabel(l.commonKeypadHide));
+      await _pump(tester);
+      await tick(squat[1].id);
+      d = (await repo.loadDetail(w.id))!;
+      expect(
+        [for (final s in d.exercises.first.sets) (s.weightKg, s.reps, s.completedAt != null)],
+        [(100.0, 8, true), (105.0, 5, true), (100.0, 8, false)],
+      );
+      await screenshot('logged');
+
+      // 4. Finish: 13 unticked sets → "Remove them" → summary.
+      await tester.tap(find.text(l.workoutFinish));
+      await _pump(tester);
+      await screenshot('finish_dialog');
+      await tester.tap(find.byKey(const ValueKey('workoutFinishRemoveThem')));
+      await _waitFor(tester, find.text(l.workoutSummaryTitle), 'summary', tries: 100);
+      final done = (await repo.loadDetail(w.id))!;
+      expect(done.workout.status, WorkoutStatus.finished);
+      expect(done.completedSets, 2);
+      expect(done.exercises.map((e) => e.entry.exerciseId), ['0043']);
+      await screenshot('summary');
+      await tester.tap(find.text(l.workoutDone));
+      await _pump(tester);
+
+      // 5. History tab shows it with 2 PR sets (100 × 8: e1RM + volume;
+      //    105 × 5: heaviest) versus the earlier workout.
+      Future<int> prSets() async {
+        final h = await container.read(historyRepositoryProvider).watchHistory().first;
+        final hw = h.workouts.firstWhere((x) => x.id == w.id);
+        return hw.exercises.fold<int>(0, (n, e) => n + e.prSets);
+      }
+
+      await tester.tap(find.text(l.shellTabHistory));
+      final card = find.byKey(ValueKey(w.id));
+      await _waitFor(tester, card, 'history card', tries: 200);
+      expect(card, findsOneWidget);
+      expect(await prSets(), 2);
+      await screenshot('history');
+
+      // 6. Edit the past workout: no ✓ there; 105 → 95 kg on set 2.
+      await tester.tap(card);
+      await _waitFor(tester, find.byType(PastWorkoutScreen), 'past workout');
+      await _waitFor(tester, find.byKey(ValueKey('set-weight-${squat[1].id}')), 'past set row', tries: 100);
+      expect(find.byType(PrBadge), findsNWidgets(2));
+      expect(find.bySemanticsLabel(l.commonSetComplete), findsNothing);
+      await screenshot('past_workout');
+      await tester.tap(find.byKey(ValueKey('set-weight-${squat[1].id}')));
+      await _pump(tester, 300);
+      await _typeOnKeypad(tester, '95');
+      await _pump(tester, 300);
+      await screenshot('past_workout_keypad');
+      await tester.tap(find.bySemanticsLabel(l.commonKeypadHide));
+      await _pump(tester, 1500);
+      final edited = (await repo.loadDetail(w.id))!.exercises.first.sets;
+      expect([for (final s in edited) (s.weightKg, s.reps)], [(100.0, 8), (95.0, 5)]);
+
+      // 7. PRs recompute: 95 × 5 beats nothing any more → 1 PR set, one 🏆.
+      expect(await prSets(), 1);
+      expect(find.byType(PrBadge), findsOneWidget);
+      final squatRecord = (await container.read(historyRepositoryProvider).watchHistory().first)
+          .records
+          .firstWhere((r) => r.exerciseId == '0043');
+      expect(squatRecord.bests.heaviestKg, 100);
+      await screenshot('past_workout_edited');
+      router.pop();
+      await _pump(tester);
+      await screenshot('history_after_edit');
     });
   }
 }

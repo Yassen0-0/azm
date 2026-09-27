@@ -101,13 +101,13 @@ All touch targets are ≥ 48 even when the visible element is smaller.
 
 | Component | Description |
 |---|---|
-| **SetRow** | `[type label] [previous] [weight] [reps] [✓]`, min height 52, numbers in `rowNumber`. Type label: set number (normal), `ح/W` in `warmup`, `د/D`, `ف/F`. Tap label → type menu. Tap previous → fills weight + reps. ✓ → row gets `setDoneTint`, ✓ turns `setDone` with `onState` check, haptic. Swipe toward the *end* edge to delete (`destructiveTint` background). PR sets show a 🏆 badge. |
-| **WeightKeypad** | Custom bottom keypad replacing the system keyboard: 3×4 digits + decimal + backspace, `−2.5` / `+2.5`, next/done. Keys 52 high on `card`, radius `button`. The value preview uses `keypadValue`. |
+| **SetRow** | `[type label] [previous] [weight] [reps] [✓]`, min height 52, numbers in `rowNumber`. Type label: set number (normal), `ح/W` in `warmup`, `د/D`, `ف/F`. Tap label → type menu. Tap previous → fills weight + reps. ✓ → row gets `setDoneTint`, ✓ turns `setDone` with `onState` check, haptic. Swipe toward the *end* edge to delete (`destructiveTint` background). PR sets show a 🏆 badge. **One component for every set table** (`core/widgets/set_row.dart`): the live workout uses all columns; a past workout has no ✓ column (every set there is done; delete = swipe only); the routine editor has neither previous nor ✓. Labels, type names and the type menu come from `core/l10n/set_labels.dart` + `core/widgets/set_type_sheet.dart`. |
+| **WeightKeypad** | Custom bottom keypad replacing the system keyboard: 3×4 digits + decimal + backspace, `−2.5` / `+2.5`, next/done. Keys 52 high on `card`, radius `button`. The value preview uses `keypadValue`. Screens use `SetValueKeypad` + `SetKeypadBuffer` (`core/widgets/set_keypad.dart`): shared wording, limits (4 digits + 1 decimal for weight, 3 for reps) and a selection haptic on ±. |
 | **RestTimerBar** | Bottom bar: remaining `mm:ss` (tabular), progress (`track`/`accent`), `−15`, `+15`, skip. Derived from an end timestamp. A **mini** variant (time only) appears inside the ActiveWorkoutBar. |
 | **ActiveWorkoutBar** | Persistent bar above the tab bar when the workout is minimized: workout name, elapsed time, mini rest timer; tap to expand. |
 | **ExerciseCard** | Thumbnail (or muscle-icon fallback) + primary name (`rowTitle`) + secondary name in the other language (`secondary`) + optional PR badge. |
 | **MuscleChips** | Horizontal scroll of filter chips (radius pill, `fill` → `accent` when selected, `chipLabel`). |
-| **LiftedCounter** | Number + unit + optional comparison line, animating with `value`. Used in the workout header (small, `rowNumber`), summary (`summaryNumber`) and history (`liftedNumber`). |
+| **LiftedCounter** | Number + unit + optional comparison line, animating with `value`. Used in the workout header (small, `rowNumber`), summary (`summaryNumber`) and history (`liftedNumber`). `compact: true` (History's all-time total): exact below 100,000, then `450K` / `1.2M` / `2B` (Arabic `450 ألف` / `1.2 مليون` / `2 مليار`), Western digits, no LTR isolate. |
 
 Inherited components (primary button, card, input, bottom sheet, dialog, chip, segmented control, progress bar, switch, checkbox, toast, error banner, app bar, **floating glass tab bar**) follow `theme.json` → `components`, with `wrong*` → `destructive*` and `right` → `setDone`.
 
