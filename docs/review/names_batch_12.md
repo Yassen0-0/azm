@@ -13,8 +13,8 @@ Flagged: 2.
 | 1007 | band standing twisting crunch | كرانش لف استك واقف | تويست كرانش باند واقف |  |
 | 1008 | band step-up | طلوع بنش استك | ستيب اب باند |  |
 | 1009 | band stiff leg deadlift | ديدلفت استك رجل مفرودة | ستيف باند |  |
-| 1023 | band straight back stiff leg deadlift | ديدلفت استك رجل مفرودة ضهر مفرود | ستيف باند ضهر مفرود |  |
-| 1010 | band straight leg deadlift | ديدلفت استك للظهر السفلي | ستريت ليج باند |  |
+| 1023 | band straight back stiff leg deadlift | ديدلفت استك رجل مفرودة ظهر مفرود | ستيف باند ظهر مفرود، ديدلفت استك رجل مفرودة ضهر مفرود |  |
+| 1010 | band straight leg deadlift | ديدلفت استك للظهر السفلي | ستريت ليج باند، ديدلفت استك للضهر السفلي |  |
 | 1012 | band twisting overhead press | ضغط كتف استك مع لف | تويست برس باند |  |
 | 1369 | band two legs calf raise - (band under both legs) v. 2 | سمانة استك برجلين | كاف باند رجلين |  |
 | 1013 | band underhand pulldown | سحب عالي عكسي استك | بول داون باند مقلوب |  |
@@ -28,7 +28,7 @@ Flagged: 2.
 | 3124 | resistance band seated chest press | ضغط صدر استك قاعد | تشيست برس باند |  |
 | 3006 | resistance band seated hip abduction | رجل خارجي استك قاعد | أبدكتور باند، خارجي استك |  |
 | 3122 | resistance band seated shoulder press | ضغط كتف استك قاعد | شولدر برس باند قاعد |  |
-| 3144 | resistance band seated straight back row | سحب أرضي استك ضهر مفرود | سيتد رو باند |  |
+| 3144 | resistance band seated straight back row | سحب أرضي استك ظهر مفرود | سيتد رو باند، سحب أرضي استك ضهر مفرود |  |
 | 0517 | kettlebell advanced windmill | طاحونة كيتل بل متقدم | ويندميل متقدم |  |
 | 0518 | kettlebell alternating hang clean | هانج كلين كيتل بل بالتبادل | كلين كيتل بل تبادل |  |
 | 0520 | kettlebell alternating press | ضغط كتف كيتل بل بالتبادل | كيتل بل برس تبادل |  |
@@ -83,16 +83,16 @@ Flagged: 2.
 | 0640 | one arm slam (with medicine ball) | ضرب كورة طبية بدراع واحد | سلام دراع واحد |  |
 | 0663 | push-up medicine ball | ضغط على كورة طبية | بوش اب كورة طبية |  |
 | 0847 | weighted seated bicep curl (on stability ball) | باي قاعد على كورة بوزن | باي كورة بوزن |  |
-| 1314 | back extension on exercise ball | ظهر سفلي على كورة | باك اكستنشن كورة، هايبر كورة |  |
+| 1314 | back extension on exercise ball | ظهر سفلي على كورة | باك اكستنشن كورة، هايبر كورة، ضهر سفلي على كورة |  |
 | 0271 | crunch (on stability ball) | كرانش على كورة | كرانش كورة، بطن كورة |  |
 | 0272 | crunch (on stability ball, arms straight) | كرانش على كورة إيد مفرودة | كرانش كورة مفرود |  |
 | 1332 | exercise ball alternating arm ups | رفع دراع بالتبادل على كورة | ارم اب كورة |  |
-| 1333 | exercise ball back extension with arms extended | ظهر سفلي على كورة إيد مفرودة | باك اكستنشن كورة مفرود |  |
-| 1334 | exercise ball back extension with hands behind head | ظهر سفلي على كورة إيد ورا الراس | باك اكستنشن كورة |  |
-| 1335 | exercise ball back extension with knees off ground | ظهر سفلي على كورة ركب مرفوعة | باك اكستنشن كورة ركب |  |
-| 1336 | exercise ball back extension with rotation | ظهر سفلي على كورة مع لف | باك اكستنشن لف |  |
+| 1333 | exercise ball back extension with arms extended | ظهر سفلي على كورة إيد مفرودة | باك اكستنشن كورة مفرود، ضهر سفلي على كورة إيد مفرودة |  |
+| 1334 | exercise ball back extension with hands behind head | ظهر سفلي على كورة إيد ورا الراس | باك اكستنشن كورة، ضهر سفلي على كورة إيد ورا الراس |  |
+| 1335 | exercise ball back extension with knees off ground | ظهر سفلي على كورة ركب مرفوعة | باك اكستنشن كورة ركب، ضهر سفلي على كورة ركب مرفوعة |  |
+| 1336 | exercise ball back extension with rotation | ظهر سفلي على كورة مع لف | باك اكستنشن لف، ضهر سفلي على كورة مع لف |  |
 | 1744 | exercise ball dip | متوازي على كورة | ديبس كورة |  |
-| 1338 | exercise ball hug | حضن الكورة | بول هاج، إطالة ضهر كورة |  |
+| 1338 | exercise ball hug | حضن الكورة | بول هاج، إطالة ظهر كورة، إطالة ضهر كورة |  |
 | 1416 | exercise ball one leg prone lower body rotation | لف رجل على كورة نايم على بطنك | روتيشن كورة |  |
 | 1417 | exercise ball one legged diagonal kick hamstring curl | رجل خلفي على كورة برجل واحدة مع رفسة | هامسترينج كيرل كورة |  |
 | 1296 | exercise ball pike push up | ضغط بايك على كورة | بايك بوش اب كورة |  |

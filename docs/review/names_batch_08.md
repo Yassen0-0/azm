@@ -19,7 +19,7 @@ Flagged: 10.
 | 0768 | smith single leg split squat | سكوات بلغاري سميث | بلغاري سميث |  |
 | 0769 | smith sprint lunge | طعن سبرينت سميث | سبرينت لانج سميث | ⚠️ اسم نادر |
 | 0770 | smith squat | سكوات سميث | سميث سكوات | ⚠️ قريب من 3281 |
-| 0771 | smith standing back wrist curl | سواعد سميث خلف الضهر | ريست كيرل خلفي سميث |  |
+| 0771 | smith standing back wrist curl | سواعد سميث خلف الظهر | ريست كيرل خلفي سميث، سواعد سميث خلف الضهر |  |
 | 0772 | smith standing behind head military press | ضغط كتف سميث خلف الراس واقف | ميلتري خلفي سميث |  |
 | 0773 | smith standing leg calf raise | سمانة سميث واقف | كاف ريز سميث |  |
 | 0774 | smith standing military press | ضغط كتف سميث أمامي واقف | ميلتري برس سميث |  |

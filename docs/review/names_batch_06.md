@@ -40,7 +40,7 @@ Flagged: 6.
 | 0209 | cable reverse preacher curl | باي ارتكاز كابل عكسي | بريتشر مقلوب كابل |  |
 | 0210 | cable reverse wrist curl | سواعد عكسي كابل | ريفرس ريست كيرل كابل |  |
 | 0207 | cable reverse-grip pushdown | تراي كابل عكسي | ريفرس بوش داون، تراي مقلوب |  |
-| 0208 | cable reverse-grip straight back seated high row | سحب عالي قاعد عكسي ضهر مفرود | هاي رو عكسي |  |
+| 0208 | cable reverse-grip straight back seated high row | سحب عالي قاعد عكسي ظهر مفرود | هاي رو عكسي، سحب عالي قاعد عكسي ضهر مفرود |  |
 | 1320 | cable rope crossover seated row | سحب أرضي حبل كروس | سيتد رو حبل كروس |  |
 | 1321 | cable rope elevated seated row | سحب أرضي حبل من مكان عالي | سيتد رو حبل عالي |  |
 | 1322 | cable rope extension incline bench row | سحب حبل على بنش عالي | انكلاين رو حبل |  |
@@ -69,7 +69,7 @@ Flagged: 6.
 | 0223 | cable side crunch | كرانش جانبي كابل | سايد كرانش كابل |  |
 | 1717 | cable squat row (with rope attachment) | سحب حبل من السكوات | سكوات رو حبل |  |
 | 1644 | cable squatting curl | باي كابل في وضع السكوات | باي سكوات كابل |  |
-| 0224 | cable standing back wrist curl | سواعد كابل خلف الضهر | ريست كيرل خلفي كابل |  |
+| 0224 | cable standing back wrist curl | سواعد كابل خلف الظهر | ريست كيرل خلفي كابل، سواعد كابل خلف الضهر |  |
 | 1375 | cable standing calf raise | سمانة كابل واقف | كاف ريز كابل |  |
 | 0225 | cable standing cross-over high reverse fly | رفرفة خلفي كروس من فوق | ريفرس فلاي كروس عالي |  |
 | 0226 | cable standing crunch | كرانش كابل واقف | بطن كابل واقف |  |
@@ -89,7 +89,7 @@ Flagged: 6.
 | 1269 | cable standing up straight crossovers | كروس واقف مفرود | كروس أوفر واقف |  |
 | 0238 | cable straight arm pulldown | بول أوفر كابل | ستريت ارم بول داون، سحب عالي دراع مفرود |  |
 | 0237 | cable straight arm pulldown (with rope) | بول أوفر حبل | ستريت ارم بول داون حبل |  |
-| 0239 | cable straight back seated row | سحب أرضي ضهر مفرود | سيتد رو ضهر مفرود |  |
+| 0239 | cable straight back seated row | سحب أرضي ظهر مفرود | سيتد رو ظهر مفرود، سحب أرضي ضهر مفرود |  |
 | 0240 | cable supine reverse fly | رفرفة خلفي كابل نايم | ريفرس فلاي نايم كابل |  |
 | 2464 | cable thibaudeau kayak row | كاياك رو كابل | كاياك رو، سحب كاياك |  |
 | 0241 | cable triceps pushdown (v-bar) | تراي كابل بمقبض في | بوش داون في بار، تراي في |  |

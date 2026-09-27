@@ -105,6 +105,6 @@ Flagged: 13.
 | 0102 | barbell squat (on knees) | سكوات على الركب | سكوات ركب، سكوات راكع |  |
 | 2798 | barbell squat jump step rear lunge | سكوات نط مع طعن خلفي بار | جامب سكوات مع لانج |  |
 | 0103 | barbell standing ab rollerout | رول اوت بار من الوقوف | ستاندينج رول اوت، رول اوت واقف |  |
-| 0104 | barbell standing back wrist curl | سواعد بار خلف الضهر | بيهايند باك ريست كيرل، سواعد ورا الضهر |  |
+| 0104 | barbell standing back wrist curl | سواعد بار خلف الظهر | بيهايند باك ريست كيرل، سواعد ورا الظهر، سواعد بار خلف الضهر |  |
 | 0105 | barbell standing bradford press | برادفورد برس واقف | برادفورد، روكي برس واقف |  |
 | 1372 | barbell standing calf raise | سمانة واقف بار | كاف ريز بار، سمانة بار واقف |  |

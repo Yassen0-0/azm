@@ -44,7 +44,7 @@ Flagged: 5.
 | 2135 | weighted front plank | بلانك بوزن | بلانك بطارة |  |
 | 0834 | weighted front raise | رفرفة أمامي بطارة | فرونت ريز بطارة، أمامي طارة |  |
 | 0866 | weighted hanging leg-hip raise | رفع رجل وحوض متعلق بوزن | بطن عقلة بوزن |  |
-| 0835 | weighted hyperextension (on stability ball) | ظهر سفلي على كورة بوزن | هايبر على كورة |  |
+| 0835 | weighted hyperextension (on stability ball) | ظهر سفلي على كورة بوزن | هايبر على كورة، ضهر سفلي على كورة بوزن |  |
 | 3641 | weighted kneeling step with swing | خطوة على الركبة مع مرجحة وزن | ستيب مع سوينج |  |
 | 3644 | weighted lunge with swing | طعن مع مرجحة وزن | لانج سوينج |  |
 | 3286 | weighted muscle up | ماسل اب بوزن | ماسل اب بحزام وزن |  |
@@ -79,7 +79,7 @@ Flagged: 5.
 | 0975 | band close-grip push-up | ضغط ضيق استك | بوش اب باند ضيق |  |
 | 0976 | band concentration curl | باي تركيز استك | كونسنتريشن باند |  |
 | 3117 | band fixed back close grip pulldown | سحب عالي ضيق استك ثابت ورا | بول داون باند ثابت |  |
-| 3116 | band fixed back underhand pulldown | سحب عالي عكسي استك ضهر ثابت | بول داون باند مقلوب |  |
+| 3116 | band fixed back underhand pulldown | سحب عالي عكسي استك ظهر ثابت | بول داون باند مقلوب، سحب عالي عكسي استك ضهر ثابت |  |
 | 0977 | band front lateral raise | رفرفة أمامي جانبي استك | فرونت لاترال باند |  |
 | 0978 | band front raise | رفرفة أمامي استك | فرونت ريز باند |  |
 | 1408 | band hip lift | رفع حوض استك | هيب ليفت باند، جلوت بريدج باند |  |

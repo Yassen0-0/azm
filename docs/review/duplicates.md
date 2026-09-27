@@ -35,6 +35,6 @@ These groups have the same movement in the source data: same equipment, same tar
 | باي ارتكاز جهاز | 0592 | 1614 | lever preacher curl → lever preacher curl v. 2 | v. 2 only adds "chest against the support" |
 | سبايدر كيرل زد | 0454 | 1628 | ez barbell spider curl → ez barbell spider curl | same English name, identical instructions |
 | هامر عرضي | 0298 | 1657 | dumbbell cross body hammer curl → dumbbell cross body hammer curl v. 2 | same cues, wording only |
-| باي دراع واحد على ضهر بنش عالي | 0422 | 1680 | dumbbell standing one arm curl (over incline bench) → dumbbell standing one arm curl over incline bench | same cues, wording only |
+| باي دراع واحد على ظهر بنش عالي | 0422 | 1680 | dumbbell standing one arm curl (over incline bench) → dumbbell standing one arm curl over incline bench | same cues, wording only |
 | كوبان برس | 0299 | 2136 | dumbbell cuban press → dumbbell cuban press v. 2 | same cues, wording only |
 | روشن تويست بوزن | 0846 | 2371 | weighted russian twist → weighted russian twist v. 2 | same cues, wording only |

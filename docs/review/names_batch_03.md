@@ -82,7 +82,7 @@ Flagged: 15.
 | 1735 | dumbbell lying single extension | تراي دمبل نايم بدراع واحد | تراي دراع واحد |  |
 | 0349 | dumbbell lying supination | لف سواعد لفوق نايم | سوبينيشن دمبل، لف رسغ |  |
 | 2706 | dumbbell lying supination on floor | لف سواعد لفوق على الأرض | سوبينيشن أرض |  |
-| 1661 | dumbbell lying supine biceps curl | باي دمبل نايم على ضهرك | باي نايم، سوباين كيرل |  |
+| 1661 | dumbbell lying supine biceps curl | باي دمبل نايم على ظهرك | باي نايم، سوباين كيرل، باي دمبل نايم على ضهرك |  |
 | 0350 | dumbbell lying supine curl | باي نايم على بنش | سوباين كيرل، باي نايم دمبل |  |
 | 0351 | dumbbell lying triceps extension | تراي فرنساوي دمبل | فرنساوي دمبل، تراي دمبل نايم |  |
 | 1662 | dumbbell lying wide curl | باي دمبل نايم واسع | باي نايم واسع |  |

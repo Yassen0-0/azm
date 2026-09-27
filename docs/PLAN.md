@@ -322,3 +322,4 @@ _(append here only)_
 _(append here only)_
 
 - **Integrator, at merge:** hide the 33 "hide" ids listed in `docs/review/duplicates.md`. Each is truly identical to its "keep" id in the source data and shares its Arabic name. Hiding them makes `tools/build_catalog.sh --check` stop warning about the 32 groups. How to hide (catalog flag or build-time filter) is the integrator's call; G touches `data/ar/**` only.
+- **Owner, at review:** reviewed 0489 (ظهر سفلي) could get the alias `ضهر سفلي` (search doesn't fold ض/ظ). G can't edit reviewed entries.

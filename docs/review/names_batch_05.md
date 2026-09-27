@@ -16,8 +16,8 @@ Flagged: 7.
 | 2321 | dumbbell standing inner biceps curl v. 2 | باي داخلي واقف | باي داخلي، باي كوع لجوه |  |
 | 0420 | dumbbell standing kickback | كيك باك واقف | تراي كيك باك واقف |  |
 | 0421 | dumbbell standing one arm concentration curl | باي تركيز واقف بدراع واحد | كونسنتريشن دراع واحد واقف |  |
-| 0422 | dumbbell standing one arm curl (over incline bench) | باي دراع واحد على ضهر بنش عالي | باي بنش مايل واقف، بريتشر على البنش | ⚠️ الدراع على ضهر البنش المايل |
-| 1680 | dumbbell standing one arm curl over incline bench | باي دراع واحد على ضهر بنش عالي | بريتشر على البنش |  |
+| 0422 | dumbbell standing one arm curl (over incline bench) | باي دراع واحد على ظهر بنش عالي | باي بنش مايل واقف، بريتشر على البنش، باي دراع واحد على ضهر بنش عالي | ⚠️ الدراع على ظهر البنش المايل |
+| 1680 | dumbbell standing one arm curl over incline bench | باي دراع واحد على ظهر بنش عالي | بريتشر على البنش، باي دراع واحد على ضهر بنش عالي |  |
 | 0423 | dumbbell standing one arm extension | تراي دمبل فوق الراس بدراع واحد | اوفرهيد تراي دراع واحد، تراي دراع واحد واقف |  |
 | 0424 | dumbbell standing one arm palm in press | ضغط كتف كف لجوه بدراع واحد | شولدر برس هامر دراع واحد |  |
 | 0425 | dumbbell standing one arm reverse curl | باي عكسي بدراع واحد واقف | ريفرس كيرل دراع واحد |  |
