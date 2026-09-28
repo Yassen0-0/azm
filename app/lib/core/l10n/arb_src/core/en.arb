@@ -32,5 +32,7 @@
   "commonKeypadIncrease": "Increase",
   "commonCompactThousand": "{value}K",
   "commonCompactMillion": "{value}M",
-  "commonCompactBillion": "{value}B"
+  "commonCompactBillion": "{value}B",
+  "commonExercisePreview": "Preview {name}",
+  "commonMediaCredit": "© Gym visual — https://gymvisual.com/"
 }

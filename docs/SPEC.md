@@ -29,7 +29,7 @@
 - **Bilingual search:** Arabic formal name, Egyptian slang aliases and English all find the same exercise. Search runs over a normalized field (see DATA.md → *Arabic search normalization*), so `أ/ا/إ`, `ة/ه`, `ى/ي`, tashkeel, etc. don't matter.
 - **Filters:** by muscle (horizontal chips) and by equipment (bottom sheet).
 - **Two names per exercise:** the primary name in the app language, and the secondary name smaller, in the other language. If an exercise has no Arabic name yet, the Arabic UI shows the English name as primary and no secondary.
-- List rows show **thumbnails only**. The animated GIF plays only on the exercise detail screen.
+- List rows show **thumbnails only** (static). The animated GIF plays, looping, on the exercise detail screen and in the **quick preview**: tapping a row's thumbnail (library, picker, active workout, routines, history, stats) opens a bottom sheet with the looping GIF, the exercise name in the app language and the Gym visual credit; tapping the rest of the row keeps its own action.
 - Missing media (no license or offline) → fallback UI (muscle icon).
 
 ### 2. Live workout logging

@@ -117,6 +117,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String commonExercisePreview(String name) {
+    return 'Preview $name';
+  }
+
+  @override
+  String get commonMediaCredit => '© Gym visual — https://gymvisual.com/';
+
+  @override
   String get exercisesSearchHint => 'Search exercises';
 
   @override

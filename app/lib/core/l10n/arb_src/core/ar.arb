@@ -151,5 +151,18 @@
         "type": "String"
       }
     }
+  },
+  "commonExercisePreview": "معاينة حركة {name}",
+  "@commonExercisePreview": {
+    "description": "Semantics label of a list thumbnail: tapping it opens the quick preview sheet with the exercise GIF. name = exercise name in the app language.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "commonMediaCredit": "© Gym visual — https://gymvisual.com/",
+  "@commonMediaCredit": {
+    "description": "Attribution line under exercise media wherever it is shown (preview sheet). Required by docs/LICENSES.md; keep the exact text."
   }
 }

@@ -296,6 +296,18 @@ abstract class AppLocalizations {
   /// **'{value} مليار'**
   String commonCompactBillion(String value);
 
+  /// Semantics label of a list thumbnail: tapping it opens the quick preview sheet with the exercise GIF. name = exercise name in the app language.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة حركة {name}'**
+  String commonExercisePreview(String name);
+
+  /// Attribution line under exercise media wherever it is shown (preview sheet). Required by docs/LICENSES.md; keep the exact text.
+  ///
+  /// In ar, this message translates to:
+  /// **'© Gym visual — https://gymvisual.com/'**
+  String get commonMediaCredit;
+
   /// Hint in the exercise search box (Arabic, slang or English all work).
   ///
   /// In ar, this message translates to:

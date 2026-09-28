@@ -118,3 +118,12 @@ Reference: `brand/exports/review_sheet.png` (every variant) and `docs/screenshot
 - [ ] **Install from the GitHub release on a real Android phone:** open the private release page logged in, download `azm-1.0.0-rc1-<build>.apk`, allow "Install unknown apps" for the browser/Files, install. Play Protect may warn about an unknown developer: "Install anyway". The app opens, onboarding shows.
 - [ ] **Update path:** with build N installed and some workouts logged, install build N+1 from its release: it installs as an update (no uninstall), data is kept, About shows the new version.
 - [ ] **Rest notification on the real phone from the release build:** tick a set, lock the phone, the notification arrives on time with the white Azm mark (status bar + lock screen), sound/vibration per the system settings.
+
+### Exercise quick preview + looping GIFs (2026-09-28)
+
+Media shows only in the owner's `personal` build (or a dev run with `tools/serve_media_dev.dart`); tester builds show the fallback icon.
+
+- [ ] **Personal build on a real Android phone, airplane mode:** tap the thumbnail of a row in the library, the picker, the active workout, a routine, a past workout and Stats → the sheet opens with the GIF playing and looping, the name in the app language, "© Gym visual — https://gymvisual.com/" under it; tapping the rest of the row still opens the detail / selects / etc.
+- [ ] **Play-once GIFs keep looping on the phone:** open 0053 (or any of the 27 GIFs without a loop block, e.g. 0087, 0105, 0114, 0295) in the preview and on the detail screen: still moving after 10 s.
+- [ ] **Memory on a low-end phone:** open and close the preview ~30 times quickly from a long library scroll: no stutter building up, no crash; the app's memory (Android Studio profiler or `adb shell dumpsys meminfo app.azm.gym.personal`) drops back after the sheets close.
+- [ ] **Swipe down / tap outside / system Back** all close the preview; with TalkBack / VoiceOver the thumbnail reads "Preview <name>" / "معاينة حركة <name>" as a button.

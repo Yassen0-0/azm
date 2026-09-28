@@ -61,7 +61,7 @@ app/lib/
 - **dev:** a local static server serving `media/` (e.g. `http://<mac-ip>:8080/`), or null.
 - **production:** Cloudflare **R2** public bucket/custom domain holding only **licensed** media.
 - `null` (not licensed, not configured, or offline with no cache) → fallback UI (muscle icon).
-- Lists request thumbnails only. GIFs are requested only on the exercise detail screen.
+- Lists request thumbnails only. GIFs are requested only by `ExerciseAnimation` (exercise detail screen + the quick preview sheet `showExercisePreview`, opened by tapping any `ExerciseThumbnail`). GIFs always loop (`LoopingImage` forces "repeat forever", some files say "play once") and are evicted from the image cache when their screen/sheet closes.
 - **Media is never bundled in the app** (licensing, see [LICENSES.md](LICENSES.md)).
 
 ## Backend plan

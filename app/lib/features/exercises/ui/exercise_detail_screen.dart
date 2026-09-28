@@ -102,7 +102,8 @@ class _DetailBody extends ConsumerWidget {
                 if (hasMedia) ...[
                   const SizedBox(height: AzmSpace.xs),
                   Text(
-                    l10n.exercisesDetailAttribution,
+                    // LTR isolate: the Latin credit keeps its order in Arabic.
+                    '\u2066${l10n.exercisesDetailAttribution}\u2069',
                     textAlign: TextAlign.center,
                     style: AzmType.micro.copyWith(color: c.textMicro),
                   ),
