@@ -11,8 +11,9 @@ import 'dart:io';
 
 Future<void> main(List<String> args) async {
   final port = args.isNotEmpty ? int.parse(args.first) : 8080;
-  // media/ is gitignored, so a git worktree has none: fall back to the main
-  // checkout (the folder holding .tooling, exported by env.sh as AZM_TOOLING).
+  // media/ is committed (2026-09-28), so every checkout has it; a checkout
+  // made before that falls back to the main one (the folder holding .tooling,
+  // exported by env.sh as AZM_TOOLING).
   var media = Directory.fromUri(Platform.script.resolve('../media/')).absolute;
   final tooling = Platform.environment['AZM_TOOLING'];
   if (!media.existsSync() && tooling != null) media = Directory('${Directory(tooling).parent.path}/media/');

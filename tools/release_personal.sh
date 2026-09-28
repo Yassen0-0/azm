@@ -1,22 +1,24 @@
 #!/bin/bash
 # OWNER-ONLY personal APK with the exercise media bundled (works offline at the
-# gym), published as a release in the PRIVATE Yassen0-0/azm-media repo, NEVER
-# in azm. The media is Gym visual's and NOT licensed (docs/LICENSES.md): this
-# build is for the owner's own phone only. Never share the APK or the link.
+# gym), published as a prerelease `personal-b<N>` in the PRIVATE azm repo. The
+# media is Gym visual's and NOT licensed (docs/LICENSES.md): this build is for
+# the owner's own phone only. Never share the APK or the link.
 #
 #   tools/release_personal.sh --build-only   # build + verify dist/azm-personal-*.apk
-#   tools/release_personal.sh                # build + verify + release in azm-media
+#   tools/release_personal.sh                # build + verify + release in azm
 #
 # - Android flavor `personal` (defined only with -PazmPersonal): app id
 #   app.azm.gym.personal (installs next to the tester app), launcher
 #   "عزم تجريبي" / "Azm Dev", media from app/assets/media/ (flavor-only assets).
-# - media/ must be a clone of azm-media (tools/fetch_media.sh). Its files are
-#   copied into app/assets/media/{images,videos}/ (gitignored) for the build and
-#   removed again on exit, even on failure.
+# - media/ is committed in azm (since 2026-09-28) and must match HEAD (no local
+#   edits). Its files are copied into app/assets/media/{images,videos}/
+#   (gitignored) for the build and removed again on exit, even on failure.
 # - Version: <pubspec version>-personal; build number = highest personal-b<N>
-#   release in azm-media + 1 (separate app id, so its own counter).
+#   release in azm + 1 (separate app id, so its own counter; tester releases
+#   are v<ver>-b<N>).
+# - Publish: clean tree, HEAD pushed to origin/main; the tag points at HEAD.
 # - Signed with the upload key (tools/upload_key.sh), same as tester builds.
-# - Aborts if either repo isn't PRIVATE or azm-media has other collaborators.
+# - Aborts unless azm is PRIVATE and owner-only (tools/lib/github_guard.sh).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "$ROOT"
@@ -31,15 +33,16 @@ MAX_MB=400
 fail() { echo "FAILED: $*"; exit 1; }
 step() { echo; echo "==> $*"; }
 
-azm_require_private_repos
+azm_require_private_repo
 
 # ---- Inputs -----------------------------------------------------------------
-[ -d media/.git ] || fail "media/ isn't a clone of $AZM_MEDIA_REPO (run tools/fetch_media.sh)"
-[ "$(azm_gh git -C media config --get remote.origin.url)" = "https://github.com/$AZM_MEDIA_REPO.git" ] || fail "media/ has an unexpected remote"
-N_IMG="$(find media/images -name '*.jpg' | wc -l | tr -d ' ')"
-N_GIF="$(find media/videos -name '*.gif' | wc -l | tr -d ' ')"
+N_IMG="$(git ls-files 'media/images/*.jpg' | wc -l | tr -d ' ')"
+N_GIF="$(git ls-files 'media/videos/*.gif' | wc -l | tr -d ' ')"
+[ "$N_IMG" -gt 0 ] && [ "$N_GIF" -gt 0 ] || fail "no committed media in media/images + media/videos"
+git diff --quiet HEAD -- media || fail "media/ differs from HEAD (commit or restore it first)"
+[ -z "$(git ls-files --others --exclude-standard media)" ] || fail "untracked files in media/ (commit or remove them first)"
 MEDIA_KB="$(du -sk media/images media/videos | awk '{s+=$1} END{print s}')"
-echo "media: $N_IMG images + $N_GIF GIFs, $((MEDIA_KB / 1024)) MB, azm-media $(git -C media rev-parse --short HEAD)"
+echo "media: $N_IMG images + $N_GIF GIFs, $((MEDIA_KB / 1024)) MB (committed in azm)"
 # Store APK ~63 MB + media (JPG/GIF don't compress further).
 EST_MB=$((63 + MEDIA_KB / 1024))
 if [ "$EST_MB" -gt "$MAX_MB" ]; then
@@ -48,7 +51,7 @@ fi
 
 FULL="$(awk '/^version:/{print $2; exit}' app/pubspec.yaml)"
 NAME="${FULL%+*}-personal"
-LAST="$(azm_gh gh release list --repo "$AZM_MEDIA_REPO" --limit 200 --json tagName -q '.[].tagName' \
+LAST="$(azm_gh gh release list --repo "$AZM_REPO" --limit 200 --json tagName -q '.[].tagName' \
   | sed -n 's/^personal-b\([0-9][0-9]*\)$/\1/p' | sort -n | tail -1)"
 BUILD=$(( ${LAST:-0} + 1 ))
 TAG="personal-b$BUILD"
@@ -56,13 +59,18 @@ APK="dist/azm-personal-${NAME%-personal}-$BUILD.apk"
 COMMIT="$(git rev-parse --short HEAD)"
 DIRTY=""; [ -z "$(git status --porcelain)" ] || DIRTY=" (+ uncommitted changes)"
 echo "personal build $BUILD, version $NAME, azm $COMMIT$DIRTY → $APK ($MODE)"
+if [ "$MODE" = publish ]; then
+  [ -z "$DIRTY" ] || fail "working tree not clean (commit first; the tag must match the build)"
+  azm_gh git fetch -q origin main
+  git merge-base --is-ancestor HEAD origin/main || fail "HEAD $COMMIT is not on origin/main (push first)"
+fi
 
 # ---- Media into the flavor's asset folders (removed on exit) -----------------
 cleanup() { find app/assets/media -type f ! -name .gitkeep -delete 2>/dev/null || true; }
 trap cleanup EXIT
 cleanup
-cp media/images/*.jpg app/assets/media/images/
-cp media/videos/*.gif app/assets/media/videos/
+git ls-files -z 'media/images/*.jpg' | xargs -0 -I{} cp {} app/assets/media/images/
+git ls-files -z 'media/videos/*.gif' | xargs -0 -I{} cp {} app/assets/media/videos/
 
 # ---- Build -------------------------------------------------------------------
 step "Build personal APK"
@@ -109,22 +117,20 @@ if [ "$MODE" = build ]; then
   exit 0
 fi
 
-# ---- Publish (azm-media ONLY) ------------------------------------------------
-step "Release $TAG in $AZM_MEDIA_REPO (never in $AZM_REPO)"
-azm_require_private_repos
+# ---- Publish (azm, private) -----------------------------------------------------
+step "Release $TAG in $AZM_REPO"
+azm_require_private_repo
 NOTES="$TMPDIR/personal-notes.md"
 cat >"$NOTES" <<EOF
 **عزم تجريبي (Azm Dev) — للمالك بس / owner only.** Bundled Gym visual media (NOT licensed): never share this APK or link.
 
 - Version $NAME, build $BUILD, package \`app.azm.gym.personal\` (installs next to the tester app)
-- azm $COMMIT$DIRTY, azm-media $(git -C media rev-parse --short HEAD)
+- azm $COMMIT (media committed in azm)
 - $IN_IMG images + $IN_GIF GIFs, works offline; $SIZE_MB MB, minSdk $MIN_SDK
 EOF
-azm_gh gh release create "$TAG" "$APK" --repo "$AZM_MEDIA_REPO" --target main \
+azm_gh gh release create "$TAG" "$APK" --repo "$AZM_REPO" --target "$(git rev-parse HEAD)" --prerelease \
   --title "Azm Dev (personal) build $BUILD" --notes-file "$NOTES" >/dev/null
-URL="$(azm_gh gh release view "$TAG" --repo "$AZM_MEDIA_REPO" --json url -q .url)"
-[ -n "$URL" ] || fail "release $TAG not found in $AZM_MEDIA_REPO"
-# Belt and braces: nothing personal may ever appear in azm.
-if azm_gh gh release view "$TAG" --repo "$AZM_REPO" >/dev/null 2>&1; then fail "$TAG exists in $AZM_REPO!"; fi
-azm_require_private_repos
+URL="$(azm_gh gh release view "$TAG" --repo "$AZM_REPO" --json url -q .url)"
+[ -n "$URL" ] || fail "release $TAG not found in $AZM_REPO"
+azm_require_private_repo
 echo "Released $TAG: $URL ($SIZE_MB MB)"

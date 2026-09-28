@@ -15,7 +15,8 @@
 # Keychain (tools/upload_key.sh), handed to Gradle through environment
 # variables for this build only (no file). The APK's certificate is checked
 # against the upload key, so a debug-signed APK can never be published.
-# Media: the APK's asset list is printed; the release aborts if any entry is
+# Media (committed in azm since 2026-09-28, NEVER in a tester build): the APK's
+# asset list is printed; the release aborts if any entry is
 # under media/, is a GIF/video, or is byte-identical to a file in media/.
 # GitHub goes through ./gh_env (token in the Keychain). Every wait is capped.
 set -euo pipefail
@@ -59,7 +60,7 @@ if [ "$MODE" = publish ]; then
     git log --no-merges --format='  - %s' ${p:+"$p"..HEAD} | head -40
     exit 1
   fi
-  azm_require_private_repos   # azm AND azm-media PRIVATE, azm-media owner-only
+  azm_require_private_repo   # azm PRIVATE + owner-only (it contains unlicensed media)
 fi
 
 # ---- Build (signed with the upload key) -----------------------------------------
@@ -135,7 +136,7 @@ git tag -a "$TAG" -m "Azm $NAME tester build $BUILD"
   --title "Azm $NAME — tester build $BUILD" --notes-file "$NOTES" >/dev/null
 URL="$("$GH" gh release view "$TAG" --repo "$REPO" --json url,isPrerelease -q 'select(.isPrerelease) | .url')"
 [ -n "$URL" ] || fail "release $TAG not found as a prerelease"
-azm_require_private_repos
+azm_require_private_repo
 
 step "Next build number"
 NEXT=$((BUILD + 1))

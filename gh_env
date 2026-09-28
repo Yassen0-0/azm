@@ -8,6 +8,9 @@
 #   ./gh_env gh auth status
 #   ./gh_env git push origin main
 #
+# `git … push …` and `gh release …` first check that azm is PRIVATE and
+# owner-only (tools/lib/github_guard.sh); pushes also run tools/audit_history.sh.
+#
 # What stays inside ROOT: gh's non-secret config (GH_CONFIG_DIR =
 # .tooling/home/.config/gh), git's "global" config (GIT_CONFIG_GLOBAL =
 # .tooling/home/.gitconfig, so the real ~/.gitconfig is never read), PATH,
@@ -15,13 +18,28 @@
 set -euo pipefail
 
 if [ $# -eq 0 ]; then
-  sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'
   exit 64
 fi
 
 AZM_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 # shellcheck source=env.sh
 source "$AZM_ROOT_DIR/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
+
+# azm contains the unlicensed Gym visual media (docs/LICENSES.md): a push or a
+# release upload only happens while azm is PRIVATE and owner-only, and a push
+# only after a clean history audit. Never change azm's visibility from here.
+case " $* " in
+  *" repo edit "*--visibility*|*" api "*visibility*)
+    echo "ABORT: changing repository visibility is not allowed (azm contains unlicensed media: docs/LICENSES.md)."; exit 1 ;;
+esac
+if [ "${1:-}" = git ] && [[ " $* " == *" push "* ]] || { [ "${1:-}" = gh ] && [ "${2:-}" = release ]; }; then
+  ROOT="$AZM_ROOT_DIR"
+  # shellcheck source=tools/lib/github_guard.sh
+  source "$AZM_ROOT_DIR/tools/lib/github_guard.sh"
+  azm_require_private_repo
+  if [ "${1:-}" = git ]; then "$AZM_ROOT_DIR/tools/audit_history.sh"; fi
+fi
 
 export GIT_CONFIG_GLOBAL="$AZM_TOOLING/home/.gitconfig"
 [ -f "$GIT_CONFIG_GLOBAL" ] || : > "$GIT_CONFIG_GLOBAL"
