@@ -334,7 +334,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [ ] **Real-device checklist**: run `docs/DEVICE_TEST_CHECKLIST.md` on a real iPhone and Android phone.
 - [ ] **Arabic names review**: 1,274 names have `reviewed: false` (`data/ar/exercise_names_ar.json`). Use `docs/review/names_batch_01…13.md` (109 ⚠️) and `docs/review/duplicates.md`; flip `reviewed` → `true`, then `tools/build_catalog.sh` (new catalog version).
 
-## 11. Delete a set + exercise filters (main, 2026-09-28) — [~] in progress (main, 2026-09-28)
+## 11. Delete a set + exercise filters (main, 2026-09-28) — [x] done 2026-09-28 (Android + iOS, ar + en)
 
 - **Owns:** everything it touches on `main` (owner-requested; frozen files included: theme tokens, `tools/build_catalog.dart`, `tools/cloud_setup.sh`, `brand/**`, `app/pubspec.yaml` unchanged in the end).
 - **Part 1 — delete a set:**
@@ -348,7 +348,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [x] Egyptian Arabic labels in `arb_src/exercises`.
   - [x] Original icons: `brand/icons/*.svg` → `brand/generate.sh` → `core/widgets/filter_icon_paths.dart` + `FilterIcon`; body silhouettes with highlighted muscles.
   - [x] Tests: `exercise_filters_test.dart` (mapping, filtering, counts), `filter_sheets_test.dart` (sheets, persistence, Arabic), updated library/picker tests.
-- **Parity:** `tools/screenshots.sh set_delete`, `exercise_filters` (new) + re-runs of `exercises`, `exercise_preview`, `routines`, `history`, `shell`, `workout_flow` (library/picker/past-workout screens changed).
+- [x] **Parity:** `tools/screenshots.sh set_delete`, `exercise_filters` (new) + re-runs of `exercises`, `exercise_preview`, `routines`, `history`, `shell`, `workout_flow` (library/picker/past-workout screens changed); all green on both platforms, images reviewed. analyze, 311 tests, directionality, `brand/generate.sh --check`, `build_catalog.sh --check` pass.
 
 ## Requests
 

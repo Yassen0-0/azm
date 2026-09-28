@@ -896,6 +896,10 @@
   "@exercisesEquipGroupOther": {
     "description": "Equipment filter card (balls, rollers, ropes, hammer, tire)."
   },
+  "exercisesFilterMuscleChip": "العضلة",
+  "@exercisesFilterMuscleChip": {
+    "description": "Short visible label of the Muscle group chip in the filter bar (three chips share the row; the full name is the sheet title and the screen-reader label)."
+  },
   "historyLiftedSoFar": "شِلت لحد دلوقتي",
   "@historyLiftedSoFar": {
     "description": "History header label above the all-time Lifted total (sum of weight x reps of every completed set)."

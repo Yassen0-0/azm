@@ -184,6 +184,7 @@ class FilterCard extends StatelessWidget {
             border: Border.all(color: selected ? c.accent : c.fill, width: 1.5),
           ),
           child: Stack(
+            fit: StackFit.expand,
             children: [
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.xxs, AzmSpace.md, AzmSpace.xxs, AzmSpace.xs),
@@ -242,7 +243,8 @@ class FilterBar extends StatelessWidget {
             Expanded(
               child: _FilterChip(
                 key: FilterKeys.chip(k),
-                label: ExerciseLabels.filterKind(context.l10n, k),
+                label: ExerciseLabels.filterChip(context.l10n, k),
+                semanticName: ExerciseLabels.filterKind(context.l10n, k),
                 count: filters.of(k).length,
                 onTap: () => onOpen(k),
               ),
@@ -255,9 +257,10 @@ class FilterBar extends StatelessWidget {
 }
 
 class _FilterChip extends StatelessWidget {
-  const _FilterChip({super.key, required this.label, required this.count, required this.onTap});
+  const _FilterChip({super.key, required this.label, required this.semanticName, required this.count, required this.onTap});
 
   final String label;
+  final String semanticName;
   final int count;
   final VoidCallback onTap;
 
@@ -270,7 +273,7 @@ class _FilterChip extends StatelessWidget {
     return AzmPressable(
       onTap: onTap,
       selected: active,
-      semanticLabel: active ? context.l10n.exercisesFilterActiveCount(label, count) : label,
+      semanticLabel: active ? context.l10n.exercisesFilterActiveCount(semanticName, count) : semanticName,
       child: ExcludeSemantics(
         child: Center(
           child: AnimatedContainer(

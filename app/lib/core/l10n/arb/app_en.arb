@@ -204,6 +204,7 @@
   "exercisesEquipGroupResistanceBand": "Resistance band",
   "exercisesEquipGroupSuspensionBand": "Suspension band",
   "exercisesEquipGroupOther": "Other",
+  "exercisesFilterMuscleChip": "Muscles",
   "historyLiftedSoFar": "Lifted so far",
   "historyWorkoutCount": "{count, plural, =0{No workouts} =1{1 workout} other{{countText} workouts}}",
   "historySetCount": "{count, plural, =0{No sets} =1{1 set} other{{countText} sets}}",

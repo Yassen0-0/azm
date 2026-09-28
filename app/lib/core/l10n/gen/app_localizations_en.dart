@@ -667,6 +667,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exercisesEquipGroupOther => 'Other';
 
   @override
+  String get exercisesFilterMuscleChip => 'Muscles';
+
+  @override
   String get historyLiftedSoFar => 'Lifted so far';
 
   @override

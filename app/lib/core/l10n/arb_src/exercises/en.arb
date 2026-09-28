@@ -166,5 +166,6 @@
   "exercisesEquipGroupPlate": "Plate",
   "exercisesEquipGroupResistanceBand": "Resistance band",
   "exercisesEquipGroupSuspensionBand": "Suspension band",
-  "exercisesEquipGroupOther": "Other"
+  "exercisesEquipGroupOther": "Other",
+  "exercisesFilterMuscleChip": "Muscles"
 }

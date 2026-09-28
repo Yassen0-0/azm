@@ -1322,6 +1322,12 @@ abstract class AppLocalizations {
   /// **'تاني'**
   String get exercisesEquipGroupOther;
 
+  /// Short visible label of the Muscle group chip in the filter bar (three chips share the row; the full name is the sheet title and the screen-reader label).
+  ///
+  /// In ar, this message translates to:
+  /// **'العضلة'**
+  String get exercisesFilterMuscleChip;
+
   /// History header label above the all-time Lifted total (sum of weight x reps of every completed set).
   ///
   /// In ar, this message translates to:

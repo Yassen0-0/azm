@@ -31,10 +31,11 @@ void main() {
   testWidgets('muscle sheet: three sections, multi-select with a live count, Show applies (English)', (tester) async {
     await openLibrary(tester, LanguagePref.en);
     expect(find.text('Place'), findsOneWidget);
-    expect(find.text('Muscle group'), findsOneWidget);
+    expect(find.text('Muscles'), findsOneWidget); // short chip label
     expect(find.text('Equipment'), findsOneWidget);
 
     await openFilterSheet(tester, FilterKind.muscle);
+    expect(find.text('Muscle group'), findsOneWidget); // sheet title
     expect(find.text('Upper body'), findsOneWidget);
     expect(find.text('Biceps'), findsOneWidget);
     expect(showResultsLabel(tester), 'Show 1,291 results');

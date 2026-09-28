@@ -170,6 +170,10 @@ abstract final class ExerciseLabels {
     FilterKind.equipment => l.exercisesFilterEquipment,
   };
 
+  /// Visible chip label (short; [filterKind] is the sheet title + semantics).
+  static String filterChip(AppLocalizations l, FilterKind k) =>
+      k == FilterKind.muscle ? l.exercisesFilterMuscleChip : filterKind(l, k);
+
   /// Name of one filter card (ids from data/*_mapping.json).
   static String filterOption(AppLocalizations l, FilterKind k, String id) => switch (k) {
     FilterKind.place => switch (id) {

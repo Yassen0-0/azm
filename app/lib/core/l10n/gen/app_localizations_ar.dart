@@ -671,6 +671,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercisesEquipGroupOther => 'تاني';
 
   @override
+  String get exercisesFilterMuscleChip => 'العضلة';
+
+  @override
   String get historyLiftedSoFar => 'شِلت لحد دلوقتي';
 
   @override
