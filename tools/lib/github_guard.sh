@@ -24,5 +24,5 @@ azm_require_private_repo() {
   if [ -n "$invites" ]; then
     echo "ABORT: $AZM_REPO has pending collaborator invitations (or couldn't be checked): $invites. It is owner-only (docs/LICENSES.md)."; exit 1
   fi
-  echo "GitHub: $AZM_REPO is PRIVATE and owner-only."
+  echo "GitHub: $AZM_REPO is PRIVATE and owner-only." >&2   # stderr: never mixed into captured gh output
 }
