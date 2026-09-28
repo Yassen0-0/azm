@@ -320,6 +320,12 @@ abstract class AppLocalizations {
   /// **'تراجع'**
   String get commonUndo;
 
+  /// Label of the red button revealed by swiping a set row (next to a trash icon; hidden, icon only, when it doesn't fit).
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح'**
+  String get commonSwipeDelete;
+
   /// Hint in the exercise search box (Arabic, slang or English all work).
   ///
   /// In ar, this message translates to:

@@ -131,6 +131,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonUndo => 'تراجع';
 
   @override
+  String get commonSwipeDelete => 'امسح';
+
+  @override
   String get exercisesSearchHint => 'ابحث بالعربي أو English';
 
   @override

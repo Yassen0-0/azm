@@ -152,22 +152,6 @@ void main() {
     });
 
     for (final dir in TextDirection.values) {
-      testWidgets('swipe toward the START edge deletes (${dir.name})', (tester) async {
-        await tester.pumpWidget(_wrap(row(), dir: dir));
-        // START edge = left in English, right in Arabic.
-        final toStart = dir == TextDirection.ltr ? const Offset(-500, 0) : const Offset(500, 0);
-        // Toward the end edge: nothing.
-        await tester.drag(find.byType(SetRow), -toStart);
-        await tester.pumpAndSettle();
-        expect(calls, isEmpty);
-        expect(find.text('60 × 8'), findsOneWidget);
-        await tester.drag(find.byType(SetRow), toStart);
-        await tester.pumpAndSettle();
-        expect(calls, ['delete']);
-        // The row is gone at once, even before the parent drops it.
-        expect(find.text('60 × 8'), findsNothing);
-      });
-
       testWidgets('long-press → menu → Delete set (${dir.name})', (tester) async {
         await tester.pumpWidget(_wrap(row(), dir: dir));
         await tester.longPress(find.byKey(SetRow.rowKey('s1')));

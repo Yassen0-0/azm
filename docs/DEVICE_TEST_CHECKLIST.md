@@ -130,6 +130,7 @@ Media shows only in the owner's `personal` build (or a dev run with `tools/serve
 
 ### Delete a set + exercise filters (2026-09-28)
 
+- [ ] **Swipe feel on real phones (2026-09-28 redesign):** the row follows the finger at 60 fps with no lag at the start; the red panel reaches the screen edge; "Delete"/"امسح" is never cut off (also with the largest system font size: then only the trash icon shows until the panel is wide enough); release at ~1/3 rests open, at ~2/3 deletes with a light haptic tick when crossing; only one row stays open; scrolling closes it.
 - [ ] **Swipe vs. system back gesture (Android gesture navigation + iPhone edge swipe):** swipe a set from the middle of the row toward the start edge (left in English, right in Arabic): it deletes and never triggers Back/minimize. Starting the swipe right at the screen edge may be taken by the system: note how far from the edge it starts to work.
 - [ ] **Long-press on a set row:** ~0.5 s opens the set menu with a selection haptic; a normal tap on weight/reps/✓/label still does its own thing; scrolling the workout with a finger resting on a row doesn't open the menu.
 - [ ] **Undo snackbar on a real phone:** readable above the keypad, the rest timer bar and the home indicator; "Undo" is easy to hit within the ~4 s; with TalkBack / VoiceOver the snackbar is announced and stays until acted on is acceptable (the OS may extend it).

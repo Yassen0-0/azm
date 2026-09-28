@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/semantics.dart';
@@ -78,11 +79,14 @@ class SetTableHeader extends StatelessWidget {
 /// workout leaves out ✓ ([onToggleComplete] null: every set there is done);
 /// the routine editor also leaves out previous ([previousText] null).
 ///
-/// Delete: swipe toward the START edge (the platform convention: right to
-/// left in English, left to right in Arabic), or long-press the row → set
-/// menu → "Delete set" (fallback), or the screen-reader action. The row hides
-/// itself as soon as the swipe completes, so it never lingers while the DB
-/// stream catches up. Value cells are keyed `set-weight-<setId>` /
+/// Delete: the row follows the finger toward the START edge (right to left in
+/// English, left to right in Arabic) over a red panel that reaches the screen
+/// edge. Released past 25 % it rests open on a "Delete" button (tap it; tap
+/// elsewhere or scroll to close; one open row at a time); past 60 % (light
+/// haptic when crossing) it deletes at once; otherwise it springs back.
+/// Long-press → set menu → "Delete set" and the screen-reader action are the
+/// fallbacks. A delete slides the row out and collapses its height before
+/// [onDelete] runs, so nothing jumps. Value cells are keyed `set-weight-<setId>` /
 /// `set-reps-<setId>` (tests).
 class SetRow extends StatefulWidget {
   const SetRow({
@@ -112,6 +116,7 @@ class SetRow extends StatefulWidget {
   /// Keys for tests: the long-press target and the menu's delete action.
   static ValueKey<(String, String)> rowKey(String setId) => ValueKey(('set-row-body', setId));
   static const menuDeleteKey = ValueKey('setMenuDelete');
+  static const swipeDeleteKey = ValueKey('setSwipeDelete');
 
   /// Stable id of the set (swipe-to-delete key).
   final String setId;
@@ -147,22 +152,165 @@ class SetRow extends StatefulWidget {
   State<SetRow> createState() => _SetRowState();
 }
 
-class _SetRowState extends State<SetRow> {
-  /// Swiped away: render nothing until the parent drops this row (the DB
-  /// stream re-emits a few ms later). A dismissed Dismissible must never be
-  /// rebuilt, so this also covers rebuilds in between (keypad, snackbar).
-  bool _dismissed = false;
+class _SetRowState extends State<SetRow> with TickerProviderStateMixin {
+  /// How far the row has slid toward the START edge, in logical px (0 = at
+  /// rest). Driven directly by the finger, then by springs.
+  late final AnimationController _slide = AnimationController.unbounded(vsync: this);
 
-  Future<void> _openMenu() async {
-    if (await showSetMenuSheet(context, label: widget.label, kind: widget.labelKind, deleteLabel: widget.deleteLabel) &&
-        mounted) {
-      widget.onDelete();
+  /// 1 → 0 while the row's height collapses after a delete.
+  late final AnimationController _size = AnimationController(vsync: this, value: 1, duration: AzmMotion.exit);
+
+  double _width = 0;
+
+  /// Distance from the row's END edge to the screen edge (the red panel
+  /// bleeds over the page margin to the screen edge).
+  double _bleed = 0;
+  bool _pastDelete = false; // haptic once per crossing of the delete threshold
+  bool _deleting = false;
+  ScrollPosition? _scroll;
+
+  /// Collapsed and handed to [SetRow.onDelete]: render nothing until the
+  /// parent drops this row (the DB stream re-emits a few ms later).
+  bool _gone = false;
+
+  /// Resting open (or springing there) on the Delete button.
+  bool _openState = false;
+  bool get _open => _openState && !_deleting;
+
+  @override
+  void dispose() {
+    _unwatchScroll();
+    if (_SwipeRegistry.open == this) _SwipeRegistry.open = null;
+    _slide.dispose();
+    _size.dispose();
+    super.dispose();
+  }
+
+  /// +1 when the END edge is on the right (English), −1 when it is on the
+  /// left (Arabic): drag deltas and translations are physical.
+  double get _endSign => AlignmentDirectional.centerEnd.resolve(Directionality.of(context)).x;
+
+  void _measure() {
+    final box = context.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+    _width = box.size.width;
+    final originX = box.localToGlobal(Offset.zero).dx;
+    final screen = MediaQuery.sizeOf(context).width;
+    _bleed = (_endSign > 0 ? screen - (originX + _width) : originX).clamp(0.0, AzmSpace.xxxl * 2);
+  }
+
+  /// Offset at which a partial swipe rests open: wide enough to show the
+  /// whole "Delete" label (adaptive to the text scale), within 50 % of the row.
+  double get _openExtent {
+    final needed = SetSwipeMetrics.labelWidth(context) + 2 * AzmSpace.xl - _bleed;
+    return needed.clamp(SetSwipeMetrics.minOpen, _width * SetSwipeMetrics.maxOpenFraction);
+  }
+
+  // ---- Gestures ------------------------------------------------------------------
+
+  void _onDragStart(DragStartDetails _) {
+    if (_deleting) return;
+    final other = _SwipeRegistry.open;
+    if (other != null && other != this) other._close();
+    _slide.stop();
+    _measure();
+  }
+
+  void _onDragUpdate(DragUpdateDetails d) {
+    if (_deleting || _width <= 0) return;
+    final towardStart = -d.delta.dx * _endSign;
+    final v = (_slide.value + towardStart).clamp(0.0, _width);
+    _slide.value = v;
+    final past = v >= _width * SetSwipeMetrics.deleteFraction;
+    if (past && !_pastDelete) unawaited(HapticFeedback.lightImpact());
+    _pastDelete = past;
+  }
+
+  void _onDragEnd(DragEndDetails d) {
+    if (_deleting || _width <= 0) return;
+    final velocity = -d.velocity.pixelsPerSecond.dx * _endSign; // + = toward start
+    final v = _slide.value;
+    _pastDelete = false;
+    if (v >= _width * SetSwipeMetrics.deleteFraction ||
+        (velocity > SetSwipeMetrics.flingVelocity && v >= _width * SetSwipeMetrics.openFraction)) {
+      unawaited(_delete());
+    } else if (v >= _width * SetSwipeMetrics.openFraction && velocity > -SetSwipeMetrics.flingVelocity) {
+      _snapTo(_openExtent);
+    } else {
+      _close();
     }
   }
 
+  void _snapTo(double target) {
+    if (target > 0) {
+      final other = _SwipeRegistry.open;
+      if (other != null && other != this) other._close();
+      _SwipeRegistry.open = this;
+      _watchScroll();
+    }
+    _openState = target > 0;
+    if (AzmMotion.reduced(context)) {
+      _slide.value = target;
+    } else {
+      // Springs stop within a tolerance: land exactly on the target.
+      _slide.animateWith(SpringSimulation(AzmMotion.crisp, _slide.value, target, 0)).whenCompleteOrCancel(() {
+        if (mounted && !_deleting && _slide.value != target && (_slide.value - target).abs() < 1) _slide.value = target;
+      });
+    }
+    setState(() {}); // tap-outside region + close overlay follow the open state
+  }
+
+  void _close() {
+    if (!mounted || _deleting) return;
+    if (_SwipeRegistry.open == this) _SwipeRegistry.open = null;
+    _unwatchScroll();
+    _snapTo(0);
+  }
+
+  void _watchScroll() {
+    final pos = Scrollable.maybeOf(context)?.position;
+    if (pos == _scroll) return;
+    _unwatchScroll();
+    _scroll = pos?..addListener(_close);
+  }
+
+  void _unwatchScroll() {
+    _scroll?.removeListener(_close);
+    _scroll = null;
+  }
+
+  /// Slide out, collapse the height, then delete (no layout jump).
+  Future<void> _delete() async {
+    if (_deleting) return;
+    _deleting = true;
+    _openState = false;
+    if (_SwipeRegistry.open == this) _SwipeRegistry.open = null;
+    _unwatchScroll();
+    _measure();
+    setState(() {});
+    if (!AzmMotion.reduced(context)) {
+      await _slide.animateTo(_width, duration: AzmMotion.exit, curve: AzmMotion.standard);
+      if (!mounted) return;
+      await _size.animateTo(0, curve: AzmMotion.standard);
+      if (!mounted) return;
+    }
+    setState(() => _gone = true);
+    widget.onDelete();
+  }
+
+  Future<void> _openMenu() async {
+    if (_open) return _close();
+    if (await showSetMenuSheet(context, label: widget.label, kind: widget.labelKind, deleteLabel: widget.deleteLabel) &&
+        mounted) {
+      unawaited(_delete());
+    }
+  }
+
+  // ---- Build -----------------------------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
-    if (_dismissed) return const SizedBox.shrink();
+    if (_gone) return const SizedBox.shrink();
     final w = widget;
     final c = context.colors;
     final tick = AzmMotion.of(context, AzmMotion.tick);
@@ -220,33 +368,161 @@ class _SetRowState extends State<SetRow> {
       ),
     );
 
-    // Swipe toward the START edge to delete: DismissDirection.endToStart
-    // follows the ambient Directionality, so it mirrors in RTL by itself.
-    // The trash icon sits on the END side, where the row uncovers.
-    return Dismissible(
-      key: ValueKey(('set-row', w.setId)),
-      direction: DismissDirection.endToStart,
-      onDismissed: (_) {
-        setState(() => _dismissed = true);
-        w.onDelete();
+    final endSign = _endSign;
+    final sliding = AnimatedBuilder(
+      animation: _slide,
+      builder: (context, child) {
+        final d = _slide.value;
+        // Everything from the row content's END edge to the screen edge is
+        // red; the part over the page margin grows with the finger too.
+        final outside = d <= 0 ? 0.0 : (d < _bleed ? d : _bleed);
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            if (d >= 0.5)
+              PositionedDirectional(
+                top: 0,
+                bottom: 0,
+                end: -outside,
+                width: d + outside,
+                child: _DeletePanel(
+                  label: context.l10n.commonSwipeDelete,
+                  semanticLabel: w.deleteLabel,
+                  endInset: outside,
+                  onTap: () => unawaited(_delete()),
+                ),
+              ),
+            ClipRect(
+              child: Transform.translate(
+                offset: Offset(-d * endSign, 0),
+                child: child,
+              ),
+            ),
+          ],
+        );
       },
-      background: const SizedBox.shrink(),
-      secondaryBackground: Container(
-        color: c.destructiveTint,
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xl),
-        alignment: AlignmentDirectional.centerEnd,
-        child: Semantics(
-          label: w.deleteLabel,
-          child: Icon(Icons.delete_outline_rounded, color: c.destructive),
-        ),
+      child: Stack(
+        children: [
+          row,
+          // While open, a tap on the row closes it instead of editing.
+          if (_open)
+            Positioned.fill(
+              child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: _close),
+            ),
+        ],
       ),
+    );
+
+    final swipeable = TapRegion(
+      onTapOutside: _open ? (_) => _close() : null,
       child: Semantics(
-        customSemanticsActions: {CustomSemanticsAction(label: w.deleteLabel): w.onDelete},
+        customSemanticsActions: {CustomSemanticsAction(label: w.deleteLabel): () => unawaited(_delete())},
         child: GestureDetector(
           key: SetRow.rowKey(w.setId),
           behavior: HitTestBehavior.opaque,
           onLongPress: _openMenu,
-          child: row,
+          // The row tracks the finger from where it touched (no lost slop).
+          dragStartBehavior: DragStartBehavior.down,
+          onHorizontalDragStart: _onDragStart,
+          onHorizontalDragUpdate: _onDragUpdate,
+          onHorizontalDragEnd: _onDragEnd,
+          onHorizontalDragCancel: () => _onDragEnd(DragEndDetails()),
+          child: sliding,
+        ),
+      ),
+    );
+    // SizeTransition clips its child, which would cut the red panel off at
+    // the card edge: only wrap while the height collapses after a delete.
+    if (!_deleting) return swipeable;
+    return SizeTransition(sizeFactor: _size, alignment: AlignmentDirectional.topCenter, child: swipeable);
+  }
+}
+
+/// Thresholds and sizes of the set swipe (docs/DESIGN.md → SetRow).
+abstract final class SetSwipeMetrics {
+  /// Past this share of the row width on release, the row snaps open.
+  static const double openFraction = 0.25;
+
+  /// Past this share, the set is deleted (light haptic when crossing it).
+  static const double deleteFraction = 0.6;
+
+  /// Open width limits.
+  static const double minOpen = AzmSize.setCellMinWidth + AzmSpace.xl;
+  static const double maxOpenFraction = 0.5;
+
+  /// A fling toward the start this fast deletes (from the open threshold on).
+  static const double flingVelocity = 1500;
+
+  /// Width of icon + gap + "Delete" at the current text scale.
+  static double labelWidth(BuildContext context) {
+    final tp = TextPainter(
+      text: TextSpan(text: context.l10n.commonSwipeDelete, style: AzmType.controlLabel),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+      maxLines: 1,
+    )..layout();
+    final w = AzmSize.icon + AzmSpace.xs + tp.width;
+    tp.dispose();
+    return w;
+  }
+}
+
+/// Only one set row is open at a time: opening (or starting to drag) another
+/// closes the previous one.
+abstract final class _SwipeRegistry {
+  static _SetRowState? open;
+}
+
+/// The red delete panel: full row height, square corners, flush with the
+/// screen edge; "Delete" + trash pinned near the screen edge. The label
+/// never truncates: when the panel is too narrow for it, only the icon shows.
+class _DeletePanel extends StatelessWidget {
+  const _DeletePanel({required this.label, required this.semanticLabel, required this.endInset, required this.onTap});
+
+  final String label;
+  final String semanticLabel;
+
+  /// Part of the panel over the page margin (not hit-testable: outside the row).
+  final double endInset;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final full = SetSwipeMetrics.labelWidth(context) + 2 * AzmSpace.xl;
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      child: GestureDetector(
+        key: SetRow.swipeDeleteKey,
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: ColoredBox(
+          color: c.destructive,
+          child: LayoutBuilder(
+            builder: (context, box) {
+              final showText = box.maxWidth >= full;
+              final showIcon = box.maxWidth >= AzmSize.icon + AzmSpace.xs;
+              return Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: Padding(
+                  padding: EdgeInsetsDirectional.only(end: showText ? AzmSpace.xl : AzmSpace.xxs),
+                  child: ExcludeSemantics(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (showIcon) Icon(Icons.delete_outline_rounded, color: c.onState, size: AzmSize.icon),
+                        if (showText) ...[
+                          const SizedBox(width: AzmSpace.xs),
+                          Text(label, maxLines: 1, softWrap: false, style: AzmType.controlLabel.copyWith(color: c.onState)),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

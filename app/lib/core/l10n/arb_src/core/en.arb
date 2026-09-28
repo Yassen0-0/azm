@@ -36,5 +36,6 @@
   "commonExercisePreview": "Preview {name}",
   "commonMediaCredit": "© Gym visual — https://gymvisual.com/",
   "commonSetDeleted": "Set deleted",
-  "commonUndo": "Undo"
+  "commonUndo": "Undo",
+  "commonSwipeDelete": "Delete"
 }

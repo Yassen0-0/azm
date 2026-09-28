@@ -16,7 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'history_test_helpers.dart';
 
 Future<void> settle(WidgetTester tester) async {
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < 12; i++) {
     await tester.pump(const Duration(milliseconds: 100));
   }
 }

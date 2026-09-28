@@ -488,7 +488,8 @@ class _ExerciseCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsetsDirectional.only(bottom: AzmSpace.listGap),
       decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(AzmRadius.card)),
-      clipBehavior: Clip.antiAlias,
+      // No clip: a set's red delete panel reaches past the card to the screen
+      // edge (SetRow); nothing else touches the rounded corners.
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

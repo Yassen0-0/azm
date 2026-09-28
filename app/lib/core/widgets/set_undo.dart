@@ -13,8 +13,10 @@ import '../theme/azm_theme.dart';
 void showSetDeletedSnackBar(BuildContext context, {required Future<void> Function() onUndo}) {
   final l = context.l10n;
   final messenger = ScaffoldMessenger.of(context);
+  // Remove (not hide): the previous snackbar's Undo must not stay tappable
+  // while it animates out; the new one targets the latest deletion.
   messenger
-    ..hideCurrentSnackBar()
+    ..removeCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
         key: setDeletedSnackBarKey,

@@ -85,38 +85,67 @@ Future<void> _openActive(WidgetTester tester, GoRouter router) async {
   await _pumpFor(tester);
 }
 
+/// Drags set [id] toward the START edge by [fraction] of the row width, in
+/// small steps like a finger, and (unless [release]) keeps the finger down.
+Future<TestGesture?> _drag(WidgetTester tester, String id, double fraction, {bool release = false}) async {
+  final width = tester.getSize(find.byKey(SetRow.rowKey(id))).width;
+  final g = await tester.startGesture(tester.getCenter(find.byKey(ValueKey('set-reps-$id'))));
+  const steps = 24;
+  for (var i = 0; i < steps; i++) {
+    await g.moveBy(_toStart(tester, width * fraction / steps));
+    await tester.pump(const Duration(milliseconds: 16));
+  }
+  if (!release) return g;
+  await tester.pump(const Duration(milliseconds: 120)); // finger rests: no fling
+  await g.up();
+  await _pumpFor(tester, 600);
+  return null;
+}
+
 void main() {
   ActiveWorkoutBarSlot.autoResume = false;
   TestGesture? held;
   var bench = <String>[];
 
+  Future<void> release(WidgetTester tester) async {
+    await held?.cancel();
+    held = null;
+    await _pumpFor(tester, 400);
+  }
+
   runScreenshotSuite('set_delete', [
-    // A set dragged toward the start edge: the delete area opens at the END.
-    ScreenStep('swipe', (tester, c, router) async {
+    // Mid-swipe (~45 %): the whole row follows the finger; the red panel
+    // grows from the END edge to the screen edge with "Delete" + trash.
+    ScreenStep('swipe_mid', (tester, c, router) async {
       await _wipe(c);
       addTearDown(() => _wipe(c));
       bench = await _seedActive(c);
       await _openActive(tester, router);
-      final cell = find.byKey(ValueKey('set-reps-${bench[2]}'));
-      held = await tester.startGesture(tester.getCenter(cell));
-      for (var i = 0; i < 10; i++) {
-        await held!.moveBy(_toStart(tester, 13));
-        await tester.pump(const Duration(milliseconds: 16));
-      }
+      held = await _drag(tester, bench[2], 0.45);
+    }),
+    // Past 60 %: released here it deletes (light haptic at the threshold).
+    ScreenStep('swipe_past_threshold', (tester, c, router) async {
+      await release(tester);
+      await _openActive(tester, router);
+      held = await _drag(tester, bench[2], 0.7);
+    }),
+    // Released after ~35 %: the row rests open on the Delete button.
+    ScreenStep('swipe_open', (tester, c, router) async {
+      await release(tester);
+      await _openActive(tester, router);
+      await _drag(tester, bench[2], 0.35, release: true);
     }),
     // Long-press fallback: set menu → Delete set.
     ScreenStep('long_press_menu', (tester, c, router) async {
-      await held?.cancel();
-      held = null;
-      await _pumpFor(tester, 400);
       await _openActive(tester, router);
       await tester.longPress(find.byKey(SetRow.rowKey(bench[2])));
     }),
-    // Swiped away: the rest renumber (1, 2), Lifted drops, Undo for ~4 s.
+    // Full swipe: slides out, the height collapses, the rest renumber
+    // (1, 2), Lifted drops, Undo for ~4 s.
     ScreenStep('deleted_undo', (tester, c, router) async {
       await _openActive(tester, router);
-      await tester.drag(find.byKey(ValueKey('set-reps-${bench[2]}')), _toStart(tester, 600));
-      await _pumpFor(tester, 900);
+      await _drag(tester, bench[2], 0.75, release: true);
+      await _pumpFor(tester, 600);
     }),
     // The last set of an exercise, completed or not, deletes the same way.
     ScreenStep('last_set_deleted', (tester, c, router) async {
@@ -142,8 +171,8 @@ void main() {
       final sets = (await r.loadDetail(id))!.exercises.single.sets;
       unawaited(router.push(AppRoutes.routineEditorFor(id)));
       await _pumpFor(tester);
-      await tester.drag(find.byKey(ValueKey('set-reps-${sets.first.id}')), _toStart(tester, 600));
-      await _pumpFor(tester, 900);
+      await _drag(tester, sets.first.id, 0.75, release: true);
+      await _pumpFor(tester, 600);
     }),
   ]);
 }

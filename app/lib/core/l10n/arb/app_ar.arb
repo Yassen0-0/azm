@@ -173,6 +173,10 @@
   "@commonUndo": {
     "description": "Snackbar action: undo the last deletion."
   },
+  "commonSwipeDelete": "امسح",
+  "@commonSwipeDelete": {
+    "description": "Label of the red button revealed by swiping a set row (next to a trash icon; hidden, icon only, when it doesn't fit)."
+  },
   "exercisesSearchHint": "ابحث بالعربي أو English",
   "@exercisesSearchHint": {
     "description": "Hint in the exercise search box (Arabic, slang or English all work)."

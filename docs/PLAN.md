@@ -350,6 +350,13 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
   - [x] Tests: `exercise_filters_test.dart` (mapping, filtering, counts), `filter_sheets_test.dart` (sheets, persistence, Arabic), updated library/picker tests.
 - [x] **Parity:** `tools/screenshots.sh set_delete`, `exercise_filters` (new) + re-runs of `exercises`, `exercise_preview`, `routines`, `history`, `shell`, `workout_flow` (library/picker/past-workout screens changed); all green on both platforms, images reviewed. analyze, 311 tests, directionality, `brand/generate.sh --check`, `build_catalog.sh --check` pass.
 
+## 12. Set swipe redesign (main, 2026-09-28) — [x] done 2026-09-28 (Android + iOS, ar + en)
+
+- [x] Custom swipe in the shared `SetRow` (live workout, past workout, routine editor): row follows the finger; red panel to the screen edge; adaptive "Delete"/"امسح" label (icon only when narrow); > 25 % rests open, > 60 % deletes with a light haptic, else springs back; one open row; tap outside / on the row / scroll closes; slide-out + height collapse.
+- [x] Undo snackbar (now replaced instantly by a newer deletion), live renumbering/totals and the long-press menu kept.
+- [x] Tests: `test/core/widgets/set_row_swipe_test.dart` (20: follows the finger, red painted to the screen edge in an inset card (pixel check), partial open + tap Delete + collapse, closing, full swipe + haptic, spring back / wrong way, single-open, label never truncates at ×1/×2/×3 text on 280–320 px), in English and Arabic; flows updated.
+- [x] Parity: `tools/screenshots.sh set_delete` (mid-swipe, past the threshold, open, menu, deleted + Undo, last set, routine editor) on both platforms, ar + en.
+
 ## Requests
 
 _(Cross-folder requests go here: "@owner-of-X: need Y". Remove when handled.)_

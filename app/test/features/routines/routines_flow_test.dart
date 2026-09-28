@@ -24,7 +24,7 @@ import 'routines_test_helpers.dart';
 
 /// Timers tick on some screens, so pump fixed fake time instead of settling.
 Future<void> settle(WidgetTester tester) async {
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < 12; i++) {
     await tester.pump(const Duration(milliseconds: 100));
   }
 }
@@ -167,6 +167,7 @@ void main() {
       expect(await ids(), all.sublist(1));
       expect(labels(), numbers(all.length - 1));
       await tester.tap(find.text(lang == LanguagePref.en ? 'Undo' : 'تراجع'));
+
       await settle(tester);
       expect(await ids(), all);
       expect(labels(), numbers(all.length));

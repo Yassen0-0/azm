@@ -131,6 +131,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonUndo => 'Undo';
 
   @override
+  String get commonSwipeDelete => 'Delete';
+
+  @override
   String get exercisesSearchHint => 'Search exercises';
 
   @override

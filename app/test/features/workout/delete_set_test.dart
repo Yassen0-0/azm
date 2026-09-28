@@ -16,7 +16,7 @@ import 'workout_test_helpers.dart';
 /// pumpAndSettle never settles while timers tick (duration, rest bar), so
 /// pump a fixed amount of fake time instead.
 Future<void> settle(WidgetTester tester) async {
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < 12; i++) {
     await tester.pump(const Duration(milliseconds: 100));
   }
 }
