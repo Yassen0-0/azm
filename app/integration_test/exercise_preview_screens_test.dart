@@ -186,10 +186,6 @@ void main() {
       await _push(tester, router, AppRoutes.routineEditorFor(await _routineId(c)));
       await _openPreview(tester, c, 'routine editor', '0025');
     }),
-    ScreenStep('program', (tester, c, router) async {
-      await _push(tester, router, AppRoutes.programFor('ppl'));
-      await _openPreview(tester, c, 'program');
-    }),
     ScreenStep('past_workout', (tester, c, router) async {
       await _push(tester, router, AppRoutes.pastWorkoutFor(await _pastId(c)));
       await _openPreview(tester, c, 'past workout', '0025');

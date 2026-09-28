@@ -21,7 +21,7 @@ The Flutter port lives in `app/lib/core/theme/` (Phase 2). No widget may use a c
 ## Gym adaptations
 
 ### 1. Dark is the default theme
-Dark is the default on first run; light is available in settings. Dark is a re-mapping of light (same tokens, different values), not a redesign.
+Dark is the default on first run **whatever the phone's own light/dark setting** (the app never follows `platformBrightness`; test `app_theme_default_test.dart`); light is available in settings. Dark is a re-mapping of light (same tokens, different values), not a redesign. The dark theme (pure black page, `#1C1C1E` cards, blue accent) is the base of the Hevy-density layout (§ Compact layout).
 
 ### 2. Semantic tokens renamed by function
 
@@ -85,7 +85,7 @@ Gym additions:
 
 | Token | Value | Use |
 |---|---|---|
-| `setRowMinHeight` | **52** | Minimum height of a SetRow |
+| `setRowMinHeight` | **48** (was 52) | Minimum height of a SetRow |
 | `setCellMinWidth` | 48 | Weight / reps / ✓ cells (touch target ≥ 48) |
 | `keypadKeyHeight` | 52 | WeightKeypad key |
 | `restBarHeight` | 64 | RestTimerBar |
@@ -99,13 +99,36 @@ Gym additions:
 | `filterCard` | 108 | Height of a filter card (icon + up to two label lines) |
 | `filterCount` | 18 | Count bubble on an active filter chip; ✓ badge on a selected card |
 
-All touch targets are ≥ 48 even when the visible element is smaller.
+Compact (Hevy-density) additions, 2026-09-28:
+
+| Token | Value | Use |
+|---|---|---|
+| `touchCompact` | 44 | Smallest touch target of a compact control (set cells, rest line, time wheels' item height) |
+| `buttonCompact` | 44 | "+ Add set", dumbbell start button, compact wide buttons, preset chips |
+| `inputCompact` | 40 | Routine-editor name/notes fields |
+| `setBox` | 36 | Outlined KG / REPS box, set-number square, ✓ square, Finish button height |
+| `detailRow` | 44 | Read-only set row on the routine detail |
+| `avatar` | 40 | Round exercise thumbnail (live workout, routine detail, editor) |
+| `outline` / `outlineActive` | 1 / 1.5 | Stroke of a value box / of the box on the keypad |
+
+Touch targets are ≥ 48 by default (`AzmPressable`) and **never below 44** in compact screens.
+
+## Compact layout (Hevy density, 2026-09-28)
+
+Layout and spacing follow the owner's Hevy reference screenshots (kept only in `.tooling/tmp/reference/`, never committed); colours, Readex Pro and RTL mirroring stay Azm's. No Hevy name, logo or icon is used.
+
+- **Workout tab:** a compact card row "+ Start empty workout" (radius `input`, min 52 high), then "My routines (N)" (`cardTitle`, `textSecondary`) with "+ New routine" (accent) at the end, then **routine cards**: name (`rowTitle`) + ⋯ at the end, exercise names (`secondary`, max 2 lines, ellipsis), and a full-width accent button (`buttonCompact`, radius `input`) holding **only** a dumbbell icon. Tapping the card opens the routine detail.
+- **Routine detail (read-only):** inner header with the routine name; "Exercises" + accent "Edit"; per exercise a round `avatar` + name in accent, then SET | KG | REPS captions (upper-case, `smallStrong`, `textTertiary`) and plain `detailRow` rows with alternating `card` background (full width), `xl` + space between exercises; the dumbbell start button pinned at the bottom.
+- **Live workout:** top bar on `card` up to the status bar: ⌄ minimize · elapsed time (accent, tappable → start-time sheet) · spacer · ⏱ (accent while a rest runs) · Finish (accent, `setBox` high, radius `segment`). Stats row on the page: three start-aligned columns, label (`small`, `textSecondary`) above value (`rowNumber`; the duration in accent), then a 1 px `divider`. Exercise blocks have **no card**; `xxxl` below each: avatar + name (`rowTitle`, accent, max 2 lines; secondary name `small`, `textTertiary`) + ⋮; borderless one-line notes (`body`, hint `textTertiary`); the rest line (⏱ + "Rest Timer: 1:30"/OFF, `itemLabel`, accent, 44 high); the set table; "+ Add set" (`buttonCompact`, `card` fill, radius `input`).
+- **Set table:** captions SET · PREVIOUS · KG · REPS · ✓ upper-cased. Rows 48; set number in a `setBox` rounded square (`fill`; warm-up amber); PREVIOUS muted text `15 kg × 8`; KG/REPS outlined boxes (`checkboxBorder` 1 px, radius `segment`; accent 1.5 px while on the keypad) whose pre-filled values and hints are `textTertiary` until edited; ✓ a `setBox` rounded square (`fill` → `setDone`). A ✓ row keeps the `setDoneTint` and drops the outlines. The row sits on the page colour in the live workout and on `card` inside past-workout / editor cards.
+- **Sheets:** rest picker (Default · Off · 0:30…5:00, scrolls), manual rest timer (preset grid 3 × 2 of `buttonCompact` chips, time left + Skip while running), workout time sheet (day · hour · minute `CupertinoPicker` wheels with Western digits, 24 h; hour:minute keep their reading order in RTL; Start / End tabs for a finished workout; live duration or the error in `destructiveText`; Save disabled while invalid).
+- **Routine editor:** same density: `inputCompact` fields, `md` gaps, round avatar + accent name + ⋮, 48 rows, `buttonCompact` wide buttons.
 
 ## New components
 
 | Component | Description |
 |---|---|
-| **SetRow** | `[type label] [previous] [weight] [reps] [✓]`, min height 52, numbers in `rowNumber`. Type label: set number (normal), `ح/W` in `warmup`, `د/D`, `ف/F`. Tap label → type menu. Tap previous → fills weight + reps. ✓ → row gets `setDoneTint`, ✓ turns `setDone` with `onState` check, haptic. **Swipe to delete:** the whole row slides with the finger toward the *start* edge (left in English, right in Arabic; tracks from touch-down) over a `destructive` panel with square corners, full row height, from the row's end edge to the **screen edge** (it bleeds over the page margin; section cards don't clip), growing with the finger. "Delete"/"امسح" + trash (`controlLabel`, `onState`) sit at the screen-edge end of the panel and never truncate: text only when it fits at the current text scale, else the icon alone. Release > 25 % → rests open (open width fits the label at the current text scale, 64 px … 50 % of the row), spring `crisp`; > 60 % → delete (light haptic when crossing), otherwise spring back. One open row app-wide; a tap outside, a tap on the row, a scroll or starting to drag another row closes it. Delete = slide out (`exit` 200 ms) + height collapse (`exit`) before the DB write; long-press → set menu → "Delete set" does the same. A snackbar offers Undo for `undoWindow` (4 s); a new deletion replaces it instantly. PR sets show a 🏆 badge. **One component for every set table** (`core/widgets/set_row.dart`): the live workout uses all columns; a past workout has no ✓ column (every set there is done); the routine editor has neither previous nor ✓. Labels, type names and the type menu come from `core/l10n/set_labels.dart` + `core/widgets/set_type_sheet.dart`. |
+| **SetRow** | `[type label] [previous] [weight] [reps] [✓]`, min height 48, numbers in `rowNumber`; weight/reps in outlined `setBox` boxes, muted (`textTertiary`) while `valuesMuted` (pre-filled) or showing the hint. Type label: set number (normal), `ح/W` in `warmup`, `د/D`, `ف/F`. Tap label → type menu. Tap previous → fills weight + reps. ✓ → row gets `setDoneTint`, ✓ turns `setDone` with `onState` check, haptic. **Swipe to delete:** the whole row slides with the finger toward the *start* edge (left in English, right in Arabic; tracks from touch-down) over a `destructive` panel with square corners, full row height, from the row's end edge to the **screen edge** (it bleeds over the page margin; section cards don't clip), growing with the finger. "Delete"/"امسح" + trash (`controlLabel`, `onState`) sit at the screen-edge end of the panel and never truncate: text only when it fits at the current text scale, else the icon alone. Release > 25 % → rests open (open width fits the label at the current text scale, 64 px … 50 % of the row), spring `crisp`; > 60 % → delete (light haptic when crossing), otherwise spring back. One open row app-wide; a tap outside, a tap on the row, a scroll or starting to drag another row closes it. Delete = slide out (`exit` 200 ms) + height collapse (`exit`) before the DB write; long-press → set menu → "Delete set" does the same. A snackbar offers Undo for `undoWindow` (4 s); a new deletion replaces it instantly. PR sets show a 🏆 badge. **One component for every set table** (`core/widgets/set_row.dart`): the live workout uses all columns; a past workout has no ✓ column (every set there is done); the routine editor has neither previous nor ✓. Labels, type names and the type menu come from `core/l10n/set_labels.dart` + `core/widgets/set_type_sheet.dart`. |
 | **WeightKeypad** | Custom bottom keypad replacing the system keyboard: 3×4 digits + decimal + backspace, `−2.5` / `+2.5`, next/done. Keys 52 high on `card`, radius `button`. The value preview uses `keypadValue`. Screens use `SetValueKeypad` + `SetKeypadBuffer` (`core/widgets/set_keypad.dart`): shared wording, limits (4 digits + 1 decimal for weight, 3 for reps) and a selection haptic on ±. |
 | **RestTimerBar** | Bottom bar: remaining `mm:ss` (tabular), progress (`track`/`accent`), `−15`, `+15`, skip. Derived from an end timestamp. A **mini** variant (time only) appears inside the ActiveWorkoutBar. |
 | **ActiveWorkoutBar** | Persistent bar above the tab bar when the workout is minimized: workout name, elapsed time, mini rest timer; tap to expand. |

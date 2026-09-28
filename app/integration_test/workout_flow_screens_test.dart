@@ -35,6 +35,8 @@ import 'package:azm/features/exercises/ui/exercise_detail_screen.dart';
 import 'package:azm/features/history/data/history_repository.dart';
 import 'package:azm/features/history/ui/past_workout_screen.dart';
 import 'package:azm/features/onboarding/data/onboarding_gate.dart';
+import 'package:azm/features/routines/data/ready_programs.dart';
+import 'package:azm/features/routines/data/routine_repository.dart';
 import 'package:azm/features/settings/data/app_version.dart';
 import 'package:azm/features/settings/data/backup/backup_codec.dart';
 import 'package:azm/features/settings/data/backup/backup_files.dart';
@@ -162,8 +164,8 @@ void main() {
       if (!Platform.isIOS) await binding.convertFlutterSurfaceToImage();
 
       // 1. Start workout (one tap).
-      await _waitFor(tester, find.text(l.workoutStart), 'home');
-      await tester.tap(find.text(l.workoutStart));
+      await _waitFor(tester, find.text(l.workoutStartEmpty), 'home');
+      await tester.tap(find.text(l.workoutStartEmpty));
       await _waitFor(tester, find.text(l.workoutFinish), 'active workout');
       expect(find.text(l.workoutFinish), findsOneWidget);
       final workoutId = (await repo.active())!.id;
@@ -370,25 +372,21 @@ void main() {
       if (!Platform.isIOS) await binding.convertFlutterSurfaceToImage();
       final router = container.read(appRouterProvider);
 
-      // 1. Onboarding: kg → Next → Full Body 3× → "Add program and start".
+      // 1. Onboarding (ready programs hidden → one screen): kg → "Let's go".
+      //    The two routines come from the (hidden) Full Body 3× program data.
       router.go(AppRoutes.onboarding);
       await _waitFor(tester, find.byKey(const ValueKey('onboarding-unit-kg')), 'onboarding');
       await tester.tap(find.byKey(const ValueKey('onboarding-unit-kg')));
       await _pump(tester, 300);
       await screenshot('onboarding_kg');
-      await tester.tap(find.byKey(const ValueKey('onboarding-next')));
-      await _pump(tester);
-      final program = find.byKey(const ValueKey('onboarding-program-full_body_3x'));
-      await _waitFor(tester, program, 'program list');
-      await tester.ensureVisible(program);
-      await _pump(tester, 300);
-      await tester.tap(program);
-      await _pump(tester, 300);
-      await screenshot('onboarding_program');
-      await tester.tap(find.byKey(const ValueKey('onboarding-start-program')));
+      await tester.tap(find.byKey(const ValueKey('onboarding-start')));
       await _pump(tester, 1500);
       expect(await db.readSetting(TrainingSettingsKeys.unit), jsonEncode('kg'));
       expect(await db.readSetting(kOnboardingDoneKey), jsonEncode(true));
+      final fullBody = (await container.read(readyProgramsProvider.future)).firstWhere((p) => p.id == 'full_body_3x');
+      await container
+          .read(routineRepositoryProvider)
+          .copyProgram(fullBody, languageCode: Localizations.localeOf(tester.element(find.byType(Scaffold).first)).languageCode);
       final routines = await (db.select(db.routines)..orderBy([(r) => OrderingTerm(expression: r.sort)])).get();
       expect(routines, hasLength(2)); // Full Body 3×: days A and B, alternated
 

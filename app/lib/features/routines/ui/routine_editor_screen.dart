@@ -145,7 +145,15 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
                             textInputAction: TextInputAction.next,
                             textCapitalization: TextCapitalization.sentences,
                             style: AzmType.cardTitle.copyWith(color: c.textPrimary),
-                            decoration: InputDecoration(hintText: l.routinesNameHint),
+                            decoration: InputDecoration(
+                              hintText: l.routinesNameHint,
+                              isDense: true,
+                              contentPadding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: AzmSpace.md,
+                                vertical: AzmSpace.xs + AzmSpace.opticalInset,
+                              ),
+                              constraints: const BoxConstraints(minHeight: AzmSize.inputCompact),
+                            ),
                           ),
                           const SizedBox(height: AzmSpace.xs),
                           TextField(
@@ -157,9 +165,17 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
                             maxLines: 4,
                             textCapitalization: TextCapitalization.sentences,
                             style: AzmType.body.copyWith(color: c.textPrimary),
-                            decoration: InputDecoration(hintText: l.routinesNotesHint),
+                            decoration: InputDecoration(
+                              hintText: l.routinesNotesHint,
+                              isDense: true,
+                              contentPadding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: AzmSpace.md,
+                                vertical: AzmSpace.xs + AzmSpace.opticalInset,
+                              ),
+                              constraints: const BoxConstraints(minHeight: AzmSize.inputCompact),
+                            ),
                           ),
-                          const SizedBox(height: AzmSpace.xxl),
+                          const SizedBox(height: AzmSpace.md),
                           if (detail.exercises.isEmpty)
                             Padding(
                               padding: const EdgeInsetsDirectional.only(bottom: AzmSpace.xl),
@@ -186,6 +202,7 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
                             ),
                           RoutinesWideButton(
                             key: const ValueKey('routineAddExercises'),
+                            height: AzmSize.buttonCompact,
                             label: l.routinesAddExercises,
                             icon: Icons.add_rounded,
                             primary: detail.exercises.isEmpty,
@@ -194,6 +211,7 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
                           const SizedBox(height: AzmSpace.xs),
                           RoutinesWideButton(
                             key: const ValueKey('routineDelete'),
+                            height: AzmSize.buttonCompact,
                             label: l.routinesDelete,
                             destructive: true,
                             onTap: () => _delete(detail.routine.id),
@@ -486,7 +504,7 @@ class _ExerciseCard extends StatelessWidget {
     final rest = detail.entry.restSeconds;
 
     return Container(
-      margin: const EdgeInsetsDirectional.only(bottom: AzmSpace.listGap),
+      margin: const EdgeInsetsDirectional.only(bottom: AzmSpace.md),
       decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(AzmRadius.card)),
       // No clip: a set's red delete panel reaches past the card to the screen
       // edge (SetRow); nothing else touches the rounded corners.
@@ -494,28 +512,38 @@ class _ExerciseCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.md, AzmSpace.md, AzmSpace.xxs, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.md, AzmSpace.xs, 0, 0),
             child: Row(
               children: [
                 if (detail.exercise != null)
-                  ExerciseThumbnail(exercise: detail.exercise!)
+                  ExerciseThumbnail(exercise: detail.exercise!, size: AzmSize.avatar, round: true)
                 else
-                  const RoutinesUnknownThumb(),
+                  const RoutineUnknownAvatar(),
                 const SizedBox(width: AzmSpace.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(names.primary, style: AzmType.rowTitle.copyWith(color: c.textPrimary)),
+                      Text(
+                        names.primary,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AzmType.rowTitle.copyWith(color: c.accent),
+                      ),
                       if (names.secondary != null)
-                        Text(names.secondary!, style: AzmType.secondary.copyWith(color: c.textSecondary)),
+                        Text(
+                          names.secondary!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AzmType.small.copyWith(color: c.textTertiary),
+                        ),
                     ],
                   ),
                 ),
-                AzmHeaderButton(
-                  icon: Icons.more_horiz_rounded,
-                  semanticLabel: l.routinesExerciseOptions,
+                AzmPressable(
                   onTap: () => onMenu(names.primary),
+                  semanticLabel: l.routinesExerciseOptions,
+                  child: Icon(Icons.more_vert_rounded, color: c.textPrimary, size: AzmSize.icon),
                 ),
               ],
             ),
@@ -554,7 +582,7 @@ class _ExerciseCard extends StatelessWidget {
               child: _targetRow(l, detail.sets[i], numbers[i]),
             ),
           Padding(
-            padding: const EdgeInsetsDirectional.all(AzmSpace.md),
+            padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.md, AzmSpace.xs, AzmSpace.md, AzmSpace.md),
             child: AzmPressable(
               onTap: onAddSet,
               semanticLabel: l.routinesAddSet,

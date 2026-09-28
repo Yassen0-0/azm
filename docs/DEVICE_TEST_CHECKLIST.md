@@ -138,3 +138,13 @@ Media shows only in the owner's `personal` build (or a dev run with `tools/serve
 - [ ] **Filter sheets on a small phone (iPhone SE size, Android 5 inch):** the three chips fit side by side in Arabic and English; the Muscle group sheet scrolls to "Other" with the Show / Clear buttons always visible above the home indicator; cards are easy to tap.
 - [ ] **Filter icons at real size:** every muscle highlight is recognizable at 44 dp (esp. abductors, adductors, neck, lats vs. upper back) in dark and light themes.
 - [ ] **Remembered filters:** set filters in the library, kill the app, reopen: the library is still filtered (chip counts), the picker keeps its own filters.
+
+### Hevy-density UI (2026-09-28)
+
+- [ ] **Dark on first launch with the phone in LIGHT mode:** fresh install (or cleared data) on an iPhone and an Android phone set to light mode: splash, onboarding and Workout tab are dark; switching to Light in Settings works and survives a restart.
+- [ ] **Density on a small phone (iPhone SE / 5-inch Android) in ar + en:** live workout shows at least one full exercise block (name, notes, rest line, 3 sets, Add set) without clipping; "15 kg × 8" in PREVIOUS is not cut off; KG/REPS boxes and ✓ are easy to hit with a thumb (≥ 44 pt), no mis-taps between neighbours.
+- [ ] **Rest OFF on a real phone:** set an exercise's rest line to OFF, ✓ a set with the screen locked soon after: no rest notification, no sound; another exercise with 1:30 still notifies.
+- [ ] **Manual rest timer (⏱):** start 1:00, lock the phone: the notification arrives on time with sound/haptic (iPhone + Android 14 exact alarms); Skip from the sheet cancels it.
+- [ ] **Notes field vs. keypad:** tapping a notes field opens the system keyboard and closes the custom keypad; tapping KG afterwards hides the system keyboard and opens the keypad; notes survive killing the app.
+- [ ] **Start-time wheels:** the wheels scroll smoothly with the platform's selection haptics; changing the start of a running workout updates the top bar and the minimized bar at once; the running rest timer is unaffected.
+- [ ] **Edit a past workout's time:** change start/end of a workout in the history, then check History (duration), Stats (this week) and the exercise's records.

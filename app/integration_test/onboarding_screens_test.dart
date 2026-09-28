@@ -1,8 +1,10 @@
 // Parity screenshots of first-run onboarding (CLAUDE.md → Platform Parity Rule).
 //   AZM_DEVICE_SET=A tools/screenshots.sh onboarding
 // Opens AppRoutes.onboarding directly (screenshot runs always count as
-// onboarded). Never taps the final buttons, so onboarding_done and the
-// routines on the device are left alone; "Next" saves kg (the default).
+// onboarded). Never taps the final button, so onboarding_done and the
+// routines on the device are left alone. Ready programs are hidden
+// (kProgramsEnabled = false): onboarding is the unit screen only; the
+// two-step version is captured by programs_screens_test.dart.
 import 'package:azm/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,18 +32,5 @@ void main() => runScreenshotSuite('onboarding', [
       ScreenStep('unit_lb_selected', (tester, c, router) async {
         await _open(tester, router);
         await tester.tap(find.byKey(const ValueKey('onboarding-unit-lb')));
-      }),
-      ScreenStep('program', (tester, c, router) async {
-        await _open(tester, router);
-        await tester.tap(find.byKey(const ValueKey('onboarding-next')));
-      }),
-      ScreenStep('program_selected', (tester, c, router) async {
-        await _open(tester, router);
-        await tester.tap(find.byKey(const ValueKey('onboarding-next')));
-        await _pumpFor(tester);
-        final card = find.byKey(const ValueKey('onboarding-program-full_body_3x'));
-        await tester.ensureVisible(card);
-        await _pumpFor(tester, 300);
-        await tester.tap(card);
       }),
     ]);

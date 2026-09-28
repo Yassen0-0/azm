@@ -16,6 +16,7 @@ import '../../../core/widgets/set_keypad.dart';
 import '../../../core/widgets/set_undo.dart';
 import '../../../core/widgets/set_type_sheet.dart';
 import '../../../core/widgets/weight_keypad.dart';
+import '../../../core/widgets/workout_time_sheet.dart';
 import '../../workout/data/workout_models.dart';
 import '../../workout/data/workout_repository.dart';
 import '../data/history_repository.dart';
@@ -164,6 +165,13 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
       title: isolate(w.name),
       children: (ctx) => [
         HistorySheetAction(label: l.historyRename, icon: Icons.edit_outlined, onTap: () => Navigator.pop(ctx, 'rename')),
+        if (w.endedAt != null)
+          HistorySheetAction(
+            key: const ValueKey('pastWorkoutEditTime'),
+            label: l.historyEditTime,
+            icon: Icons.schedule_rounded,
+            onTap: () => Navigator.pop(ctx, 'time'),
+          ),
         HistorySheetAction(
           label: l.historyDeleteWorkout,
           icon: Icons.delete_outline_rounded,
@@ -176,6 +184,11 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
     if (action == 'rename') {
       final name = await showRenameDialog(context, w.name);
       if (name != null) await _history.rename(w.id, name);
+    } else if (action == 'time') {
+      // Start + end (end after start, nothing in the future). History, stats
+      // and PRs re-read the DB, so they follow.
+      final r = await showWorkoutTimesSheet(context, start: w.startedAt, end: w.endedAt!, now: ref.read(workoutClockProvider));
+      if (r != null) await ref.read(workoutRepositoryProvider).setTimes(w.id, start: r.start, end: r.end);
     } else if (action == 'delete') {
       await _delete();
     }

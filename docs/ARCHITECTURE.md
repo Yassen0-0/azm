@@ -53,6 +53,7 @@ app/lib/
 - **Directionality:** only `EdgeInsetsDirectional`, `AlignmentDirectional`, `start/end`. A check script in `tools/` fails the build if `left/right` APIs appear in `app/lib/`.
 - **Localization:** every user-visible string comes from ARB. Language setting: System (default) / العربية / English. Numbers use Western digits in both locales.
 - **Theme:** dark default, light optional, tokens only (see DESIGN.md).
+- **Feature flags:** `core/feature_flags.dart` (compile-time constant + a provider so tests can flip it). Today: `kProgramsEnabled = false` hides ready programs (Workout-tab entry, onboarding step 2, `/programs` + `/program/:id` redirect to the Workout tab).
 - **Catalog vs user data:** catalog tables are read-only and replaced wholesale when the bundled catalog version changes. User tables are never touched by catalog updates.
 
 ## Media

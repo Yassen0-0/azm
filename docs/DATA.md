@@ -94,8 +94,8 @@ Muscle, body-part and equipment keys are localized through ARB (`muscle_pectoral
 | `routine_exercises` | `id` uuid PK, `routine_id` → routines (cascade), `exercise_id` TEXT (catalog id, *no FK*: catalog is replaceable), `sort`, `rest_seconds` INTEGER NULL, `notes` TEXT NULL |
 | `routine_sets` | `id` uuid PK, `routine_exercise_id` → routine_exercises (cascade), `sort`, `type` (`normal`\|`warmup`\|`drop`\|`failure`), `target_reps` INTEGER NULL, `target_weight_kg` REAL NULL |
 | `workouts` | `id` uuid PK, `routine_id` TEXT NULL (no FK: routine may be deleted), `name`, `started_at`, `ended_at` NULL, `status` (`active`\|`finished`), `notes` NULL. **Partial unique index: at most one row with `status='active'`.** |
-| `workout_exercises` | `id` uuid PK, `workout_id` → workouts (cascade), `exercise_id` TEXT, `sort`, `notes` NULL |
-| `workout_sets` | `id` uuid PK, `workout_exercise_id` → workout_exercises (cascade), `sort`, `type` (`normal`\|`warmup`\|`drop`\|`failure`), `weight_kg` REAL NOT NULL DEFAULT 0, `reps` INTEGER NOT NULL DEFAULT 0, `completed_at` NULL (null = not ✓) |
+| `workout_exercises` | `id` uuid PK, `workout_id` → workouts (cascade), `exercise_id` TEXT, `sort`, `notes` NULL (the live workout's one-line notes), `rest_seconds` INTEGER NULL (**schema v3**: rest after a ✓ in this workout; NULL = the routine override, else the settings default; **0 = OFF**, no rest timer; copied from the routine on start) |
+| `workout_sets` | `id` uuid PK, `workout_exercise_id` → workout_exercises (cascade), `sort`, `type` (`normal`\|`warmup`\|`drop`\|`failure`), `weight_kg` REAL NOT NULL DEFAULT 0, `reps` INTEGER NOT NULL DEFAULT 0, `completed_at` NULL (null = not ✓), `prefilled` BOOL NOT NULL DEFAULT false (**schema v3**: weight/reps are the app's suggestion, i.e. routine target / last weight on start or a copy by "Add set", shown muted until the user types or taps "previous") |
 | `settings` | `key` TEXT PK, `value` TEXT (JSON-encoded) |
 
 Settings keys (values JSON-encoded): `exercises_filters_library` / `exercises_filters_picker` (`{"place": [...], "muscle": [...], "equipment": [...]}`: the last-used filters of each screen; device state, not in backups), `locale` (`"system"`\|`"ar"`\|`"en"`, implemented), `theme` (`"dark"`\|`"light"`, implemented), `unit` (`"kg"`\|`"lb"`), `default_rest_seconds` (90), `onboarding_done` (bool), `active_rest_ends_at` (ISO UTC or null), `active_rest_notification_id`, `active_rest_total_seconds` (int: current rest length incl. ±15, for the progress bar; null when no rest), `workout_notifications_asked` (bool: notification permission prompt shown once), `workout_exact_alarms_asked` (bool: Android exact-alarm explanation sheet shown once).
@@ -184,7 +184,7 @@ A single UTF-8 JSON file named `azm-backup-YYYYMMDD-HHmm.json` (**local** time o
 ```jsonc
 {
  "format": "azm-backup",            // marker; anything else → "not an Azm backup"
- "version": 1,                      // file format version (integer ≥ 1); > 1 → "newer version"
+ "version": 2,                      // file format version (integer ≥ 1); > 2 → "newer version" (v1 still imports)
  "exported_at": "2026-09-27T18:09:00.001Z",
  "app_version": "1.0.0+1",          // the build that wrote it (package_info_plus: version+build); informational only
  "settings": { "locale": "ar", "theme": "dark", "unit": "kg", "default_rest_seconds": 90 },
@@ -192,8 +192,8 @@ A single UTF-8 JSON file named `azm-backup-YYYYMMDD-HHmm.json` (**local** time o
  "routine_exercises": [{ "id", "routine_id", "exercise_id", "sort", "rest_seconds", "notes" }],
  "routine_sets":      [{ "id", "routine_exercise_id", "sort", "type", "target_reps", "target_weight_kg" }],
  "workouts":          [{ "id", "routine_id", "name", "started_at", "ended_at", "status", "notes" }],
- "workout_exercises": [{ "id", "workout_id", "exercise_id", "sort", "notes" }],
- "workout_sets":      [{ "id", "workout_exercise_id", "sort", "type", "weight_kg", "reps", "completed_at" }]
+ "workout_exercises": [{ "id", "workout_id", "exercise_id", "sort", "notes", "rest_seconds" }],          // rest_seconds: v2+
+ "workout_sets":      [{ "id", "workout_exercise_id", "sort", "type", "weight_kg", "reps", "completed_at", "prefilled" }] // prefilled: v2+
 }
 ```
 
@@ -202,3 +202,6 @@ A single UTF-8 JSON file named `azm-backup-YYYYMMDD-HHmm.json` (**local** time o
 - **Settings:** only `locale`, `theme`, `unit`, `default_rest_seconds`, as **decoded** JSON values (not the stored JSON strings). Device state is never exported nor overwritten: `onboarding_done`, `workout_notifications_asked`, `workout_exact_alarms_asked`, `active_rest_*`. On import a restorable key missing from the file is deleted (back to its default); unknown keys are ignored; an invalid value for a known key = corrupt.
 - **Import = validate everything first, then one transaction.** Order: not JSON (incl. non-UTF-8) → not an Azm backup → `version` → `exported_at` / `app_version` → settings → each table (columns, types, UUID v4, enums, `rest_seconds` > 0 or null, reps ≥ 0) → unique ids per table → every FK resolves (`workouts.routine_id` has no FK: may point to a deleted routine) → at most one `active` workout. Only then the confirmation dialog with counts; the replace deletes and re-inserts all user tables in ONE Drift transaction (all or nothing). Import is refused while a workout is running. A backup exported mid-workout restores that workout as active.
 - **Compatibility:** a build reads every `version` ≤ its own `kBackupVersion` and rejects newer ones. Bump `version` for any change to this shape (and keep reading older versions).
+- **Version 2 (2026-09-28, schema v3):** `workout_exercises` rows add `rest_seconds` (integer ≥ 0 or null; 0 = rest OFF) and `workout_sets` rows add `prefilled` (boolean). A v2 file must carry both columns; a v1 file must not, and imports with `rest_seconds = null`, `prefilled = false`.
+
+Schema history: v1 initial · v2 `exercises.hidden` (catalog only) · **v3** `workout_exercises.rest_seconds` + `workout_sets.prefilled` (`addColumn`, existing rows keep NULL / false).

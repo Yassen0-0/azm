@@ -41,6 +41,7 @@ class RoutinesWideButton extends StatelessWidget {
     this.icon,
     this.primary = false,
     this.destructive = false,
+    this.height = AzmSize.primaryButton,
   });
 
   final String label;
@@ -48,6 +49,9 @@ class RoutinesWideButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool primary;
   final bool destructive;
+
+  /// `primaryButton` (52) by default; compact screens pass `buttonCompact`.
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +63,7 @@ class RoutinesWideButton extends StatelessWidget {
       semanticLabel: label,
       child: ExcludeSemantics(
         child: Container(
-          height: AzmSize.primaryButton,
+          height: height,
           decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(AzmRadius.button)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

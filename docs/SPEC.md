@@ -37,7 +37,9 @@
 - Missing media (no license or offline) → fallback UI (muscle icon).
 
 ### 2. Live workout logging
-Each exercise in a workout shows a table of sets. Columns per set: **type · previous · weight · reps · ✓**.
+Layout (Hevy density, 2026-09-28; DESIGN.md → Live workout): **top bar** (minimize ⌄, live elapsed time, ⏱ manual rest timer, accent **Finish** / **إنهاء**), a **stats row** (Duration | Lifted | Sets), then one **block per exercise** without a card: round thumbnail + name (accent) + ⋮ menu, a one-line **notes** field ("Add notes here..." / "ضيف ملاحظة..."), the tappable **rest line** ("⏱ Rest Timer: 1:30" / "الراحة: 1:30", or OFF), the set table and a full-width **"+ Add set"** button.
+
+Each exercise in a workout shows a table of sets. Columns per set: **SET · PREVIOUS · KG · REPS · ✓**.
 
 - **Set types:**
 
@@ -49,28 +51,36 @@ Each exercise in a workout shows a table of sets. Columns per set: **type · pre
   | failure | `ف` / `F` | default (**never red**: failure sets are intentional, not mistakes) |
 
   Tap the set label to change its type.
-- **Previous:** shows the same set (same exercise, same set index) from the last finished workout that contained this exercise, e.g. `60 kg × 8`. Tapping it fills weight + reps.
+- **Previous:** shows the same set (same exercise, same set index) from the last finished workout that contained this exercise, as muted text, e.g. `60 kg × 8`. Tapping it fills weight + reps.
+- **KG / REPS** are outlined boxes. Values the app **pre-filled** (routine target or last weight on start, a set copied by "Add set") and hints from "previous" are **muted until edited**; typed values and ✓ rows are in full colour.
+- **Notes** per exercise, one line, saved on every keystroke (copied from the routine exercise's notes on start).
+- **Rest line** per exercise → picker: Default (routine override / settings), **OFF** (no rest timer after ✓ for this exercise), or 0:30 … 5:00. Stored on the workout's exercise (DATA.md → `workout_exercises.rest_seconds`).
+- **Manual rest timer** (⏱ in the top bar): presets 0:30 · 1:00 · 1:30 · 2:00 · 3:00 · 5:00 start a countdown (same end-timestamp timer + notification as after a ✓); while one runs, the sheet shows the time left and Skip.
+- **Editable start time:** tapping the elapsed time opens a sheet (day · hour · minute wheels, 24 h) to move the workout's **start** back (forgot to open the app on time). Never in the future; the duration recalculates at once; a running rest timer is not affected.
 - **✓ (complete):** the row tints green (`setDone`), light haptic, and the rest timer starts automatically.
 - **Delete a set:** drag the row toward the **start** edge (left in English, right in Arabic): the whole row follows the finger over a red panel ("Delete" + trash) that grows from the trailing edge to the screen edge. Released past **~25 %** it rests open on the Delete button (tap it to delete; tap anywhere else or scroll to close; only one row open at a time); past **~60 %** it deletes at once (light haptic at the threshold); otherwise it springs back. A deleted row slides out and its height collapses (no jump). **Long-press** → "Delete set" is the fallback. A snackbar offers **Undo for ~4 s**. The remaining sets renumber and Lifted / sets / PRs update at once. Works for any set (✓ or not, the last one of an exercise too), in the live workout, a past workout and the routine editor. A deleted set is gone from the database immediately, so no total, PR, "previous" or history ever counts it; Undo puts the same row back.
 - **Custom numeric keypad** (not the system keyboard): digits 0–9, decimal point, `−2.5` / `+2.5` steppers (in the display unit), backspace, next/done.
-- **Header** shows 3 live stats: **duration | Lifted (شِلت) | sets** (completed sets count).
+- **Stats row** shows 3 live stats: **duration | Lifted (شِلت) | sets** (completed sets count), small labels above the values, then a divider.
 - The screen can **minimize** into a persistent bar above the tab bar (ActiveWorkoutBar: name, elapsed time, mini rest timer). Tap it to restore.
 - **Every change is written to the database immediately.** Killing the app or a dead battery loses nothing. On launch, if a workout with status `active` exists, the app resumes it.
 - At most **one** active workout at a time.
 
 ### 3. Rest timer
 - Bottom bar with countdown and **−15 / +15 / skip**. Haptic + sound when it ends.
-- Default **90 s**; per-exercise override (stored on the routine exercise, else the global default from settings).
+- Default **90 s**; per-exercise override (stored on the routine exercise, else the global default from settings), and per exercise **in a workout** from its rest line, including **OFF**.
+- A manual countdown can be started from the live workout's top bar (⏱).
 - Implemented from an **end timestamp** plus a **scheduled local notification**, never a ticking counter. The UI derives the remaining time from `endsAt − now`, so it survives backgrounding, app kill and clock-display pauses. ±15 s moves `endsAt` and reschedules the notification; skip cancels it.
 
 ### 4. Routines
 - Create and edit: name, notes, add exercises (multi-select picker), target sets per exercise (type, target reps, optional target weight), rest override, **drag to reorder**.
-- **Start in one tap** from the Workout tab. The workout is prefilled from the routine; set rows start from the targets and show *previous* values.
-- **Ready-made programs** in Arabic + English (Push/Pull/Legs, Upper/Lower, Full Body 3×/week). The user copies one into their routines, and can then edit it.
+- **Start in one tap** from the Workout tab. The workout is prefilled from the routine; set rows start from the targets (muted until edited) and show *previous* values.
+- **Routine card** on the Workout tab: name, the exercise names (max 2 lines), ⋯ menu (Edit, Delete) and a full-width accent button with **only a dumbbell icon** (screen readers: "Start routine" / "ابدأ الروتين"). Tapping the card opens the **routine detail** (read-only): per exercise a round thumbnail + name, then SET | KG | REPS as plain rows; "Edit" opens the editor; the dumbbell button at the bottom starts it.
+- **Ready-made programs** in Arabic + English (Push/Pull/Legs, Upper/Lower, Full Body 3×/week). The user copies one into their routines, and can then edit it. **Hidden since 2026-09-28** behind `kProgramsEnabled = false` (`core/feature_flags.dart`): no Workout-tab entry, onboarding is one screen, the routes redirect to the Workout tab. Code, data and tests are kept; flip the flag to bring it back.
 
 ### 5. History & PRs
 - **Workout cards:** name, date, duration, lifted, PR count, best set per exercise.
 - **Edit past workouts** (sets, weights, reps, types, add/remove exercises). Edits recompute PRs.
+- **Edit a finished workout's time** (summary → "Edit time", past workout ⋯ → "Edit time"): start and end, end after start, nothing in the future. History, stats and PRs follow.
 - **Per-exercise chart** on the exercise detail screen (best set / est. 1RM / volume over time).
 - **PR types** (per exercise, over completed sets of finished workouts):
   1. **Heaviest weight**: max `weight_kg`.
@@ -94,15 +104,15 @@ Each exercise in a workout shows a table of sets. Columns per set: **type · pre
   Pick the **smallest** object whose count (`round(lifted / kg)`) falls between **1 and 20**: cars first, then pyramid blocks, then elephants. This matches the example: 8,450 kg → 6 cars. If none qualifies (< 700 kg lifted), show no comparison. Above 20 elephants, show the elephant count anyway.
 - **History** shows the all-time lifted total, e.g. `شِلت لحد دلوقتي 1.2 مليون kg` / `Lifted so far: 1.2M kg`.
 
-### 7. Onboarding (first run only, max 2 screens)
-1. Unit: **kg / lb**.
-2. Optional: pick a ready program (or skip).
+### 7. Onboarding (first run only)
+1. Unit: **kg / lb** → "Let's go" / "يلا بينا".
+2. (Only while ready programs are enabled) optional: pick a ready program (or skip).
 
 Language follows the device (changeable later in settings).
 
 ### 8. Settings
 - Language: **System (default) / العربية / English**
-- Theme: **Dark (default) / Light**
+- Theme: **Dark (default on first launch, whatever the phone's own light/dark setting) / Light**
 - Unit: kg / lb
 - Default rest time
 - Backup: export / import JSON
@@ -117,11 +127,11 @@ Three tabs, with settings reachable from a header icon:
 
 | Tab | AR | Content |
 |---|---|---|
-| **Workout** (home) | تمرين | Big "Start workout" (empty workout), my routines, ready programs |
+| **Workout** (home) | تمرين | Compact "Start empty workout" row, "My routines (N)" + New routine, routine cards (ready programs hidden, see §4) |
 | **History** | السجل | List / calendar, stats, PRs, all-time lifted |
 | **Exercises** | التمارين | Library (search + filters) |
 
-**Screens:** onboarding · routine editor · active workout · workout summary · exercise picker (multi-select) · exercise detail (GIF, instructions, muscles, your history, chart, PRs) · past workout detail (editable) · settings.
+**Screens:** onboarding · routine detail (read-only) · routine editor · active workout · workout summary · exercise picker (multi-select) · exercise detail (GIF, instructions, muscles, your history, chart, PRs) · past workout detail (editable) · settings.
 
 ## Postponed (v2+)
 Accounts + sync (Supabase) · social feed · coach ↔ client · payments (InstaPay / Fawry) · Live Activities / widgets / Apple Watch · body measurements (and so bodyweight-based Lifted) · AI features · plate calculator.

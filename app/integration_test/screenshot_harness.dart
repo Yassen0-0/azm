@@ -9,6 +9,7 @@ import 'package:azm/bootstrap.dart';
 import 'package:azm/core/router/app_router.dart';
 import 'package:azm/features/settings/data/app_settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:integration_test/integration_test.dart';
@@ -45,14 +46,17 @@ void _log(String m) => print('[screenshots] $m');
 
 /// Captures every step in Arabic and English. Files land in
 /// `docs/screenshots/<feature>/<android|ios>/<locale>_<nn>_<name>.png`.
-void runScreenshotSuite(String feature, List<ScreenStep> steps) {
+///
+/// [overrides] go to the ProviderContainer (e.g. turning a feature flag on
+/// for a suite that captures hidden screens).
+void runScreenshotSuite(String feature, List<ScreenStep> steps, {List<Override> overrides = const []}) {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   final platform = Platform.isIOS ? 'ios' : 'android';
 
   for (final lang in [LanguagePref.ar, LanguagePref.en]) {
     testWidgets('$feature screenshots ($platform, ${lang.name})', (tester) async {
       _log('bootstrap ${lang.name}');
-      final container = await bootstrapApp(settingsOverride: AppSettings(language: lang));
+      final container = await bootstrapApp(settingsOverride: AppSettings(language: lang), overrides: overrides);
       addTearDown(container.dispose);
       await tester.pumpWidget(UncontrolledProviderScope(container: container, child: const AzmApp()));
       await _settle(tester);

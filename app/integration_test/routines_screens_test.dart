@@ -1,4 +1,5 @@
-// Parity screenshots of routines + ready programs (CLAUDE.md → Platform Parity Rule).
+// Parity screenshots of routines (CLAUDE.md → Platform Parity Rule). Ready
+// programs are hidden (kProgramsEnabled): see programs_screens_test.dart.
 //   AZM_DEVICE_SET=A tools/screenshots.sh routines
 // Seeds the ON-DEVICE database of the test emulator/simulator (dedicated
 // devices only): step 1 wipes routines + workouts; later steps copy a ready
@@ -85,17 +86,22 @@ void main() {
       await _wipe(c);
       router.go(AppRoutes.workout);
     }),
-    ScreenStep('programs', (tester, c, router) async {
-      unawaited(router.push(AppRoutes.programs));
-    }),
-    ScreenStep('program_preview', (tester, c, router) async {
-      unawaited(router.push(AppRoutes.programFor('ppl')));
-    }),
     ScreenStep('home_routines', (tester, c, router) async {
       final programs = await c.read(readyProgramsProvider.future);
       await c.read(routineRepositoryProvider).copyProgram(programs.first, languageCode: _lang(c));
       await _seedCustom(c);
       router.go(AppRoutes.workout);
+    }),
+    ScreenStep('routine_menu', (tester, c, router) async {
+      router.go(AppRoutes.workout);
+      await _pumpFor(tester);
+      final menu = find.byKey(ValueKey('routine-menu-${await _customId(c)}'));
+      await tester.ensureVisible(menu);
+      await _pumpFor(tester, 300);
+      await tester.tap(menu);
+    }),
+    ScreenStep('routine_detail', (tester, c, router) async {
+      unawaited(router.push(AppRoutes.routineDetailFor(await _customId(c))));
     }),
     ScreenStep('editor', (tester, c, router) async {
       unawaited(router.push(AppRoutes.routineEditorFor(await _customId(c))));

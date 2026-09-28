@@ -14,6 +14,7 @@ import '../../../core/widgets/azm_pressable.dart';
 import '../../../core/widgets/lifted_counter.dart';
 import '../../../core/widgets/rest_timer_bar.dart';
 import '../../../core/widgets/set_row.dart';
+import '../../../core/widgets/workout_time_sheet.dart';
 import '../data/workout_models.dart';
 import '../data/workout_repository.dart';
 import 'workout_format.dart';
@@ -60,13 +61,23 @@ class WorkoutSummaryScreen extends ConsumerWidget {
   }
 }
 
-class _SummaryBody extends StatelessWidget {
+class _SummaryBody extends ConsumerWidget {
   const _SummaryBody({required this.detail});
 
   final WorkoutDetail detail;
 
+  /// Start + end (forgot to open or finish on time). History, stats and PRs
+  /// re-read the DB, so they follow.
+  Future<void> _editTimes(BuildContext context, WidgetRef ref) async {
+    final w = detail.workout;
+    final end = w.endedAt;
+    if (end == null) return;
+    final r = await showWorkoutTimesSheet(context, start: w.startedAt, end: end, now: ref.read(workoutClockProvider));
+    if (r != null) await ref.read(workoutRepositoryProvider).setTimes(w.id, start: r.start, end: r.end);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final l = context.l10n;
     final w = detail.workout;
@@ -127,6 +138,25 @@ class _SummaryBody extends StatelessWidget {
             ],
           ),
         ),
+        if (w.endedAt != null)
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: AzmPressable(
+              key: const ValueKey('summaryEditTime'),
+              onTap: () => _editTimes(context, ref),
+              semanticLabel: l.workoutEditTimes,
+              child: ExcludeSemantics(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.schedule_rounded, color: c.accent, size: AzmSize.icon - AzmSpace.xxs),
+                    const SizedBox(width: AzmSpace.xs),
+                    Text(l.workoutEditTimes, style: AzmType.controlLabel.copyWith(color: c.accent)),
+                  ],
+                ),
+              ),
+            ),
+          ),
         if (prRows.isNotEmpty) ...[
           _SectionTitle(text: l.workoutSummaryPrs),
           _Card(padded: false, child: Column(children: prRows)),

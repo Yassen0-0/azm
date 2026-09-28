@@ -363,6 +363,24 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Arabic "امسح الفلاتر" in both places (result bar / no-results button and the sheet); test.
 - [x] Parity: `exercise_filters` + `exercises` re-captured on both platforms, ar + en. `set_delete` screenshots of the swipe redesign reviewed (no changes needed).
 
+## 14. Hevy-density UI overhaul (main, 2026-09-28) — [~] code done (cloud, 2026-09-28) — device verification pending (Mac)
+
+Owner request after real-phone testing, with 3 Hevy screenshots as the layout reference (kept only in `.tooling/tmp/reference/`, never committed; the cloud copy is NOT on the Mac: re-save them there). Owns everything it touches on `main` (owner-requested; frozen files included: theme tokens, router, DB schema, `core/media/exercise_media.dart`, `core/widgets/**`, screenshot harness).
+
+- [x] **0. Dark by default** on first launch whatever the phone's setting (already true in code; now locked by `test/app_theme_default_test.dart`). Light stays in Settings.
+- [x] **1. Workout tab:** compact "Start empty workout" card row; "My routines (N)" + New routine; routine cards (name, 2-line exercise preview, ⋯ Edit/Delete, full-width dumbbell-only start button with the "Start routine" label for screen readers); ready-programs entry removed (flag).
+- [x] **2. Routine detail** (new, read-only, `AppRoutes.routineDetailFor(id)`): round thumbnail + name, SET | KG | REPS plain 44 px rows with alternating background; Edit → editor; dumbbell start at the bottom.
+- [x] **3. Routine editor compact:** 40 px fields, smaller gaps, round avatars, 48 px rows; tokens `AzmSize.touchCompact/buttonCompact/inputCompact/setBox/detailRow/avatar/outline*` (DESIGN.md).
+- [x] **4. Live workout (Hevy layout):** top bar (⌄, live elapsed time, ⏱ manual rest sheet with presets, accent Finish); stats row Duration | Lifted | Sets + divider; exercise blocks without card: avatar + accent name + ⋮, one-line notes (saved per keystroke), rest line → per-exercise picker incl. **OFF**, SET | PREVIOUS | KG | REPS | ✓ with outlined boxes, pre-filled values muted until edited (`workout_sets.prefilled`), full-width "+ Add set"; custom keypad kept; rows 48, targets ≥ 44; ✓ rows keep the green tint.
+- [x] **5. Editable workout time:** live workout → tap the elapsed time → start (day/hour/minute wheels, never in the future, duration follows, rest timer untouched); summary "Edit time" + past workout ⋯ "Edit time" → start + end (end after start, not in the future); history / stats / PRs follow from the DB.
+- [x] **6. Ready programs hidden** behind `kProgramsEnabled = false` (`core/feature_flags.dart` + `programsEnabledProvider`): no Workout-tab entry, onboarding = 1 screen (unit only, "Let's go"), `/programs` and `/program/:id` redirect to the Workout tab. Code, data and tests kept (tests turn the provider on).
+- [x] **Data:** schema **v3** (`workout_exercises.rest_seconds` 0 = OFF, `workout_sets.prefilled`), routine start copies the rest override and marks targets pre-filled; backup format **v2** (v1 files still import). DATA.md updated.
+- [x] **7a. Checks (cloud):** `flutter analyze` clean, **361** tests green (new: `workout_overhaul_data_test.dart`, `active_workout_overhaul_test.dart`, `history/workout_times_edit_test.dart`, `app_theme_default_test.dart`, routines flow + SetRow additions), `tools/check_directionality.sh` passes.
+- [ ] **7b. Parity screenshots (Mac, both platforms, ar + en, dark theme):** `tools/screenshots.sh workout_ui` (new: Workout tab, routine detail, pre-filled live workout, notes + rest OFF, rest picker, manual timer, start-time sheet, summary + past-workout time sheets), `programs` (new: the hidden screens with the flag on), and re-captures of `workout`, `routines`, `onboarding` (now 2 images: delete the stale `*_03_program*` / `*_04_program_selected*` files), `shell`, `history`, `set_delete`, `exercise_preview`, `exercises`, and the E2E `workout_flow` (onboarding is one screen now; routines are copied from the program data). Put each new screen side by side with the Hevy references and fix any spacing/density difference, then commit the screenshots.
+- [ ] **7c. Device checklist** items in `docs/DEVICE_TEST_CHECKLIST.md` → "Hevy-density UI (2026-09-28)".
+- [ ] **8. Releases (Mac only: signing key in the Keychain):** tester `tools/release_apk.sh` (notes ready: `docs/release_notes/v1.0.0-rc1-b2.md`) and personal `tools/release_personal.sh` (with media). Both need HEAD = `origin/main` and a clean tree.
+- **Later idea (not in this task):** a muscle/body diagram in the live workout's stats row (Hevy shows one at the end of the row), drawn from Azm's own filter-icon silhouettes.
+
 ## Requests
 
 _(Cross-folder requests go here: "@owner-of-X: need Y". Remove when handled.)_
