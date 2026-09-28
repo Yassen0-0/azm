@@ -76,6 +76,9 @@ A separate pure-Dart package (`tools/pubspec.yaml`), never shipped:
 - `build_catalog.dart` (`tools/build_catalog.sh`): data/ → catalog.sqlite → app assets (DATA.md).
 - `check_directionality.sh`: bans left/right layout APIs in `app/lib/`.
 - `serve_media_dev.dart`: dev-only LAN server for `media/`.
+- `build_catalog.dart` also validates the library filter mappings (`data/{equipment,place,muscle}_mapping.json`) and generates `features/exercises/data/exercise_filters_data.dart`.
+
+Brand pipeline (`brand/generate.sh`, macOS): app icons + splash from `brand/logo-concept-a.svg` (Swift/AppKit), and the library **filter icons** from `brand/icons/*.svg` (`brand/pipeline/filter_icons.dart` → `core/widgets/filter_icon_paths.dart` vector data drawn by `FilterIcon` with theme colours, plus review SVGs and `brand/exports/filter_icons_review.png`). `--check` fails on any stale output.
 - `relocate.sh`: re-binds ROOT after a move.
 
 ## Build & run

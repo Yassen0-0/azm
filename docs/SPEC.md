@@ -27,7 +27,11 @@
 
 ### 1. Exercise library
 - **Bilingual search:** Arabic formal name, Egyptian slang aliases and English all find the same exercise. Search runs over a normalized field (see DATA.md → *Arabic search normalization*), so `أ/ا/إ`, `ة/ه`, `ى/ي`, tashkeel, etc. don't matter.
-- **Filters:** by muscle (horizontal chips) and by equipment (bottom sheet).
+- **Filters** (library + exercise picker): a filter bar under the search with three chips, **Place · Muscle group · Equipment**, each opening a bottom sheet with a grid of cards (icon + name), **multi-select**, a live **"Show N results"** button and **"Clear filters"** (clears that sheet). Filters combine **OR within a type, AND across types**, and AND with the search text. An active chip shows how many of its cards are selected; the result bar offers "Clear filters" (all types). The **last-used filters are remembered per screen** (library and picker separately).
+  - **Place:** Gym (everything) · Home (bodyweight, dumbbell, kettlebell, bands) · Resistance bands (band-type only), derived from the equipment through `data/place_mapping.json`.
+  - **Muscle group** in three sections: Upper body (abs, biceps, chest, forearms, lats, lower back, neck, shoulders, traps, triceps, upper back) · Lower body (abductors, adductors, calves, glutes, hamstrings, quads) · Other (cardio, full body, other); from the dataset `target` (then `body_part`) through `data/muscle_mapping.json`.
+  - **Equipment:** none/bodyweight, barbell, dumbbell, kettlebell, machine, cable, plate, resistance band, suspension band, other; every dataset value mapped in `data/equipment_mapping.json`.
+  - Arabic labels use Egyptian gym words (بطن، باي، صدر، سواعد، ضهر، كتف، ترابيس، تراي، رجل أمامي، خلفي، سمانة، مؤخرة، دمبل، بار، كيتل بل، أحبال مقاومة). Card icons are Azm's own (brand pipeline), incl. a body silhouette with the muscle group highlighted.
 - **Two names per exercise:** the primary name in the app language, and the secondary name smaller, in the other language. If an exercise has no Arabic name yet, the Arabic UI shows the English name as primary and no secondary.
 - List rows show **thumbnails only** (static). The animated GIF plays, looping, on the exercise detail screen and in the **quick preview**: tapping a row's thumbnail (library, picker, active workout, routines, history, stats) opens a bottom sheet with the looping GIF, the exercise name in the app language and the Gym visual credit; tapping the rest of the row keeps its own action.
 - Missing media (no license or offline) → fallback UI (muscle icon).
@@ -47,7 +51,7 @@ Each exercise in a workout shows a table of sets. Columns per set: **type · pre
   Tap the set label to change its type.
 - **Previous:** shows the same set (same exercise, same set index) from the last finished workout that contained this exercise, e.g. `60 kg × 8`. Tapping it fills weight + reps.
 - **✓ (complete):** the row tints green (`setDone`), light haptic, and the rest timer starts automatically.
-- **Swipe to delete** a set. The swipe direction mirrors in RTL (toward the *end* edge).
+- **Delete a set:** swipe the row toward the **start** edge (the platform convention: right→left in English, left→right in Arabic), or **long-press** it → "Delete set" (fallback). A snackbar offers **Undo for ~4 s**. The remaining sets renumber and Lifted / sets / PRs update at once. Works for any set (✓ or not, the last one of an exercise too), in the live workout, a past workout and the routine editor. A deleted set is gone from the database immediately, so no total, PR, "previous" or history ever counts it; Undo puts the same row back.
 - **Custom numeric keypad** (not the system keyboard): digits 0–9, decimal point, `−2.5` / `+2.5` steppers (in the display unit), backspace, next/done.
 - **Header** shows 3 live stats: **duration | Lifted (شِلت) | sets** (completed sets count).
 - The screen can **minimize** into a persistent bar above the tab bar (ActiveWorkoutBar: name, elapsed time, mini rest timer). Tap it to restore.

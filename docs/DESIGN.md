@@ -75,6 +75,7 @@ Unchanged from Ather (`theme.json` → `motion`): easing `standard / press / she
 | Rest timer bar in/out | `settle` spring / `exit` 200 ms |
 | Workout ⇄ minimized bar | `sheet` 280 ms |
 | Reduced motion | jump to the end state; haptics stay |
+| Undo window after deleting a set | `undoWindow` 4 s (a duration token, not an animation) |
 
 ### 5. Sizes
 
@@ -94,6 +95,9 @@ Gym additions:
 | `exerciseMedia` | 216 | Max edge of the exercise GIF / fallback square on the detail |
 | `chartStroke` | 2 | Progress chart line width |
 | `chartDot` | 4 | Progress chart data-point radius |
+| `filterIcon` | 44 | Icon on a filter card |
+| `filterCard` | 108 | Height of a filter card (icon + up to two label lines) |
+| `filterCount` | 18 | Count bubble on an active filter chip; ✓ badge on a selected card |
 
 All touch targets are ≥ 48 even when the visible element is smaller.
 
@@ -101,13 +105,18 @@ All touch targets are ≥ 48 even when the visible element is smaller.
 
 | Component | Description |
 |---|---|
-| **SetRow** | `[type label] [previous] [weight] [reps] [✓]`, min height 52, numbers in `rowNumber`. Type label: set number (normal), `ح/W` in `warmup`, `د/D`, `ف/F`. Tap label → type menu. Tap previous → fills weight + reps. ✓ → row gets `setDoneTint`, ✓ turns `setDone` with `onState` check, haptic. Swipe toward the *end* edge to delete (`destructiveTint` background). PR sets show a 🏆 badge. **One component for every set table** (`core/widgets/set_row.dart`): the live workout uses all columns; a past workout has no ✓ column (every set there is done; delete = swipe only); the routine editor has neither previous nor ✓. Labels, type names and the type menu come from `core/l10n/set_labels.dart` + `core/widgets/set_type_sheet.dart`. |
+| **SetRow** | `[type label] [previous] [weight] [reps] [✓]`, min height 52, numbers in `rowNumber`. Type label: set number (normal), `ح/W` in `warmup`, `د/D`, `ف/F`. Tap label → type menu. Tap previous → fills weight + reps. ✓ → row gets `setDoneTint`, ✓ turns `setDone` with `onState` check, haptic. Swipe toward the *start* edge to delete (right→left in English, left→right in Arabic; `destructiveTint` area with the trash icon at the *end*), or long-press → set menu → "Delete set"; the row disappears at once and a snackbar offers Undo for `undoWindow` (4 s). PR sets show a 🏆 badge. **One component for every set table** (`core/widgets/set_row.dart`): the live workout uses all columns; a past workout has no ✓ column (every set there is done); the routine editor has neither previous nor ✓. Labels, type names and the type menu come from `core/l10n/set_labels.dart` + `core/widgets/set_type_sheet.dart`. |
 | **WeightKeypad** | Custom bottom keypad replacing the system keyboard: 3×4 digits + decimal + backspace, `−2.5` / `+2.5`, next/done. Keys 52 high on `card`, radius `button`. The value preview uses `keypadValue`. Screens use `SetValueKeypad` + `SetKeypadBuffer` (`core/widgets/set_keypad.dart`): shared wording, limits (4 digits + 1 decimal for weight, 3 for reps) and a selection haptic on ±. |
 | **RestTimerBar** | Bottom bar: remaining `mm:ss` (tabular), progress (`track`/`accent`), `−15`, `+15`, skip. Derived from an end timestamp. A **mini** variant (time only) appears inside the ActiveWorkoutBar. |
 | **ActiveWorkoutBar** | Persistent bar above the tab bar when the workout is minimized: workout name, elapsed time, mini rest timer; tap to expand. |
 | **ExerciseCard** | Thumbnail (or muscle-icon fallback) + primary name (`rowTitle`) + secondary name in the other language (`secondary`) + optional PR badge. |
 | **Exercise quick preview** | Tap on any list thumbnail (`ExerciseThumbnail`, press scale like every tappable; semantics "Preview <name>" / "معاينة حركة <name>") → modal bottom sheet (theme sheet, drag handle): primary name (`cardTitle`, start-aligned), the looping GIF in an `exerciseMedia` square (fallback icon when there is no media), the credit "© Gym visual — https://gymvisual.com/" (`micro`, `textMicro`, centred) only when media is shown. Sized by content, scrolls on short screens. The rest of the row keeps its own tap. |
-| **MuscleChips** | Horizontal scroll of filter chips (radius pill, `fill` → `accent` when selected, `chipLabel`). |
+| **MuscleChips** | Horizontal scroll of single-select chips (radius pill, `fill` → `accent` when selected, `chipLabel`). Used by the exercise detail's chart metrics; the library uses the FilterBar. |
+| **FilterBar** | Under the library/picker search: three equal-width pills (Place · Muscle group · Equipment), `fill` → `accent` when active, `chipLabel`, a ⌄ when idle and a count bubble (`filterCount` 18, `onAccent` with `accent` number) when active. |
+| **Filter sheet** | Modal bottom sheet (theme sheet, ≤ 85 % height): title (`screenTitle`), optional section titles (`smallStrong`, `textSecondary`), a 3-column grid of **FilterCards**, and a footer (divider on top) with "Clear filters" (text button, `accent`) + "Show N results" (primary, disabled at 0). |
+| **FilterCard** | `filterCard` (108) high, radius `input`, `fill`; selected = `accentSoft` + 1.5 px `accent` border + a ✓ badge (`filterCount` circle, `accent`/`onAccent`) at the top end; `FilterIcon` (`filterIcon` 44) over the name (`chipLabel`, 2 lines max, `accent` when selected). Press scale like every tappable. |
+| **FilterIcon** | Azm's own two-tone vector icons (`brand/icons/*.svg` → `brand/generate.sh` → `core/widgets/filter_icon_paths.dart`): `base` = `textTertiary` (`textSecondary` on a selected card), `accent` = `accent`. Muscle groups = a front/back body silhouette with the group's segments in accent. Never copied or traced from another app, never made from the licensed exercise media. Not mirrored in RTL. |
+| **Set deleted snackbar** | Floating snackbar (theme: `actionPrimary` plate, `onPrimary` text and action): "Set deleted · Undo", `undoWindow` (4 s), replaced by the next deletion (`core/widgets/set_undo.dart`). |
 | **LiftedCounter** | Number + unit + optional comparison line, animating with `value`. Used in the workout header (small, `rowNumber`), summary (`summaryNumber`) and history (`liftedNumber`). `compact: true` (History's all-time total): exact below 100,000, then `450K` / `1.2M` / `2B` (Arabic `450 ألف` / `1.2 مليون` / `2 مليار`), Western digits, no LTR isolate. |
 
 Inherited components (primary button, card, input, bottom sheet, dialog, chip, segmented control, progress bar, switch, checkbox, toast, error banner, app bar, **floating glass tab bar**) follow `theme.json` → `components`, with `wrong*` → `destructive*` and `right` → `setDone`.

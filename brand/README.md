@@ -1,6 +1,6 @@
 # Brand
 
-**One source, one command.** Every app icon and splash asset on both platforms is generated from `logo-concept-a.svg`:
+**One source, one command.** Every app icon and splash asset on both platforms is generated from `logo-concept-a.svg`, and the library filter icons from `icons/*.svg` (see *Filter icons* below):
 
 ```sh
 source ./env.sh && brand/generate.sh           # regenerate everything (≈3 s)
@@ -58,6 +58,23 @@ Placement is measured, not hard-coded: the mark is rendered once at 1024 px, and
 | Store | `brand/exports/play_store_512.png` | Play Store icon |
 
 Not generated (kept by hand, never touched by the pipeline): `res/values{,-ar}/strings.xml` (launcher name `عزم` / `Azm`), `res/raw/keep.xml`, iOS `InfoPlist.strings`.
+
+## Filter icons (library + picker filters)
+
+Azm's own simple two-tone icons for the Place / Muscle group / Equipment filter cards. **Original work:** drawn for Azm from basic shapes; never copied or traced from Hevy or any other app, and never made from the licensed exercise media.
+
+| Source | What |
+|---|---|
+| `icons/place_{gym,home,bands}.svg` | Place cards |
+| `icons/equipment_<group>.svg` | Equipment cards (`none`, `barbell`, `dumbbell`, `kettlebell`, `machine`, `cable`, `plate`, `resistance_band`, `suspension_band`, `other`) |
+| `icons/body_front.svg`, `icons/body_back.svg` | The body silhouettes, one element per muscle segment (`id`); right-side segments mirror the left ones; `class="optional"` segments (heart, dots) appear only when highlighted |
+| `icons/muscles.json` | Each muscle-group icon = a view + the segment ids drawn in the accent tone (`"*"` = all) |
+
+Contract (`pipeline/filter_icons.dart` fails otherwise): `viewBox="0 0 64 64"`; elements `path`/`circle`/`ellipse`/`rect`/`line`/`polyline`/`polygon`/`g`; transforms `translate`/`scale`/`matrix`; colours **only** `#88888E` (base tone) and `#4D9BFF` (accent tone), fill and/or stroke; strokes with round caps and joins. The app never uses these hex values: `FilterIcon` paints the base tone with `textTertiary` (or `textSecondary` on a selected card) and the accent tone with `accent`, so the icons follow light/dark themes.
+
+Outputs (generated, checked by `--check`): `app/lib/core/widgets/filter_icon_paths.dart` (every shape as move/line/cubic/close commands; arcs, circles and rounded rects become cubics), `exports/filter_icons/<id>.svg` (composed icons, for review/diffs) and `exports/filter_icons_review.png` (AppKit render of all of them on the dark card colour).
+
+To add or change one: edit the SVG (or `muscles.json`), run `brand/generate.sh`, look at `exports/filter_icons_review.png`, commit the source and the outputs together. A new filter group needs its icon; `test/features/exercises/exercise_filters_test.dart` fails when a card has none.
 
 ## Still to do
 

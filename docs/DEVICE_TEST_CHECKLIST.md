@@ -46,7 +46,7 @@ Emulator/Simulator can't prove these; check on real phones (both platforms unles
 - [ ] Tapping the rest notification opens the app on the active workout (cold start resumes it). (workout, 2026-09-26)
 - [ ] Kill the app mid-workout (and pull the battery / force-stop): reopen → the active workout opens with every set, value and ✓ exactly as left, rest timer still counting if not over. (workout, 2026-09-26)
 - [ ] Custom keypad: the system keyboard never appears; keys respond quickly; typing speed feels OK with one thumb. (workout, 2026-09-26)
-- [ ] Swipe-to-delete a set feels right in Arabic (swipe toward the LEFT edge = end in RTL) and English (toward the right). (workout, 2026-09-26)
+- [ ] Swipe-to-delete a set feels right in Arabic (swipe toward the RIGHT edge = start in RTL) and English (toward the left). (workout, 2026-09-26; direction changed to the start edge 2026-09-28)
 - [ ] Reduced motion (iOS Settings → Accessibility → Motion / Android "Remove animations"): Lifted counter and PR badge jump without animation; haptics stay. (workout, 2026-09-26)
 - [ ] Performance: a long workout (8 exercises × 5 sets) scrolls smoothly while the rest timer runs. (workout, 2026-09-26)
 
@@ -60,14 +60,14 @@ Emulator/Simulator can't prove these; check on real phones (both platforms unles
 
 _(window C appends here only)_
 - [ ] Routine editor on a real phone: tapping the name/notes fields opens the system keyboard; tapping a weight/reps cell closes it and shows the WeightKeypad (never both). The keypad's step haptic is felt. (window C, 2026-09-27)
-- [ ] Swipe a target set toward the end edge to delete it (right in English, left in Arabic) on both platforms; drag-to-reorder exercises in the sheet feels smooth. (window C, 2026-09-27)
+- [ ] Swipe a target set toward the start edge to delete it (left in English, right in Arabic; changed 2026-09-28) on both platforms; drag-to-reorder exercises in the sheet feels smooth. (window C, 2026-09-27)
 - [ ] Fresh install on a real phone (both platforms): onboarding appears once; after finishing, killing and reopening the app lands on the Workout tab. Updating over an install that already has workouts skips onboarding. (window C, 2026-09-27)
 - [ ] Start a routine, kill the app during the workout, reopen: the prefilled workout resumes exactly (targets, routine rest times). (window C, 2026-09-27)
 
 ### History (window D, round 2)
 
 _(window D appends here only)_
-- [ ] Edit a past workout on a phone: keypad edits, "Add set" and swipe-to-delete (toward the end edge) feel like the live workout; there is no ✓ column; leaving the screen removes nothing; the History card and exercise detail show the new values at once. (history, 2026-09-27; ✓/removal wording updated by the integrator 2026-09-27)
+- [ ] Edit a past workout on a phone: keypad edits, "Add set" and swipe-to-delete (toward the start edge since 2026-09-28) feel like the live workout; there is no ✓ column; leaving the screen removes nothing; the History card and exercise detail show the new values at once. (history, 2026-09-27; ✓/removal wording updated by the integrator 2026-09-27)
 - [ ] Add an exercise to a past workout, kill the app at once, reopen that workout: the new exercise's sets are there and logged (values from the workout before, or 0 × 0); nothing was removed. (history, 2026-09-27; rewritten by the integrator 2026-09-27: sets are logged, never removed)
 - [ ] Performance with a long history (1–2 years, ~300 workouts): History tab, calendar month switching and Stats open without visible lag; logging sets in the active workout stays smooth while the History tab is alive. (history, 2026-09-27)
 - [ ] Device in a UTC+2/+3 time zone: a workout started just after midnight shows on that day in the calendar and in that week in Stats; the calendar week starts on Saturday in Arabic, Sunday in English. (history, 2026-09-27)
@@ -127,3 +127,13 @@ Media shows only in the owner's `personal` build (or a dev run with `tools/serve
 - [ ] **Play-once GIFs keep looping on the phone:** open 0053 (or any of the 27 GIFs without a loop block, e.g. 0087, 0105, 0114, 0295) in the preview and on the detail screen: still moving after 10 s.
 - [ ] **Memory on a low-end phone:** open and close the preview ~30 times quickly from a long library scroll: no stutter building up, no crash; the app's memory (Android Studio profiler or `adb shell dumpsys meminfo app.azm.gym.personal`) drops back after the sheets close.
 - [ ] **Swipe down / tap outside / system Back** all close the preview; with TalkBack / VoiceOver the thumbnail reads "Preview <name>" / "معاينة حركة <name>" as a button.
+
+### Delete a set + exercise filters (2026-09-28)
+
+- [ ] **Swipe vs. system back gesture (Android gesture navigation + iPhone edge swipe):** swipe a set from the middle of the row toward the start edge (left in English, right in Arabic): it deletes and never triggers Back/minimize. Starting the swipe right at the screen edge may be taken by the system: note how far from the edge it starts to work.
+- [ ] **Long-press on a set row:** ~0.5 s opens the set menu with a selection haptic; a normal tap on weight/reps/✓/label still does its own thing; scrolling the workout with a finger resting on a row doesn't open the menu.
+- [ ] **Undo snackbar on a real phone:** readable above the keypad, the rest timer bar and the home indicator; "Undo" is easy to hit within the ~4 s; with TalkBack / VoiceOver the snackbar is announced and stays until acted on is acceptable (the OS may extend it).
+- [ ] **Delete during a running rest timer / after ✓:** the timer keeps running, Lifted and the set count drop at once, Undo brings both back.
+- [ ] **Filter sheets on a small phone (iPhone SE size, Android 5 inch):** the three chips fit side by side in Arabic and English; the Muscle group sheet scrolls to "Other" with the Show / Clear buttons always visible above the home indicator; cards are easy to tap.
+- [ ] **Filter icons at real size:** every muscle highlight is recognizable at 44 dp (esp. abductors, adductors, neck, lats vs. upper back) in dark and light themes.
+- [ ] **Remembered filters:** set filters in the library, kill the app, reopen: the library is still filtered (chip counts), the picker keeps its own filters.

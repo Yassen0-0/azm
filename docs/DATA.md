@@ -9,6 +9,10 @@
 | `data/raw/LICENSE`, `data/raw/NOTICE.md` | Dataset license (MIT for text/data) and media notice | never |
 | `data/ar/exercise_names_ar.json` | Arabic names + Egyptian gym slang aliases | humans / agents (reviewed flag) |
 | `data/programs/programs.json` | Ready-made routines | humans / agents |
+| `data/equipment_mapping.json` | Library filter: every dataset `equipment` value → one Equipment group | humans / agents (reviewable) |
+| `data/place_mapping.json` | Library filter: Place → the Equipment groups usable there | humans / agents (reviewable) |
+| `data/muscle_mapping.json` | Library filter: dataset `target` (then `body_part`) → Muscle group, the three sheet sections, and the `full_body` id list | humans / agents (reviewable) |
+| `app/lib/features/exercises/data/exercise_filters_data.dart` | The three mappings merged (JSON in a Dart string), read synchronously by the app | generated only (`tools/build_catalog.sh`) |
 | `data/catalog/catalog.sqlite` | **Build output** of `tools/build_catalog.dart`. Gitignored. | generated only |
 | `data/catalog/catalog_version.json` | `{version, input_sha256}`: the version bumps only when the inputs change. Committed. | generated only |
 | `app/assets/catalog/catalog.sqlite` + `catalog_version.txt` | Copies bundled into the app. **Committed**, so a fresh clone builds without running the tool. | generated only |
@@ -94,7 +98,7 @@ Muscle, body-part and equipment keys are localized through ARB (`muscle_pectoral
 | `workout_sets` | `id` uuid PK, `workout_exercise_id` → workout_exercises (cascade), `sort`, `type` (`normal`\|`warmup`\|`drop`\|`failure`), `weight_kg` REAL NOT NULL DEFAULT 0, `reps` INTEGER NOT NULL DEFAULT 0, `completed_at` NULL (null = not ✓) |
 | `settings` | `key` TEXT PK, `value` TEXT (JSON-encoded) |
 
-Settings keys (values JSON-encoded): `locale` (`"system"`\|`"ar"`\|`"en"`, implemented), `theme` (`"dark"`\|`"light"`, implemented), `unit` (`"kg"`\|`"lb"`), `default_rest_seconds` (90), `onboarding_done` (bool), `active_rest_ends_at` (ISO UTC or null), `active_rest_notification_id`, `active_rest_total_seconds` (int: current rest length incl. ±15, for the progress bar; null when no rest), `workout_notifications_asked` (bool: notification permission prompt shown once), `workout_exact_alarms_asked` (bool: Android exact-alarm explanation sheet shown once).
+Settings keys (values JSON-encoded): `exercises_filters_library` / `exercises_filters_picker` (`{"place": [...], "muscle": [...], "equipment": [...]}`: the last-used filters of each screen; device state, not in backups), `locale` (`"system"`\|`"ar"`\|`"en"`, implemented), `theme` (`"dark"`\|`"light"`, implemented), `unit` (`"kg"`\|`"lb"`), `default_rest_seconds` (90), `onboarding_done` (bool), `active_rest_ends_at` (ISO UTC or null), `active_rest_notification_id`, `active_rest_total_seconds` (int: current rest length incl. ±15, for the progress bar; null when no rest), `workout_notifications_asked` (bool: notification permission prompt shown once), `workout_exact_alarms_asked` (bool: Android exact-alarm explanation sheet shown once).
 
 `unit` and `default_rest_seconds` are owned by settings: written only through `TrainingSettingsWriter`, read by every feature through `weightUnitProvider` / `defaultRestSecondsProvider` (`features/settings/data/training_settings.dart`). The `active_rest_*` and `workout_*` keys are owned by the workout feature.
 
@@ -138,6 +142,8 @@ Steps, in order:
 Examples: `ضَغْطُ بارٍ` → `ضغط بار`; `رفرفة جانبي` → `رفرفه جانبي`; `Bench  Press` → `bench press`.
 
 **Matching** (`CatalogRepository.search`): the query is normalized and split into tokens. A row matches if **every** token is a substring of `search_norm` (SQL `LIKE '%tok%' ESCAPE '\'` per token; `%`/`_` in the query are literal). Ranking: exact alias/name match > prefix match > substring match, then English name. Optional filters: `target`, `equipment`.
+
+**Library filters** (`ExerciseSearchIndex` + `ExerciseFilterMapping`, in memory): each visible exercise gets tags once: equipment group = `equipment_mapping.map[equipment]` (else `other`); places = every place whose list holds that group; muscle group = `muscle_mapping.target[target]`, else `.body_part[body_part]`, else `fallback` (`other`), plus `full_body` for the listed ids. A row matches the filters when, for every type with a selection, one of its tags is selected (OR within a type, AND across types), and the search text matches too. `tools/build_catalog.dart` validates the three files (every dataset equipment value and target mapped, groups known, gym covers every group, `full_body` ids exist and are visible), writes `exercise_filters_data.dart`, and `--check` prints the unmapped values + results per card. The mappings are **not** part of the catalog version hash: they don't change `catalog.sqlite`.
 
 ## `data/ar/exercise_names_ar.json`
 
