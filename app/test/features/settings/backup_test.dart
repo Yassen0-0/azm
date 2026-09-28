@@ -64,7 +64,7 @@ void main() {
       await seedEverything(db);
       final json = _json(await BackupService(db).exportText(now: t(9, 14, 30), appVersion: '1.2.3+4'));
       expect(json['format'], 'azm-backup');
-      expect(json['version'], 1);
+      expect(json['version'], 2);
       expect(json['exported_at'], '2026-09-09T14:30:00.000Z');
       expect(json['app_version'], '1.2.3+4');
       expect(json['settings'], {'locale': 'ar', 'theme': 'light', 'unit': 'lb', 'default_rest_seconds': 120});
@@ -89,6 +89,7 @@ void main() {
         'weight_kg': 83.91457,
         'reps': 5,
         'completed_at': '2026-09-05T18:09:00.001Z',
+        'prefilled': false,
       });
       // Catalog data and device state are never exported.
       expect(json.keys, isNot(contains('exercises')));
@@ -156,7 +157,7 @@ void main() {
     });
 
     test('newer version is refused; bad version is corrupt', () async {
-      await expectRejected(BackupError.newerVersion, (j) => j['version'] = 2);
+      await expectRejected(BackupError.newerVersion, (j) => j['version'] = 3);
       await expectRejected(BackupError.newerVersion, (j) => j['version'] = 99);
       await expectRejected(BackupError.corrupt, (j) => j['version'] = 0);
       await expectRejected(BackupError.corrupt, (j) => j['version'] = '1');
@@ -274,7 +275,7 @@ void main() {
         workoutExercises: good.workoutExercises,
         workoutSets: [
           ...good.workoutSets,
-          const WorkoutSet(
+          const WorkoutSet(prefilled: false, 
             id: 'f9999999-9999-4999-8999-999999999999',
             workoutExerciseId: 'e9999999-9999-4999-8999-999999999999',
             sort: 0,

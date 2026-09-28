@@ -1,4 +1,5 @@
 import 'package:azm/app.dart';
+import 'package:azm/core/feature_flags.dart';
 import 'package:azm/core/router/app_router.dart';
 import 'package:azm/features/history/ui/exercise_history_screen.dart';
 import 'package:azm/features/history/ui/past_workout_screen.dart';
@@ -8,6 +9,7 @@ import 'package:azm/features/onboarding/data/onboarding_gate.dart';
 import 'package:azm/features/onboarding/ui/onboarding_screen.dart';
 import 'package:azm/features/routines/ui/program_detail_screen.dart';
 import 'package:azm/features/routines/ui/programs_screen.dart';
+import 'package:azm/features/routines/ui/routine_detail_screen.dart';
 import 'package:azm/features/routines/ui/routine_editor_screen.dart';
 import 'package:azm/features/workout/ui/workout_home_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,12 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   Future<ProviderContainer> pump(WidgetTester tester, {bool onboardingDone = true}) async {
     final container = ProviderContainer(
-      overrides: [onboardingDoneAtLaunchProvider.overrideWithValue(onboardingDone)],
+      overrides: [
+        onboardingDoneAtLaunchProvider.overrideWithValue(onboardingDone),
+        // Ready programs are behind kProgramsEnabled; their routes must still
+        // work when the flag is turned back on.
+        programsEnabledProvider.overrideWithValue(true),
+      ],
     );
     addTearDown(container.dispose);
     await tester.pumpWidget(UncontrolledProviderScope(container: container, child: const AzmApp()));
@@ -46,6 +53,7 @@ void main() {
     await open<OnboardingScreen>(AppRoutes.onboarding);
     expect((await open<RoutineEditorScreen>(AppRoutes.routineNew)).routineId, isNull);
     expect((await open<RoutineEditorScreen>(AppRoutes.routineEditorFor('r1'))).routineId, 'r1');
+    expect((await open<RoutineDetailScreen>(AppRoutes.routineDetailFor('r1'))).routineId, 'r1');
     await open<ProgramsScreen>(AppRoutes.programs);
     expect((await open<ProgramDetailScreen>(AppRoutes.programFor('ppl'))).programId, 'ppl');
     expect((await open<PastWorkoutScreen>(AppRoutes.pastWorkoutFor('w1'))).workoutId, 'w1');

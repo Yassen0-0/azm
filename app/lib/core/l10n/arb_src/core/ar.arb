@@ -176,5 +176,62 @@
   "commonSwipeDelete": "امسح",
   "@commonSwipeDelete": {
     "description": "Label of the red button revealed by swiping a set row (next to a trash icon; hidden, icon only, when it doesn't fit)."
+  },
+  "commonTimeStart": "البداية",
+  "@commonTimeStart": {
+    "description": "Label of the start date/time in the workout time sheet."
+  },
+  "commonTimeEnd": "النهاية",
+  "@commonTimeEnd": {
+    "description": "Label of the end date/time in the workout time sheet."
+  },
+  "commonTimeSave": "حفظ",
+  "@commonTimeSave": {
+    "description": "Save button of the workout time sheet."
+  },
+  "commonTimeToday": "النهاردة",
+  "@commonTimeToday": {
+    "description": "Day wheel item: today."
+  },
+  "commonTimeYesterday": "امبارح",
+  "@commonTimeYesterday": {
+    "description": "Day wheel item: yesterday."
+  },
+  "commonTimeFuture": "مينفعش يبقى في المستقبل",
+  "@commonTimeFuture": {
+    "description": "Error in the workout time sheet: the chosen time is after now."
+  },
+  "commonTimeOrder": "النهاية لازم تبقى بعد البداية",
+  "@commonTimeOrder": {
+    "description": "Error in the workout time sheet: end is not after start."
+  },
+  "commonTimeEditTitle": "عدّل وقت التمرين",
+  "@commonTimeEditTitle": {
+    "description": "Title of the sheet that edits a finished workout's start and end."
+  },
+  "commonTimeStartTitle": "بدأت التمرين إمتى؟",
+  "@commonTimeStartTitle": {
+    "description": "Title of the sheet that edits the running workout's start time."
+  },
+  "commonTimeDuration": "المدة {time}",
+  "@commonTimeDuration": {
+    "description": "Live duration preview in the workout time sheet.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTimeDay": "اليوم",
+  "@commonTimeDay": {
+    "description": "Screen-reader label of the day wheel."
+  },
+  "commonTimeHour": "الساعة",
+  "@commonTimeHour": {
+    "description": "Screen-reader label of the hour wheel."
+  },
+  "commonTimeMinute": "الدقيقة",
+  "@commonTimeMinute": {
+    "description": "Screen-reader label of the minute wheel."
   }
 }

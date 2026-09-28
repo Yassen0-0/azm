@@ -134,6 +134,47 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonSwipeDelete => 'امسح';
 
   @override
+  String get commonTimeStart => 'البداية';
+
+  @override
+  String get commonTimeEnd => 'النهاية';
+
+  @override
+  String get commonTimeSave => 'حفظ';
+
+  @override
+  String get commonTimeToday => 'النهاردة';
+
+  @override
+  String get commonTimeYesterday => 'امبارح';
+
+  @override
+  String get commonTimeFuture => 'مينفعش يبقى في المستقبل';
+
+  @override
+  String get commonTimeOrder => 'النهاية لازم تبقى بعد البداية';
+
+  @override
+  String get commonTimeEditTitle => 'عدّل وقت التمرين';
+
+  @override
+  String get commonTimeStartTitle => 'بدأت التمرين إمتى؟';
+
+  @override
+  String commonTimeDuration(String time) {
+    return 'المدة $time';
+  }
+
+  @override
+  String get commonTimeDay => 'اليوم';
+
+  @override
+  String get commonTimeHour => 'الساعة';
+
+  @override
+  String get commonTimeMinute => 'الدقيقة';
+
+  @override
   String get exercisesSearchHint => 'ابحث بالعربي أو English';
 
   @override
@@ -898,6 +939,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get historyExerciseRecords => 'أرقامك في التمرين ده';
 
   @override
+  String get historyEditTime => 'عدّل الوقت';
+
+  @override
   String onboardingStep(String step, String total) {
     return 'خطوة $step من $total';
   }
@@ -937,6 +981,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get onboardingSkip => 'تخطّى، وابدأ من غير برنامج';
+
+  @override
+  String get onboardingStart => 'يلا بينا';
 
   @override
   String get routinesMyRoutines => 'روتيناتي';
@@ -1135,6 +1182,33 @@ class AppLocalizationsAr extends AppLocalizations {
   String routinesUnknownExercise(String id) {
     return 'تمرين مش معروف ($id)';
   }
+
+  @override
+  String routinesMyRoutinesCount(String count) {
+    return 'روتيناتي ($count)';
+  }
+
+  @override
+  String get routinesStartRoutine => 'ابدأ الروتين';
+
+  @override
+  String get routinesOptions => 'خيارات الروتين';
+
+  @override
+  String get routinesEditShort => 'تعديل';
+
+  @override
+  String get routinesDetailTitle => 'الروتين';
+
+  @override
+  String get routinesDetailExercises => 'التمارين';
+
+  @override
+  String get routinesDetailEmpty => 'لسه مفيش تمارين. دوس تعديل وضيف.';
+
+  @override
+  String get routinesEmptyBodyNoPrograms =>
+      'اعمل الروتين مرة واحدة وابدأه بضغطة واحدة.';
 
   @override
   String get settingsTitle => 'الإعدادات';
@@ -1563,4 +1637,52 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get workoutExactAlarmLater => 'مش دلوقتي';
+
+  @override
+  String get workoutStartEmpty => 'ابدأ تمرين فاضي';
+
+  @override
+  String get workoutNotesHint => 'ضيف ملاحظة...';
+
+  @override
+  String workoutRestLine(String time) {
+    return 'الراحة: $time';
+  }
+
+  @override
+  String get workoutRestOff => 'مقفولة';
+
+  @override
+  String get workoutRestPickerTitle => 'وقت الراحة';
+
+  @override
+  String workoutRestPickerDefault(String time) {
+    return 'الافتراضي ($time)';
+  }
+
+  @override
+  String get workoutRestPickerOff => 'من غير تايمر';
+
+  @override
+  String get workoutTimerTitle => 'تايمر الراحة';
+
+  @override
+  String get workoutTimerBody => 'ابدأ عدّ تنازلي للراحة دلوقتي.';
+
+  @override
+  String workoutTimerRunning(String time) {
+    return 'فاضل $time';
+  }
+
+  @override
+  String workoutElapsedEdit(String time) {
+    return 'عدّى $time. دوس عشان تغيّر وقت البداية';
+  }
+
+  @override
+  String get workoutStartTimeHint =>
+      'نسيت تفتح الأبلكيشن في ميعادك؟ رجّع وقت البداية والمدة هتتظبط.';
+
+  @override
+  String get workoutEditTimes => 'عدّل الوقت';
 }

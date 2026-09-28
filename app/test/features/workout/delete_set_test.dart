@@ -50,7 +50,7 @@ void main() {
   WorkoutRepository repo() => container.read(workoutRepositoryProvider);
 
   /// Active workout, bench press with sets (weight, reps, ✓) in order.
-  Future<(String, List<String>)> startWith(WidgetTester tester, List<(double, int, bool)> sets, {String start = 'Start workout'}) async {
+  Future<(String, List<String>)> startWith(WidgetTester tester, List<(double, int, bool)> sets, {String start = 'Start empty workout'}) async {
     await tester.tap(find.text(start));
     await settle(tester);
     final w = (await repo().active())!.id;
@@ -128,7 +128,7 @@ void main() {
 
   testWidgets('Arabic (RTL): swipe right deletes; long-press menu deletes the LAST set; Undo', (tester) async {
     await pumpApp(tester, LanguagePref.ar);
-    final (w, ids) = await startWith(tester, [(60, 8, false), (50, 6, true)], start: 'ابدأ تمرين');
+    final (w, ids) = await startWith(tester, [(60, 8, false), (50, 6, true)], start: 'ابدأ تمرين فاضي');
     expect(labels(tester), ['1', '2']);
 
     // Toward the end edge (LEFT in Arabic): nothing.

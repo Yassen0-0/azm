@@ -68,7 +68,7 @@ BackupContents _sampleBackup() {
     workoutExercises: const [],
     workoutSets: [
       for (var i = 0; i < 1152; i++)
-        WorkoutSet(id: newUuid(), workoutExerciseId: 'x', sort: i, type: SetType.normal, weightKg: 60, reps: 8),
+        WorkoutSet(prefilled: false, id: newUuid(), workoutExerciseId: 'x', sort: i, type: SetType.normal, weightKg: 60, reps: 8),
     ],
   );
 }

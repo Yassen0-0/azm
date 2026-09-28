@@ -60,5 +60,9 @@
   "onboardingSkip": "تخطّى، وابدأ من غير برنامج",
   "@onboardingSkip": {
     "description": "Button that finishes onboarding without a program."
+  },
+  "onboardingStart": "يلا بينا",
+  "@onboardingStart": {
+    "description": "Button of the single onboarding screen (unit only)."
   }
 }

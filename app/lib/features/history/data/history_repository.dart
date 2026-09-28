@@ -88,6 +88,7 @@ class HistoryRepository {
       if (sid == null) continue;
       entry.sets.add(WorkoutSet(
         id: sid,
+        prefilled: false,
         workoutExerciseId: eid,
         sort: r['ssort']! as int,
         type: $WorkoutSetsTable.$convertertype.fromSql(r['stype']! as String),

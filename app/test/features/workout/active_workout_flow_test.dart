@@ -60,7 +60,7 @@ void main() {
     await pumpApp(tester, LanguagePref.en);
 
     // 1 tap: start an empty workout.
-    await tester.tap(find.text('Start workout'));
+    await tester.tap(find.text('Start empty workout'));
     await settle(tester);
     expect(find.text('Add your first exercise to start logging'), findsOneWidget);
     final workoutId = (await repo().active())!.id;
@@ -70,7 +70,7 @@ void main() {
     await settle(tester);
     expect(find.text('Barbell Bench Press'), findsOneWidget);
     expect(find.text('ضغط بار مستوي'), findsOneWidget); // secondary name
-    expect(find.textContaining('60 × 8'), findsOneWidget); // previous
+    expect(find.textContaining('60 kg × 8'), findsOneWidget); // previous
 
     // ✓ an empty set → filled from previous, persisted, rest timer starts.
     await tester.tap(find.bySemanticsLabel('Mark set complete'));
@@ -133,14 +133,14 @@ void main() {
 
     await tester.tap(find.text('Done'));
     await settle(tester);
-    expect(find.text('Start workout'), findsOneWidget);
+    expect(find.text('Start empty workout'), findsOneWidget);
 
     await tearDownApp(tester);
   });
 
   testWidgets('Arabic: RTL labels, set type menu, discard with confirmation', (tester) async {
     await pumpApp(tester, LanguagePref.ar);
-    await tester.tap(find.text('ابدأ تمرين'));
+    await tester.tap(find.text('ابدأ تمرين فاضي'));
     await settle(tester);
     final workoutId = (await repo().active())!.id;
     await repo().addExercises(workoutId, ['0292']);
@@ -175,7 +175,7 @@ void main() {
     expect(await repo().active(), isNull);
     expect(await repo().loadDetail(workoutId), isNull); // deleted with its sets (cascade)
     expect(await db.select(db.workouts).get(), hasLength(1)); // only the seeded history
-    expect(find.text('ابدأ تمرين'), findsOneWidget);
+    expect(find.text('ابدأ تمرين فاضي'), findsOneWidget);
 
     await tearDownApp(tester);
   });

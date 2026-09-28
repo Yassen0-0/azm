@@ -13,6 +13,7 @@ import '../../features/onboarding/data/onboarding_gate.dart';
 import '../../features/onboarding/ui/onboarding_screen.dart';
 import '../../features/routines/ui/program_detail_screen.dart';
 import '../../features/routines/ui/programs_screen.dart';
+import '../../features/routines/ui/routine_detail_screen.dart';
 import '../../features/routines/ui/routine_editor_screen.dart';
 import '../../features/settings/ui/licenses_screen.dart';
 import '../../features/settings/ui/settings_screen.dart';
@@ -20,6 +21,7 @@ import '../../features/workout/ui/active_workout_bar_slot.dart';
 import '../../features/workout/ui/active_workout_screen.dart';
 import '../../features/workout/ui/workout_home_screen.dart';
 import '../../features/workout/ui/workout_summary_screen.dart';
+import '../feature_flags.dart';
 import '../l10n/l10n.dart';
 import '../widgets/azm_tab_bar.dart';
 
@@ -61,6 +63,10 @@ abstract final class AppRoutes {
   static const String routineEditor = '/routine-editor/:id';
   static String routineEditorFor(String id) => '/routine-editor/$id';
 
+  /// Read-only routine detail: `context.push(AppRoutes.routineDetailFor(id))`.
+  static const String routineDetail = '/routine/:id';
+  static String routineDetailFor(String id) => '/routine/$id';
+
   /// Ready programs list.
   static const String programs = '/programs';
 
@@ -89,9 +95,17 @@ abstract final class AppRoutes {
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
+bool _isProgramsLocation(String location) =>
+    location == AppRoutes.programs || location.startsWith('/program/');
+
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final programsEnabled = ref.read(programsEnabledProvider);
   final router = GoRouter(
     navigatorKey: _rootKey,
+    // Ready programs are behind a feature flag (core/feature_flags.dart):
+    // while it is off their routes are unreachable.
+    redirect: (_, state) =>
+        !programsEnabled && _isProgramsLocation(state.uri.path) ? AppRoutes.workout : null,
     // First run → onboarding (read once; bootstrapApp sets it before the first frame).
     initialLocation: ref.read(onboardingDoneAtLaunchProvider) ? AppRoutes.workout : AppRoutes.onboarding,
     routes: [
@@ -172,6 +186,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.routineEditor,
         parentNavigatorKey: _rootKey,
         builder: (_, state) => RoutineEditorScreen(routineId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: AppRoutes.routineDetail,
+        parentNavigatorKey: _rootKey,
+        builder: (_, state) => RoutineDetailScreen(routineId: state.pathParameters['id']!),
       ),
       GoRoute(
         path: AppRoutes.programs,

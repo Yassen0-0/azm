@@ -32,7 +32,7 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase.open() => AppDatabase(driftDatabase(name: 'azm'));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -51,6 +51,11 @@ class AppDatabase extends _$AppDatabase {
           // v2: catalog `exercises.hidden`. Catalog-only; the bundled catalog
           // (newer version) is re-installed right after opening.
           if (from < 2) await m.addColumn(exercises, exercises.hidden);
+          // v3: per-workout rest override (0 = OFF) + pre-filled set values.
+          if (from < 3) {
+            await m.addColumn(workoutExercises, workoutExercises.restSeconds);
+            await m.addColumn(workoutSets, workoutSets.prefilled);
+          }
         },
         beforeOpen: (details) async {
           await customStatement('PRAGMA foreign_keys = ON');

@@ -82,15 +82,57 @@ class WorkoutRepository {
               sort: Value((last?.sort ?? -1) + 1),
               weightKg: Value(last?.weightKg ?? 0),
               reps: Value(last?.reps ?? 0),
+              // A copy is a suggestion: muted until the user edits it.
+              prefilled: Value(last != null && (last.weightKg > 0 || last.reps > 0)),
             ));
       });
 
+  /// Writes weight / reps / type. A new weight or reps is the user's own
+  /// value, so the set stops being "pre-filled" (no longer shown muted).
   Future<void> updateSet(String setId, {double? weightKg, int? reps, SetType? type}) =>
       (db.update(db.workoutSets)..where((s) => s.id.equals(setId))).write(WorkoutSetsCompanion(
         weightKg: weightKg == null ? const Value.absent() : Value(weightKg < 0 ? 0 : weightKg),
         reps: reps == null ? const Value.absent() : Value(reps < 0 ? 0 : reps),
         type: type == null ? const Value.absent() : Value(type),
+        prefilled: weightKg == null && reps == null ? const Value.absent() : const Value(false),
       ));
+
+  /// Notes of one exercise in a workout (empty → null). Written on every edit.
+  Future<void> setExerciseNotes(String workoutExerciseId, String notes) =>
+      (db.update(db.workoutExercises)..where((e) => e.id.equals(workoutExerciseId))).write(
+        WorkoutExercisesCompanion(notes: Value(notes.trim().isEmpty ? null : notes)),
+      );
+
+  /// Rest after a ✓ of this exercise in this workout: null = default (routine
+  /// override → settings), 0 = OFF, else seconds.
+  Future<void> setExerciseRest(String workoutExerciseId, int? seconds) =>
+      (db.update(db.workoutExercises)..where((e) => e.id.equals(workoutExerciseId))).write(
+        WorkoutExercisesCompanion(restSeconds: Value(seconds == null || seconds < 0 ? null : seconds)),
+      );
+
+  /// Moves the start of a workout (the user forgot to open the app on time).
+  /// Clamped so it is never in the future and, for a finished workout, stays
+  /// before its end. Durations, "previous" and PRs follow from the DB.
+  Future<void> setStartedAt(String workoutId, DateTime startedAt) => db.transaction(() async {
+        final w = await _workout(workoutId);
+        if (w == null) return;
+        final v = clampWorkoutTimes(start: startedAt, end: w.endedAt, now: _now());
+        await (db.update(db.workouts)..where((x) => x.id.equals(workoutId)))
+            .write(WorkoutsCompanion(startedAt: Value(v.start)));
+      });
+
+  /// Start + end of a finished workout (summary / past workout). Returns
+  /// false and changes nothing unless start < end ≤ now.
+  Future<bool> setTimes(String workoutId, {required DateTime start, required DateTime end}) =>
+      db.transaction(() async {
+        final w = await _workout(workoutId);
+        if (w == null || !workoutTimesValid(start: start, end: end, now: _now())) return false;
+        await (db.update(db.workouts)..where((x) => x.id.equals(workoutId))).write(WorkoutsCompanion(
+          startedAt: Value(start.toUtc()),
+          endedAt: Value(end.toUtc()),
+        ));
+        return true;
+      });
 
   /// ✓ / un-✓ a set. Completing may also fill weight + reps (from "previous").
   Future<void> setCompleted(String setId, bool completed, {double? weightKg, int? reps}) =>
@@ -238,7 +280,9 @@ class WorkoutRepository {
               sets: mine,
               previous: previous[e.exerciseId] ?? const [],
               prs: detectPrs(mine.map(setStatsOf).toList(), bests[e.exerciseId] ?? PrBests.none),
-              restSeconds: rest[e.exerciseId] ?? kDefaultRestSeconds,
+              restSeconds: e.restSeconds ?? rest[e.exerciseId] ?? kDefaultRestSeconds,
+              defaultRestSeconds: rest[e.exerciseId] ?? kDefaultRestSeconds,
+              restIsOverride: e.restSeconds != null,
             );
           }(),
       ],

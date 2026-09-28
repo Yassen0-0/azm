@@ -296,5 +296,9 @@
   "historyExerciseRecords": "أرقامك في التمرين ده",
   "@historyExerciseRecords": {
     "description": "Full exercise history: records card title."
+  },
+  "historyEditTime": "عدّل الوقت",
+  "@historyEditTime": {
+    "description": "Past workout menu action: edit its start and end time."
   }
 }

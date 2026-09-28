@@ -59,5 +59,18 @@
   "workoutExactAlarmTitle": "Get the rest alert on time",
   "workoutExactAlarmBody": "With the screen off, Android can delay the “rest is over” alert by a few minutes. Allow “Alarms & reminders” for Azm so it rings exactly when your rest ends. You can change this any time in the phone settings.",
   "workoutExactAlarmAllow": "Open settings",
-  "workoutExactAlarmLater": "Not now"
+  "workoutExactAlarmLater": "Not now",
+  "workoutStartEmpty": "Start empty workout",
+  "workoutNotesHint": "Add notes here...",
+  "workoutRestLine": "Rest Timer: {time}",
+  "workoutRestOff": "OFF",
+  "workoutRestPickerTitle": "Rest timer",
+  "workoutRestPickerDefault": "Default ({time})",
+  "workoutRestPickerOff": "Off (no timer)",
+  "workoutTimerTitle": "Rest timer",
+  "workoutTimerBody": "Start a rest countdown now.",
+  "workoutTimerRunning": "{time} left",
+  "workoutElapsedEdit": "Elapsed {time}. Tap to change the start time",
+  "workoutStartTimeHint": "Forgot to open the app on time? Move the start back and the duration follows.",
+  "workoutEditTimes": "Edit time"
 }

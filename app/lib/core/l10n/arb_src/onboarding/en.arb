@@ -11,5 +11,6 @@
   "onboardingProgramTitle": "Start with a ready program?",
   "onboardingProgramBody": "Its days are added to your routines, and you can edit them any time.",
   "onboardingStartWithProgram": "Add program and start",
-  "onboardingSkip": "Skip, start empty"
+  "onboardingSkip": "Skip, start empty",
+  "onboardingStart": "Let's go"
 }

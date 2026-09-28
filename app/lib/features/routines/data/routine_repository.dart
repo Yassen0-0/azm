@@ -329,16 +329,20 @@ class RoutineRepository {
                 exerciseId: e.entry.exerciseId,
                 sort: Value(i),
                 notes: Value(e.entry.notes),
+                restSeconds: Value(e.entry.restSeconds),
               ));
           final last = previous[e.entry.exerciseId] ?? const <double>[];
           for (var j = 0; j < e.sets.length; j++) {
             final s = e.sets[j];
+            final weight = s.targetWeightKg ?? (j < last.length ? last[j] : 0.0);
             await db.into(db.workoutSets).insert(WorkoutSetsCompanion.insert(
                   workoutExerciseId: weId,
                   sort: Value(j),
                   type: Value(s.type),
                   reps: Value(s.targetReps ?? 0),
-                  weightKg: Value(s.targetWeightKg ?? (j < last.length ? last[j] : 0)),
+                  weightKg: Value(weight),
+                  // Targets / last weights are suggestions: muted until edited.
+                  prefilled: Value(weight > 0 || (s.targetReps ?? 0) > 0),
                 ));
           }
         }

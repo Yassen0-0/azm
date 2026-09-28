@@ -198,7 +198,7 @@ void main() {
       'not JSON': ('%PDF-1.7 not json', "This file isn't a backup (it isn't a JSON file)."),
       'not an Azm backup': ('{"hello": "world"}', "This file isn't an Azm backup."),
       'newer version': (
-        '{"format": "azm-backup", "version": 2}',
+        '{"format": "azm-backup", "version": 3}',
         'This backup was made by a newer version of Azm. Update the app and try again.',
       ),
       'corrupt': ('{"format": "azm-backup", "version": 1, "routines": 5}', 'This backup is damaged or incomplete.'),

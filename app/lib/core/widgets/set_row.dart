@@ -52,7 +52,9 @@ class SetTableHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = AzmType.smallStrong.copyWith(color: context.colors.textTertiary);
-    Widget cell(String t) => Text(t, style: style, textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis);
+    // Upper-case captions (SET · PREVIOUS · KG · REPS); Arabic has no case.
+    Widget cell(String t) =>
+        Text(t.toUpperCase(), style: style, textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis);
     return Padding(
       padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xs),
       child: Row(
@@ -111,6 +113,8 @@ class SetRow extends StatefulWidget {
     this.activeField,
     this.isPr = false,
     this.labelSemantics,
+    this.valuesMuted = false,
+    this.background,
   });
 
   /// Keys for tests: the long-press target and the menu's delete action.
@@ -147,6 +151,13 @@ class SetRow extends StatefulWidget {
 
   /// Screen-reader label of the type chip (default: [label]).
   final String? labelSemantics;
+
+  /// [weightText] / [repsText] are the app's pre-fill (routine target, a
+  /// copied set), not typed yet: drawn muted like a hint until edited.
+  final bool valuesMuted;
+
+  /// Row colour when not ✓ (default `card`; the live workout sits on the page).
+  final Color? background;
 
   @override
   State<SetRow> createState() => _SetRowState();
@@ -320,7 +331,7 @@ class _SetRowState extends State<SetRow> with TickerProviderStateMixin {
       curve: AzmMotion.standard,
       constraints: const BoxConstraints(minHeight: AzmSize.setRowMinHeight),
       padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xs),
-      color: w.completed ? c.setDoneTint : c.card,
+      color: w.completed ? c.setDoneTint : (w.background ?? c.card),
       child: Row(
         children: [
           _LabelCell(label: w.label, kind: w.labelKind, onTap: w.onLabelTap, semanticLabel: w.labelSemantics ?? w.label),
@@ -347,6 +358,7 @@ class _SetRowState extends State<SetRow> with TickerProviderStateMixin {
               hint: w.weightHint,
               active: w.activeField == SetField.weight,
               completed: w.completed,
+              muted: w.valuesMuted,
               onTap: w.onWeightTap,
             ),
           ),
@@ -358,6 +370,7 @@ class _SetRowState extends State<SetRow> with TickerProviderStateMixin {
               hint: w.repsHint,
               active: w.activeField == SetField.reps,
               completed: w.completed,
+              muted: w.valuesMuted,
               onTap: w.onRepsTap,
               badge: w.isPr ? const PrBadge() : null,
             ),
@@ -624,8 +637,8 @@ class SetLabelChip extends StatelessWidget {
       SetLabelKind.other => (c.textPrimary, c.fill),
     };
     return Container(
-      width: AzmSize.headerButton,
-      height: AzmSize.headerButton,
+      width: AzmSize.setBox,
+      height: AzmSize.setBox,
       alignment: AlignmentDirectional.center,
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(AzmRadius.segment)),
       child: ExcludeSemantics(child: Text(label, style: AzmType.controlLabel.copyWith(color: fg))),
@@ -641,6 +654,7 @@ class _ValueCell extends StatelessWidget {
     required this.active,
     required this.completed,
     required this.onTap,
+    this.muted = false,
     this.badge,
   });
 
@@ -648,6 +662,7 @@ class _ValueCell extends StatelessWidget {
   final String hint;
   final bool active;
   final bool completed;
+  final bool muted;
   final VoidCallback onTap;
   final Widget? badge;
 
@@ -655,32 +670,40 @@ class _ValueCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final empty = text.isEmpty;
+    // Outlined box (KG / REPS). Hint and pre-filled values are muted until
+    // edited; a ✓ row drops the outline. The whole cell is the tap target.
+    final color = empty ? c.textTertiary : (muted && !completed ? c.textTertiary : c.textPrimary);
+    final border = active
+        ? Border.all(color: c.accent, width: AzmSize.outlineActive)
+        : Border.all(color: completed ? Colors.transparent : c.checkboxBorder, width: AzmSize.outline);
     return AzmPressable(
       onTap: onTap,
-      child: Center(
-        child: AnimatedContainer(
-          duration: AzmMotion.of(context, AzmMotion.micro),
-          margin: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xxs),
-          constraints: const BoxConstraints(minHeight: AzmSize.headerButton),
-          alignment: AlignmentDirectional.center,
-          decoration: BoxDecoration(
-            color: completed ? Colors.transparent : c.fill,
-            borderRadius: BorderRadius.circular(AzmRadius.segment),
-            border: Border.all(color: active ? c.accent : Colors.transparent, width: 1.5),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Text(
-                  empty ? hint : text,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AzmType.rowNumber.copyWith(color: empty ? c.textNoData : c.textPrimary),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: AzmSize.touchCompact),
+        child: Center(
+          child: AnimatedContainer(
+            duration: AzmMotion.of(context, AzmMotion.micro),
+            margin: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xxs),
+            constraints: const BoxConstraints(minHeight: AzmSize.setBox),
+            alignment: AlignmentDirectional.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AzmRadius.segment),
+              border: border,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Text(
+                    empty ? hint : text,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AzmType.rowNumber.copyWith(color: color),
+                  ),
                 ),
-              ),
-              if (badge != null) ...[const SizedBox(width: AzmSpace.opticalInset), badge!],
-            ],
+                if (badge != null) ...[const SizedBox(width: AzmSpace.opticalInset), badge!],
+              ],
+            ),
           ),
         ),
       ),
@@ -708,8 +731,8 @@ class _CheckCell extends StatelessWidget {
           child: AnimatedContainer(
             duration: AzmMotion.of(context, AzmMotion.tick),
             curve: AzmMotion.standard,
-            width: AzmSize.headerButton,
-            height: AzmSize.headerButton,
+            width: AzmSize.setBox,
+            height: AzmSize.setBox,
             decoration: BoxDecoration(
               color: completed ? c.setDone : c.fill,
               borderRadius: BorderRadius.circular(AzmRadius.segment),

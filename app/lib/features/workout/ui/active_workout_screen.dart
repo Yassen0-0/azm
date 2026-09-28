@@ -11,13 +11,13 @@ import '../../../core/l10n/set_labels.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
-import '../../../core/widgets/azm_header.dart';
 import '../../../core/widgets/azm_pressable.dart';
 import '../../../core/widgets/lifted_counter.dart';
 import '../../../core/widgets/rest_timer_bar.dart';
 import '../../../core/widgets/set_row.dart';
 import '../../../core/widgets/set_keypad.dart';
 import '../../../core/widgets/set_undo.dart';
+import '../../../core/widgets/workout_time_sheet.dart';
 import '../../../core/widgets/weight_keypad.dart';
 import '../data/rest_timer.dart';
 import '../data/workout_models.dart';
@@ -78,13 +78,17 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
 
     return Scaffold(
       body: SafeArea(
+        top: false,
         bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _Header(
-              name: workout.name,
+            _TopBar(
+              workout: workout,
+              restRunning: rest != null,
               onMinimize: _minimize,
+              onEditStart: () => _editStart(workout),
+              onTimer: _manualTimer,
               onFinish: _finish,
             ),
             _Stats(workout: workout, detail: detail),
@@ -92,9 +96,10 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
               child: detail == null
                   ? const SizedBox.shrink()
                   : ListView(
+                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                       padding: const EdgeInsetsDirectional.fromSTEB(
                         AzmSpace.pageMargin,
-                        AzmSpace.md,
+                        AzmSpace.xl,
                         AzmSpace.pageMargin,
                         AzmSpace.xxxl,
                       ),
@@ -307,6 +312,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
     if (_editing?.setId == set.id) _closeKeypad();
     unawaited(HapticFeedback.lightImpact());
     await _repo.setCompleted(set.id, true, weightKg: weightKg, reps: reps);
+    if (exercise.restOff) return; // "Rest Timer: OFF" for this exercise
     final rest = ref.read(restTimerProvider.notifier);
     await rest.start(exercise.restSeconds);
     await _maybeExplainExactAlarms(rest);
@@ -355,6 +361,58 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
     }
   }
 
+  @override
+  void onNotesChanged(WorkoutExerciseDetail exercise, String notes) =>
+      unawaited(_repo.setExerciseNotes(exercise.entry.id, notes));
+
+  @override
+  void onNotesFocus() => _closeKeypad();
+
+  @override
+  Future<void> onRestTap(WorkoutExerciseDetail exercise, String name) async {
+    _closeKeypad();
+    final choice = await showExerciseRestSheet(
+      context,
+      exerciseName: name,
+      current: exercise.restIsOverride ? exercise.restSeconds : null,
+      defaultSeconds: exercise.defaultRestSeconds,
+    );
+    if (choice != null) await _repo.setExerciseRest(exercise.entry.id, choice.seconds);
+  }
+
+  // ---- Top bar ---------------------------------------------------------------
+
+  /// Tap on the elapsed time: move the start back (forgot to open the app on
+  /// time). The duration follows from the DB; the rest timer is untouched.
+  Future<void> _editStart(Workout workout) async {
+    _closeKeypad();
+    FocusScope.of(context).unfocus();
+    final start = await showWorkoutStartSheet(
+      context,
+      start: workout.startedAt,
+      now: ref.read(workoutClockProvider),
+      hint: context.l10n.workoutStartTimeHint,
+    );
+    if (start != null) await _repo.setStartedAt(workout.id, start);
+  }
+
+  /// ⏱ in the top bar: start a manual rest countdown (or skip the running one).
+  Future<void> _manualTimer() async {
+    _closeKeypad();
+    FocusScope.of(context).unfocus();
+    final running = ref.read(restTimerProvider);
+    final seconds = await showManualRestSheet(
+      context,
+      runningEndsAt: running?.endsAt,
+      now: ref.read(workoutClockProvider),
+    );
+    if (seconds == null || !mounted) return;
+    final rest = ref.read(restTimerProvider.notifier);
+    if (seconds <= 0) return rest.skip();
+    await rest.start(seconds);
+    await _maybeExplainExactAlarms(rest);
+  }
+
   // ---- Keypad ----------------------------------------------------------------
 
   void _closeKeypad() {
@@ -400,54 +458,98 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
   }
 }
 
-class _Header extends StatelessWidget {
-  const _Header({required this.name, required this.onMinimize, required this.onFinish});
+/// Top bar (card colour up to the status bar): minimize ⌄, live elapsed time
+/// (tap → change the start time), ⏱ manual rest timer, accent "Finish".
+class _TopBar extends ConsumerWidget {
+  const _TopBar({
+    required this.workout,
+    required this.restRunning,
+    required this.onMinimize,
+    required this.onEditStart,
+    required this.onTimer,
+    required this.onFinish,
+  });
 
-  final String name;
+  final Workout workout;
+  final bool restRunning;
   final VoidCallback onMinimize;
+  final VoidCallback onEditStart;
+  final VoidCallback onTimer;
   final VoidCallback onFinish;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final l = context.l10n;
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.xs, AzmSpace.xs, AzmSpace.pageMargin, AzmSpace.xxs),
-      child: Row(
-        children: [
-          AzmHeaderButton(icon: Icons.keyboard_arrow_down_rounded, semanticLabel: l.workoutMinimize, onTap: onMinimize),
-          const SizedBox(width: AzmSpace.xxs),
-          Expanded(
-            child: Semantics(
-              header: true,
-              child: Text(
-                name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AzmType.screenTitle.copyWith(color: c.textPrimary),
+    return ColoredBox(
+      color: c.card,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.xxs, AzmSpace.xxs, AzmSpace.pageMargin, AzmSpace.xxs),
+          child: Row(
+            children: [
+              AzmPressable(
+                key: const ValueKey('workoutMinimize'),
+                onTap: onMinimize,
+                semanticLabel: l.workoutMinimize,
+                child: Icon(Icons.keyboard_arrow_down_rounded, color: c.textPrimary, size: AzmSize.icon + AzmSpace.xxs),
               ),
-            ),
-          ),
-          AzmPressable(
-            onTap: onFinish,
-            semanticLabel: l.workoutFinish,
-            child: Center(
-              child: Container(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xl, vertical: AzmSpace.xs),
-                decoration: BoxDecoration(color: c.accent, borderRadius: BorderRadius.circular(AzmRadius.pill)),
-                child: ExcludeSemantics(
-                  child: Text(l.workoutFinish, style: AzmType.pillLabel.copyWith(color: c.onAccent)),
+              AzmTicker(
+                period: const Duration(seconds: 1),
+                now: ref.read(workoutClockProvider),
+                builder: (_, now) {
+                  final elapsed = formatClock(now.difference(workout.startedAt));
+                  return AzmPressable(
+                    key: const ValueKey('workoutElapsed'),
+                    onTap: onEditStart,
+                    semanticLabel: l.workoutElapsedEdit(elapsed),
+                    child: ExcludeSemantics(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xxs),
+                          child: Text(elapsed, style: AzmType.rowNumberCompact.copyWith(color: c.accent)),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const Spacer(),
+              AzmPressable(
+                key: const ValueKey('workoutTimerButton'),
+                onTap: onTimer,
+                semanticLabel: l.workoutTimerTitle,
+                selected: restRunning,
+                child: Icon(Icons.timer_outlined, color: restRunning ? c.accent : c.textPrimary, size: AzmSize.icon),
+              ),
+              const SizedBox(width: AzmSpace.xs),
+              AzmPressable(
+                key: const ValueKey('workoutFinish'),
+                onTap: onFinish,
+                semanticLabel: l.workoutFinish,
+                child: Center(
+                  child: Container(
+                    height: AzmSize.setBox,
+                    padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xl),
+                    alignment: AlignmentDirectional.center,
+                    decoration: BoxDecoration(color: c.accent, borderRadius: BorderRadius.circular(AzmRadius.segment)),
+                    child: ExcludeSemantics(
+                      child: Text(l.workoutFinish, style: AzmType.pillLabel.copyWith(color: c.onAccent)),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
 
-/// duration | Lifted | sets.
+/// Duration | Lifted (شِلت) | Sets: small labels above the values, then a
+/// divider. (A muscle/body diagram is a later idea, docs/PLAN.md.)
 class _Stats extends ConsumerWidget {
   const _Stats({required this.workout, required this.detail});
 
@@ -464,36 +566,44 @@ class _Stats extends ConsumerWidget {
 
     Widget stat(String label, Widget value) => Expanded(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: AzmType.statLabel.copyWith(color: c.textSecondary)),
+              Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: AzmType.small.copyWith(color: c.textSecondary)),
               const SizedBox(height: AzmSpace.opticalInset),
               value,
             ],
           ),
         );
-    Widget divider() => const SizedBox(height: AzmSize.headerButton, child: VerticalDivider());
 
-    return Padding(
-      padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.pageMargin, vertical: AzmSpace.xs),
-      child: Row(
-        children: [
-          stat(
-            l.workoutStatDuration,
-            AzmTicker(
-              period: const Duration(seconds: 1),
-              now: ref.read(workoutClockProvider),
-              builder: (_, now) => Text(formatClock(now.difference(workout.startedAt)), style: valueStyle),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.pageMargin, AzmSpace.md, AzmSpace.pageMargin, AzmSpace.md),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              stat(
+                l.workoutStatDuration,
+                AzmTicker(
+                  period: const Duration(seconds: 1),
+                  now: ref.read(workoutClockProvider),
+                  builder: (_, now) => Text(
+                    formatClock(now.difference(workout.startedAt)),
+                    style: valueStyle.copyWith(color: c.accent),
+                  ),
+                ),
+              ),
+              stat(
+                l.workoutStatLifted,
+                LiftedCounter(value: Units.toDisplay(d?.liftedTotalKg ?? 0, unit), unit: l.weightUnitLabel(unit)),
+              ),
+              stat(l.workoutStatSets, Text('${d?.completedSets ?? 0}', style: valueStyle)),
+            ],
           ),
-          divider(),
-          stat(
-            l.workoutStatLifted,
-            LiftedCounter(value: Units.toDisplay(d?.liftedTotalKg ?? 0, unit), unit: l.weightUnitLabel(unit)),
-          ),
-          divider(),
-          stat(l.workoutStatSets, Text('${d?.completedSets ?? 0}', style: valueStyle)),
-        ],
-      ),
+        ),
+        Divider(height: 1, thickness: AzmSize.outline, color: c.divider),
+      ],
     );
   }
 }
@@ -523,8 +633,8 @@ class _WideButton extends StatelessWidget {
       semanticLabel: label,
       child: ExcludeSemantics(
         child: Container(
-          height: AzmSize.input,
-          decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(AzmRadius.button)),
+          height: AzmSize.buttonCompact,
+          decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(AzmRadius.input)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

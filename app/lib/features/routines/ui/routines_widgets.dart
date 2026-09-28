@@ -127,6 +127,22 @@ class RoutinesUnknownThumb extends StatelessWidget {
   }
 }
 
+/// Round placeholder for an exercise missing from the catalog (avatar size).
+class RoutineUnknownAvatar extends StatelessWidget {
+  const RoutineUnknownAvatar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Container(
+      width: AzmSize.avatar,
+      height: AzmSize.avatar,
+      decoration: BoxDecoration(color: c.fill, shape: BoxShape.circle),
+      child: Icon(Icons.help_outline_rounded, color: c.textTertiary, size: AzmSize.icon - AzmSpace.xxs),
+    );
+  }
+}
+
 /// Bottom-sheet list row: icon + label (optionally destructive / selected).
 class RoutinesSheetAction extends StatelessWidget {
   const RoutinesSheetAction({
@@ -223,6 +239,73 @@ Future<({int? seconds})?> showRoutineRestSheet(BuildContext context, {required i
         ),
     ],
   );
+}
+
+enum RoutineMenuAction { edit, delete }
+
+/// ⋯ menu of a routine card: edit, delete.
+Future<RoutineMenuAction?> showRoutineMenu(BuildContext context, String routineName) {
+  final l = context.l10n;
+  return _sheet<RoutineMenuAction>(
+    context,
+    title: routineName,
+    children: (ctx) => [
+      RoutinesSheetAction(
+        key: const ValueKey('routineMenuEdit'),
+        label: l.routinesEditTitle,
+        icon: Icons.edit_outlined,
+        onTap: () => Navigator.pop(ctx, RoutineMenuAction.edit),
+      ),
+      RoutinesSheetAction(
+        key: const ValueKey('routineMenuDelete'),
+        label: l.routinesDelete,
+        icon: Icons.delete_outline_rounded,
+        destructive: true,
+        onTap: () => Navigator.pop(ctx, RoutineMenuAction.delete),
+      ),
+    ],
+  );
+}
+
+/// Full-width accent start button holding ONLY a dumbbell icon (no text);
+/// screen readers hear "Start routine" / "ابدأ الروتين".
+class RoutineStartButton extends StatelessWidget {
+  const RoutineStartButton({super.key, required this.onTap});
+
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return AzmPressable(
+      onTap: onTap,
+      semanticLabel: context.l10n.routinesStartRoutine,
+      child: ExcludeSemantics(
+        child: Container(
+          height: AzmSize.buttonCompact,
+          decoration: BoxDecoration(
+            color: onTap == null ? c.actionDisabled : c.accent,
+            borderRadius: BorderRadius.circular(AzmRadius.input),
+          ),
+          child: Icon(Icons.fitness_center_rounded, color: onTap == null ? c.textTertiary : c.onAccent, size: AzmSize.icon),
+        ),
+      ),
+    );
+  }
+}
+
+/// Deletes a routine after confirming. Returns true when deleted.
+Future<bool> confirmDeleteRoutine(BuildContext context, Future<void> Function() delete) async {
+  final l = context.l10n;
+  final ok = await routinesConfirm(
+    context,
+    title: l.routinesDeleteTitle,
+    body: l.routinesDeleteBody,
+    confirm: l.routinesDeleteConfirm,
+    destructive: true,
+  );
+  if (ok) await delete();
+  return ok;
 }
 
 enum RoutineExerciseAction { rest, reorder, remove }

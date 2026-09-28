@@ -326,6 +326,84 @@ abstract class AppLocalizations {
   /// **'امسح'**
   String get commonSwipeDelete;
 
+  /// Label of the start date/time in the workout time sheet.
+  ///
+  /// In ar, this message translates to:
+  /// **'البداية'**
+  String get commonTimeStart;
+
+  /// Label of the end date/time in the workout time sheet.
+  ///
+  /// In ar, this message translates to:
+  /// **'النهاية'**
+  String get commonTimeEnd;
+
+  /// Save button of the workout time sheet.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get commonTimeSave;
+
+  /// Day wheel item: today.
+  ///
+  /// In ar, this message translates to:
+  /// **'النهاردة'**
+  String get commonTimeToday;
+
+  /// Day wheel item: yesterday.
+  ///
+  /// In ar, this message translates to:
+  /// **'امبارح'**
+  String get commonTimeYesterday;
+
+  /// Error in the workout time sheet: the chosen time is after now.
+  ///
+  /// In ar, this message translates to:
+  /// **'مينفعش يبقى في المستقبل'**
+  String get commonTimeFuture;
+
+  /// Error in the workout time sheet: end is not after start.
+  ///
+  /// In ar, this message translates to:
+  /// **'النهاية لازم تبقى بعد البداية'**
+  String get commonTimeOrder;
+
+  /// Title of the sheet that edits a finished workout's start and end.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّل وقت التمرين'**
+  String get commonTimeEditTitle;
+
+  /// Title of the sheet that edits the running workout's start time.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدأت التمرين إمتى؟'**
+  String get commonTimeStartTitle;
+
+  /// Live duration preview in the workout time sheet.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدة {time}'**
+  String commonTimeDuration(String time);
+
+  /// Screen-reader label of the day wheel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get commonTimeDay;
+
+  /// Screen-reader label of the hour wheel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الساعة'**
+  String get commonTimeHour;
+
+  /// Screen-reader label of the minute wheel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدقيقة'**
+  String get commonTimeMinute;
+
   /// Hint in the exercise search box (Arabic, slang or English all work).
   ///
   /// In ar, this message translates to:
@@ -1646,6 +1724,12 @@ abstract class AppLocalizations {
   /// **'أرقامك في التمرين ده'**
   String get historyExerciseRecords;
 
+  /// Past workout menu action: edit its start and end time.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّل الوقت'**
+  String get historyEditTime;
+
   /// Progress label at the top of onboarding.
   ///
   /// In ar, this message translates to:
@@ -1717,6 +1801,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تخطّى، وابدأ من غير برنامج'**
   String get onboardingSkip;
+
+  /// Button of the single onboarding screen (unit only).
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا بينا'**
+  String get onboardingStart;
 
   /// Section title on the Workout tab.
   ///
@@ -1999,6 +2089,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تمرين مش معروف ({id})'**
   String routinesUnknownExercise(String id);
+
+  /// Section header on the Workout tab with the number of routines.
+  ///
+  /// In ar, this message translates to:
+  /// **'روتيناتي ({count})'**
+  String routinesMyRoutinesCount(String count);
+
+  /// Screen-reader label of the dumbbell start button (icon only).
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ الروتين'**
+  String get routinesStartRoutine;
+
+  /// Screen-reader label of the ⋯ menu on a routine card.
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات الروتين'**
+  String get routinesOptions;
+
+  /// Action on the routine detail: open the editor.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get routinesEditShort;
+
+  /// Title bar of the read-only routine detail.
+  ///
+  /// In ar, this message translates to:
+  /// **'الروتين'**
+  String get routinesDetailTitle;
+
+  /// Section label on the routine detail.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمارين'**
+  String get routinesDetailExercises;
+
+  /// Routine detail of a routine without exercises.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه مفيش تمارين. دوس تعديل وضيف.'**
+  String get routinesDetailEmpty;
+
+  /// Empty state of My routines while ready programs are hidden.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعمل الروتين مرة واحدة وابدأه بضغطة واحدة.'**
+  String get routinesEmptyBodyNoPrograms;
 
   /// Settings screen title.
   ///
@@ -2695,6 +2833,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مش دلوقتي'**
   String get workoutExactAlarmLater;
+
+  /// Compact row on the Workout tab that starts an empty workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ تمرين فاضي'**
+  String get workoutStartEmpty;
+
+  /// Placeholder of the one-line notes field under an exercise in the live workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف ملاحظة...'**
+  String get workoutNotesHint;
+
+  /// Tappable rest line under an exercise (time like 1:30, or OFF).
+  ///
+  /// In ar, this message translates to:
+  /// **'الراحة: {time}'**
+  String workoutRestLine(String time);
+
+  /// Rest line value when this exercise has no rest timer.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقفولة'**
+  String get workoutRestOff;
+
+  /// Title of the per-exercise rest picker in the live workout.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الراحة'**
+  String get workoutRestPickerTitle;
+
+  /// Rest picker option: use the routine / settings default.
+  ///
+  /// In ar, this message translates to:
+  /// **'الافتراضي ({time})'**
+  String workoutRestPickerDefault(String time);
+
+  /// Rest picker option: no rest timer for this exercise.
+  ///
+  /// In ar, this message translates to:
+  /// **'من غير تايمر'**
+  String get workoutRestPickerOff;
+
+  /// Top-bar button + sheet title: start a manual rest countdown.
+  ///
+  /// In ar, this message translates to:
+  /// **'تايمر الراحة'**
+  String get workoutTimerTitle;
+
+  /// Body of the manual rest timer sheet.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ عدّ تنازلي للراحة دلوقتي.'**
+  String get workoutTimerBody;
+
+  /// Manual rest sheet: the running timer's remaining time.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاضل {time}'**
+  String workoutTimerRunning(String time);
+
+  /// Screen-reader label of the elapsed time in the live workout top bar.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّى {time}. دوس عشان تغيّر وقت البداية'**
+  String workoutElapsedEdit(String time);
+
+  /// Hint in the sheet that edits the running workout's start time.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسيت تفتح الأبلكيشن في ميعادك؟ رجّع وقت البداية والمدة هتتظبط.'**
+  String get workoutStartTimeHint;
+
+  /// Workout summary action: edit start and end time.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّل الوقت'**
+  String get workoutEditTimes;
 }
 
 class _AppLocalizationsDelegate

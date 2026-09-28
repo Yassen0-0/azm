@@ -12,8 +12,10 @@ import '../training_settings.dart' show TrainingSettingsKeys;
 /// Format marker of every Azm backup file.
 const String kBackupFormat = 'azm-backup';
 
-/// The only backup version this build understands. A newer file is rejected.
-const int kBackupVersion = 1;
+/// The backup version this build writes; it reads every version up to it
+/// and rejects newer ones. v2 (schema v3): `workout_exercises.rest_seconds`
+/// (0 = rest OFF) and `workout_sets.prefilled`.
+const int kBackupVersion = 2;
 
 /// Settings keys that travel in a backup (decision in DECISIONS_LOG → Window E).
 /// Everything else (onboarding flag, permission prompts, the running rest
@@ -150,6 +152,7 @@ String encodeBackup(BackupContents contents) {
           'exercise_id': e.exerciseId,
           'sort': e.sort,
           'notes': e.notes,
+          'rest_seconds': e.restSeconds,
         },
     ],
     'workout_sets': [
@@ -162,6 +165,7 @@ String encodeBackup(BackupContents contents) {
           'weight_kg': s.weightKg,
           'reps': s.reps,
           'completed_at': _tsOrNull(s.completedAt),
+          'prefilled': s.prefilled,
         },
     ],
   };
@@ -220,6 +224,12 @@ class _Row {
   }
 
   int? integerOrNull(String c, {int min = 0}) => map[c] == null ? null : integer(c, min: min);
+
+  bool boolean(String c) {
+    final v = map[c];
+    if (v is! bool) _fail('$c is not a boolean');
+    return v;
+  }
 
   double kg(String c) {
     final v = map[c];
@@ -377,19 +387,20 @@ BackupContents decodeBackup(String text) {
   final workoutExercises = _table(
     root,
     'workout_exercises',
-    {'id', 'workout_id', 'exercise_id', 'sort', 'notes'},
+    {'id', 'workout_id', 'exercise_id', 'sort', 'notes', if (version >= 2) 'rest_seconds'},
     (r) => WorkoutExercise(
       id: r.uuid('id'),
       workoutId: r.uuid('workout_id'),
       exerciseId: r.string('exercise_id', nonEmpty: true),
       sort: r.integer('sort', min: -1 << 31),
       notes: r.stringOrNull('notes'),
+      restSeconds: version >= 2 ? r.integerOrNull('rest_seconds') : null,
     ),
   );
   final workoutSets = _table(
     root,
     'workout_sets',
-    {'id', 'workout_exercise_id', 'sort', 'type', 'weight_kg', 'reps', 'completed_at'},
+    {'id', 'workout_exercise_id', 'sort', 'type', 'weight_kg', 'reps', 'completed_at', if (version >= 2) 'prefilled'},
     (r) => WorkoutSet(
       id: r.uuid('id'),
       workoutExerciseId: r.uuid('workout_exercise_id'),
@@ -398,6 +409,7 @@ BackupContents decodeBackup(String text) {
       weightKg: r.kg('weight_kg'),
       reps: r.integer('reps'),
       completedAt: r.timeOrNull('completed_at'),
+      prefilled: version >= 2 && r.boolean('prefilled'),
     ),
   );
 

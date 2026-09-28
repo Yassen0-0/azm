@@ -57,10 +57,10 @@ Future<void> seedEverything(AppDatabase db, {bool activeWorkout = false}) async 
       const WorkoutExercise(id: 'e2222222-2222-4222-8222-222222222222', workoutId: 'd2222222-2222-4222-8222-222222222222', exerciseId: '9999', sort: 0),
     ]);
     b.insertAll(db.workoutSets, [
-      WorkoutSet(id: 'f1111111-1111-4111-8111-111111111111', workoutExerciseId: 'e1111111-1111-4111-8111-111111111111', sort: 0, type: SetType.warmup, weightKg: 20, reps: 12, completedAt: t(5, 18, 5)),
-      WorkoutSet(id: 'f2222222-2222-4222-8222-222222222222', workoutExerciseId: 'e1111111-1111-4111-8111-111111111111', sort: 1, type: SetType.normal, weightKg: 83.91457, reps: 5, completedAt: t(5, 18, 9, 1)),
-      const WorkoutSet(id: 'f3333333-3333-4333-8333-333333333333', workoutExerciseId: 'e1111111-1111-4111-8111-111111111111', sort: 2, type: SetType.drop, weightKg: 0, reps: 0),
-      WorkoutSet(id: 'f4444444-4444-4444-8444-444444444444', workoutExerciseId: 'e2222222-2222-4222-8222-222222222222', sort: 0, type: SetType.failure, weightKg: 140, reps: 1, completedAt: t(6, 7, 30)),
+      WorkoutSet(prefilled: false, id: 'f1111111-1111-4111-8111-111111111111', workoutExerciseId: 'e1111111-1111-4111-8111-111111111111', sort: 0, type: SetType.warmup, weightKg: 20, reps: 12, completedAt: t(5, 18, 5)),
+      WorkoutSet(prefilled: false, id: 'f2222222-2222-4222-8222-222222222222', workoutExerciseId: 'e1111111-1111-4111-8111-111111111111', sort: 1, type: SetType.normal, weightKg: 83.91457, reps: 5, completedAt: t(5, 18, 9, 1)),
+      const WorkoutSet(prefilled: false, id: 'f3333333-3333-4333-8333-333333333333', workoutExerciseId: 'e1111111-1111-4111-8111-111111111111', sort: 2, type: SetType.drop, weightKg: 0, reps: 0),
+      WorkoutSet(prefilled: false, id: 'f4444444-4444-4444-8444-444444444444', workoutExerciseId: 'e2222222-2222-4222-8222-222222222222', sort: 0, type: SetType.failure, weightKg: 140, reps: 1, completedAt: t(6, 7, 30)),
     ]);
   });
   await db.writeSetting('locale', '"ar"');

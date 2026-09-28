@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:azm/app.dart';
 import 'package:azm/core/db/app_database.dart';
+import 'package:azm/core/feature_flags.dart';
 import 'package:azm/core/router/app_router.dart';
 import 'package:azm/core/widgets/set_row.dart';
 import 'package:azm/core/utils/units.dart';
 import 'package:azm/features/onboarding/data/onboarding_gate.dart';
 import 'package:azm/features/onboarding/ui/onboarding_screen.dart';
 import 'package:azm/features/routines/data/routine_repository.dart';
+import 'package:azm/features/routines/ui/programs_screen.dart';
+import 'package:azm/features/routines/ui/routine_detail_screen.dart';
 import 'package:azm/features/routines/ui/routine_editor_screen.dart';
 import 'package:azm/features/settings/data/app_settings.dart';
 import 'package:azm/features/settings/data/training_settings.dart';
@@ -35,13 +38,16 @@ void main() {
 
   setUp(() => ActiveWorkoutBarSlot.autoResume = false);
 
-  Future<void> pumpApp(WidgetTester tester, LanguagePref lang, {bool onboardingDone = true}) async {
+  Future<void> pumpApp(WidgetTester tester, LanguagePref lang, {bool onboardingDone = true, bool programs = false}) async {
     db = openRoutinesTestDb();
     container = ProviderContainer(overrides: [
       appDatabaseProvider.overrideWithValue(db),
       restAlarmProvider.overrideWithValue(FakeRestAlarm()),
       initialAppSettingsProvider.overrideWithValue(AppSettings(language: lang)),
       onboardingDoneAtLaunchProvider.overrideWithValue(onboardingDone),
+      // Ready programs are hidden by default (kProgramsEnabled); their tests
+      // turn them back on.
+      programsEnabledProvider.overrideWithValue(programs),
     ]);
     await seedRoutinesCatalog(db);
     await tester.pumpWidget(UncontrolledProviderScope(container: container, child: const AzmApp()));
@@ -58,7 +64,7 @@ void main() {
   RoutineRepository repo() => container.read(routineRepositoryProvider);
 
   testWidgets('onboarding: lb + ready program → Workout tab with the copied routines (English)', (tester) async {
-    await pumpApp(tester, LanguagePref.en, onboardingDone: false);
+    await pumpApp(tester, LanguagePref.en, onboardingDone: false, programs: true);
     expect(find.byType(OnboardingScreen), findsOneWidget);
     expect(find.text('Step 1 of 2'), findsOneWidget);
 
@@ -75,16 +81,16 @@ void main() {
     await settle(tester);
 
     expect(find.byType(OnboardingScreen), findsNothing);
-    expect(find.text('My routines'), findsOneWidget);
+    expect(find.text('My routines (2)'), findsOneWidget);
     expect(find.text('Day A'), findsOneWidget);
     expect(find.text('Day B'), findsOneWidget);
-    expect(find.text('2 exercises'), findsOneWidget);
+    expect(find.text('Barbell Bench Press, Dumbbell One Arm Bent-over Row'), findsOneWidget);
     expect(await loadOnboardingDone(db), isTrue);
     await tearDownApp(tester);
   });
 
   testWidgets('onboarding: skip (Arabic) → empty routines state', (tester) async {
-    await pumpApp(tester, LanguagePref.ar, onboardingDone: false);
+    await pumpApp(tester, LanguagePref.ar, onboardingDone: false, programs: true);
     await tester.tap(find.text('التالي'));
     await settle(tester);
     await tester.tap(find.text('تخطّى، وابدأ من غير برنامج'));
@@ -136,9 +142,9 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Back'));
     await settle(tester);
     expect(find.text('Push day'), findsOneWidget);
-    expect(find.text('1 exercise'), findsOneWidget);
+    expect(find.text('Barbell Bench Press'), findsOneWidget); // exercise preview
 
-    await tester.tap(find.bySemanticsLabel('Start Push day'));
+    await tester.tap(find.bySemanticsLabel('Start routine'));
     await settle(tester);
     expect(find.byType(ActiveWorkoutScreen), findsOneWidget);
     final w = (await container.read(workoutRepositoryProvider).active())!;
@@ -200,7 +206,7 @@ void main() {
 
     final id = await repo().create(name: 'Legs');
     await settle(tester);
-    await tester.tap(find.text('Legs'));
+    await tester.tap(find.bySemanticsLabel('Routine options'));
     await settle(tester);
     await tester.tap(find.text('Delete routine'));
     await settle(tester);
@@ -209,6 +215,103 @@ void main() {
     await settle(tester);
     expect(await repo().loadDetail(id), isNull);
     expect(find.text('No routines yet'), findsOneWidget);
+    await tearDownApp(tester);
+  });
+
+  test('ready programs are hidden in this build', () {
+    expect(kProgramsEnabled, isFalse);
+    expect(ProviderContainer().read(programsEnabledProvider), isFalse);
+  });
+
+  for (final lang in [LanguagePref.en, LanguagePref.ar]) {
+    testWidgets('programs hidden: one onboarding screen (unit only), no entry, routes unreachable (${lang.name})',
+        (tester) async {
+      await pumpApp(tester, lang, onboardingDone: false);
+      expect(find.byType(OnboardingScreen), findsOneWidget);
+      expect(find.textContaining(lang == LanguagePref.en ? 'Step' : 'خطوة'), findsNothing);
+      await tester.tap(find.text(lang == LanguagePref.en ? 'Pounds' : 'باوند'));
+      await settle(tester);
+      await tester.tap(find.byKey(const ValueKey('onboarding-start')));
+      await settle(tester);
+      expect(find.byType(OnboardingScreen), findsNothing);
+      expect(await loadOnboardingDone(db), isTrue);
+      expect(parseWeightUnit(await db.readSetting(TrainingSettingsKeys.unit)), WeightUnit.lb);
+      expect(await db.select(db.routines).get(), isEmpty);
+      expect(find.byKey(const ValueKey('routinesProgramsEntry')), findsNothing);
+
+      final router = container.read(appRouterProvider);
+      router.go(AppRoutes.programs);
+      await settle(tester);
+      expect(find.byType(ProgramsScreen), findsNothing);
+      router.go(AppRoutes.programFor('test_ab'));
+      await settle(tester);
+      expect(find.byType(ProgramsScreen), findsNothing);
+      expect(router.routerDelegate.currentConfiguration.uri.path, AppRoutes.workout);
+      await tearDownApp(tester);
+    });
+  }
+
+  for (final lang in [LanguagePref.en, LanguagePref.ar]) {
+    testWidgets('routine card → read-only detail (SET | KG | REPS) → Edit → back → dumbbell start (${lang.name})',
+        (tester) async {
+      await pumpApp(tester, lang);
+      final id = await repo().create(name: 'Upper day');
+      await repo().addExercises(id, ['0025', '0292']);
+      final d = (await repo().loadDetail(id))!;
+      await repo().updateSet(d.exercises[0].sets[0].id, targetWeightKg: 15, targetReps: 8);
+      await settle(tester);
+
+      // Card: name, preview (max 2 lines), ⋯, icon-only start button.
+      expect(find.text(lang == LanguagePref.en ? 'My routines (1)' : 'روتيناتي (1)'), findsOneWidget);
+      final start = find.bySemanticsLabel(lang == LanguagePref.en ? 'Start routine' : 'ابدأ الروتين');
+      expect(start, findsOneWidget);
+      expect(find.descendant(of: find.byKey(ValueKey('routine-start-$id')), matching: find.byType(Text)), findsNothing);
+      expect(
+        find.descendant(of: find.byKey(ValueKey('routine-start-$id')), matching: find.byIcon(Icons.fitness_center_rounded)),
+        findsOneWidget,
+      );
+      final preview = tester.widgetList<Text>(find.byType(Text)).firstWhere((t) => RegExp('[,،]').hasMatch(t.data ?? ''));
+      expect(preview.maxLines, 2);
+
+      await tester.tap(find.text('Upper day'));
+      await settle(tester);
+      expect(find.byType(RoutineDetailScreen), findsOneWidget);
+      expect(find.byType(RoutineEditorScreen), findsNothing);
+      // Plain text rows, no inputs: 3 + 3 target sets; the first has 15 × 8.
+      expect(find.byType(TextField), findsNothing);
+      for (final e in d.exercises) {
+        for (final s in e.sets) {
+          expect(find.byKey(ValueKey('routine-detail-set-${s.id}')), findsOneWidget);
+        }
+      }
+      expect(find.text('15'), findsOneWidget);
+      expect(find.text('8'), findsOneWidget);
+      expect(find.text('KG'), findsNWidgets(2));
+
+      await tester.tap(find.byKey(const ValueKey('routineDetailEdit')));
+      await settle(tester);
+      expect(find.byType(RoutineEditorScreen), findsOneWidget);
+      await tester.tap(find.bySemanticsLabel(lang == LanguagePref.en ? 'Back' : 'رجوع'));
+      await settle(tester);
+      expect(find.byType(RoutineDetailScreen), findsOneWidget);
+
+      await tester.tap(find.byKey(const ValueKey('routineDetailStart')));
+      await settle(tester);
+      expect(find.byType(ActiveWorkoutScreen), findsOneWidget);
+      expect((await container.read(workoutRepositoryProvider).active())!.routineId, id);
+      await tearDownApp(tester);
+    });
+  }
+
+  testWidgets('⋯ menu → Edit opens the editor', (tester) async {
+    await pumpApp(tester, LanguagePref.en);
+    await repo().create(name: 'Legs');
+    await settle(tester);
+    await tester.tap(find.bySemanticsLabel('Routine options'));
+    await settle(tester);
+    await tester.tap(find.byKey(const ValueKey('routineMenuEdit')));
+    await settle(tester);
+    expect(find.byType(RoutineEditorScreen), findsOneWidget);
     await tearDownApp(tester);
   });
 }

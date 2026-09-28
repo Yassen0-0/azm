@@ -15,8 +15,9 @@ import '../../routines/ui/routines_home_section.dart';
 import '../data/workout_repository.dart';
 import 'workout_format.dart';
 
-/// Workout tab: big "Start workout" (empty workout → active workout in one
-/// tap), or the running workout; routines/programs below (RoutinesHomeSection).
+/// Workout tab: a compact "Start empty workout" row (empty workout → active
+/// workout in one tap), or the running workout; "My routines" below
+/// (RoutinesHomeSection).
 class WorkoutHomeScreen extends ConsumerWidget {
   const WorkoutHomeScreen({super.key});
 
@@ -27,10 +28,10 @@ class WorkoutHomeScreen extends ConsumerWidget {
     return AzmTabPage(
       title: l.shellTabWorkout,
       body: ListView(
-        padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.pageMargin, AzmSpace.md, AzmSpace.pageMargin, 0),
+        padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.pageMargin, AzmSpace.xs, AzmSpace.pageMargin, 0),
         children: [
-          if (active == null) const _StartCard() else _ActiveCard(workout: active),
-          // Routines window slot: my routines + ready programs.
+          if (active == null) const _StartRow() else _ActiveRow(workout: active),
+          // Routines window slot: my routines.
           const RoutinesHomeSection(),
         ],
       ),
@@ -45,38 +46,32 @@ Future<void> startEmptyWorkout(BuildContext context, WidgetRef ref) async {
   if (context.mounted) unawaited(context.push(AppRoutes.activeWorkout));
 }
 
-class _StartCard extends ConsumerWidget {
-  const _StartCard();
+/// Card row: + icon, "Start empty workout".
+class _StartRow extends ConsumerWidget {
+  const _StartRow();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final l = context.l10n;
-    return Container(
-      padding: const EdgeInsetsDirectional.all(AzmSpace.cardPadding),
-      decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(AzmRadius.card)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _PrimaryButton(
-            label: l.workoutStart,
-            icon: Icons.play_arrow_rounded,
-            onTap: () => startEmptyWorkout(context, ref),
-          ),
-          const SizedBox(height: AzmSpace.md),
-          Text(
-            l.workoutStartHint,
-            textAlign: TextAlign.center,
-            style: AzmType.secondary.copyWith(color: c.textSecondary),
-          ),
-        ],
+    return _CardRow(
+      key: const ValueKey('workoutStartEmpty'),
+      onTap: () => startEmptyWorkout(context, ref),
+      semanticLabel: l.workoutStartEmpty,
+      leading: Icon(Icons.add_rounded, color: c.textPrimary, size: AzmSize.icon),
+      child: Text(
+        l.workoutStartEmpty,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: AzmType.itemLabel.copyWith(color: c.textPrimary),
       ),
     );
   }
 }
 
-class _ActiveCard extends StatelessWidget {
-  const _ActiveCard({required this.workout});
+/// Card row for the running workout: play icon, name, elapsed time.
+class _ActiveRow extends StatelessWidget {
+  const _ActiveRow({required this.workout});
 
   final Workout workout;
 
@@ -84,38 +79,33 @@ class _ActiveCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final l = context.l10n;
-    return Container(
-      padding: const EdgeInsetsDirectional.all(AzmSpace.cardPadding),
-      decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(AzmRadius.card)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return _CardRow(
+      key: const ValueKey('workoutResume'),
+      onTap: () => context.push(AppRoutes.activeWorkout),
+      semanticLabel: '${l.workoutResume}: ${workout.name}',
+      leading: Icon(Icons.play_arrow_rounded, color: c.accent, size: AzmSize.icon),
+      child: Row(
         children: [
-          Text(l.workoutInProgress, style: AzmType.groupHeading.copyWith(color: c.textSecondary)),
-          const SizedBox(height: AzmSpace.xxs),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l.workoutResume, style: AzmType.itemLabel.copyWith(color: c.accent)),
+                Text(
                   workout.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: AzmType.cardTitle.copyWith(color: c.textPrimary),
+                  style: AzmType.secondary.copyWith(color: c.textSecondary),
                 ),
-              ),
-              AzmTicker(
-                period: const Duration(seconds: 1),
-                builder: (_, now) => Text(
-                  formatClock(now.difference(workout.startedAt)),
-                  style: AzmType.rowNumberCompact.copyWith(color: c.textSecondary),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: AzmSpace.md),
-          _PrimaryButton(
-            label: l.workoutResume,
-            icon: Icons.play_arrow_rounded,
-            onTap: () => context.push(AppRoutes.activeWorkout),
+          AzmTicker(
+            period: const Duration(seconds: 1),
+            builder: (_, now) => Text(
+              formatClock(now.difference(workout.startedAt)),
+              style: AzmType.rowNumberCompact.copyWith(color: c.textSecondary),
+            ),
           ),
         ],
       ),
@@ -123,29 +113,30 @@ class _ActiveCard extends StatelessWidget {
   }
 }
 
-class _PrimaryButton extends StatelessWidget {
-  const _PrimaryButton({required this.label, required this.icon, required this.onTap});
+class _CardRow extends StatelessWidget {
+  const _CardRow({super.key, required this.onTap, required this.semanticLabel, required this.leading, required this.child});
 
-  final String label;
-  final IconData icon;
   final VoidCallback onTap;
+  final String semanticLabel;
+  final Widget leading;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     return AzmPressable(
       onTap: onTap,
-      semanticLabel: label,
+      semanticLabel: semanticLabel,
       child: ExcludeSemantics(
         child: Container(
-          height: AzmSize.primaryButton,
-          decoration: BoxDecoration(color: c.accent, borderRadius: BorderRadius.circular(AzmRadius.button)),
+          constraints: const BoxConstraints(minHeight: AzmSize.primaryButton),
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xl, vertical: AzmSpace.xs),
+          decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(AzmRadius.input)),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: c.onAccent, size: AzmSize.icon),
-              const SizedBox(width: AzmSpace.xs),
-              Text(label, style: AzmType.button.copyWith(color: c.onAccent)),
+              leading,
+              const SizedBox(width: AzmSpace.md),
+              Expanded(child: child),
             ],
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/feature_flags.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/azm_theme.dart';
@@ -11,7 +12,9 @@ import '../../../core/widgets/azm_pressable.dart';
 import '../../routines/data/ready_programs.dart';
 import '../data/onboarding_gate.dart';
 
-/// First-run onboarding, two steps: 1) unit kg/lb, 2) optional ready program.
+/// First-run onboarding: 1) unit kg/lb, 2) optional ready program. While
+/// ready programs are hidden (`kProgramsEnabled`), it is the unit screen
+/// only, whose button finishes onboarding.
 /// Route: AppRoutes.onboarding (initial location while `onboarding_done` is
 /// unset). Finishing writes `onboarding_done` and goes to the Workout tab.
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -22,12 +25,13 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 }
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
-  static const _steps = 2;
-
   int _step = 0;
   WeightUnit _unit = WeightUnit.kg;
   String? _programId;
   bool _finishing = false;
+
+  bool get _withPrograms => ref.read(programsEnabledProvider);
+  int get _steps => _withPrograms ? 2 : 1;
 
   @override
   Widget build(BuildContext context) {
@@ -44,28 +48,29 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.xs, AzmSpace.xs, AzmSpace.pageMargin, 0),
-                child: Row(
-                  children: [
-                    if (_step > 0)
-                      AzmHeaderButton(
-                        icon: Icons.arrow_back_rounded,
-                        semanticLabel: l.commonBack,
-                        onTap: () => setState(() => _step--),
-                      )
-                    else
-                      const SizedBox(width: AzmSize.minTouchTarget, height: AzmSize.minTouchTarget),
-                    const SizedBox(width: AzmSpace.xs),
-                    Expanded(child: _Progress(step: _step, total: _steps)),
-                    const SizedBox(width: AzmSpace.md),
-                    Text(
-                      l.onboardingStep(AzmNumbers.integer(_step + 1), AzmNumbers.integer(_steps)),
-                      style: AzmType.smallStrong.copyWith(color: c.textSecondary),
-                    ),
-                  ],
+              if (_steps > 1)
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.xs, AzmSpace.xs, AzmSpace.pageMargin, 0),
+                  child: Row(
+                    children: [
+                      if (_step > 0)
+                        AzmHeaderButton(
+                          icon: Icons.arrow_back_rounded,
+                          semanticLabel: l.commonBack,
+                          onTap: () => setState(() => _step--),
+                        )
+                      else
+                        const SizedBox(width: AzmSize.minTouchTarget, height: AzmSize.minTouchTarget),
+                      const SizedBox(width: AzmSpace.xs),
+                      Expanded(child: _Progress(step: _step, total: _steps)),
+                      const SizedBox(width: AzmSpace.md),
+                      Text(
+                        l.onboardingStep(AzmNumbers.integer(_step + 1), AzmNumbers.integer(_steps)),
+                        style: AzmType.smallStrong.copyWith(color: c.textSecondary),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               Expanded(
                 child: AnimatedSwitcher(
                   duration: AzmMotion.of(context, AzmMotion.step),
@@ -119,12 +124,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             onTap: () => setState(() => _unit = WeightUnit.lb),
           ),
           const Spacer(),
-          _WideButton(
-            key: const ValueKey('onboarding-next'),
-            label: l.onboardingNext,
-            primary: true,
-            onTap: _next,
-          ),
+          if (_withPrograms)
+            _WideButton(
+              key: const ValueKey('onboarding-next'),
+              label: l.onboardingNext,
+              primary: true,
+              onTap: _next,
+            )
+          else
+            _WideButton(
+              key: const ValueKey('onboarding-start'),
+              label: l.onboardingStart,
+              primary: true,
+              onTap: _finishing ? null : () => _finish(null),
+            ),
         ],
       ),
     );

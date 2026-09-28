@@ -37,5 +37,18 @@
   "commonMediaCredit": "© Gym visual — https://gymvisual.com/",
   "commonSetDeleted": "Set deleted",
   "commonUndo": "Undo",
-  "commonSwipeDelete": "Delete"
+  "commonSwipeDelete": "Delete",
+  "commonTimeStart": "Start",
+  "commonTimeEnd": "End",
+  "commonTimeSave": "Save",
+  "commonTimeToday": "Today",
+  "commonTimeYesterday": "Yesterday",
+  "commonTimeFuture": "Can't be in the future",
+  "commonTimeOrder": "The end must be after the start",
+  "commonTimeEditTitle": "Edit workout time",
+  "commonTimeStartTitle": "When did you start?",
+  "commonTimeDuration": "Duration {time}",
+  "commonTimeDay": "Day",
+  "commonTimeHour": "Hour",
+  "commonTimeMinute": "Minute"
 }

@@ -46,5 +46,13 @@
   "routinesProgramMissing": "This program isn't available.",
   "routinesListSeparator": ", ",
   "routinesResumed": "A workout is already running, so we opened it.",
-  "routinesUnknownExercise": "Unknown exercise ({id})"
+  "routinesUnknownExercise": "Unknown exercise ({id})",
+  "routinesMyRoutinesCount": "My routines ({count})",
+  "routinesStartRoutine": "Start routine",
+  "routinesOptions": "Routine options",
+  "routinesEditShort": "Edit",
+  "routinesDetailTitle": "Routine",
+  "routinesDetailExercises": "Exercises",
+  "routinesDetailEmpty": "No exercises yet. Tap Edit to add some.",
+  "routinesEmptyBodyNoPrograms": "Build a routine once, then start it in one tap."
 }

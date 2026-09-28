@@ -33,6 +33,23 @@ abstract final class WorkoutSettingsKeys {
   return (weightKg: weight, reps: reps);
 }
 
+/// A workout's start/end is valid when start < end and nothing is in the
+/// future (end = null: still running, only start ≤ now).
+bool workoutTimesValid({required DateTime start, DateTime? end, required DateTime now}) {
+  if (start.isAfter(now)) return false;
+  if (end == null) return true;
+  return start.isBefore(end) && !end.isAfter(now);
+}
+
+/// [start] pulled back into range: not after [now], and at least a minute
+/// before [end] when there is one.
+({DateTime start}) clampWorkoutTimes({required DateTime start, DateTime? end, required DateTime now}) {
+  var s = start.toUtc();
+  if (s.isAfter(now)) s = now;
+  if (end != null && !s.isBefore(end)) s = end.subtract(const Duration(minutes: 1));
+  return (start: s);
+}
+
 /// A set to ✓ with these values.
 typedef SetCompletion = ({String setId, double weightKg, int reps});
 
@@ -74,7 +91,9 @@ class WorkoutExerciseDetail {
     required this.previous,
     required this.prs,
     required this.restSeconds,
-  });
+    this.restIsOverride = false,
+    int? defaultRestSeconds,
+  }) : defaultRestSeconds = defaultRestSeconds ?? restSeconds;
 
   final WorkoutExercise entry;
 
@@ -90,7 +109,17 @@ class WorkoutExerciseDetail {
   /// Set index (in [sets]) → PR types it holds versus all earlier workouts.
   final Map<int, Set<PrType>> prs;
 
+  /// Rest after a ✓ in seconds; 0 = OFF (no rest timer).
   final int restSeconds;
+
+  /// Set in this workout (rest line picker), not inherited from the routine
+  /// or the settings default.
+  final bool restIsOverride;
+
+  /// Rest without this workout's override (routine override → settings).
+  final int defaultRestSeconds;
+
+  bool get restOff => restSeconds <= 0;
 
   WorkoutSet? previousFor(int index) => index < previous.length ? previous[index] : null;
 }

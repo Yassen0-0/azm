@@ -177,6 +177,63 @@
   "@commonSwipeDelete": {
     "description": "Label of the red button revealed by swiping a set row (next to a trash icon; hidden, icon only, when it doesn't fit)."
   },
+  "commonTimeStart": "البداية",
+  "@commonTimeStart": {
+    "description": "Label of the start date/time in the workout time sheet."
+  },
+  "commonTimeEnd": "النهاية",
+  "@commonTimeEnd": {
+    "description": "Label of the end date/time in the workout time sheet."
+  },
+  "commonTimeSave": "حفظ",
+  "@commonTimeSave": {
+    "description": "Save button of the workout time sheet."
+  },
+  "commonTimeToday": "النهاردة",
+  "@commonTimeToday": {
+    "description": "Day wheel item: today."
+  },
+  "commonTimeYesterday": "امبارح",
+  "@commonTimeYesterday": {
+    "description": "Day wheel item: yesterday."
+  },
+  "commonTimeFuture": "مينفعش يبقى في المستقبل",
+  "@commonTimeFuture": {
+    "description": "Error in the workout time sheet: the chosen time is after now."
+  },
+  "commonTimeOrder": "النهاية لازم تبقى بعد البداية",
+  "@commonTimeOrder": {
+    "description": "Error in the workout time sheet: end is not after start."
+  },
+  "commonTimeEditTitle": "عدّل وقت التمرين",
+  "@commonTimeEditTitle": {
+    "description": "Title of the sheet that edits a finished workout's start and end."
+  },
+  "commonTimeStartTitle": "بدأت التمرين إمتى؟",
+  "@commonTimeStartTitle": {
+    "description": "Title of the sheet that edits the running workout's start time."
+  },
+  "commonTimeDuration": "المدة {time}",
+  "@commonTimeDuration": {
+    "description": "Live duration preview in the workout time sheet.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "commonTimeDay": "اليوم",
+  "@commonTimeDay": {
+    "description": "Screen-reader label of the day wheel."
+  },
+  "commonTimeHour": "الساعة",
+  "@commonTimeHour": {
+    "description": "Screen-reader label of the hour wheel."
+  },
+  "commonTimeMinute": "الدقيقة",
+  "@commonTimeMinute": {
+    "description": "Screen-reader label of the minute wheel."
+  },
   "exercisesSearchHint": "ابحث بالعربي أو English",
   "@exercisesSearchHint": {
     "description": "Hint in the exercise search box (Arabic, slang or English all work)."
@@ -1201,6 +1258,10 @@
   "@historyExerciseRecords": {
     "description": "Full exercise history: records card title."
   },
+  "historyEditTime": "عدّل الوقت",
+  "@historyEditTime": {
+    "description": "Past workout menu action: edit its start and end time."
+  },
   "onboardingStep": "خطوة {step} من {total}",
   "@onboardingStep": {
     "description": "Progress label at the top of onboarding.",
@@ -1261,6 +1322,10 @@
   "onboardingSkip": "تخطّى، وابدأ من غير برنامج",
   "@onboardingSkip": {
     "description": "Button that finishes onboarding without a program."
+  },
+  "onboardingStart": "يلا بينا",
+  "@onboardingStart": {
+    "description": "Button of the single onboarding screen (unit only)."
   },
   "routinesMyRoutines": "روتيناتي",
   "@routinesMyRoutines": {
@@ -1519,6 +1584,43 @@
         "type": "String"
       }
     }
+  },
+  "routinesMyRoutinesCount": "روتيناتي ({count})",
+  "@routinesMyRoutinesCount": {
+    "description": "Section header on the Workout tab with the number of routines.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesStartRoutine": "ابدأ الروتين",
+  "@routinesStartRoutine": {
+    "description": "Screen-reader label of the dumbbell start button (icon only)."
+  },
+  "routinesOptions": "خيارات الروتين",
+  "@routinesOptions": {
+    "description": "Screen-reader label of the ⋯ menu on a routine card."
+  },
+  "routinesEditShort": "تعديل",
+  "@routinesEditShort": {
+    "description": "Action on the routine detail: open the editor."
+  },
+  "routinesDetailTitle": "الروتين",
+  "@routinesDetailTitle": {
+    "description": "Title bar of the read-only routine detail."
+  },
+  "routinesDetailExercises": "التمارين",
+  "@routinesDetailExercises": {
+    "description": "Section label on the routine detail."
+  },
+  "routinesDetailEmpty": "لسه مفيش تمارين. دوس تعديل وضيف.",
+  "@routinesDetailEmpty": {
+    "description": "Routine detail of a routine without exercises."
+  },
+  "routinesEmptyBodyNoPrograms": "اعمل الروتين مرة واحدة وابدأه بضغطة واحدة.",
+  "@routinesEmptyBodyNoPrograms": {
+    "description": "Empty state of My routines while ready programs are hidden."
   },
   "settingsTitle": "الإعدادات",
   "@settingsTitle": {
@@ -2069,5 +2171,77 @@
   "workoutExactAlarmLater": "مش دلوقتي",
   "@workoutExactAlarmLater": {
     "description": "Exact-alarm sheet: dismiss (never asked again automatically)."
+  },
+  "workoutStartEmpty": "ابدأ تمرين فاضي",
+  "@workoutStartEmpty": {
+    "description": "Compact row on the Workout tab that starts an empty workout."
+  },
+  "workoutNotesHint": "ضيف ملاحظة...",
+  "@workoutNotesHint": {
+    "description": "Placeholder of the one-line notes field under an exercise in the live workout."
+  },
+  "workoutRestLine": "الراحة: {time}",
+  "@workoutRestLine": {
+    "description": "Tappable rest line under an exercise (time like 1:30, or OFF).",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutRestOff": "مقفولة",
+  "@workoutRestOff": {
+    "description": "Rest line value when this exercise has no rest timer."
+  },
+  "workoutRestPickerTitle": "وقت الراحة",
+  "@workoutRestPickerTitle": {
+    "description": "Title of the per-exercise rest picker in the live workout."
+  },
+  "workoutRestPickerDefault": "الافتراضي ({time})",
+  "@workoutRestPickerDefault": {
+    "description": "Rest picker option: use the routine / settings default.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutRestPickerOff": "من غير تايمر",
+  "@workoutRestPickerOff": {
+    "description": "Rest picker option: no rest timer for this exercise."
+  },
+  "workoutTimerTitle": "تايمر الراحة",
+  "@workoutTimerTitle": {
+    "description": "Top-bar button + sheet title: start a manual rest countdown."
+  },
+  "workoutTimerBody": "ابدأ عدّ تنازلي للراحة دلوقتي.",
+  "@workoutTimerBody": {
+    "description": "Body of the manual rest timer sheet."
+  },
+  "workoutTimerRunning": "فاضل {time}",
+  "@workoutTimerRunning": {
+    "description": "Manual rest sheet: the running timer's remaining time.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutElapsedEdit": "عدّى {time}. دوس عشان تغيّر وقت البداية",
+  "@workoutElapsedEdit": {
+    "description": "Screen-reader label of the elapsed time in the live workout top bar.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutStartTimeHint": "نسيت تفتح الأبلكيشن في ميعادك؟ رجّع وقت البداية والمدة هتتظبط.",
+  "@workoutStartTimeHint": {
+    "description": "Hint in the sheet that edits the running workout's start time."
+  },
+  "workoutEditTimes": "عدّل الوقت",
+  "@workoutEditTimes": {
+    "description": "Workout summary action: edit start and end time."
   }
 }

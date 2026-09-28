@@ -134,6 +134,11 @@ class WorkoutExercises extends Table {
   IntColumn get sort => integer().withDefault(const Constant(0))();
   TextColumn get notes => text().nullable()();
 
+  /// Rest after a ✓ for this exercise in this workout: null = the routine's
+  /// override or the settings default, 0 = OFF (no rest timer), else seconds.
+  /// Added in schema v3.
+  IntColumn get restSeconds => integer().nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -149,6 +154,11 @@ class WorkoutSets extends Table {
 
   /// Null = not ✓.
   DateTimeColumn get completedAt => dateTime().nullable()();
+
+  /// True while weight/reps are the app's pre-fill (routine target, the last
+  /// set copied by "Add set"), not values the user typed: shown muted until
+  /// edited. Added in schema v3.
+  BoolColumn get prefilled => boolean().withDefault(const Constant(false))();
 
   @override
   Set<Column> get primaryKey => {id};

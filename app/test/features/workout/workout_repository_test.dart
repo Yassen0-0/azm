@@ -247,7 +247,7 @@ void main() {
   });
 
   test('normal set numbers skip other types; best set uses e1RM', () async {
-    WorkoutSet s(SetType t, double w, int r, {bool done = true}) => WorkoutSet(
+    WorkoutSet s(SetType t, double w, int r, {bool done = true}) => WorkoutSet(prefilled: false, 
           id: newUuid(),
           workoutExerciseId: 'x',
           sort: 0,

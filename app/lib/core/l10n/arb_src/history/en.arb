@@ -51,5 +51,6 @@
   "historyRecord1Rm": "Est. 1RM",
   "historyRecordVolume": "Best volume",
   "historySeeAll": "See all history ({count})",
-  "historyExerciseRecords": "Your records"
+  "historyExerciseRecords": "Your records",
+  "historyEditTime": "Edit time"
 }

@@ -44,7 +44,7 @@ void main() {
     );
     await tester.pumpWidget(UncontrolledProviderScope(container: container, child: const AzmApp()));
     await settle(tester);
-    await tester.tap(find.text('Start workout'));
+    await tester.tap(find.text('Start empty workout'));
     await settle(tester);
     final id = (await repo().active())!.id;
     await repo().addExercises(id, ['0025', '0292']);

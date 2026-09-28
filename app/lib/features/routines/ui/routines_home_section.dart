@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/feature_flags.dart';
 import '../../../core/l10n/exercise_names.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/router/app_router.dart';
@@ -12,8 +13,10 @@ import '../../../core/widgets/azm_pressable.dart';
 import '../data/routine_repository.dart';
 import 'routines_widgets.dart';
 
-/// "My routines" + "Ready programs" on the Workout tab, rendered by
-/// WorkoutHomeScreen under the Start / Resume card.
+/// "My routines (N)" on the Workout tab, rendered by WorkoutHomeScreen under
+/// the start row: header + "New routine", then one card per routine. The
+/// ready-programs entry only shows while programs are enabled
+/// (core/feature_flags.dart).
 class RoutinesHomeSection extends ConsumerWidget {
   const RoutinesHomeSection({super.key});
 
@@ -25,17 +28,23 @@ class RoutinesHomeSection extends ConsumerWidget {
     // No DB (widget tests without one) or still loading: render nothing.
     final list = routines.value;
     if (list == null) return const SizedBox.shrink();
+    final programs = ref.watch(programsEnabledProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: AzmSpace.xxxl),
+        const SizedBox(height: AzmSpace.xl),
         Row(
           children: [
             Expanded(
               child: Semantics(
                 header: true,
-                child: Text(l.routinesMyRoutines, style: AzmType.sectionTitle.copyWith(color: c.textPrimary)),
+                child: Text(
+                  l.routinesMyRoutinesCount(AzmNumbers.integer(list.length)),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AzmType.cardTitle.copyWith(color: c.textSecondary),
+                ),
               ),
             ),
             if (list.isNotEmpty)
@@ -58,7 +67,7 @@ class RoutinesHomeSection extends ConsumerWidget {
               ),
           ],
         ),
-        const SizedBox(height: AzmSpace.xs),
+        const SizedBox(height: AzmSpace.xxs),
         if (list.isEmpty)
           const _EmptyCard()
         else
@@ -66,8 +75,10 @@ class RoutinesHomeSection extends ConsumerWidget {
             _RoutineCard(summary: r),
             const SizedBox(height: AzmSpace.listGap),
           ],
-        if (list.isEmpty) const SizedBox(height: AzmSpace.listGap),
-        const _ProgramsEntry(),
+        if (programs) ...[
+          if (list.isEmpty) const SizedBox(height: AzmSpace.listGap),
+          const _ProgramsEntry(),
+        ],
       ],
     );
   }
@@ -84,6 +95,9 @@ Future<void> startRoutine(BuildContext context, WidgetRef ref, String routineId)
   }
 }
 
+/// Routine card (Hevy density): name + ⋯ menu (edit, delete), up to two
+/// lines of exercise names, and a full-width dumbbell start button. Tapping
+/// the card opens the read-only routine detail.
 class _RoutineCard extends ConsumerWidget {
   const _RoutineCard({required this.summary});
 
@@ -104,78 +118,82 @@ class _RoutineCard extends ConsumerWidget {
 
     return Container(
       key: ValueKey('routine-${r.id}'),
+      padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.cardPadding, AzmSpace.xs, AzmSpace.xxs, AzmSpace.cardPadding),
       decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(AzmRadius.card)),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: AzmPressable(
-              onTap: () => context.push(AppRoutes.routineEditorFor(r.id)),
-              semanticLabel: name,
-              child: ExcludeSemantics(
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(
-                    AzmSpace.cardPadding,
-                    AzmSpace.md,
-                    AzmSpace.xs,
-                    AzmSpace.md,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AzmType.rowTitle.copyWith(color: c.textPrimary),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: AzmPressable(
+                  key: ValueKey('routine-open-${r.id}'),
+                  onTap: () => context.push(AppRoutes.routineDetailFor(r.id)),
+                  semanticLabel: preview.isEmpty ? name : '$name. $preview',
+                  child: ExcludeSemantics(
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(top: AzmSpace.xs),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AzmType.rowTitle.copyWith(color: c.textPrimary),
+                          ),
+                          const SizedBox(height: AzmSpace.opticalInset),
+                          Text(
+                            preview.isEmpty ? l.routinesExerciseCount(count, AzmNumbers.integer(count)) : preview,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AzmType.secondary.copyWith(color: c.textSecondary),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: AzmSpace.opticalInset),
-                      Text(
-                        l.routinesExerciseCount(count, AzmNumbers.integer(count)),
-                        style: AzmType.secondaryStrong.copyWith(color: c.textSecondary),
-                      ),
-                      if (preview.isNotEmpty) ...[
-                        const SizedBox(height: AzmSpace.opticalInset),
-                        Text(
-                          preview,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AzmType.secondary.copyWith(color: c.textTertiary),
-                        ),
-                      ],
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
+              AzmPressable(
+                key: ValueKey('routine-menu-${r.id}'),
+                onTap: () => _menu(context, ref, r.id, name),
+                semanticLabel: l.routinesOptions,
+                child: Icon(Icons.more_horiz_rounded, color: c.textPrimary, size: AzmSize.icon),
+              ),
+            ],
           ),
-          AzmPressable(
-            key: ValueKey('routine-start-${r.id}'),
-            onTap: count == 0 ? null : () => startRoutine(context, ref, r.id),
-            semanticLabel: l.routinesStart(name),
-            child: Padding(
-              padding: const EdgeInsetsDirectional.only(end: AzmSpace.md),
-              child: Container(
-                width: AzmSize.minTouchTarget,
-                height: AzmSize.minTouchTarget,
-                decoration: BoxDecoration(
-                  color: count == 0 ? c.actionDisabled : c.accent,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.play_arrow_rounded, color: count == 0 ? c.textTertiary : c.onAccent, size: AzmSize.icon),
-              ),
+          const SizedBox(height: AzmSpace.md),
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: AzmSpace.md),
+            child: RoutineStartButton(
+              key: ValueKey('routine-start-${r.id}'),
+              onTap: count == 0 ? null : () => startRoutine(context, ref, r.id),
             ),
           ),
         ],
       ),
     );
   }
+
+  Future<void> _menu(BuildContext context, WidgetRef ref, String id, String name) async {
+    final action = await showRoutineMenu(context, name);
+    if (!context.mounted || action == null) return;
+    switch (action) {
+      case RoutineMenuAction.edit:
+        unawaited(context.push(AppRoutes.routineEditorFor(id)));
+      case RoutineMenuAction.delete:
+        await confirmDeleteRoutine(context, () => ref.read(routineRepositoryProvider).delete(id));
+    }
+  }
 }
 
-class _EmptyCard extends StatelessWidget {
+class _EmptyCard extends ConsumerWidget {
   const _EmptyCard();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final l = context.l10n;
     return Container(
@@ -193,7 +211,7 @@ class _EmptyCard extends StatelessWidget {
           ),
           const SizedBox(height: AzmSpace.xxs),
           Text(
-            l.routinesEmptyBody,
+            ref.watch(programsEnabledProvider) ? l.routinesEmptyBody : l.routinesEmptyBodyNoPrograms,
             textAlign: TextAlign.center,
             style: AzmType.secondary.copyWith(color: c.textSecondary),
           ),

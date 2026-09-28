@@ -93,6 +93,12 @@ void main() {
       raw.execute("INSERT INTO exercises (id, name_en, body_part, target, equipment, instructions_en, "
           "media_id, search_norm) VALUES ('0077', 'Old', 'upper legs', 'glutes', 'barbell', '[]', 'm', 'old')");
       raw.execute('INSERT INTO catalog_meta VALUES (2)');
+      // User tables the v3 step extends (their v1 shape).
+      raw.execute('CREATE TABLE workout_exercises (id TEXT NOT NULL PRIMARY KEY, workout_id TEXT NOT NULL, '
+          'exercise_id TEXT NOT NULL, sort INTEGER NOT NULL DEFAULT 0, notes TEXT)');
+      raw.execute('CREATE TABLE workout_sets (id TEXT NOT NULL PRIMARY KEY, workout_exercise_id TEXT NOT NULL, '
+          "sort INTEGER NOT NULL DEFAULT 0, type TEXT NOT NULL DEFAULT 'normal', weight_kg REAL NOT NULL DEFAULT 0, "
+          'reps INTEGER NOT NULL DEFAULT 0, completed_at TEXT)');
       raw.userVersion = 1;
     }));
     addTearDown(db.close);

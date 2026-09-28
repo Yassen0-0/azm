@@ -300,5 +300,77 @@
   "workoutExactAlarmLater": "مش دلوقتي",
   "@workoutExactAlarmLater": {
     "description": "Exact-alarm sheet: dismiss (never asked again automatically)."
+  },
+  "workoutStartEmpty": "ابدأ تمرين فاضي",
+  "@workoutStartEmpty": {
+    "description": "Compact row on the Workout tab that starts an empty workout."
+  },
+  "workoutNotesHint": "ضيف ملاحظة...",
+  "@workoutNotesHint": {
+    "description": "Placeholder of the one-line notes field under an exercise in the live workout."
+  },
+  "workoutRestLine": "الراحة: {time}",
+  "@workoutRestLine": {
+    "description": "Tappable rest line under an exercise (time like 1:30, or OFF).",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutRestOff": "مقفولة",
+  "@workoutRestOff": {
+    "description": "Rest line value when this exercise has no rest timer."
+  },
+  "workoutRestPickerTitle": "وقت الراحة",
+  "@workoutRestPickerTitle": {
+    "description": "Title of the per-exercise rest picker in the live workout."
+  },
+  "workoutRestPickerDefault": "الافتراضي ({time})",
+  "@workoutRestPickerDefault": {
+    "description": "Rest picker option: use the routine / settings default.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutRestPickerOff": "من غير تايمر",
+  "@workoutRestPickerOff": {
+    "description": "Rest picker option: no rest timer for this exercise."
+  },
+  "workoutTimerTitle": "تايمر الراحة",
+  "@workoutTimerTitle": {
+    "description": "Top-bar button + sheet title: start a manual rest countdown."
+  },
+  "workoutTimerBody": "ابدأ عدّ تنازلي للراحة دلوقتي.",
+  "@workoutTimerBody": {
+    "description": "Body of the manual rest timer sheet."
+  },
+  "workoutTimerRunning": "فاضل {time}",
+  "@workoutTimerRunning": {
+    "description": "Manual rest sheet: the running timer's remaining time.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutElapsedEdit": "عدّى {time}. دوس عشان تغيّر وقت البداية",
+  "@workoutElapsedEdit": {
+    "description": "Screen-reader label of the elapsed time in the live workout top bar.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutStartTimeHint": "نسيت تفتح الأبلكيشن في ميعادك؟ رجّع وقت البداية والمدة هتتظبط.",
+  "@workoutStartTimeHint": {
+    "description": "Hint in the sheet that edits the running workout's start time."
+  },
+  "workoutEditTimes": "عدّل الوقت",
+  "@workoutEditTimes": {
+    "description": "Workout summary action: edit start and end time."
   }
 }

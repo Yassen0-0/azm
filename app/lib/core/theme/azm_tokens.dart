@@ -53,13 +53,33 @@ abstract final class AzmSize {
   static const double tabBarBadgeDisc = 16;
 
   // Gym additions
-  static const double setRowMinHeight = 52;
+  /// Minimum height of a SetRow (was 52 before the compact overhaul).
+  static const double setRowMinHeight = 48;
   static const double setCellMinWidth = 48;
   static const double keypadKeyHeight = 52;
   static const double restBarHeight = 64;
   static const double activeBarHeight = 56;
   static const double thumbnailList = 48;
   static const double thumbnailCard = 72;
+
+  // Compact, Hevy-density layout (Workout tab, routine detail + editor,
+  // live workout; docs/DESIGN.md → Sizes). Touch targets stay ≥ 44.
+  /// Smallest touch target of a compact control (set cells, rest line).
+  static const double touchCompact = 44;
+  /// Compact button / row: start-empty row, dumbbell start, "Add set".
+  static const double buttonCompact = 44;
+  /// Compact input: routine-editor fields and value cells.
+  static const double inputCompact = 40;
+  /// Outlined KG / REPS box and set-number / ✓ squares inside a set row.
+  static const double setBox = 36;
+  /// Read-only set row on the routine detail.
+  static const double detailRow = 44;
+  /// Round exercise thumbnail in the live workout and on the routine detail.
+  static const double avatar = 40;
+  /// Stroke of an outlined value box.
+  static const double outline = 1;
+  /// Stroke of the value box being edited with the keypad.
+  static const double outlineActive = 1.5;
 
   // Library filters
   /// Icon on a filter card (place / muscle-group silhouette / equipment).

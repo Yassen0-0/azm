@@ -257,5 +257,42 @@
         "type": "String"
       }
     }
+  },
+  "routinesMyRoutinesCount": "روتيناتي ({count})",
+  "@routinesMyRoutinesCount": {
+    "description": "Section header on the Workout tab with the number of routines.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "routinesStartRoutine": "ابدأ الروتين",
+  "@routinesStartRoutine": {
+    "description": "Screen-reader label of the dumbbell start button (icon only)."
+  },
+  "routinesOptions": "خيارات الروتين",
+  "@routinesOptions": {
+    "description": "Screen-reader label of the ⋯ menu on a routine card."
+  },
+  "routinesEditShort": "تعديل",
+  "@routinesEditShort": {
+    "description": "Action on the routine detail: open the editor."
+  },
+  "routinesDetailTitle": "الروتين",
+  "@routinesDetailTitle": {
+    "description": "Title bar of the read-only routine detail."
+  },
+  "routinesDetailExercises": "التمارين",
+  "@routinesDetailExercises": {
+    "description": "Section label on the routine detail."
+  },
+  "routinesDetailEmpty": "لسه مفيش تمارين. دوس تعديل وضيف.",
+  "@routinesDetailEmpty": {
+    "description": "Routine detail of a routine without exercises."
+  },
+  "routinesEmptyBodyNoPrograms": "اعمل الروتين مرة واحدة وابدأه بضغطة واحدة.",
+  "@routinesEmptyBodyNoPrograms": {
+    "description": "Empty state of My routines while ready programs are hidden."
   }
 }

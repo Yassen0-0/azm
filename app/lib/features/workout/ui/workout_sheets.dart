@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/widgets/azm_pressable.dart';
+import '../../../core/widgets/rest_timer_bar.dart' show AzmTicker, formatClock;
 
 /// Bottom-sheet list row: icon + label (optionally destructive / selected).
 class SheetAction extends StatelessWidget {
@@ -67,6 +68,177 @@ Future<T?> _sheet<T>(BuildContext context, {required String title, required List
         ),
       ),
     );
+
+/// Like [_sheet], but scrolls when the options don't fit (long lists).
+Future<T?> _scrollSheet<T>(BuildContext context, {required String title, required List<Widget> Function(BuildContext) children}) =>
+    showModalBottomSheet<T>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (context) => SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.8),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.xxl, 0, AzmSpace.xxl, AzmSpace.xs),
+                  child: Text(title, style: AzmType.cardTitle.copyWith(color: context.colors.textPrimary)),
+                ),
+                ...children(context),
+                const SizedBox(height: AzmSpace.xs),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+/// Rest choices offered per exercise and as manual timer presets (seconds).
+const List<int> kWorkoutRestChoices = [30, 45, 60, 90, 120, 150, 180, 240, 300];
+
+/// Presets of the manual rest timer (top-bar ⏱).
+const List<int> kManualRestPresets = [30, 60, 90, 120, 180, 300];
+
+/// Rest as `m:ss` (Western digits).
+String formatRestSeconds(int seconds) => formatClock(Duration(seconds: seconds));
+
+/// Keys for tests.
+abstract final class WorkoutSheetKeys {
+  static const restDefault = ValueKey('restPickDefault');
+  static const restOff = ValueKey('restPickOff');
+  static ValueKey<String> restChoice(int s) => ValueKey('restPick-$s');
+  static ValueKey<String> manualPreset(int s) => ValueKey('manualRest-$s');
+  static const manualSkip = ValueKey('manualRestSkip');
+}
+
+/// Per-exercise rest picker (the "Rest Timer" line): default, OFF, or a
+/// fixed time. Returns `(seconds: null)` for default, `(seconds: 0)` for OFF,
+/// `(seconds: s)` for a time, or null when dismissed.
+Future<({int? seconds})?> showExerciseRestSheet(
+  BuildContext context, {
+  required String exerciseName,
+  required int? current,
+  required int defaultSeconds,
+}) {
+  final l = context.l10n;
+  return _scrollSheet<({int? seconds})>(
+    context,
+    title: '${l.workoutRestPickerTitle} · $exerciseName',
+    children: (ctx) => [
+      SheetAction(
+        key: WorkoutSheetKeys.restDefault,
+        label: l.workoutRestPickerDefault(formatRestSeconds(defaultSeconds)),
+        icon: Icons.settings_backup_restore_rounded,
+        selected: current == null,
+        onTap: () => Navigator.pop(ctx, (seconds: null)),
+      ),
+      SheetAction(
+        key: WorkoutSheetKeys.restOff,
+        label: l.workoutRestPickerOff,
+        icon: Icons.timer_off_outlined,
+        selected: current == 0,
+        onTap: () => Navigator.pop(ctx, (seconds: 0)),
+      ),
+      for (final s in kWorkoutRestChoices)
+        SheetAction(
+          key: WorkoutSheetKeys.restChoice(s),
+          label: formatRestSeconds(s),
+          icon: Icons.timer_outlined,
+          selected: current == s,
+          onTap: () => Navigator.pop(ctx, (seconds: s)),
+        ),
+    ],
+  );
+}
+
+/// Manual rest timer (top-bar ⏱): presets start a countdown; while one runs
+/// it shows the time left and "Skip". Returns the seconds to start, 0 to
+/// skip the running one, or null when dismissed.
+Future<int?> showManualRestSheet(
+  BuildContext context, {
+  required DateTime? runningEndsAt,
+  required DateTime Function() now,
+}) {
+  final l = context.l10n;
+  return showModalBottomSheet<int>(
+    context: context,
+    useRootNavigator: true,
+    isScrollControlled: true,
+    builder: (ctx) {
+      final c = ctx.colors;
+      return SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.xxl, 0, AzmSpace.xxl, AzmSpace.xs),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(l.workoutTimerTitle, style: AzmType.cardTitle.copyWith(color: c.textPrimary)),
+              const SizedBox(height: AzmSpace.xxs),
+              Text(l.workoutTimerBody, style: AzmType.secondary.copyWith(color: c.textSecondary)),
+              if (runningEndsAt != null) ...[
+                const SizedBox(height: AzmSpace.md),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AzmTicker(
+                        now: now,
+                        builder: (_, t) => Text(
+                          l.workoutTimerRunning(formatClock(runningEndsAt.difference(t))),
+                          style: AzmType.rowNumberCompact.copyWith(color: c.accent),
+                        ),
+                      ),
+                    ),
+                    AzmPressable(
+                      key: WorkoutSheetKeys.manualSkip,
+                      onTap: () => Navigator.pop(ctx, 0),
+                      semanticLabel: l.workoutRestSkip,
+                      child: ExcludeSemantics(
+                        child: Center(
+                          child: Text(l.workoutRestSkip, style: AzmType.controlLabel.copyWith(color: c.accent)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              const SizedBox(height: AzmSpace.md),
+              GridView(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: AzmSpace.xs,
+                  crossAxisSpacing: AzmSpace.xs,
+                  mainAxisExtent: AzmSize.buttonCompact,
+                ),
+                children: [
+                  for (final s in kManualRestPresets)
+                    AzmPressable(
+                      key: WorkoutSheetKeys.manualPreset(s),
+                      onTap: () => Navigator.pop(ctx, s),
+                      semanticLabel: formatRestSeconds(s),
+                      child: ExcludeSemantics(
+                        child: Container(
+                          alignment: AlignmentDirectional.center,
+                          decoration: BoxDecoration(color: c.fill, borderRadius: BorderRadius.circular(AzmRadius.input)),
+                          child: Text(formatRestSeconds(s), style: AzmType.rowNumberCompact.copyWith(color: c.textPrimary)),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: AzmSpace.xs),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
 enum ExerciseMenuAction { reorder, remove }
 

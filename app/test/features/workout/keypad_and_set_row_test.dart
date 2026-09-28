@@ -1,5 +1,6 @@
 import 'package:azm/core/l10n/l10n.dart';
 import 'package:azm/core/theme/azm_theme.dart';
+import 'package:azm/core/widgets/azm_pressable.dart';
 import 'package:azm/core/widgets/set_row.dart';
 import 'package:azm/core/widgets/weight_keypad.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +89,7 @@ void main() {
       bool pr = false,
       String weight = '',
       String reps = '',
+      bool muted = false,
     }) =>
         SetRow(
           setId: 's1',
@@ -100,6 +102,7 @@ void main() {
           repsHint: '8',
           completed: completed,
           isPr: pr,
+          valuesMuted: muted,
           onLabelTap: () => calls.add('label'),
           onPreviousTap: () => calls.add('previous'),
           onWeightTap: () => calls.add('weight'),
@@ -114,11 +117,32 @@ void main() {
 
     Color textColor(WidgetTester tester, String text) => tester.widget<Text>(find.text(text)).style!.color!;
 
-    testWidgets('empty set shows the previous values as grey hints', (tester) async {
+    testWidgets('empty set shows the previous values as muted hints', (tester) async {
       await tester.pumpWidget(_wrap(row()));
-      expect(textColor(tester, '60'), AzmColors.dark.textNoData);
-      expect(textColor(tester, '8'), AzmColors.dark.textNoData);
+      expect(textColor(tester, '60'), AzmColors.dark.textTertiary);
+      expect(textColor(tester, '8'), AzmColors.dark.textTertiary);
       expect(find.text('60 × 8'), findsOneWidget);
+    });
+
+    testWidgets('pre-filled values stay muted until edited; typed values are primary', (tester) async {
+      await tester.pumpWidget(_wrap(row(weight: '15', reps: '8', muted: true)));
+      expect(textColor(tester, '15'), AzmColors.dark.textTertiary);
+      await tester.pumpWidget(_wrap(row(weight: '15', reps: '8')));
+      expect(textColor(tester, '15'), AzmColors.dark.textPrimary);
+      // A ✓ row shows its values in full colour even if they were pre-filled.
+      await tester.pumpWidget(_wrap(row(weight: '15', reps: '8', muted: true, completed: true)));
+      expect(textColor(tester, '15'), AzmColors.dark.textPrimary);
+    });
+
+    testWidgets('rows are 48 high; every cell is a ≥ 44 touch target', (tester) async {
+      await tester.pumpWidget(_wrap(Column(children: [row(weight: '60', reps: '8')])));
+      expect(tester.getSize(find.byKey(SetRow.rowKey('s1'))).height, AzmSize.setRowMinHeight);
+      for (final f in [find.text('1'), find.text('60'), find.text('8'), find.bySemanticsLabel('Mark set complete')]) {
+        final hit = find.ancestor(of: f, matching: find.byType(AzmPressable)).first;
+        final size = tester.getSize(hit);
+        expect(size.height, greaterThanOrEqualTo(AzmSize.touchCompact), reason: '$f');
+        expect(size.width, greaterThanOrEqualTo(AzmSize.touchCompact), reason: '$f');
+      }
     });
 
     testWidgets('warm-up label is amber; failure label is NOT red', (tester) async {

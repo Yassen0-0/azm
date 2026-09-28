@@ -134,6 +134,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonSwipeDelete => 'Delete';
 
   @override
+  String get commonTimeStart => 'Start';
+
+  @override
+  String get commonTimeEnd => 'End';
+
+  @override
+  String get commonTimeSave => 'Save';
+
+  @override
+  String get commonTimeToday => 'Today';
+
+  @override
+  String get commonTimeYesterday => 'Yesterday';
+
+  @override
+  String get commonTimeFuture => 'Can\'t be in the future';
+
+  @override
+  String get commonTimeOrder => 'The end must be after the start';
+
+  @override
+  String get commonTimeEditTitle => 'Edit workout time';
+
+  @override
+  String get commonTimeStartTitle => 'When did you start?';
+
+  @override
+  String commonTimeDuration(String time) {
+    return 'Duration $time';
+  }
+
+  @override
+  String get commonTimeDay => 'Day';
+
+  @override
+  String get commonTimeHour => 'Hour';
+
+  @override
+  String get commonTimeMinute => 'Minute';
+
+  @override
   String get exercisesSearchHint => 'Search exercises';
 
   @override
@@ -886,6 +927,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get historyExerciseRecords => 'Your records';
 
   @override
+  String get historyEditTime => 'Edit time';
+
+  @override
   String onboardingStep(String step, String total) {
     return 'Step $step of $total';
   }
@@ -925,6 +969,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingSkip => 'Skip, start empty';
+
+  @override
+  String get onboardingStart => 'Let\'s go';
 
   @override
   String get routinesMyRoutines => 'My routines';
@@ -1118,6 +1165,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String routinesUnknownExercise(String id) {
     return 'Unknown exercise ($id)';
   }
+
+  @override
+  String routinesMyRoutinesCount(String count) {
+    return 'My routines ($count)';
+  }
+
+  @override
+  String get routinesStartRoutine => 'Start routine';
+
+  @override
+  String get routinesOptions => 'Routine options';
+
+  @override
+  String get routinesEditShort => 'Edit';
+
+  @override
+  String get routinesDetailTitle => 'Routine';
+
+  @override
+  String get routinesDetailExercises => 'Exercises';
+
+  @override
+  String get routinesDetailEmpty => 'No exercises yet. Tap Edit to add some.';
+
+  @override
+  String get routinesEmptyBodyNoPrograms =>
+      'Build a routine once, then start it in one tap.';
 
   @override
   String get settingsTitle => 'Settings';
@@ -1541,4 +1615,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workoutExactAlarmLater => 'Not now';
+
+  @override
+  String get workoutStartEmpty => 'Start empty workout';
+
+  @override
+  String get workoutNotesHint => 'Add notes here...';
+
+  @override
+  String workoutRestLine(String time) {
+    return 'Rest Timer: $time';
+  }
+
+  @override
+  String get workoutRestOff => 'OFF';
+
+  @override
+  String get workoutRestPickerTitle => 'Rest timer';
+
+  @override
+  String workoutRestPickerDefault(String time) {
+    return 'Default ($time)';
+  }
+
+  @override
+  String get workoutRestPickerOff => 'Off (no timer)';
+
+  @override
+  String get workoutTimerTitle => 'Rest timer';
+
+  @override
+  String get workoutTimerBody => 'Start a rest countdown now.';
+
+  @override
+  String workoutTimerRunning(String time) {
+    return '$time left';
+  }
+
+  @override
+  String workoutElapsedEdit(String time) {
+    return 'Elapsed $time. Tap to change the start time';
+  }
+
+  @override
+  String get workoutStartTimeHint =>
+      'Forgot to open the app on time? Move the start back and the duration follows.';
+
+  @override
+  String get workoutEditTimes => 'Edit time';
 }

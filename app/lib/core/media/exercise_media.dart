@@ -21,17 +21,27 @@ import 'media_resolver.dart';
 /// `showExercisePreview`); the row around it keeps its own tap. Pass
 /// [preview] = false where the thumbnail must stay inert.
 class ExerciseThumbnail extends ConsumerWidget {
-  const ExerciseThumbnail({super.key, required this.exercise, this.size = AzmSize.thumbnailList, this.preview = true});
+  const ExerciseThumbnail({
+    super.key,
+    required this.exercise,
+    this.size = AzmSize.thumbnailList,
+    this.preview = true,
+    this.round = false,
+  });
 
   final Exercise exercise;
   final double size;
   final bool preview;
+
+  /// Circle instead of the rounded square (live workout, routine detail).
+  final bool round;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final url = ref.watch(mediaResolverProvider).thumbnailFor(exercise);
     final thumbnail = _Frame(
       size: size,
+      round: round,
       child: url == null
           ? _Fallback(size: size)
           : url.startsWith(MediaConfig.assetScheme)
@@ -143,16 +153,19 @@ class _BundledImage extends StatelessWidget {
 }
 
 class _Frame extends StatelessWidget {
-  const _Frame({required this.size, required this.child});
+  const _Frame({required this.size, required this.child, this.round = false});
 
   final double size;
   final Widget child;
+  final bool round;
 
   @override
-  Widget build(BuildContext context) => ClipRRect(
-        borderRadius: BorderRadius.circular(AzmRadius.input),
-        child: SizedBox.square(dimension: size, child: child),
-      );
+  Widget build(BuildContext context) => round
+      ? ClipOval(child: SizedBox.square(dimension: size, child: child))
+      : ClipRRect(
+          borderRadius: BorderRadius.circular(AzmRadius.input),
+          child: SizedBox.square(dimension: size, child: child),
+        );
 }
 
 class _Fallback extends StatelessWidget {
