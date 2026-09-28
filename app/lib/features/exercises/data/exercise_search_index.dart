@@ -47,6 +47,31 @@ class ExerciseSearchIndex {
     ];
   }
 
+  /// Cards of [kind] that match at least one exercise of the catalog, in
+  /// sheet order. Cards with none (today: suspension band, muscle "other")
+  /// are hidden; they come back by themselves if a future catalog fills them.
+  List<String> availableOptions(FilterKind kind) {
+    final m = mapping;
+    if (m == null) return const [];
+    final used = <String>{
+      for (final x in _entries)
+        if (x.tags != null) ...switch (kind) {
+          FilterKind.place => x.tags!.places,
+          FilterKind.muscle => x.tags!.muscles,
+          FilterKind.equipment => {x.tags!.equipment},
+        },
+    };
+    return [for (final id in m.optionsOf(kind)) if (used.contains(id)) id];
+  }
+
+  /// Drops selected cards that match no exercise (e.g. remembered from an
+  /// older catalog), so a hidden card can never filter the list.
+  ExerciseFilters onlyAvailable(ExerciseFilters f) => ExerciseFilters(
+        places: f.places.where(availableOptions(FilterKind.place).contains).toSet(),
+        muscles: f.muscles.where(availableOptions(FilterKind.muscle).contains).toSet(),
+        equipment: f.equipment.where(availableOptions(FilterKind.equipment).contains).toSet(),
+      );
+
   /// Number of results [query] would list (the sheets' live "Show N results").
   int count(ExerciseQuery query) => _matches(query, searchTokens(query.text)).length;
 

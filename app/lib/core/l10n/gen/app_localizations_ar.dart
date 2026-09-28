@@ -164,7 +164,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercisesNoResultsBody => 'جرّب اسم تاني، أو شيل الفلاتر.';
 
   @override
-  String get exercisesClearFilters => 'شيل الفلاتر';
+  String get exercisesClearFilters => 'امسح الفلاتر';
 
   @override
   String get exercisesLibraryEmpty => 'مكتبة التمارين مش جاهزة لسه';

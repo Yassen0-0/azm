@@ -145,6 +145,46 @@ void main() {
     expect(find.bySemanticsLabel('Place, 1 selected'), findsOneWidget);
   });
 
+  for (final lang in [LanguagePref.en, LanguagePref.ar]) {
+    testWidgets('cards with 0 exercises are hidden (${lang.name})', (tester) async {
+      await openLibrary(tester, lang);
+      await openFilterSheet(tester, FilterKind.equipment);
+      expect(find.byKey(FilterKeys.card(FilterKind.equipment, 'suspension_band')), findsNothing);
+      expect(find.byKey(FilterKeys.card(FilterKind.equipment, 'dumbbell')), findsOneWidget);
+      await tester.tapAt(const Offset(20, 20));
+      await settle(tester);
+
+      await openFilterSheet(tester, FilterKind.muscle);
+      final list = find.descendant(of: find.byType(BottomSheet), matching: find.byType(Scrollable)).first;
+      await tester.scrollUntilVisible(find.byKey(FilterKeys.card(FilterKind.muscle, 'full_body')), 200, scrollable: list);
+      await settle(tester);
+      // The "Other" section keeps cardio + full body; the empty "other" card is gone.
+      expect(find.byKey(FilterKeys.card(FilterKind.muscle, 'cardio')), findsOneWidget);
+      expect(find.byKey(FilterKeys.card(FilterKind.muscle, 'other')), findsNothing);
+      expect(find.text(lang == LanguagePref.en ? 'Other' : 'تاني'), findsOneWidget); // the section title only
+    });
+  }
+
+  testWidgets('a remembered filter on a hidden card is dropped on restore', (tester) async {
+    await db.writeSetting(
+      FilterScreen.library.settingsKey,
+      '{"place":[],"muscle":["other"],"equipment":["suspension_band","dumbbell"]}',
+    );
+    await openLibrary(tester, LanguagePref.en);
+    expect(find.text('281 exercises'), findsOneWidget); // dumbbell only
+    expect(find.bySemanticsLabel('Equipment, 1 selected'), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('^Muscle group, ')), findsNothing);
+  });
+
+  testWidgets('Arabic: "امسح الفلاتر" in the result bar and in the sheet', (tester) async {
+    await openLibrary(tester, LanguagePref.ar);
+    await applyFilter(tester, FilterKind.muscle, ['chest']);
+    expect(find.descendant(of: find.byKey(FilterKeys.clearAll), matching: find.text('امسح الفلاتر')), findsOneWidget);
+    await openFilterSheet(tester, FilterKind.muscle);
+    expect(find.descendant(of: find.byKey(FilterKeys.clear), matching: find.text('امسح الفلاتر')), findsOneWidget);
+    expect(find.text('شيل الفلاتر'), findsNothing);
+  });
+
   testWidgets('Arabic: Egyptian gym labels, RTL sheet, live Arabic count', (tester) async {
     await openLibrary(tester, LanguagePref.ar);
     expect(find.text('المكان'), findsOneWidget);

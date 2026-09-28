@@ -17,7 +17,8 @@ abstract final class FilterKeys {
 }
 
 /// Filter sheet of one type (docs/SPEC.md → Exercise library → Filters): a
-/// grid of cards (icon + name), multi-select; "Show N results" applies the
+/// grid of cards (icon + name; cards without any exercise are hidden),
+/// multi-select; "Show N results" applies the
 /// selection (N is live: search text and the other filters included) and
 /// "Clear filters" unselects this sheet's cards. Returns the new selection,
 /// or null when dismissed without applying.
@@ -27,6 +28,7 @@ Future<Set<String>?> showFilterSheet(
   required ExerciseFilterMapping mapping,
   required Set<String> selected,
   required int Function(Set<String> selection) countFor,
+  List<String>? options,
 }) {
   return showModalBottomSheet<Set<String>>(
     context: context,
@@ -35,17 +37,32 @@ Future<Set<String>?> showFilterSheet(
     useRootNavigator: true,
     useSafeArea: true,
     constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.85),
-    builder: (context) => _FilterSheet(kind: kind, mapping: mapping, initial: selected, countFor: countFor),
+    builder: (context) => _FilterSheet(
+      kind: kind,
+      mapping: mapping,
+      initial: selected,
+      countFor: countFor,
+      options: (options ?? mapping.optionsOf(kind)).toSet(),
+    ),
   );
 }
 
 class _FilterSheet extends StatefulWidget {
-  const _FilterSheet({required this.kind, required this.mapping, required this.initial, required this.countFor});
+  const _FilterSheet({
+    required this.kind,
+    required this.mapping,
+    required this.initial,
+    required this.countFor,
+    required this.options,
+  });
 
   final FilterKind kind;
   final ExerciseFilterMapping mapping;
   final Set<String> initial;
   final int Function(Set<String> selection) countFor;
+
+  /// Cards to show (those with at least one exercise), plus any selected.
+  final Set<String> options;
 
   @override
   State<_FilterSheet> createState() => _FilterSheetState();
@@ -65,9 +82,13 @@ class _FilterSheetState extends State<_FilterSheet> {
     final kind = widget.kind;
     final count = widget.countFor(_draft);
 
-    final sections = kind == FilterKind.muscle
-        ? [for (final s in widget.mapping.muscleSections) (title: ExerciseLabels.muscleSection(l, s.id), ids: s.groups)]
-        : [(title: null, ids: widget.mapping.optionsOf(kind))];
+    bool shown(String id) => widget.options.contains(id) || widget.initial.contains(id);
+    final sections = [
+      for (final s in kind == FilterKind.muscle
+          ? [for (final s in widget.mapping.muscleSections) (title: ExerciseLabels.muscleSection(l, s.id), ids: s.groups)]
+          : [(title: null, ids: widget.mapping.optionsOf(kind))])
+        if (s.ids.any(shown)) (title: s.title, ids: s.ids.where(shown).toList()),
+    ];
 
     return Column(
       mainAxisSize: MainAxisSize.min,

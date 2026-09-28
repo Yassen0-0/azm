@@ -67,7 +67,9 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
     var saved = ExerciseFilters.none;
     try {
       saved = await ref.read(exerciseFilterStoreProvider).load(widget.screen);
-      if (!saved.isEmpty) saved = saved.validFor(ref.read(exerciseFilterMappingProvider));
+      if (!saved.isEmpty) {
+        saved = (await ref.read(exerciseSearchIndexProvider.future)).onlyAvailable(saved);
+      }
     } on Object {
       saved = ExerciseFilters.none; // no DB / asset (tests): start unfiltered
     }
@@ -138,6 +140,7 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
       context,
       kind: kind,
       mapping: mapping,
+      options: index.availableOptions(kind),
       selected: base.filters.of(kind),
       countFor: (sel) => index.count(base.copyWith(filters: base.filters.withKind(kind, sel))),
     );

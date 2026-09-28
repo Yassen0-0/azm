@@ -357,6 +357,12 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Tests: `test/core/widgets/set_row_swipe_test.dart` (20: follows the finger, red painted to the screen edge in an inset card (pixel check), partial open + tap Delete + collapse, closing, full swipe + haptic, spring back / wrong way, single-open, label never truncates at ×1/×2/×3 text on 280–320 px), in English and Arabic; flows updated.
 - [x] Parity: `tools/screenshots.sh set_delete` (mid-swipe, past the threshold, open, menu, deleted + Undo, last set, routine editor) on both platforms, ar + en.
 
+## 13. Filter follow-ups (main, 2026-09-28) — [x] done 2026-09-28 (Android + iOS, ar + en)
+
+- [x] Cards with 0 exercises hidden (`ExerciseSearchIndex.availableOptions`): suspension band, muscle "other"; remembered selections of hidden cards dropped on restore (`onlyAvailable`). Tests: `exercise_filters_test.dart`, `filter_sheets_test.dart` (en + ar).
+- [x] Arabic "امسح الفلاتر" in both places (result bar / no-results button and the sheet); test.
+- [x] Parity: `exercise_filters` + `exercises` re-captured on both platforms, ar + en. `set_delete` screenshots of the swipe redesign reviewed (no changes needed).
+
 ## Requests
 
 _(Cross-folder requests go here: "@owner-of-X: need Y". Remove when handled.)_

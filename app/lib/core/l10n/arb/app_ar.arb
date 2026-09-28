@@ -209,9 +209,9 @@
   "@exercisesNoResultsBody": {
     "description": "Empty state hint when the search/filters match nothing."
   },
-  "exercisesClearFilters": "شيل الفلاتر",
+  "exercisesClearFilters": "امسح الفلاتر",
   "@exercisesClearFilters": {
-    "description": "Button in the no-results state: resets search text, muscle and equipment."
+    "description": "Clears every filter: the result bar's link while any filter is active, and the no-results button (also clears the search text). Same wording as exercisesFilterClearSheet."
   },
   "exercisesLibraryEmpty": "مكتبة التمارين مش جاهزة لسه",
   "@exercisesLibraryEmpty": {

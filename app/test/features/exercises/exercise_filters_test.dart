@@ -172,6 +172,30 @@ void main() {
       expect(equipment.values.fold(0, (a, b) => a + b), 1291);
     });
 
+    test('cards without any exercise are hidden (suspension band, muscle "other"); the rest keep their order', () {
+      expect(index.availableOptions(FilterKind.place), ['gym', 'home', 'bands']);
+      expect(index.availableOptions(FilterKind.equipment), [
+        for (final g in m.equipmentGroups)
+          if (g != 'suspension_band') g,
+      ]);
+      expect(index.availableOptions(FilterKind.muscle), [
+        for (final g in m.muscleGroups)
+          if (g != 'other') g,
+      ]);
+      // Every shown card really has results; every hidden one really has none.
+      for (final k in FilterKind.values) {
+        for (final id in m.optionsOf(k)) {
+          final n = count(ExerciseFilters.none.withKind(k, {id}));
+          expect(index.availableOptions(k).contains(id), n > 0, reason: '${k.name}/$id has $n');
+        }
+      }
+      // A remembered hidden card can never filter the list.
+      expect(
+        index.onlyAvailable(const ExerciseFilters(muscles: {'other', 'chest'}, equipment: {'suspension_band'})),
+        const ExerciseFilters(muscles: {'chest'}),
+      );
+    });
+
     test('filters combine with each other and with the search text', () {
       final chestOrBiceps = count(const ExerciseFilters(muscles: {'chest', 'biceps'}));
       expect(chestOrBiceps, 158 + 143);

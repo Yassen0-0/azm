@@ -362,10 +362,10 @@ abstract class AppLocalizations {
   /// **'جرّب اسم تاني، أو شيل الفلاتر.'**
   String get exercisesNoResultsBody;
 
-  /// Button in the no-results state: resets search text, muscle and equipment.
+  /// Clears every filter: the result bar's link while any filter is active, and the no-results button (also clears the search text). Same wording as exercisesFilterClearSheet.
   ///
   /// In ar, this message translates to:
-  /// **'شيل الفلاتر'**
+  /// **'امسح الفلاتر'**
   String get exercisesClearFilters;
 
   /// Empty state when the catalog could not be loaded (should not happen).
