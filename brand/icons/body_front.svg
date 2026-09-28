@@ -1,0 +1,45 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Azm original body silhouette, front view. One element per segment; ids
+       are referenced by muscles.json. Right-side segments mirror the left
+       ones across x = 32 (matrix(-1 0 0 1 64 0)). -->
+  <g fill="#88888E" transform="matrix(1.16 0 0 1 -5.12 0)">
+    <ellipse id="head" cx="32" cy="6.6" rx="4.3" ry="4.9"/>
+    <path id="neck" d="M29.4 11.2 H34.6 L35 15.2 H29 Z"/>
+    <!-- shoulders (delts) -->
+    <path id="delt-l" d="M27.4 15.6 C23.2 15.4 20.2 16.8 19 19.8 C18.4 21.4 18.3 23 18.5 24.6 C19.8 23.4 21.6 22.5 23.8 22.1 C24.2 19.6 25.4 17.2 27.4 15.6 Z"/>
+    <path id="delt-r" transform="matrix(-1 0 0 1 64 0)" d="M27.4 15.6 C23.2 15.4 20.2 16.8 19 19.8 C18.4 21.4 18.3 23 18.5 24.6 C19.8 23.4 21.6 22.5 23.8 22.1 C24.2 19.6 25.4 17.2 27.4 15.6 Z"/>
+    <!-- chest (pecs) -->
+    <path id="pec-l" d="M28.9 16.2 H31.3 V25.4 C28.8 26.3 26.3 25.6 24.8 23.4 C25.2 20.2 26.6 17.6 28.9 16.2 Z"/>
+    <path id="pec-r" transform="matrix(-1 0 0 1 64 0)" d="M28.9 16.2 H31.3 V25.4 C28.8 26.3 26.3 25.6 24.8 23.4 C25.2 20.2 26.6 17.6 28.9 16.2 Z"/>
+    <!-- abs + obliques -->
+    <path id="abs" d="M28.2 26.8 C29.5 27 30.8 26.7 32 26.3 C33.2 26.7 34.5 27 35.8 26.8 L35.5 37.9 C34.4 38.7 29.6 38.7 28.5 37.9 Z"/>
+    <path id="oblique-l" d="M24.9 25 C25.6 25.9 26.4 26.5 27.3 26.8 L27.6 37.6 L25.6 36.2 C24.8 32.6 24.6 28.8 24.9 25 Z"/>
+    <path id="oblique-r" transform="matrix(-1 0 0 1 64 0)" d="M24.9 25 C25.6 25.9 26.4 26.5 27.3 26.8 L27.6 37.6 L25.6 36.2 C24.8 32.6 24.6 28.8 24.9 25 Z"/>
+    <!-- pelvis -->
+    <path id="hips" d="M25.4 37.4 L28.2 39 C30.7 39.8 33.3 39.8 35.8 39 L38.6 37.4 L39.2 41 C36.6 41.8 34.2 42.8 32 44.6 C29.8 42.8 27.4 41.8 24.8 41 Z"/>
+    <!-- upper arms (biceps) -->
+    <path id="bicep-l" d="M18.4 25.9 C19.8 24.6 21.7 23.7 23.8 23.4 C23.9 26.8 23.4 30.2 22.2 33.2 L18.2 33.4 C17.6 30.8 17.7 28.3 18.4 25.9 Z"/>
+    <path id="bicep-r" transform="matrix(-1 0 0 1 64 0)" d="M18.4 25.9 C19.8 24.6 21.7 23.7 23.8 23.4 C23.9 26.8 23.4 30.2 22.2 33.2 L18.2 33.4 C17.6 30.8 17.7 28.3 18.4 25.9 Z"/>
+    <!-- forearms -->
+    <path id="forearm-l" d="M18 34.6 L22 34.4 C21.8 37.6 21 40.6 19.8 43.4 L16.8 43.2 C16.6 40.2 17 37.3 18 34.6 Z"/>
+    <path id="forearm-r" transform="matrix(-1 0 0 1 64 0)" d="M18 34.6 L22 34.4 C21.8 37.6 21 40.6 19.8 43.4 L16.8 43.2 C16.6 40.2 17 37.3 18 34.6 Z"/>
+    <ellipse id="hand-l" cx="18.1" cy="45.9" rx="1.9" ry="2.3"/>
+    <ellipse id="hand-r" cx="45.9" cy="45.9" rx="1.9" ry="2.3"/>
+    <!-- thighs: outer (abductors) · front (quads) · inner (adductors) -->
+    <path id="abductor-l" d="M23.9 42.4 L26.6 42.9 C26 45.6 25.9 48.6 26.4 51.8 L25.4 52.2 C24.1 49 23.6 45.6 23.9 42.4 Z"/>
+    <path id="abductor-r" transform="matrix(-1 0 0 1 64 0)" d="M23.9 42.4 L26.6 42.9 C26 45.6 25.9 48.6 26.4 51.8 L25.4 52.2 C24.1 49 23.6 45.6 23.9 42.4 Z"/>
+    <path id="quad-l" d="M27.3 43 C27.9 43.2 28.4 43.6 28.7 44.1 C28.3 47.6 28.9 51 30.2 54.4 L29.9 55.2 L27.6 55.3 C26.6 52.8 26.3 50.6 26.4 48.4 C26.5 46.6 26.8 44.8 27.3 43 Z"/>
+    <path id="quad-r" transform="matrix(-1 0 0 1 64 0)" d="M27.3 43 C27.9 43.2 28.4 43.6 28.7 44.1 C28.3 47.6 28.9 51 30.2 54.4 L29.9 55.2 L27.6 55.3 C26.6 52.8 26.3 50.6 26.4 48.4 C26.5 46.6 26.8 44.8 27.3 43 Z"/>
+    <path id="adductor-l" d="M29.3 44.2 C30.2 44.2 31.1 44.4 31.8 44.8 L31.5 48.6 C31.3 50.6 31 52.2 30.6 53.4 C29.6 50.4 29 47.2 29.3 44.2 Z"/>
+    <path id="adductor-r" transform="matrix(-1 0 0 1 64 0)" d="M29.3 44.2 C30.2 44.2 31.1 44.4 31.8 44.8 L31.5 48.6 C31.3 50.6 31 52.2 30.6 53.4 C29.6 50.4 29 47.2 29.3 44.2 Z"/>
+    <!-- lower legs + feet -->
+    <path id="shin-l" d="M27.2 56.6 H30.2 C30.6 58.6 30.4 60.4 29.8 62 H27.8 C27.1 60.3 26.9 58.5 27.2 56.6 Z"/>
+    <path id="shin-r" transform="matrix(-1 0 0 1 64 0)" d="M27.2 56.6 H30.2 C30.6 58.6 30.4 60.4 29.8 62 H27.8 C27.1 60.3 26.9 58.5 27.2 56.6 Z"/>
+    <!-- cardio: the heart, drawn only when highlighted -->
+    <path id="heart" class="optional" d="M34.6 18.4 C35.6 16.9 38.2 17.2 38.3 19.4 C38.4 21.2 36.2 22.7 34.6 23.9 C33 22.7 30.8 21.2 30.9 19.4 C31 17.2 33.6 16.9 34.6 18.4 Z"/>
+    <!-- other: three dots, drawn only when highlighted -->
+    <circle id="dots-1" class="optional" cx="44.4" cy="56.6" r="1.6"/>
+    <circle id="dots-2" class="optional" cx="49.2" cy="56.6" r="1.6"/>
+    <circle id="dots-3" class="optional" cx="54" cy="56.6" r="1.6"/>
+  </g>
+</svg>

@@ -181,34 +181,9 @@
   "@exercisesSearchClear": {
     "description": "Accessibility label of the clear (x) button in the search box."
   },
-  "exercisesFilterAll": "الكل",
-  "@exercisesFilterAll": {
-    "description": "First muscle chip: no muscle filter."
-  },
-  "exercisesFilterMore": "المزيد",
-  "@exercisesFilterMore": {
-    "description": "Last muscle chip: shows the less common muscles inline."
-  },
   "exercisesFilterEquipment": "الأداة",
   "@exercisesFilterEquipment": {
     "description": "Button that opens the equipment filter sheet (no equipment chosen)."
-  },
-  "exercisesEquipmentSheetTitle": "فلتر بالأداة",
-  "@exercisesEquipmentSheetTitle": {
-    "description": "Title of the equipment filter bottom sheet."
-  },
-  "exercisesEquipmentAll": "كل الأدوات",
-  "@exercisesEquipmentAll": {
-    "description": "Equipment sheet option: no equipment filter."
-  },
-  "exercisesRemoveEquipmentFilter": "شيل فلتر {equipment}",
-  "@exercisesRemoveEquipmentFilter": {
-    "description": "Accessibility label of the active equipment pill; tapping it removes the filter.",
-    "placeholders": {
-      "equipment": {
-        "type": "String"
-      }
-    }
   },
   "exercisesResultCount": "{count, plural, =0{مفيش تمارين} =1{تمرين واحد} =2{تمرينين} few{{countText} تمارين} many{{countText} تمرين} other{{countText} تمرين}}",
   "@exercisesResultCount": {
@@ -736,6 +711,190 @@
   "exercisesBodyPartNeck": "رقبة",
   "@exercisesBodyPartNeck": {
     "description": "Dataset body part \"neck\" (localized label, owner-reviewed 2026-09-26)."
+  },
+  "exercisesFilterPlace": "المكان",
+  "@exercisesFilterPlace": {
+    "description": "Filter-bar chip + sheet title: where you train (gym / home / resistance bands)."
+  },
+  "exercisesFilterMuscle": "العضلة",
+  "@exercisesFilterMuscle": {
+    "description": "Filter-bar chip + sheet title: muscle group."
+  },
+  "exercisesFilterActiveCount": "{filter}، {count} مختار",
+  "@exercisesFilterActiveCount": {
+    "description": "Screen-reader label of a filter chip with active cards: chip name + number of selected cards (Western digits).",
+    "placeholders": {
+      "filter": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exercisesFilterShowResults": "{count, plural, =0{مفيش نتايج} =1{اعرض تمرين واحد} =2{اعرض تمرينين} few{اعرض {countText} تمارين} many{اعرض {countText} تمرين} other{اعرض {countText} تمرين}}",
+  "@exercisesFilterShowResults": {
+    "description": "Primary button of a filter sheet: applies the selection; shows the live number of results with it (search text and the other filters included). countText = the number with a thousands separator, Western digits.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "exercisesFilterClearSheet": "امسح الفلاتر",
+  "@exercisesFilterClearSheet": {
+    "description": "Secondary button of a filter sheet: unselects every card of this sheet (the result count updates; nothing applies until Show)."
+  },
+  "exercisesFilterCardSelected": "مختار",
+  "@exercisesFilterCardSelected": {
+    "description": "Screen-reader hint of a selected filter card."
+  },
+  "exercisesMuscleSectionUpper": "الجزء العلوي",
+  "@exercisesMuscleSectionUpper": {
+    "description": "Muscle Group sheet: section title."
+  },
+  "exercisesMuscleSectionLower": "الجزء السفلي",
+  "@exercisesMuscleSectionLower": {
+    "description": "Muscle Group sheet: section title."
+  },
+  "exercisesMuscleSectionOther": "تاني",
+  "@exercisesMuscleSectionOther": {
+    "description": "Muscle Group sheet: section title (cardio, full body, other)."
+  },
+  "exercisesPlaceGym": "جيم",
+  "@exercisesPlaceGym": {
+    "description": "Place filter card: everything (a gym has all equipment)."
+  },
+  "exercisesPlaceHome": "البيت",
+  "@exercisesPlaceHome": {
+    "description": "Place filter card: bodyweight, dumbbells, kettlebells and bands (data/place_mapping.json)."
+  },
+  "exercisesPlaceBands": "أحبال مقاومة",
+  "@exercisesPlaceBands": {
+    "description": "Place filter card: band exercises only."
+  },
+  "exercisesGroupAbs": "بطن",
+  "@exercisesGroupAbs": {
+    "description": "Muscle Group card (Egyptian gym term)."
+  },
+  "exercisesGroupBiceps": "باي",
+  "@exercisesGroupBiceps": {
+    "description": "Muscle Group card (Egyptian gym term)."
+  },
+  "exercisesGroupChest": "صدر",
+  "@exercisesGroupChest": {
+    "description": "Muscle Group card."
+  },
+  "exercisesGroupForearms": "سواعد",
+  "@exercisesGroupForearms": {
+    "description": "Muscle Group card."
+  },
+  "exercisesGroupLats": "لاتس",
+  "@exercisesGroupLats": {
+    "description": "Muscle Group card (same word as the owner-reviewed muscle label)."
+  },
+  "exercisesGroupLowerBack": "ضهر سفلي",
+  "@exercisesGroupLowerBack": {
+    "description": "Muscle Group card (Egyptian spelling ضهر, as said in the gym)."
+  },
+  "exercisesGroupNeck": "رقبة",
+  "@exercisesGroupNeck": {
+    "description": "Muscle Group card."
+  },
+  "exercisesGroupShoulders": "كتف",
+  "@exercisesGroupShoulders": {
+    "description": "Muscle Group card (Egyptian gym term)."
+  },
+  "exercisesGroupTraps": "ترابيس",
+  "@exercisesGroupTraps": {
+    "description": "Muscle Group card (Egyptian gym term)."
+  },
+  "exercisesGroupTriceps": "تراي",
+  "@exercisesGroupTriceps": {
+    "description": "Muscle Group card (Egyptian gym term)."
+  },
+  "exercisesGroupUpperBack": "ضهر",
+  "@exercisesGroupUpperBack": {
+    "description": "Muscle Group card: upper/mid back (Egyptian gym term ضهر; lats are their own card)."
+  },
+  "exercisesGroupAbductors": "خارجي",
+  "@exercisesGroupAbductors": {
+    "description": "Muscle Group card: hip abductors (Egyptian gyms name them after the machine: خارجي)."
+  },
+  "exercisesGroupAdductors": "داخلي",
+  "@exercisesGroupAdductors": {
+    "description": "Muscle Group card: hip adductors (the داخلي machine)."
+  },
+  "exercisesGroupCalves": "سمانة",
+  "@exercisesGroupCalves": {
+    "description": "Muscle Group card (Egyptian gym term)."
+  },
+  "exercisesGroupGlutes": "مؤخرة",
+  "@exercisesGroupGlutes": {
+    "description": "Muscle Group card."
+  },
+  "exercisesGroupHamstrings": "خلفي",
+  "@exercisesGroupHamstrings": {
+    "description": "Muscle Group card (Egyptian gym term for the back of the thigh)."
+  },
+  "exercisesGroupQuads": "رجل أمامي",
+  "@exercisesGroupQuads": {
+    "description": "Muscle Group card (Egyptian gym term for the front of the thigh)."
+  },
+  "exercisesGroupCardio": "كارديو",
+  "@exercisesGroupCardio": {
+    "description": "Muscle Group card."
+  },
+  "exercisesGroupFullBody": "جسم كامل",
+  "@exercisesGroupFullBody": {
+    "description": "Muscle Group card: compound total-body moves (list in data/muscle_mapping.json)."
+  },
+  "exercisesGroupOther": "تاني",
+  "@exercisesGroupOther": {
+    "description": "Muscle Group card: anything the mapping can't place (0 in the current dataset)."
+  },
+  "exercisesEquipGroupNone": "من غير أداة",
+  "@exercisesEquipGroupNone": {
+    "description": "Equipment filter card: bodyweight / no equipment."
+  },
+  "exercisesEquipGroupBarbell": "بار",
+  "@exercisesEquipGroupBarbell": {
+    "description": "Equipment filter card (bar, EZ bar, Olympic bar, trap bar)."
+  },
+  "exercisesEquipGroupDumbbell": "دمبل",
+  "@exercisesEquipGroupDumbbell": {
+    "description": "Equipment filter card."
+  },
+  "exercisesEquipGroupKettlebell": "كيتل بل",
+  "@exercisesEquipGroupKettlebell": {
+    "description": "Equipment filter card."
+  },
+  "exercisesEquipGroupMachine": "جهاز",
+  "@exercisesEquipGroupMachine": {
+    "description": "Equipment filter card (lever, Smith, sled, cardio machines)."
+  },
+  "exercisesEquipGroupCable": "كابل",
+  "@exercisesEquipGroupCable": {
+    "description": "Equipment filter card."
+  },
+  "exercisesEquipGroupPlate": "طارة",
+  "@exercisesEquipGroupPlate": {
+    "description": "Equipment filter card (weighted moves with a plate; Egyptian gym term طارة)."
+  },
+  "exercisesEquipGroupResistanceBand": "أحبال مقاومة",
+  "@exercisesEquipGroupResistanceBand": {
+    "description": "Equipment filter card."
+  },
+  "exercisesEquipGroupSuspensionBand": "أحبال تعليق",
+  "@exercisesEquipGroupSuspensionBand": {
+    "description": "Equipment filter card (TRX-style; no dataset exercise yet)."
+  },
+  "exercisesEquipGroupOther": "تاني",
+  "@exercisesEquipGroupOther": {
+    "description": "Equipment filter card (balls, rollers, ropes, hammer, tire)."
   },
   "historyLiftedSoFar": "شِلت لحد دلوقتي",
   "@historyLiftedSoFar": {

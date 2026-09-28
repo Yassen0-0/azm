@@ -1,0 +1,8 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Azm original filter icon: equipment_resistance_band -->
+  <path d="M15 17 C13 52 51 52 49 17" fill="none" stroke="#4D9BFF" stroke-width="4.4" stroke-linecap="round"/>
+  <g fill="#88888E">
+    <rect x="7" y="9" width="16" height="7" rx="3.5"/>
+    <rect x="41" y="9" width="16" height="7" rx="3.5"/>
+  </g>
+</svg>

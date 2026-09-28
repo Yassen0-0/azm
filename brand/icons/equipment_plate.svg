@@ -1,0 +1,5 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Azm original filter icon: equipment_plate -->
+  <path d="M8 32 A24 24 0 1 0 56 32 A24 24 0 1 0 8 32 Z M12.5 32 A19.5 19.5 0 1 1 51.5 32 A19.5 19.5 0 1 1 12.5 32 Z" fill="#4D9BFF" fill-rule="evenodd"/>
+  <path d="M16 32 A16 16 0 1 0 48 32 A16 16 0 1 0 16 32 Z M27 32 A5 5 0 1 1 37 32 A5 5 0 1 1 27 32 Z" fill="#88888E" fill-rule="evenodd"/>
+</svg>

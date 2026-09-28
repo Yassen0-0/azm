@@ -6,8 +6,8 @@ import '../../../core/router/app_router.dart';
 import '../../../core/widgets/azm_tab_page.dart';
 import 'exercise_browser.dart';
 
-/// Exercises tab: the library (bilingual search, muscle chips, equipment
-/// filter). Tapping an exercise opens its detail.
+/// Exercises tab: the library (bilingual search + Place / Muscle group /
+/// Equipment filters). Tapping an exercise opens its detail.
 class ExercisesScreen extends StatelessWidget {
   const ExercisesScreen({super.key});
 

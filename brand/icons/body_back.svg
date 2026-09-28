@@ -1,0 +1,38 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Azm original body silhouette, back view (same proportions as the
+       front view). Right-side segments mirror the left ones across x = 32. -->
+  <g fill="#88888E" transform="matrix(1.16 0 0 1 -5.12 0)">
+    <ellipse id="head" cx="32" cy="6.6" rx="4.3" ry="4.9"/>
+    <path id="neck" d="M29.6 11.2 H34.4 L34.2 13.4 L32 14.6 L29.8 13.4 Z"/>
+    <!-- traps: a kite from the neck to mid-back -->
+    <path id="traps" d="M32 15.6 L35.4 13.8 C37.4 15 39.6 15.8 42 16.2 L36.2 19.4 L32 25.6 L27.8 19.4 L22 16.2 C24.4 15.8 26.6 15 28.6 13.8 Z"/>
+    <!-- rear delts -->
+    <path id="delt-l" d="M21 16.9 C19.6 17.8 18.8 19.4 18.5 21.4 C18.3 22.6 18.3 23.6 18.5 24.6 C19.9 23.4 21.8 22.5 24 22.1 L25.6 19.6 Z"/>
+    <path id="delt-r" transform="matrix(-1 0 0 1 64 0)" d="M21 16.9 C19.6 17.8 18.8 19.4 18.5 21.4 C18.3 22.6 18.3 23.6 18.5 24.6 C19.9 23.4 21.8 22.5 24 22.1 L25.6 19.6 Z"/>
+    <!-- upper back (rhomboids / mid back), medial -->
+    <path id="upperback-l" d="M26.6 20.6 L31.2 27.4 V33.4 C30.1 33.6 29.2 33.2 28.7 32.4 C28.2 28.4 27.6 24.4 26.6 20.6 Z"/>
+    <path id="upperback-r" transform="matrix(-1 0 0 1 64 0)" d="M26.6 20.6 L31.2 27.4 V33.4 C30.1 33.6 29.2 33.2 28.7 32.4 C28.2 28.4 27.6 24.4 26.6 20.6 Z"/>
+    <!-- lats: lateral wings from the armpit to the waist -->
+    <path id="lat-l" d="M24.8 23 C26.2 24.8 27 27.4 27.4 30.2 C27.8 32.6 28.5 34.2 29.8 35.1 C28.4 35.6 27.2 36.4 26.2 37.4 C24.8 32.8 24.3 27.8 24.8 23 Z"/>
+    <path id="lat-r" transform="matrix(-1 0 0 1 64 0)" d="M24.8 23 C26.2 24.8 27 27.4 27.4 30.2 C27.8 32.6 28.5 34.2 29.8 35.1 C28.4 35.6 27.2 36.4 26.2 37.4 C24.8 32.8 24.3 27.8 24.8 23 Z"/>
+    <!-- lower back -->
+    <path id="lowerback" d="M27 37.6 C28.6 36 30.2 35.1 32 34.8 C33.8 35.1 35.4 36 37 37.6 L37.5 40.4 H26.5 Z"/>
+    <!-- upper arms (triceps) -->
+    <path id="tricep-l" d="M18.4 25.9 C19.8 24.6 21.7 23.7 23.8 23.4 C23.9 26.8 23.4 30.2 22.2 33.2 L18.2 33.4 C17.6 30.8 17.7 28.3 18.4 25.9 Z"/>
+    <path id="tricep-r" transform="matrix(-1 0 0 1 64 0)" d="M18.4 25.9 C19.8 24.6 21.7 23.7 23.8 23.4 C23.9 26.8 23.4 30.2 22.2 33.2 L18.2 33.4 C17.6 30.8 17.7 28.3 18.4 25.9 Z"/>
+    <!-- forearms -->
+    <path id="forearm-l" d="M18 34.6 L22 34.4 C21.8 37.6 21 40.6 19.8 43.4 L16.8 43.2 C16.6 40.2 17 37.3 18 34.6 Z"/>
+    <path id="forearm-r" transform="matrix(-1 0 0 1 64 0)" d="M18 34.6 L22 34.4 C21.8 37.6 21 40.6 19.8 43.4 L16.8 43.2 C16.6 40.2 17 37.3 18 34.6 Z"/>
+    <ellipse id="hand-l" cx="18.1" cy="45.9" rx="1.9" ry="2.3"/>
+    <ellipse id="hand-r" cx="45.9" cy="45.9" rx="1.9" ry="2.3"/>
+    <!-- glutes -->
+    <path id="glute-l" d="M26.2 41.6 H31.4 V47.8 C29.2 48.8 26.6 48.4 24.9 46.8 C24.6 45 25 43.2 26.2 41.6 Z"/>
+    <path id="glute-r" transform="matrix(-1 0 0 1 64 0)" d="M26.2 41.6 H31.4 V47.8 C29.2 48.8 26.6 48.4 24.9 46.8 C24.6 45 25 43.2 26.2 41.6 Z"/>
+    <!-- hamstrings -->
+    <path id="hamstring-l" d="M25 48.4 C26.8 49.6 29 50 31.2 49.4 L30.2 55.2 H26.6 C25.6 53 25 50.8 25 48.4 Z"/>
+    <path id="hamstring-r" transform="matrix(-1 0 0 1 64 0)" d="M25 48.4 C26.8 49.6 29 50 31.2 49.4 L30.2 55.2 H26.6 C25.6 53 25 50.8 25 48.4 Z"/>
+    <!-- calves -->
+    <path id="calf-l" d="M26.6 56.6 H30.4 C31 58.4 30.8 60.4 29.8 62 H27.6 C26.6 60.4 26.2 58.4 26.6 56.6 Z"/>
+    <path id="calf-r" transform="matrix(-1 0 0 1 64 0)" d="M26.6 56.6 H30.4 C31 58.4 30.8 60.4 29.8 62 H27.6 C26.6 60.4 26.2 58.4 26.6 56.6 Z"/>
+  </g>
+</svg>

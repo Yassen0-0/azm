@@ -332,41 +332,11 @@ abstract class AppLocalizations {
   /// **'مسح البحث'**
   String get exercisesSearchClear;
 
-  /// First muscle chip: no muscle filter.
-  ///
-  /// In ar, this message translates to:
-  /// **'الكل'**
-  String get exercisesFilterAll;
-
-  /// Last muscle chip: shows the less common muscles inline.
-  ///
-  /// In ar, this message translates to:
-  /// **'المزيد'**
-  String get exercisesFilterMore;
-
   /// Button that opens the equipment filter sheet (no equipment chosen).
   ///
   /// In ar, this message translates to:
   /// **'الأداة'**
   String get exercisesFilterEquipment;
-
-  /// Title of the equipment filter bottom sheet.
-  ///
-  /// In ar, this message translates to:
-  /// **'فلتر بالأداة'**
-  String get exercisesEquipmentSheetTitle;
-
-  /// Equipment sheet option: no equipment filter.
-  ///
-  /// In ar, this message translates to:
-  /// **'كل الأدوات'**
-  String get exercisesEquipmentAll;
-
-  /// Accessibility label of the active equipment pill; tapping it removes the filter.
-  ///
-  /// In ar, this message translates to:
-  /// **'شيل فلتر {equipment}'**
-  String exercisesRemoveEquipmentFilter(String equipment);
 
   /// Number of exercises in the list under the filters. count picks the plural form; countText is the same number formatted with a thousands separator and Western digits (1,324).
   ///
@@ -1099,6 +1069,258 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'رقبة'**
   String get exercisesBodyPartNeck;
+
+  /// Filter-bar chip + sheet title: where you train (gym / home / resistance bands).
+  ///
+  /// In ar, this message translates to:
+  /// **'المكان'**
+  String get exercisesFilterPlace;
+
+  /// Filter-bar chip + sheet title: muscle group.
+  ///
+  /// In ar, this message translates to:
+  /// **'العضلة'**
+  String get exercisesFilterMuscle;
+
+  /// Screen-reader label of a filter chip with active cards: chip name + number of selected cards (Western digits).
+  ///
+  /// In ar, this message translates to:
+  /// **'{filter}، {count} مختار'**
+  String exercisesFilterActiveCount(String filter, int count);
+
+  /// Primary button of a filter sheet: applies the selection; shows the live number of results with it (search text and the other filters included). countText = the number with a thousands separator, Western digits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{مفيش نتايج} =1{اعرض تمرين واحد} =2{اعرض تمرينين} few{اعرض {countText} تمارين} many{اعرض {countText} تمرين} other{اعرض {countText} تمرين}}'**
+  String exercisesFilterShowResults(int count, String countText);
+
+  /// Secondary button of a filter sheet: unselects every card of this sheet (the result count updates; nothing applies until Show).
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح الفلاتر'**
+  String get exercisesFilterClearSheet;
+
+  /// Screen-reader hint of a selected filter card.
+  ///
+  /// In ar, this message translates to:
+  /// **'مختار'**
+  String get exercisesFilterCardSelected;
+
+  /// Muscle Group sheet: section title.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجزء العلوي'**
+  String get exercisesMuscleSectionUpper;
+
+  /// Muscle Group sheet: section title.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجزء السفلي'**
+  String get exercisesMuscleSectionLower;
+
+  /// Muscle Group sheet: section title (cardio, full body, other).
+  ///
+  /// In ar, this message translates to:
+  /// **'تاني'**
+  String get exercisesMuscleSectionOther;
+
+  /// Place filter card: everything (a gym has all equipment).
+  ///
+  /// In ar, this message translates to:
+  /// **'جيم'**
+  String get exercisesPlaceGym;
+
+  /// Place filter card: bodyweight, dumbbells, kettlebells and bands (data/place_mapping.json).
+  ///
+  /// In ar, this message translates to:
+  /// **'البيت'**
+  String get exercisesPlaceHome;
+
+  /// Place filter card: band exercises only.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحبال مقاومة'**
+  String get exercisesPlaceBands;
+
+  /// Muscle Group card (Egyptian gym term).
+  ///
+  /// In ar, this message translates to:
+  /// **'بطن'**
+  String get exercisesGroupAbs;
+
+  /// Muscle Group card (Egyptian gym term).
+  ///
+  /// In ar, this message translates to:
+  /// **'باي'**
+  String get exercisesGroupBiceps;
+
+  /// Muscle Group card.
+  ///
+  /// In ar, this message translates to:
+  /// **'صدر'**
+  String get exercisesGroupChest;
+
+  /// Muscle Group card.
+  ///
+  /// In ar, this message translates to:
+  /// **'سواعد'**
+  String get exercisesGroupForearms;
+
+  /// Muscle Group card (same word as the owner-reviewed muscle label).
+  ///
+  /// In ar, this message translates to:
+  /// **'لاتس'**
+  String get exercisesGroupLats;
+
+  /// Muscle Group card (Egyptian spelling ضهر, as said in the gym).
+  ///
+  /// In ar, this message translates to:
+  /// **'ضهر سفلي'**
+  String get exercisesGroupLowerBack;
+
+  /// Muscle Group card.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقبة'**
+  String get exercisesGroupNeck;
+
+  /// Muscle Group card (Egyptian gym term).
+  ///
+  /// In ar, this message translates to:
+  /// **'كتف'**
+  String get exercisesGroupShoulders;
+
+  /// Muscle Group card (Egyptian gym term).
+  ///
+  /// In ar, this message translates to:
+  /// **'ترابيس'**
+  String get exercisesGroupTraps;
+
+  /// Muscle Group card (Egyptian gym term).
+  ///
+  /// In ar, this message translates to:
+  /// **'تراي'**
+  String get exercisesGroupTriceps;
+
+  /// Muscle Group card: upper/mid back (Egyptian gym term ضهر; lats are their own card).
+  ///
+  /// In ar, this message translates to:
+  /// **'ضهر'**
+  String get exercisesGroupUpperBack;
+
+  /// Muscle Group card: hip abductors (Egyptian gyms name them after the machine: خارجي).
+  ///
+  /// In ar, this message translates to:
+  /// **'خارجي'**
+  String get exercisesGroupAbductors;
+
+  /// Muscle Group card: hip adductors (the داخلي machine).
+  ///
+  /// In ar, this message translates to:
+  /// **'داخلي'**
+  String get exercisesGroupAdductors;
+
+  /// Muscle Group card (Egyptian gym term).
+  ///
+  /// In ar, this message translates to:
+  /// **'سمانة'**
+  String get exercisesGroupCalves;
+
+  /// Muscle Group card.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤخرة'**
+  String get exercisesGroupGlutes;
+
+  /// Muscle Group card (Egyptian gym term for the back of the thigh).
+  ///
+  /// In ar, this message translates to:
+  /// **'خلفي'**
+  String get exercisesGroupHamstrings;
+
+  /// Muscle Group card (Egyptian gym term for the front of the thigh).
+  ///
+  /// In ar, this message translates to:
+  /// **'رجل أمامي'**
+  String get exercisesGroupQuads;
+
+  /// Muscle Group card.
+  ///
+  /// In ar, this message translates to:
+  /// **'كارديو'**
+  String get exercisesGroupCardio;
+
+  /// Muscle Group card: compound total-body moves (list in data/muscle_mapping.json).
+  ///
+  /// In ar, this message translates to:
+  /// **'جسم كامل'**
+  String get exercisesGroupFullBody;
+
+  /// Muscle Group card: anything the mapping can't place (0 in the current dataset).
+  ///
+  /// In ar, this message translates to:
+  /// **'تاني'**
+  String get exercisesGroupOther;
+
+  /// Equipment filter card: bodyweight / no equipment.
+  ///
+  /// In ar, this message translates to:
+  /// **'من غير أداة'**
+  String get exercisesEquipGroupNone;
+
+  /// Equipment filter card (bar, EZ bar, Olympic bar, trap bar).
+  ///
+  /// In ar, this message translates to:
+  /// **'بار'**
+  String get exercisesEquipGroupBarbell;
+
+  /// Equipment filter card.
+  ///
+  /// In ar, this message translates to:
+  /// **'دمبل'**
+  String get exercisesEquipGroupDumbbell;
+
+  /// Equipment filter card.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيتل بل'**
+  String get exercisesEquipGroupKettlebell;
+
+  /// Equipment filter card (lever, Smith, sled, cardio machines).
+  ///
+  /// In ar, this message translates to:
+  /// **'جهاز'**
+  String get exercisesEquipGroupMachine;
+
+  /// Equipment filter card.
+  ///
+  /// In ar, this message translates to:
+  /// **'كابل'**
+  String get exercisesEquipGroupCable;
+
+  /// Equipment filter card (weighted moves with a plate; Egyptian gym term طارة).
+  ///
+  /// In ar, this message translates to:
+  /// **'طارة'**
+  String get exercisesEquipGroupPlate;
+
+  /// Equipment filter card.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحبال مقاومة'**
+  String get exercisesEquipGroupResistanceBand;
+
+  /// Equipment filter card (TRX-style; no dataset exercise yet).
+  ///
+  /// In ar, this message translates to:
+  /// **'أحبال تعليق'**
+  String get exercisesEquipGroupSuspensionBand;
+
+  /// Equipment filter card (balls, rollers, ropes, hammer, tire).
+  ///
+  /// In ar, this message translates to:
+  /// **'تاني'**
+  String get exercisesEquipGroupOther;
 
   /// History header label above the all-time Lifted total (sum of weight x reps of every completed set).
   ///

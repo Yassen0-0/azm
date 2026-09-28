@@ -7,25 +7,35 @@ import '../../../core/theme/azm_theme.dart';
 import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_pressable.dart';
 import '../../../core/widgets/exercise_card.dart';
-import '../../../core/widgets/muscle_chips.dart';
 import '../../settings/data/training_settings.dart';
+import '../data/exercise_filters.dart';
 import '../data/exercise_history.dart';
-import '../data/exercise_labels.dart';
 import '../data/exercise_library.dart';
 import '../data/exercise_search_index.dart';
-import 'equipment_sheet.dart';
 import 'exercise_format.dart';
+import 'filter_sheet.dart';
 
-/// Search box + muscle chips + equipment filter + results. Shared by the
-/// library (tap opens the detail) and the picker (tap toggles selection).
+/// Search box + filter bar (Place · Muscle group · Equipment) + results.
+/// Shared by the library (tap opens the detail) and the picker (tap toggles
+/// selection). Filters combine with each other and with the search text
+/// (OR within a type, AND across types) and are remembered per [screen].
 ///
 /// [selection] null = library mode; otherwise the selected ids in order, and
 /// every row shows its position (1, 2, 3…) or an empty ring.
 class ExerciseBrowser extends ConsumerStatefulWidget {
-  const ExerciseBrowser({super.key, required this.onTap, this.selection, this.bottomPadding = 0});
+  const ExerciseBrowser({
+    super.key,
+    required this.onTap,
+    this.selection,
+    this.bottomPadding = 0,
+    this.screen = FilterScreen.library,
+  });
 
   final ValueChanged<Exercise> onTap;
   final List<String>? selection;
+
+  /// Whose last-used filters are restored and saved.
+  final FilterScreen screen;
 
   /// Extra space below the last row (e.g. the picker's confirm bar).
   final double bottomPadding;
@@ -39,7 +49,6 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
   ExerciseQuery _query = const ExerciseQuery();
   List<Exercise>? _results;
   bool _failed = false;
-  bool _moreMuscles = false;
   int _request = 0;
 
   @override
@@ -49,7 +58,22 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
     // button, keyboard undo, or a programmatic edit. (onChanged alone misses
     // the last two, which left a stale list behind.)
     _text.addListener(_onText);
-    _run();
+    _restoreFilters();
+  }
+
+  /// Last-used filters of this screen, then the first search (so the list
+  /// never flashes unfiltered).
+  Future<void> _restoreFilters() async {
+    var saved = ExerciseFilters.none;
+    try {
+      saved = await ref.read(exerciseFilterStoreProvider).load(widget.screen);
+      if (!saved.isEmpty) saved = saved.validFor(ref.read(exerciseFilterMappingProvider));
+    } on Object {
+      saved = ExerciseFilters.none; // no DB / asset (tests): start unfiltered
+    }
+    if (!mounted) return;
+    if (saved.isEmpty) return _run();
+    _update(_query.copyWith(filters: saved));
   }
 
   @override
@@ -89,14 +113,36 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
 
   void _clearAll() {
     _text.clear();
-    _update(const ExerciseQuery());
+    _setFilters(ExerciseFilters.none);
   }
 
-  Future<void> _pickEquipment() async {
+  /// Applies and remembers (per screen) the filters.
+  void _setFilters(ExerciseFilters f) {
+    _update(_query.copyWith(filters: f));
+    ref.read(exerciseFilterStoreProvider).save(widget.screen, f).ignore();
+  }
+
+  Future<void> _openFilter(FilterKind kind) async {
     FocusScope.of(context).unfocus();
-    final choice = await showEquipmentSheet(context, selected: _query.equipment);
-    if (choice == null || !mounted) return;
-    _update(_query.copyWith(equipment: () => choice.equipment));
+    final ExerciseSearchIndex index;
+    final ExerciseFilterMapping mapping;
+    try {
+      index = await ref.read(exerciseSearchIndexProvider.future);
+      mapping = ref.read(exerciseFilterMappingProvider);
+    } on Object {
+      return;
+    }
+    if (!mounted) return;
+    final base = _query;
+    final picked = await showFilterSheet(
+      context,
+      kind: kind,
+      mapping: mapping,
+      selected: base.filters.of(kind),
+      countFor: (sel) => index.count(base.copyWith(filters: base.filters.withKind(kind, sel))),
+    );
+    if (picked == null || !mounted) return;
+    _setFilters(_query.filters.withKind(kind, picked));
   }
 
   @override
@@ -106,42 +152,19 @@ class _ExerciseBrowserState extends ConsumerState<ExerciseBrowser> {
     final unit = ref.watch(weightUnitProvider).value ?? WeightUnit.kg;
     final results = _results;
     final selection = widget.selection;
-    // A selected rare muscle stays visible even if "More" was never tapped.
-    final showMoreMuscles = _moreMuscles || ExerciseLabels.moreTargets.contains(_query.target);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
           padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.pageMargin),
-          child: Row(
-            children: [
-              Expanded(
-                child: _SearchField(controller: _text),
-              ),
-              const SizedBox(width: AzmSpace.xs),
-              _EquipmentButton(active: _query.equipment != null, onTap: _pickEquipment),
-            ],
-          ),
+          child: _SearchField(controller: _text),
         ),
         const SizedBox(height: AzmSpace.xxs),
-        MuscleChips(
-          items: [
-            MuscleChipItem(value: null, label: l10n.exercisesFilterAll),
-            for (final t in ExerciseLabels.targets) MuscleChipItem(value: t, label: ExerciseLabels.muscle(l10n, t)),
-            if (showMoreMuscles)
-              for (final t in ExerciseLabels.moreTargets)
-                MuscleChipItem(value: t, label: ExerciseLabels.muscle(l10n, t)),
-          ],
-          moreLabel: showMoreMuscles ? null : l10n.exercisesFilterMore,
-          onMore: () => setState(() => _moreMuscles = true),
-          selected: _query.target,
-          onSelected: (t) => _update(_query.copyWith(target: () => t)),
-        ),
+        FilterBar(filters: _query.filters, onOpen: _openFilter),
         _ResultBar(
           count: results?.length,
-          equipmentLabel: _query.equipment == null ? null : ExerciseLabels.equipmentLabel(l10n, _query.equipment!),
-          onClearEquipment: () => _update(_query.copyWith(equipment: () => null)),
+          onClearFilters: _query.filters.isEmpty ? null : () => _setFilters(ExerciseFilters.none),
         ),
         Expanded(
           child: switch (results) {
@@ -221,41 +244,14 @@ class _SearchField extends StatelessWidget {
   }
 }
 
-class _EquipmentButton extends StatelessWidget {
-  const _EquipmentButton({required this.active, required this.onTap});
-
-  final bool active;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    return AzmPressable(
-      onTap: onTap,
-      selected: active,
-      semanticLabel: context.l10n.exercisesFilterEquipment,
-      child: AnimatedContainer(
-        duration: AzmMotion.of(context, AzmMotion.micro),
-        curve: AzmMotion.standard,
-        width: AzmSize.input,
-        height: AzmSize.input,
-        decoration: BoxDecoration(
-          color: active ? c.accent : c.muted,
-          borderRadius: BorderRadius.circular(AzmRadius.input),
-        ),
-        child: Icon(Icons.tune_rounded, size: AzmSize.icon, color: active ? c.onAccent : c.textPrimary),
-      ),
-    );
-  }
-}
-
-/// "154 exercises" + the active equipment filter as a removable pill.
+/// "154 exercises" + "Clear filters" while any filter is active.
 class _ResultBar extends StatelessWidget {
-  const _ResultBar({required this.count, required this.equipmentLabel, required this.onClearEquipment});
+  const _ResultBar({required this.count, required this.onClearFilters});
 
   final int? count;
-  final String? equipmentLabel;
-  final VoidCallback onClearEquipment;
+
+  /// Null = no active filter (no button).
+  final VoidCallback? onClearFilters;
 
   @override
   Widget build(BuildContext context) {
@@ -273,32 +269,14 @@ class _ResultBar extends StatelessWidget {
                 style: AzmType.small.copyWith(color: c.textSecondary),
               ),
             ),
-            if (equipmentLabel != null)
+            if (onClearFilters != null)
               AzmPressable(
-                onTap: onClearEquipment,
-                semanticLabel: l10n.exercisesRemoveEquipmentFilter(equipmentLabel!),
+                key: FilterKeys.clearAll,
+                onTap: onClearFilters,
+                semanticLabel: l10n.exercisesClearFilters,
                 child: ExcludeSemantics(
                   child: Center(
-                    child: Container(
-                      padding: const EdgeInsetsDirectional.fromSTEB(
-                        AzmSpace.md,
-                        AzmSpace.xxs,
-                        AzmSpace.xs,
-                        AzmSpace.xxs,
-                      ),
-                      decoration: BoxDecoration(
-                        color: c.accentSoft,
-                        borderRadius: BorderRadius.circular(AzmRadius.pill),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(equipmentLabel!, style: AzmType.chipLabel.copyWith(color: c.accent)),
-                          const SizedBox(width: AzmSpace.xxs),
-                          Icon(Icons.close_rounded, size: AzmSpace.xl, color: c.accent),
-                        ],
-                      ),
-                    ),
+                    child: Text(l10n.exercisesClearFilters, style: AzmType.chipLabel.copyWith(color: c.accent)),
                   ),
                 ),
               ),

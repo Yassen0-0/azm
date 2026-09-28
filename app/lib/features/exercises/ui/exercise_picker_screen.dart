@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/theme/azm_theme.dart';
 import '../../../core/widgets/azm_header.dart';
+import '../data/exercise_filters.dart';
 import 'exercise_browser.dart';
 
 /// Multi-select exercise picker. CONTRACT: pops a `List<String>` of catalog ids in selection order (or null if cancelled): `final ids = await context.push<List<String>>(AppRoutes.exercisePicker);`
@@ -60,7 +61,7 @@ class _ExercisePickerScreenState extends State<ExercisePickerScreen> {
               ),
             ),
             Expanded(
-              child: ExerciseBrowser(selection: _selected, onTap: (e) => _toggle(e.id)),
+              child: ExerciseBrowser(selection: _selected, onTap: (e) => _toggle(e.id), screen: FilterScreen.picker),
             ),
             ColoredBox(
               color: c.pageBackground,

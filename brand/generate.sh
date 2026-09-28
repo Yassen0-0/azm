@@ -1,12 +1,15 @@
 #!/bin/bash
-# Regenerates EVERY icon and splash asset from brand/logo-concept-a.svg.
+# Regenerates EVERY icon and splash asset from brand/logo-concept-a.svg, and
+# the library filter icons from brand/icons/*.svg (vector data for the app in
+# app/lib/core/widgets/filter_icon_paths.dart + review SVGs and sheet).
 #
 #   brand/generate.sh           regenerate into app/ and brand/exports/
 #   brand/generate.sh --check   regenerate into a temp dir and fail (exit 1) if
 #                               any committed asset differs, is missing or is stale
 #
 # Only macOS tools: swiftc (Xcode) compiles brand/pipeline/azm_brand.swift,
-# AppKit renders the SVG. Nothing is installed. Deterministic: running it twice
+# AppKit renders the SVG; the sandbox `dart` runs brand/pipeline/filter_icons.dart.
+# Nothing is installed. Deterministic: running it twice
 # changes nothing. Every step is capped (CLAUDE.md → Waiting and polling).
 # See brand/README.md for the source contract and the list of outputs.
 set -euo pipefail
@@ -56,7 +59,8 @@ managed_dirs() {
   done
   return 0
 }
-MANAGED_FILES="$RES/drawable/launch_background.xml $RES/drawable-v21/launch_background.xml $RES/values/colors.xml
+ICON_DART=app/lib/core/widgets/filter_icon_paths.dart
+MANAGED_FILES="$ICON_DART $RES/drawable/launch_background.xml $RES/drawable-v21/launch_background.xml $RES/values/colors.xml
 $RES/values/styles.xml $RES/values-night/styles.xml $IOS/Base.lproj/LaunchScreen.storyboard"
 # Replaced by drawable-*dpi/ic_stat_azm.png (same resource name, see DECISIONS_LOG).
 OBSOLETE="$RES/drawable/ic_stat_azm.xml"
@@ -77,11 +81,23 @@ if [ ! -x "$BIN" ]; then
   run_capped "swiftc" /usr/bin/xcrun swiftc -O -module-cache-path "$TMPDIR/swift-module-cache" "$SWIFT" -o "$BIN"
 fi
 
+# Filter icons: vector data + composed review SVGs, then an AppKit review sheet
+# (dark card background) of every composed SVG.
+filter_icons() { # filter_icons <out-root>
+  local o="$1"
+  run_capped "filter_icons" dart "$ROOT/brand/pipeline/filter_icons.dart" "$ROOT" "$o"
+  # shellcheck disable=SC2046
+  run_capped "filter icon sheet" "$BIN" --sheet "$o/brand/exports/filter_icons_review.png" \
+    "$(sed -n 's/.*"card": *"\(#[0-9A-Fa-f]*\)".*/\1/p' "$THEME" | tail -1)" 8 96 \
+    $(find "$o/brand/exports/filter_icons" -name '*.svg' | LC_ALL=C sort)
+}
+
 if [ "$MODE" = write ]; then
-  echo "==> regenerating from $SVG"
+  echo "==> regenerating from $SVG + brand/icons/"
   managed_dirs "$ROOT" | while read -r d; do rm -rf "$d"; done
   for f in $MANAGED_FILES $OBSOLETE; do rm -f "$f"; done
   run_capped "azm_brand" "$BIN" "$SVG" "$THEME" "$ROOT"
+  filter_icons "$ROOT"
   grep '^azm_brand:' "$LOG" || true
   echo "==> $(list_outputs "$ROOT" | wc -l | tr -d ' ') files written:"
   list_outputs "$ROOT" | sed 's/^/   /'
@@ -92,6 +108,7 @@ OUT="$TMPDIR/brand-check"
 rm -rf "$OUT"
 mkdir -p "$OUT"
 run_capped "azm_brand (check)" "$BIN" "$SVG" "$THEME" "$OUT"
+filter_icons "$OUT"
 FRESH="$(list_outputs "$OUT")"
 COMMITTED="$(list_outputs "$ROOT")"
 bad=0
@@ -106,7 +123,7 @@ while read -r f; do
 done <<<"$FRESH"
 rm -rf "$OUT"
 if [ "$bad" = 1 ]; then
-  echo "brand/generate.sh --check: FAILED. Committed assets are not what $SVG produces; run brand/generate.sh."
+  echo "brand/generate.sh --check: FAILED. Committed assets are not what $SVG + brand/icons/ produce; run brand/generate.sh."
   exit 1
 fi
-echo "brand/generate.sh --check: OK ($(echo "$FRESH" | wc -l | tr -d ' ') files match $SVG)"
+echo "brand/generate.sh --check: OK ($(echo "$FRESH" | wc -l | tr -d ' ') files match $SVG + brand/icons/)"

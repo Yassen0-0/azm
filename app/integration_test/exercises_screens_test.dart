@@ -1,4 +1,4 @@
-// Screens of the exercises feature (library, equipment sheet, picker, detail),
+// Screens of the exercises feature (library, equipment filter sheet, picker, detail),
 // captured by tools/screenshots.sh exercises on both platforms in ar + en.
 // Also measures catalog search latency ON THE DEVICE ([perf] lines; run
 // `flutter drive` directly to see them, screenshots.sh filters the output).
@@ -8,11 +8,12 @@ import 'package:azm/core/db/app_database.dart';
 import 'package:azm/core/db/catalog_repository.dart';
 import 'package:azm/core/router/app_router.dart';
 import 'package:azm/core/widgets/exercise_card.dart';
-import 'package:azm/core/widgets/muscle_chips.dart';
+import 'package:azm/features/exercises/data/exercise_filters.dart';
 import 'package:azm/features/exercises/data/exercise_library.dart';
 import 'package:azm/features/exercises/data/exercise_search_index.dart';
 import 'package:azm/features/exercises/ui/exercise_detail_screen.dart';
 import 'package:azm/features/exercises/ui/exercise_progress_chart.dart';
+import 'package:azm/features/exercises/ui/filter_sheet.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,12 +50,13 @@ Future<void> _waitFor(WidgetTester tester, Finder f, {Duration max = const Durat
   await _pumpFor(tester, 30);
 }
 
-/// Jumps the muscle chip row to its start or end.
-Future<void> _chipsTo(WidgetTester tester, {required bool end}) async {
-  final row = find.descendant(of: find.byType(MuscleChips), matching: find.byType(Scrollable)).first;
-  final p = tester.state<ScrollableState>(row).position;
-  p.jumpTo(end ? p.maxScrollExtent : 0);
-  await _pumpFor(tester);
+/// The library and the picker remember their filters on the device: start
+/// every run unfiltered.
+Future<void> _clearSavedFilters(ProviderContainer c) async {
+  final store = c.read(exerciseFilterStoreProvider);
+  for (final s in FilterScreen.values) {
+    await store.save(s, ExerciseFilters.none);
+  }
 }
 
 Future<void> _typeSearch(WidgetTester tester, String text) async {
@@ -76,9 +78,11 @@ Future<void> _measureSearch(ProviderContainer container) async {
     const ExerciseQuery(text: 'ر'),
     const ExerciseQuery(text: 'curl', target: 'biceps'),
     const ExerciseQuery(target: 'pectorals', equipment: 'barbell'),
+    const ExerciseQuery(filters: ExerciseFilters(places: {'home'}, muscles: {'chest', 'biceps'})),
+    const ExerciseQuery(text: 'press', filters: ExerciseFilters(muscles: {'shoulders'}, equipment: {'dumbbell', 'barbell'})),
   ];
   final load = Stopwatch()..start();
-  final index = await ExerciseSearchIndex.load(repo);
+  final index = await ExerciseSearchIndex.load(repo, mapping: ExerciseFilterMapping.bundled);
   _log('index load (once per app run): ${load.elapsedMilliseconds} ms, ${index.length} rows');
 
   var worst = 0;
@@ -151,6 +155,8 @@ Future<void> _seedHistory(AppDatabase db) async {
 void main() => runScreenshotSuite('exercises', [
   ScreenStep('library', (tester, container, router) async {
     await _removeSeed(container.read(appDatabaseProvider));
+    await _clearSavedFilters(container);
+    addTearDown(() => _clearSavedFilters(container));
     await _measureSearch(container);
     router.go(AppRoutes.exercises);
     // First capture of the run: on a busy iOS simulator the fixed harness
@@ -158,18 +164,7 @@ void main() => runScreenshotSuite('exercises', [
     // (blank list, Workout tab still selected). Wait for real cards.
     await _waitFor(tester, find.byType(ExerciseCard));
   }),
-  ScreenStep('library_more_muscles', (tester, container, router) async {
-    final ar = Localizations.localeOf(tester.element(find.byType(TextField).first)).languageCode == 'ar';
-    await _chipsTo(tester, end: true);
-    await tester.tap(find.text(ar ? 'المزيد' : 'More'));
-    await _pumpFor(tester, 20);
-    // Show the expanded rare muscles; jump twice because the first jump uses
-    // an extent estimated before the new chips were laid out.
-    await _chipsTo(tester, end: true);
-    await _chipsTo(tester, end: true);
-  }),
   ScreenStep('library_search_ar', (tester, container, router) async {
-    await _chipsTo(tester, end: false);
     await _typeSearch(tester, 'بنش');
   }),
   ScreenStep('equipment_sheet', (tester, container, router) async {
@@ -177,19 +172,26 @@ void main() => runScreenshotSuite('exercises', [
     await _pumpFor(tester);
     FocusManager.instance.primaryFocus?.unfocus();
     await _pumpFor(tester);
-    await tester.tap(find.byIcon(Icons.tune_rounded));
+    await tester.tap(find.byKey(FilterKeys.chip(FilterKind.equipment)));
+    await _pumpFor(tester, 30);
+    await tester.tap(find.byKey(FilterKeys.card(FilterKind.equipment, 'barbell')));
   }),
   ScreenStep('library_filtered', (tester, container, router) async {
-    // The harness closed the sheet after the last capture: reopen it,
-    // pick "Barbell", then the chest chip.
-    final ar = Localizations.localeOf(tester.element(find.byType(TextField).first)).languageCode == 'ar';
-    await tester.tap(find.byIcon(Icons.tune_rounded));
-    await _pumpFor(tester, 30);
-    await tester.tap(find.descendant(of: find.byType(BottomSheet), matching: find.text(ar ? 'بار' : 'Barbell')));
-    await _pumpFor(tester, 30);
-    await tester.tap(find.text(ar ? 'صدر' : 'Chest').first);
+    // The harness closed the sheet after the last capture (nothing applied):
+    // Equipment → Barbell, then Muscle group → Chest.
+    for (final (kind, id) in [(FilterKind.equipment, 'barbell'), (FilterKind.muscle, 'chest')]) {
+      await tester.tap(find.byKey(FilterKeys.chip(kind)));
+      await _pumpFor(tester, 30);
+      await tester.tap(find.byKey(FilterKeys.card(kind, id)));
+      await _pumpFor(tester, 10);
+      await tester.tap(find.byKey(FilterKeys.showResults));
+      await _pumpFor(tester, 30);
+    }
   }),
   ScreenStep('picker_3_selected', (tester, container, router) async {
+    // The library keeps its filters; the picker has its own (none).
+    await tester.tap(find.byKey(FilterKeys.clearAll));
+    await _pumpFor(tester);
     unawaited(router.push<List<String>>(AppRoutes.exercisePicker));
     await _pumpFor(tester, 40);
     await _typeSearch(tester, 'بار');

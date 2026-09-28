@@ -1,0 +1,14 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Azm original filter icon: equipment_machine -->
+  <g fill="none" stroke="#88888E" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 56 V10 H50 V56"/>
+    <path d="M10 56 H18"/>
+    <path d="M46 56 H54"/>
+    <path d="M32 10 V30"/>
+  </g>
+  <g fill="#4D9BFF">
+    <rect x="22" y="31" width="20" height="6" rx="1.8"/>
+    <rect x="22" y="39" width="20" height="6" rx="1.8"/>
+    <rect x="22" y="47" width="20" height="6" rx="1.8"/>
+  </g>
+</svg>

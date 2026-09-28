@@ -1,5 +1,6 @@
 import 'package:azm/core/db/app_database.dart';
 import 'package:azm/core/router/app_router.dart';
+import 'package:azm/features/exercises/data/exercise_filters.dart';
 import 'package:azm/features/settings/data/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -85,9 +86,10 @@ void main() {
     final (_, result, _) = await openPicker(tester);
     await tapExercise(tester, 'barbell bench press', '0025');
     await tester.enterText(find.byType(TextField), '');
-    await tapChip(tester, 'Biceps');
+    await applyFilter(tester, FilterKind.muscle, ['biceps']);
     expect(find.text('143 exercises'), findsOneWidget);
-    await tapChip(tester, 'All');
+    await applyFilter(tester, FilterKind.muscle, ['biceps']); // toggles off
+    expect(find.text('1,291 exercises'), findsOneWidget);
     await tapExercise(tester, 'barbell bench press', '0025'); // toggles off
     expect(find.text('Add'), findsOneWidget);
     expect(result(), isNull);

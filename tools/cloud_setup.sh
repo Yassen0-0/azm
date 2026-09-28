@@ -97,7 +97,7 @@ step "Code generation: l10n, Drift (build_runner), catalog"
 tools/gen_l10n.sh
 (cd app && dart run build_runner build --delete-conflicting-outputs)
 tools/build_catalog.sh
-GENERATED=(app/lib/core/l10n/arb app/lib/core/l10n/gen app/assets/catalog data/catalog/catalog_version.json)
+GENERATED=(app/lib/core/l10n/arb app/lib/core/l10n/gen app/assets/catalog app/lib/features/exercises/data/exercise_filters_data.dart data/catalog/catalog_version.json)
 while IFS= read -r f; do GENERATED+=("$f"); done < <(git ls-files '*.g.dart')
 if ! git diff --quiet -- "${GENERATED[@]}"; then
   echo "FAILED: generated files differ from the committed ones (commit the regenerated files):"

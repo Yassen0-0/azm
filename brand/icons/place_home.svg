@@ -1,0 +1,12 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Azm original filter icon: place_home -->
+  <g fill="none" stroke="#88888E" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 30 L32 11 L56 30"/>
+    <path d="M14 26 V55 H50 V26"/>
+  </g>
+  <path d="M27 43 H37" fill="none" stroke="#4D9BFF" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#4D9BFF">
+    <rect x="21" y="36" width="6" height="14" rx="2.2"/>
+    <rect x="37" y="36" width="6" height="14" rx="2.2"/>
+  </g>
+</svg>

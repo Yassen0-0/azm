@@ -1,0 +1,7 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Azm original filter icon: place_bands -->
+  <rect x="7" y="8" width="7" height="48" rx="3.5" fill="#88888E"/>
+  <path d="M14 22 C28 20 38 30 47 43" fill="none" stroke="#4D9BFF" stroke-width="4.4" stroke-linecap="round"/>
+  <path d="M14 30 C26 31 34 38 41 48" fill="none" stroke="#4D9BFF" stroke-width="4.4" stroke-linecap="round"/>
+  <rect x="40" y="44" width="15" height="7" rx="3.5" fill="#88888E"/>
+</svg>

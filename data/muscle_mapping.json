@@ -1,0 +1,52 @@
+{
+  "_about": "Muscle Group filter (library + exercise picker). An exercise's group = `target`[its dataset target] (primary muscle), else `body_part`[its dataset body_part], else `fallback`. Exercises listed in `full_body` ALSO belong to full_body (compound total-body lifts; the dataset has no such value). `sections` = the three sections of the sheet, in order. Validated by tools/build_catalog.dart (every group known, every dataset target mapped, full_body ids exist) and generated into app/lib/features/exercises/data/exercise_filters_data.dart.",
+  "sections": {
+    "upper": ["abs", "biceps", "chest", "forearms", "lats", "lower_back", "neck", "shoulders", "traps", "triceps", "upper_back"],
+    "lower": ["abductors", "adductors", "calves", "glutes", "hamstrings", "quads"],
+    "other": ["cardio", "full_body", "other"]
+  },
+  "target": {
+    "abs": "abs",
+    "biceps": "biceps",
+    "pectorals": "chest",
+    "serratus anterior": "chest",
+    "forearms": "forearms",
+    "lats": "lats",
+    "spine": "lower_back",
+    "levator scapulae": "neck",
+    "delts": "shoulders",
+    "traps": "traps",
+    "triceps": "triceps",
+    "upper back": "upper_back",
+    "abductors": "abductors",
+    "adductors": "adductors",
+    "calves": "calves",
+    "glutes": "glutes",
+    "hamstrings": "hamstrings",
+    "quads": "quads",
+    "cardiovascular system": "cardio"
+  },
+  "body_part": {
+    "waist": "abs",
+    "chest": "chest",
+    "lower arms": "forearms",
+    "neck": "neck",
+    "shoulders": "shoulders",
+    "lower legs": "calves",
+    "cardio": "cardio"
+  },
+  "fallback": "other",
+  "full_body": [
+    "0028", "0067", "0128", "0295", "0501", "0518", "0525", "0526", "0527", "0529",
+    "0535", "0537", "0538", "0542", "0549", "0550", "0551", "0552", "0648", "0680",
+    "0776", "0786", "1160", "1201", "1496", "2133", "2459", "3305", "3360", "3888"
+  ],
+  "_notes": {
+    "serratus anterior": "Chest wall (dataset body_part: chest) → chest.",
+    "spine": "Erector spinae (hyperextensions, good mornings) → lower back.",
+    "levator scapulae": "Neck (dataset body_part: neck) → neck.",
+    "body_part": "Only used when a future dataset adds a target this file doesn't know. `back`, `upper arms` and `upper legs` are deliberately absent (they span several groups): such an exercise falls to `other` until mapped.",
+    "full_body": "Burpees, cleans, snatches, jerks, thrusters, clean & press, kettlebell swing, Turkish get-up, farmers walk, battling ropes, bear crawl, rope climb, sledge hammer, tire flip, snatch pull, squat jerk. They keep their target group too.",
+    "other": "The fallback group: 0 exercises in the current dataset (every target is mapped)."
+  }
+}

@@ -137,24 +137,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exercisesSearchClear => 'Clear search';
 
   @override
-  String get exercisesFilterAll => 'All';
-
-  @override
-  String get exercisesFilterMore => 'More';
-
-  @override
   String get exercisesFilterEquipment => 'Equipment';
-
-  @override
-  String get exercisesEquipmentSheetTitle => 'Filter by equipment';
-
-  @override
-  String get exercisesEquipmentAll => 'All equipment';
-
-  @override
-  String exercisesRemoveEquipmentFilter(String equipment) {
-    return 'Remove filter $equipment';
-  }
 
   @override
   String exercisesResultCount(int count, String countText) {
@@ -545,6 +528,143 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exercisesBodyPartNeck => 'Neck';
+
+  @override
+  String get exercisesFilterPlace => 'Place';
+
+  @override
+  String get exercisesFilterMuscle => 'Muscle group';
+
+  @override
+  String exercisesFilterActiveCount(String filter, int count) {
+    return '$filter, $count selected';
+  }
+
+  @override
+  String exercisesFilterShowResults(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Show $countText results',
+      one: 'Show 1 result',
+      zero: 'No results',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get exercisesFilterClearSheet => 'Clear filters';
+
+  @override
+  String get exercisesFilterCardSelected => 'Selected';
+
+  @override
+  String get exercisesMuscleSectionUpper => 'Upper body';
+
+  @override
+  String get exercisesMuscleSectionLower => 'Lower body';
+
+  @override
+  String get exercisesMuscleSectionOther => 'Other';
+
+  @override
+  String get exercisesPlaceGym => 'Gym';
+
+  @override
+  String get exercisesPlaceHome => 'Home';
+
+  @override
+  String get exercisesPlaceBands => 'Resistance bands';
+
+  @override
+  String get exercisesGroupAbs => 'Abs';
+
+  @override
+  String get exercisesGroupBiceps => 'Biceps';
+
+  @override
+  String get exercisesGroupChest => 'Chest';
+
+  @override
+  String get exercisesGroupForearms => 'Forearms';
+
+  @override
+  String get exercisesGroupLats => 'Lats';
+
+  @override
+  String get exercisesGroupLowerBack => 'Lower back';
+
+  @override
+  String get exercisesGroupNeck => 'Neck';
+
+  @override
+  String get exercisesGroupShoulders => 'Shoulders';
+
+  @override
+  String get exercisesGroupTraps => 'Traps';
+
+  @override
+  String get exercisesGroupTriceps => 'Triceps';
+
+  @override
+  String get exercisesGroupUpperBack => 'Upper back';
+
+  @override
+  String get exercisesGroupAbductors => 'Abductors';
+
+  @override
+  String get exercisesGroupAdductors => 'Adductors';
+
+  @override
+  String get exercisesGroupCalves => 'Calves';
+
+  @override
+  String get exercisesGroupGlutes => 'Glutes';
+
+  @override
+  String get exercisesGroupHamstrings => 'Hamstrings';
+
+  @override
+  String get exercisesGroupQuads => 'Quads';
+
+  @override
+  String get exercisesGroupCardio => 'Cardio';
+
+  @override
+  String get exercisesGroupFullBody => 'Full body';
+
+  @override
+  String get exercisesGroupOther => 'Other';
+
+  @override
+  String get exercisesEquipGroupNone => 'None (bodyweight)';
+
+  @override
+  String get exercisesEquipGroupBarbell => 'Barbell';
+
+  @override
+  String get exercisesEquipGroupDumbbell => 'Dumbbell';
+
+  @override
+  String get exercisesEquipGroupKettlebell => 'Kettlebell';
+
+  @override
+  String get exercisesEquipGroupMachine => 'Machine';
+
+  @override
+  String get exercisesEquipGroupCable => 'Cable';
+
+  @override
+  String get exercisesEquipGroupPlate => 'Plate';
+
+  @override
+  String get exercisesEquipGroupResistanceBand => 'Resistance band';
+
+  @override
+  String get exercisesEquipGroupSuspensionBand => 'Suspension band';
+
+  @override
+  String get exercisesEquipGroupOther => 'Other';
 
   @override
   String get historyLiftedSoFar => 'Lifted so far';

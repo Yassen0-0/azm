@@ -70,49 +70,6 @@ void main() {
     expect(find.descendant(of: card, matching: find.text(isolateName('ضغط بار مستوي'))), findsOneWidget);
   });
 
-  testWidgets('muscle chip filters by target; "All" resets', (tester) async {
-    await openLibrary(tester, LanguagePref.en);
-    await tapChip(tester, 'Biceps');
-    expect(find.text('143 exercises'), findsOneWidget);
-    final targets = (await db.select(db.exercises).get())
-        .where((e) => cardIds().contains(e.id))
-        .map((e) => e.target)
-        .toSet();
-    expect(targets, {'biceps'});
-
-    await tapChip(tester, 'All');
-    expect(find.text('1,291 exercises'), findsOneWidget);
-  });
-
-  testWidgets('"More" chip expands the rare muscles inline', (tester) async {
-    await openLibrary(tester, LanguagePref.en);
-    expect(find.text('Spine'), findsNothing);
-    await tapChip(tester, 'More');
-    expect(find.text('More'), findsNothing);
-    await tapChip(tester, 'Spine');
-    expect(find.text('19 exercises'), findsOneWidget);
-  });
-
-  testWidgets('equipment sheet filters; the pill removes the filter', (tester) async {
-    await openLibrary(tester, LanguagePref.en);
-    await tester.tap(find.bySemanticsLabel('Equipment'));
-    await settle(tester);
-    expect(find.text('Filter by equipment'), findsOneWidget);
-    await tester.tap(find.text('Barbell'));
-    await settle(tester);
-    expect(find.text('Filter by equipment'), findsNothing);
-    expect(find.text('150 exercises'), findsOneWidget);
-
-    // Combined with a search and a muscle.
-    await tapChip(tester, 'Chest');
-    await search(tester, 'bench');
-    expect(cardIds(), contains('0025'));
-
-    await tester.tap(find.bySemanticsLabel('Remove filter Barbell'));
-    await settle(tester);
-    expect(find.bySemanticsLabel('Remove filter Barbell'), findsNothing);
-  });
-
   testWidgets('no results → message and "Clear filters" resets everything', (tester) async {
     await openLibrary(tester, LanguagePref.en);
     await search(tester, 'zzzz nothing');

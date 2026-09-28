@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:azm/app.dart';
 import 'package:azm/core/db/app_database.dart';
 import 'package:azm/core/db/catalog_installer.dart';
 import 'package:azm/core/widgets/exercise_card.dart';
-import 'package:azm/core/widgets/muscle_chips.dart';
+import 'package:azm/features/exercises/data/exercise_filters.dart';
+import 'package:azm/features/exercises/ui/filter_sheet.dart';
 import 'package:azm/features/settings/data/app_settings.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
@@ -96,15 +99,41 @@ void useTallScreen(WidgetTester tester) {
   addTearDown(tester.view.reset);
 }
 
-/// Scrolls the muscle chip row until [label] is on screen, then taps it.
-Future<void> tapChip(WidgetTester tester, String label) async {
-  final row = find.descendant(of: find.byType(MuscleChips), matching: find.byType(Scrollable)).first;
-  final chip = find.descendant(of: find.byType(MuscleChips), matching: find.text(label));
-  // From the start of the row, scroll forward until the chip is on screen.
-  tester.state<ScrollableState>(row).position.jumpTo(0);
+/// Opens the [kind] filter sheet, toggles the cards [ids] and applies them
+/// with "Show N results".
+Future<void> applyFilter(WidgetTester tester, FilterKind kind, List<String> ids) async {
+  await openFilterSheet(tester, kind);
+  for (final id in ids) {
+    await tapFilterCard(tester, kind, id);
+  }
+  await tester.tap(find.byKey(FilterKeys.showResults));
   await settle(tester);
-  await tester.scrollUntilVisible(chip.hitTestable(), 150, scrollable: row);
+}
+
+Future<void> openFilterSheet(WidgetTester tester, FilterKind kind) async {
+  await tester.tap(find.byKey(FilterKeys.chip(kind)));
   await settle(tester);
-  await tester.tap(chip);
+}
+
+/// Scrolls the open sheet until the card is visible, then taps it.
+Future<void> tapFilterCard(WidgetTester tester, FilterKind kind, String id) async {
+  final card = find.byKey(FilterKeys.card(kind, id));
+  await tester.scrollUntilVisible(
+    card.hitTestable(),
+    120,
+    scrollable: find.descendant(of: find.byType(BottomSheet), matching: find.byType(Scrollable)).first,
+  );
   await settle(tester);
+  await tester.tap(card);
+  await settle(tester);
+}
+
+/// Label of the sheet's primary button ("Show N results").
+String showResultsLabel(WidgetTester tester) =>
+    (tester.widget<FilledButton>(find.byKey(FilterKeys.showResults)).child! as Text).data!;
+
+/// Decoded JSON value of a settings key (null when unset).
+Future<Object?> readSettingJson(AppDatabase db, String key) async {
+  final v = await db.readSetting(key);
+  return v == null ? null : jsonDecode(v);
 }

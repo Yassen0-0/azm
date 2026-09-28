@@ -220,6 +220,42 @@ func write(_ text: String, to path: String) throws {
 // MARK: - Main
 
 let args = CommandLine.arguments
+
+// Review sheet of the filter icons (not shipped):
+//   azm_brand --sheet <out.png> <bg #hex> <columns> <cell px> <icon.svg>…
+// Each SVG is rendered by AppKit (the same renderer as the logo) into a cell
+// on the given background, left to right, top to bottom.
+if args.count >= 7, args[1] == "--sheet" {
+  do {
+    let (outPath, bg, cols, cell) = (args[2], try RGB(hex: args[3]), Int(args[4]) ?? 8, Int(args[5]) ?? 96)
+    let files = Array(args[6...])
+    let pad = cell / 6, rows = (files.count + cols - 1) / cols
+    let w = cols * cell + (cols + 1) * pad, h = rows * cell + (rows + 1) * pad
+    var sheet = [UInt8](repeating: 0, count: w * h * 4)
+    for i in stride(from: 0, to: sheet.count, by: 4) {
+      sheet[i] = UInt8((bg.r * 255).rounded()); sheet[i + 1] = UInt8((bg.g * 255).rounded())
+      sheet[i + 2] = UInt8((bg.b * 255).rounded()); sheet[i + 3] = 255
+    }
+    for (n, f) in files.enumerated() {
+      let icon = try render(try String(contentsOfFile: f, encoding: .utf8), w: cell, h: cell,
+        rect: CGRect(x: 0, y: 0, width: cell, height: cell))
+      let x0 = pad + (n % cols) * (cell + pad), y0 = pad + (n / cols) * (cell + pad)
+      for y in 0..<cell {
+        for x in 0..<cell {
+          let si = (y * cell + x) * 4, di = ((y0 + y) * w + x0 + x) * 4
+          let a = Double(icon.data[si + 3]) / 255
+          for c in 0..<3 { sheet[di + c] = UInt8((Double(icon.data[si + c]) + Double(sheet[di + c]) * (1 - a)).rounded()) }
+        }
+      }
+    }
+    try writePNG((sheet, w, h), to: outPath)
+    print("azm_brand: sheet \(files.count) icons → \(outPath)")
+    exit(0)
+  } catch {
+    fail("\(error)")
+  }
+}
+
 guard args.count == 4 else { fail("usage: azm_brand <source.svg> <theme.json> <out-root>") }
 let (svgPath, themePath, outRoot) = (args[1], args[2], args[3])
 

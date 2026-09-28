@@ -1,0 +1,42 @@
+{
+  "_about": "Equipment filter (library + exercise picker). Every dataset `equipment` value in data/raw/exercises.json maps to exactly one filter group. `groups` = the cards of the Equipment sheet, in order. Validated by tools/build_catalog.dart (every dataset value mapped, every group known) and generated into app/lib/features/exercises/data/exercise_filters_data.dart. Reviewed judgement calls are in `_notes`.",
+  "groups": ["none", "barbell", "dumbbell", "kettlebell", "machine", "cable", "plate", "resistance_band", "suspension_band", "other"],
+  "map": {
+    "body weight": "none",
+    "assisted": "none",
+    "barbell": "barbell",
+    "ez barbell": "barbell",
+    "olympic barbell": "barbell",
+    "trap bar": "barbell",
+    "dumbbell": "dumbbell",
+    "kettlebell": "kettlebell",
+    "leverage machine": "machine",
+    "smith machine": "machine",
+    "sled machine": "machine",
+    "stepmill machine": "machine",
+    "skierg machine": "machine",
+    "elliptical machine": "machine",
+    "stationary bike": "machine",
+    "upper body ergometer": "machine",
+    "cable": "cable",
+    "weighted": "plate",
+    "band": "resistance_band",
+    "resistance band": "resistance_band",
+    "stability ball": "other",
+    "medicine ball": "other",
+    "bosu ball": "other",
+    "roller": "other",
+    "wheel roller": "other",
+    "rope": "other",
+    "hammer": "other",
+    "tire": "other"
+  },
+  "_notes": {
+    "assisted": "Partner-assisted stretches and hanging/lying raises: no equipment of their own → none/bodyweight.",
+    "weighted": "Bodyweight moves loaded with a plate (weighted crunch, plank, dips, chin-ups) → plate.",
+    "trap bar": "A barbell variant → barbell.",
+    "sled machine": "Leg press / hack squat sleds → machine.",
+    "rope": "Jump rope, battling ropes, rope climb and stretching straps → other.",
+    "suspension_band": "No dataset exercise uses a suspension trainer (TRX): the card exists but has 0 results."
+  }
+}

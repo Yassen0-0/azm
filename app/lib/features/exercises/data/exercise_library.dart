@@ -6,35 +6,51 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/db/app_database.dart';
 import '../../../core/db/catalog_repository.dart';
+import 'exercise_filters.dart';
 
 /// What the library / picker is currently asking the catalog for.
 @immutable
 class ExerciseQuery {
-  const ExerciseQuery({this.text = '', this.target, this.equipment});
+  const ExerciseQuery({this.text = '', this.target, this.equipment, this.filters = ExerciseFilters.none});
 
   /// Raw search text (normalized by `CatalogRepository.search`).
   final String text;
 
-  /// Dataset `target` key, or null for all muscles.
+  /// Dataset `target` key, or null for all muscles (the same filter as
+  /// `CatalogRepository.search`; the UI uses [filters]).
   final String? target;
 
-  /// Dataset `equipment` key, or null for all equipment.
+  /// Dataset `equipment` key, or null for all equipment (as [target]).
   final String? equipment;
 
-  bool get isEmpty => text.trim().isEmpty && target == null && equipment == null;
+  /// Place / Muscle Group / Equipment filter cards (the filter bar).
+  final ExerciseFilters filters;
 
-  ExerciseQuery copyWith({String? text, String? Function()? target, String? Function()? equipment}) => ExerciseQuery(
-    text: text ?? this.text,
-    target: target == null ? this.target : target(),
-    equipment: equipment == null ? this.equipment : equipment(),
-  );
+  bool get isEmpty => text.trim().isEmpty && target == null && equipment == null && filters.isEmpty;
+
+  ExerciseQuery copyWith({
+    String? text,
+    String? Function()? target,
+    String? Function()? equipment,
+    ExerciseFilters? filters,
+  }) =>
+      ExerciseQuery(
+        text: text ?? this.text,
+        target: target == null ? this.target : target(),
+        equipment: equipment == null ? this.equipment : equipment(),
+        filters: filters ?? this.filters,
+      );
 
   @override
   bool operator ==(Object other) =>
-      other is ExerciseQuery && other.text == text && other.target == target && other.equipment == equipment;
+      other is ExerciseQuery &&
+      other.text == text &&
+      other.target == target &&
+      other.equipment == equipment &&
+      other.filters == filters;
 
   @override
-  int get hashCode => Object.hash(text, target, equipment);
+  int get hashCode => Object.hash(text, target, equipment, filters);
 }
 
 /// One catalog exercise by id (null if the catalog no longer has it).

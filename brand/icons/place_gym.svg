@@ -1,0 +1,14 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Azm original filter icon: place_gym -->
+  <g fill="none" stroke="#88888E" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 14 V56"/>
+    <path d="M46 14 V56"/>
+    <path d="M12 56 H24"/>
+    <path d="M40 56 H52"/>
+    <path d="M5 26 H59"/>
+  </g>
+  <g fill="#4D9BFF">
+    <rect x="8" y="16" width="5.5" height="20" rx="2"/>
+    <rect x="50.5" y="16" width="5.5" height="20" rx="2"/>
+  </g>
+</svg>

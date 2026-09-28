@@ -1,0 +1,10 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Azm original filter icon: equipment_dumbbell -->
+  <path d="M22 32 H42" fill="none" stroke="#88888E" stroke-width="4" stroke-linecap="round"/>
+  <g fill="#4D9BFF">
+    <rect x="14" y="19" width="8" height="26" rx="3"/>
+    <rect x="8" y="24" width="5" height="16" rx="2"/>
+    <rect x="42" y="19" width="8" height="26" rx="3"/>
+    <rect x="51" y="24" width="5" height="16" rx="2"/>
+  </g>
+</svg>

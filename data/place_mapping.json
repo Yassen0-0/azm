@@ -1,0 +1,13 @@
+{
+  "_about": "Place filter (library + exercise picker), derived from the equipment filter group of each exercise (data/equipment_mapping.json). `places` = the cards of the Place sheet, in order; each lists the equipment groups that can be used there. Validated by tools/build_catalog.dart (gym must cover every group) and generated into app/lib/features/exercises/data/exercise_filters_data.dart.",
+  "places": {
+    "gym": ["none", "barbell", "dumbbell", "kettlebell", "machine", "cable", "plate", "resistance_band", "suspension_band", "other"],
+    "home": ["none", "dumbbell", "kettlebell", "resistance_band", "suspension_band"],
+    "bands": ["resistance_band", "suspension_band"]
+  },
+  "_notes": {
+    "gym": "Everything: a gym has all equipment.",
+    "home": "Bodyweight (incl. partner-assisted), dumbbells, kettlebells and bands. Balls, rollers, plates-only and machines are not assumed at home.",
+    "bands": "Band-type equipment only (dataset `band` + `resistance band`; suspension trainers have no exercises yet)."
+  }
+}

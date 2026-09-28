@@ -61,6 +61,14 @@ abstract final class AzmSize {
   static const double thumbnailList = 48;
   static const double thumbnailCard = 72;
 
+  // Library filters
+  /// Icon on a filter card (place / muscle-group silhouette / equipment).
+  static const double filterIcon = 44;
+  /// Height of a filter card in a filter sheet (icon + up to two label lines).
+  static const double filterCard = 108;
+  /// Count bubble on an active filter chip.
+  static const double filterCount = 18;
+
   // Exercise detail
   /// Height of the per-exercise progress chart.
   static const double chartHeight = 144;

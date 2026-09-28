@@ -137,24 +137,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exercisesSearchClear => 'مسح البحث';
 
   @override
-  String get exercisesFilterAll => 'الكل';
-
-  @override
-  String get exercisesFilterMore => 'المزيد';
-
-  @override
   String get exercisesFilterEquipment => 'الأداة';
-
-  @override
-  String get exercisesEquipmentSheetTitle => 'فلتر بالأداة';
-
-  @override
-  String get exercisesEquipmentAll => 'كل الأدوات';
-
-  @override
-  String exercisesRemoveEquipmentFilter(String equipment) {
-    return 'شيل فلتر $equipment';
-  }
 
   @override
   String exercisesResultCount(int count, String countText) {
@@ -546,6 +529,146 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get exercisesBodyPartNeck => 'رقبة';
+
+  @override
+  String get exercisesFilterPlace => 'المكان';
+
+  @override
+  String get exercisesFilterMuscle => 'العضلة';
+
+  @override
+  String exercisesFilterActiveCount(String filter, int count) {
+    return '$filter، $count مختار';
+  }
+
+  @override
+  String exercisesFilterShowResults(int count, String countText) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'اعرض $countText تمرين',
+      many: 'اعرض $countText تمرين',
+      few: 'اعرض $countText تمارين',
+      two: 'اعرض تمرينين',
+      one: 'اعرض تمرين واحد',
+      zero: 'مفيش نتايج',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get exercisesFilterClearSheet => 'امسح الفلاتر';
+
+  @override
+  String get exercisesFilterCardSelected => 'مختار';
+
+  @override
+  String get exercisesMuscleSectionUpper => 'الجزء العلوي';
+
+  @override
+  String get exercisesMuscleSectionLower => 'الجزء السفلي';
+
+  @override
+  String get exercisesMuscleSectionOther => 'تاني';
+
+  @override
+  String get exercisesPlaceGym => 'جيم';
+
+  @override
+  String get exercisesPlaceHome => 'البيت';
+
+  @override
+  String get exercisesPlaceBands => 'أحبال مقاومة';
+
+  @override
+  String get exercisesGroupAbs => 'بطن';
+
+  @override
+  String get exercisesGroupBiceps => 'باي';
+
+  @override
+  String get exercisesGroupChest => 'صدر';
+
+  @override
+  String get exercisesGroupForearms => 'سواعد';
+
+  @override
+  String get exercisesGroupLats => 'لاتس';
+
+  @override
+  String get exercisesGroupLowerBack => 'ضهر سفلي';
+
+  @override
+  String get exercisesGroupNeck => 'رقبة';
+
+  @override
+  String get exercisesGroupShoulders => 'كتف';
+
+  @override
+  String get exercisesGroupTraps => 'ترابيس';
+
+  @override
+  String get exercisesGroupTriceps => 'تراي';
+
+  @override
+  String get exercisesGroupUpperBack => 'ضهر';
+
+  @override
+  String get exercisesGroupAbductors => 'خارجي';
+
+  @override
+  String get exercisesGroupAdductors => 'داخلي';
+
+  @override
+  String get exercisesGroupCalves => 'سمانة';
+
+  @override
+  String get exercisesGroupGlutes => 'مؤخرة';
+
+  @override
+  String get exercisesGroupHamstrings => 'خلفي';
+
+  @override
+  String get exercisesGroupQuads => 'رجل أمامي';
+
+  @override
+  String get exercisesGroupCardio => 'كارديو';
+
+  @override
+  String get exercisesGroupFullBody => 'جسم كامل';
+
+  @override
+  String get exercisesGroupOther => 'تاني';
+
+  @override
+  String get exercisesEquipGroupNone => 'من غير أداة';
+
+  @override
+  String get exercisesEquipGroupBarbell => 'بار';
+
+  @override
+  String get exercisesEquipGroupDumbbell => 'دمبل';
+
+  @override
+  String get exercisesEquipGroupKettlebell => 'كيتل بل';
+
+  @override
+  String get exercisesEquipGroupMachine => 'جهاز';
+
+  @override
+  String get exercisesEquipGroupCable => 'كابل';
+
+  @override
+  String get exercisesEquipGroupPlate => 'طارة';
+
+  @override
+  String get exercisesEquipGroupResistanceBand => 'أحبال مقاومة';
+
+  @override
+  String get exercisesEquipGroupSuspensionBand => 'أحبال تعليق';
+
+  @override
+  String get exercisesEquipGroupOther => 'تاني';
 
   @override
   String get historyLiftedSoFar => 'شِلت لحد دلوقتي';

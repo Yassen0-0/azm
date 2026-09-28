@@ -1,0 +1,25 @@
+{
+  "_about": "Muscle-group filter icons: which body view (body_front.svg / body_back.svg) and which of its segment ids are highlighted in the accent tone. \"*\" = every segment. Keys = the muscle groups of data/muscle_mapping.json.",
+  "icons": {
+    "abs": { "view": "front", "highlight": ["abs", "oblique-l", "oblique-r"] },
+    "biceps": { "view": "front", "highlight": ["bicep-l", "bicep-r"] },
+    "chest": { "view": "front", "highlight": ["pec-l", "pec-r"] },
+    "forearms": { "view": "front", "highlight": ["forearm-l", "forearm-r"] },
+    "lats": { "view": "back", "highlight": ["lat-l", "lat-r"] },
+    "lower_back": { "view": "back", "highlight": ["lowerback"] },
+    "neck": { "view": "front", "highlight": ["neck"] },
+    "shoulders": { "view": "front", "highlight": ["delt-l", "delt-r"] },
+    "traps": { "view": "back", "highlight": ["traps"] },
+    "triceps": { "view": "back", "highlight": ["tricep-l", "tricep-r"] },
+    "upper_back": { "view": "back", "highlight": ["upperback-l", "upperback-r"] },
+    "abductors": { "view": "front", "highlight": ["abductor-l", "abductor-r"] },
+    "adductors": { "view": "front", "highlight": ["adductor-l", "adductor-r"] },
+    "calves": { "view": "back", "highlight": ["calf-l", "calf-r"] },
+    "glutes": { "view": "back", "highlight": ["glute-l", "glute-r"] },
+    "hamstrings": { "view": "back", "highlight": ["hamstring-l", "hamstring-r"] },
+    "quads": { "view": "front", "highlight": ["quad-l", "quad-r"] },
+    "cardio": { "view": "front", "highlight": ["heart"] },
+    "full_body": { "view": "front", "highlight": ["*"] },
+    "other": { "view": "front", "highlight": ["dots-1", "dots-2", "dots-3"] }
+  }
+}

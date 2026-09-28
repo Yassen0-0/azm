@@ -1,4 +1,5 @@
 import '../../../core/l10n/l10n.dart';
+import 'exercise_filters.dart';
 
 /// Localized labels for the dataset keys stored in the catalog (`target`,
 /// `secondary_muscles`, `equipment`, `body_part`; docs/DATA.md). The keys stay
@@ -160,6 +161,73 @@ abstract final class ExerciseLabels {
     'neck' => l.exercisesBodyPartNeck,
     _ => _fallback(key),
   };
+
+  // ---- Filter bar (Place / Muscle Group / Equipment) ----------------------
+
+  static String filterKind(AppLocalizations l, FilterKind k) => switch (k) {
+    FilterKind.place => l.exercisesFilterPlace,
+    FilterKind.muscle => l.exercisesFilterMuscle,
+    FilterKind.equipment => l.exercisesFilterEquipment,
+  };
+
+  /// Name of one filter card (ids from data/*_mapping.json).
+  static String filterOption(AppLocalizations l, FilterKind k, String id) => switch (k) {
+    FilterKind.place => switch (id) {
+      'gym' => l.exercisesPlaceGym,
+      'home' => l.exercisesPlaceHome,
+      'bands' => l.exercisesPlaceBands,
+      _ => _fallbackId(id),
+    },
+    FilterKind.muscle => switch (id) {
+      'abs' => l.exercisesGroupAbs,
+      'biceps' => l.exercisesGroupBiceps,
+      'chest' => l.exercisesGroupChest,
+      'forearms' => l.exercisesGroupForearms,
+      'lats' => l.exercisesGroupLats,
+      'lower_back' => l.exercisesGroupLowerBack,
+      'neck' => l.exercisesGroupNeck,
+      'shoulders' => l.exercisesGroupShoulders,
+      'traps' => l.exercisesGroupTraps,
+      'triceps' => l.exercisesGroupTriceps,
+      'upper_back' => l.exercisesGroupUpperBack,
+      'abductors' => l.exercisesGroupAbductors,
+      'adductors' => l.exercisesGroupAdductors,
+      'calves' => l.exercisesGroupCalves,
+      'glutes' => l.exercisesGroupGlutes,
+      'hamstrings' => l.exercisesGroupHamstrings,
+      'quads' => l.exercisesGroupQuads,
+      'cardio' => l.exercisesGroupCardio,
+      'full_body' => l.exercisesGroupFullBody,
+      'other' => l.exercisesGroupOther,
+      _ => _fallbackId(id),
+    },
+    FilterKind.equipment => switch (id) {
+      'none' => l.exercisesEquipGroupNone,
+      'barbell' => l.exercisesEquipGroupBarbell,
+      'dumbbell' => l.exercisesEquipGroupDumbbell,
+      'kettlebell' => l.exercisesEquipGroupKettlebell,
+      'machine' => l.exercisesEquipGroupMachine,
+      'cable' => l.exercisesEquipGroupCable,
+      'plate' => l.exercisesEquipGroupPlate,
+      'resistance_band' => l.exercisesEquipGroupResistanceBand,
+      'suspension_band' => l.exercisesEquipGroupSuspensionBand,
+      'other' => l.exercisesEquipGroupOther,
+      _ => _fallbackId(id),
+    },
+  };
+
+  /// Section title of the Muscle Group sheet.
+  static String muscleSection(AppLocalizations l, String id) => switch (id) {
+    'upper' => l.exercisesMuscleSectionUpper,
+    'lower' => l.exercisesMuscleSectionLower,
+    'other' => l.exercisesMuscleSectionOther,
+    _ => _fallbackId(id),
+  };
+
+  /// [FilterIcon] id of a card.
+  static String filterIconId(FilterKind k, String id) => '${k.name}_$id';
+
+  static String _fallbackId(String id) => _fallback(id.replaceAll('_', ' '));
 
   static String _fallback(String key) => key.isEmpty ? key : key[0].toUpperCase() + key.substring(1);
 }
