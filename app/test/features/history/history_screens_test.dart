@@ -145,7 +145,7 @@ void main() {
     await tearDownApp(tester);
   });
 
-  testWidgets('past workout: no ✓, delete is swipe-only, nothing removed on leaving', (tester) async {
+  testWidgets('past workout: no ✓, delete by swipe or long-press (Undo), nothing removed on leaving', (tester) async {
     late String w;
     await pumpApp(tester, seed: () async {
       w = await seedWorkout(db, name: 'Push', startedAt: now.subtract(const Duration(days: 1)), exercises: {
@@ -171,8 +171,22 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Close keypad'));
     await settle(tester);
 
-    // Swipe toward the end edge deletes that one set.
+    // Swipe toward the START edge (left in English) deletes that one set;
+    // Undo puts it back; a second swipe deletes it for good.
     await tester.drag(find.byKey(ValueKey('set-weight-${ids[1]}')), const Offset(600, 0));
+    await settle(tester);
+    expect(find.byType(SetRow), findsNWidgets(3)); // toward the end: nothing
+    await tester.drag(find.byKey(ValueKey('set-weight-${ids[1]}')), const Offset(-600, 0));
+    await settle(tester);
+    expect(find.byType(SetRow), findsNWidgets(2));
+    expect((await db.select(db.workoutSets).get()).map((s) => s.id).toSet(), {ids[0], ids[2]});
+    await tester.tap(find.text('Undo'));
+    await settle(tester);
+    expect(find.byType(SetRow), findsNWidgets(3));
+    expect((await db.select(db.workoutSets).get()).map((s) => s.id).toSet(), ids.toSet());
+    await tester.longPress(find.byKey(SetRow.rowKey(ids[1])));
+    await settle(tester);
+    await tester.tap(find.byKey(SetRow.menuDeleteKey));
     await settle(tester);
     expect(find.byType(SetRow), findsNWidgets(2));
     expect((await db.select(db.workoutSets).get()).map((s) => s.id).toSet(), {ids[0], ids[2]});

@@ -273,6 +273,27 @@ class RoutineRepository {
         await (db.delete(db.routineSets)..where((s) => s.id.equals(setId))).go();
       });
 
+  /// Undo of [deleteSet]: puts the exact target set back (same id, position,
+  /// type, targets), shifting later sets down if a new set took its place.
+  /// Returns false when its routine exercise is gone.
+  Future<bool> restoreSet(RoutineSet set) => db.transaction(() async {
+        final routineId = await _routineOfExercise(set.routineExerciseId);
+        if (routineId == null) return false;
+        final siblings = await (db.select(db.routineSets)
+              ..where((s) => s.routineExerciseId.equals(set.routineExerciseId)))
+            .get();
+        if (siblings.any((s) => s.id == set.id)) return false;
+        if (siblings.any((s) => s.sort == set.sort)) {
+          for (final s in siblings.where((s) => s.sort >= set.sort)) {
+            await (db.update(db.routineSets)..where((x) => x.id.equals(s.id)))
+                .write(RoutineSetsCompanion(sort: Value(s.sort + 1)));
+          }
+        }
+        await db.into(db.routineSets).insert(set);
+        await _touch(routineId);
+        return true;
+      });
+
   // ---- Start ------------------------------------------------------------------
 
   /// Starts a workout from the routine (docs/SPEC.md → Routines): the

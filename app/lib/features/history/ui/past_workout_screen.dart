@@ -13,6 +13,7 @@ import '../../../core/utils/units.dart';
 import '../../../core/widgets/azm_header.dart';
 import '../../../core/widgets/set_row.dart';
 import '../../../core/widgets/set_keypad.dart';
+import '../../../core/widgets/set_undo.dart';
 import '../../../core/widgets/set_type_sheet.dart';
 import '../../../core/widgets/weight_keypad.dart';
 import '../../workout/data/workout_models.dart';
@@ -27,9 +28,9 @@ import 'past_exercise_section.dart';
 ///
 /// Same set table as the live workout (SetRow + SetValueKeypad) without the
 /// ✓: every set of a finished workout is done. Weights, reps, types, add
-/// sets, add/remove exercises, rename, delete; deleting a set is swipe-only
-/// and nothing is ever removed behind the user's back. Every edit is written
-/// at once; Lifted, PRs and records everywhere recompute from the DB streams
+/// sets, add/remove exercises, rename, delete; a set is deleted by the user
+/// only (swipe or long-press menu, with Undo), never behind their back.
+/// Every edit is written at once; Lifted, PRs and records everywhere recompute from the DB streams
 /// (PRs chronologically, so later workouts can change too).
 class PastWorkoutScreen extends ConsumerStatefulWidget {
   const PastWorkoutScreen({super.key, required this.workoutId});
@@ -267,6 +268,7 @@ class _PastWorkoutScreenState extends ConsumerState<PastWorkoutScreen> implement
   void onDeleteSet(WorkoutSet set) {
     if (_editing?.setId == set.id) _closeKeypad();
     unawaited(_sets.deleteSet(set.id));
+    showSetDeletedSnackBar(context, onUndo: () => _sets.restoreSet(set, status: WorkoutStatus.finished));
   }
 
   @override

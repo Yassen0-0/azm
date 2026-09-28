@@ -28,6 +28,8 @@ abstract final class AzmMotion {
   static const Duration celebrationDuration = Duration(milliseconds: 500);
   static const Duration valueDuration = Duration(milliseconds: 600);
   static const Duration toast = Duration(milliseconds: 2200);
+  /// How long "Set deleted · Undo" stays up (the undo window).
+  static const Duration undoWindow = Duration(seconds: 4);
 
   // Distances (px)
   static const double pageRise = 8;

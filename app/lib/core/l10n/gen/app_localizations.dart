@@ -308,6 +308,18 @@ abstract class AppLocalizations {
   /// **'© Gym visual — https://gymvisual.com/'**
   String get commonMediaCredit;
 
+  /// Snackbar after a set was deleted (swipe or long-press menu); shown ~4 s with an Undo action.
+  ///
+  /// In ar, this message translates to:
+  /// **'السِت اتمسح'**
+  String get commonSetDeleted;
+
+  /// Snackbar action: undo the last deletion.
+  ///
+  /// In ar, this message translates to:
+  /// **'تراجع'**
+  String get commonUndo;
+
   /// Hint in the exercise search box (Arabic, slang or English all work).
   ///
   /// In ar, this message translates to:
@@ -1322,10 +1334,10 @@ abstract class AppLocalizations {
   /// **'شيل التمرين'**
   String get historyRemoveExercise;
 
-  /// Hint at the top of a past workout being edited: edits are saved immediately; deleting a set is a swipe toward the end edge (the only way; nothing is removed automatically).
+  /// Hint at the top of a past workout being edited: edits are saved immediately; delete a set by swiping it toward the START edge (right in Arabic, left in English) or long-pressing it (menu → Delete set); Undo shows for ~4 s.
   ///
   /// In ar, this message translates to:
-  /// **'التعديلات بتتحفظ على طول. اسحب السِت للآخر عشان تمسحه.'**
+  /// **'التعديلات بتتحفظ على طول. اسحب السِت لليمين أو دوس عليه مطوّلًا عشان تمسحه.'**
   String get historyEditHint;
 
   /// Past workout: id not found or not finished.

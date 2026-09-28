@@ -1,3 +1,4 @@
+import 'package:azm/core/l10n/l10n.dart';
 import 'package:azm/core/theme/azm_theme.dart';
 import 'package:azm/core/widgets/set_row.dart';
 import 'package:azm/core/widgets/weight_keypad.dart';
@@ -6,6 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 Widget _wrap(Widget child, {TextDirection dir = TextDirection.ltr}) => MaterialApp(
       theme: AzmTheme.dark(),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale(dir == TextDirection.rtl ? 'ar' : 'en'),
       home: Directionality(textDirection: dir, child: Scaffold(body: child)),
     );
 
@@ -148,17 +152,50 @@ void main() {
     });
 
     for (final dir in TextDirection.values) {
-      testWidgets('swipe toward the END edge deletes (${dir.name})', (tester) async {
+      testWidgets('swipe toward the START edge deletes (${dir.name})', (tester) async {
         await tester.pumpWidget(_wrap(row(), dir: dir));
-        final toEnd = dir == TextDirection.ltr ? const Offset(500, 0) : const Offset(-500, 0);
-        // Toward the start edge: nothing.
-        await tester.drag(find.byType(SetRow), -toEnd);
+        // START edge = left in English, right in Arabic.
+        final toStart = dir == TextDirection.ltr ? const Offset(-500, 0) : const Offset(500, 0);
+        // Toward the end edge: nothing.
+        await tester.drag(find.byType(SetRow), -toStart);
         await tester.pumpAndSettle();
         expect(calls, isEmpty);
-        await tester.drag(find.byType(SetRow), toEnd);
+        expect(find.text('60 × 8'), findsOneWidget);
+        await tester.drag(find.byType(SetRow), toStart);
+        await tester.pumpAndSettle();
+        expect(calls, ['delete']);
+        // The row is gone at once, even before the parent drops it.
+        expect(find.text('60 × 8'), findsNothing);
+      });
+
+      testWidgets('long-press → menu → Delete set (${dir.name})', (tester) async {
+        await tester.pumpWidget(_wrap(row(), dir: dir));
+        await tester.longPress(find.byKey(SetRow.rowKey('s1')));
+        await tester.pumpAndSettle();
+        expect(find.byKey(SetRow.menuDeleteKey), findsOneWidget);
+        expect(calls, isEmpty);
+        await tester.tap(find.byKey(SetRow.menuDeleteKey));
         await tester.pumpAndSettle();
         expect(calls, ['delete']);
       });
     }
+
+    testWidgets('long-press menu dismissed without a choice deletes nothing', (tester) async {
+      await tester.pumpWidget(_wrap(row()));
+      await tester.longPress(find.byKey(SetRow.rowKey('s1')));
+      await tester.pumpAndSettle();
+      await tester.tapAt(const Offset(10, 10)); // the scrim
+      await tester.pumpAndSettle();
+      expect(find.byKey(SetRow.menuDeleteKey), findsNothing);
+      expect(calls, isEmpty);
+    });
+
+    testWidgets('a short tap is still a tap, not the menu', (tester) async {
+      await tester.pumpWidget(_wrap(row(weight: '60', reps: '8')));
+      await tester.tap(find.text('60'));
+      await tester.pumpAndSettle();
+      expect(calls, ['weight']);
+      expect(find.byKey(SetRow.menuDeleteKey), findsNothing);
+    });
   });
 }

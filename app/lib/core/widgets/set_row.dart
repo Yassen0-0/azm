@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter/services.dart';
 
+import '../l10n/l10n.dart';
 import '../theme/azm_theme.dart';
 import '../utils/workout_math.dart';
 import 'azm_pressable.dart';
@@ -73,9 +77,14 @@ class SetTableHeader extends StatelessWidget {
 /// The one set row of the app: the live workout uses every column; a past
 /// workout leaves out ✓ ([onToggleComplete] null: every set there is done);
 /// the routine editor also leaves out previous ([previousText] null).
-/// Swipe toward the end edge deletes. Value cells are keyed
-/// `set-weight-<setId>` / `set-reps-<setId>` (tests).
-class SetRow extends StatelessWidget {
+///
+/// Delete: swipe toward the START edge (the platform convention: right to
+/// left in English, left to right in Arabic), or long-press the row → set
+/// menu → "Delete set" (fallback), or the screen-reader action. The row hides
+/// itself as soon as the swipe completes, so it never lingers while the DB
+/// stream catches up. Value cells are keyed `set-weight-<setId>` /
+/// `set-reps-<setId>` (tests).
+class SetRow extends StatefulWidget {
   const SetRow({
     super.key,
     required this.setId,
@@ -99,6 +108,10 @@ class SetRow extends StatelessWidget {
     this.isPr = false,
     this.labelSemantics,
   });
+
+  /// Keys for tests: the long-press target and the menu's delete action.
+  static ValueKey<(String, String)> rowKey(String setId) => ValueKey(('set-row-body', setId));
+  static const menuDeleteKey = ValueKey('setMenuDelete');
 
   /// Stable id of the set (swipe-to-delete key).
   final String setId;
@@ -131,7 +144,26 @@ class SetRow extends StatelessWidget {
   final String? labelSemantics;
 
   @override
+  State<SetRow> createState() => _SetRowState();
+}
+
+class _SetRowState extends State<SetRow> {
+  /// Swiped away: render nothing until the parent drops this row (the DB
+  /// stream re-emits a few ms later). A dismissed Dismissible must never be
+  /// rebuilt, so this also covers rebuilds in between (keypad, snackbar).
+  bool _dismissed = false;
+
+  Future<void> _openMenu() async {
+    if (await showSetMenuSheet(context, label: widget.label, kind: widget.labelKind, deleteLabel: widget.deleteLabel) &&
+        mounted) {
+      widget.onDelete();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_dismissed) return const SizedBox.shrink();
+    final w = widget;
     final c = context.colors;
     final tick = AzmMotion.of(context, AzmMotion.tick);
 
@@ -140,18 +172,18 @@ class SetRow extends StatelessWidget {
       curve: AzmMotion.standard,
       constraints: const BoxConstraints(minHeight: AzmSize.setRowMinHeight),
       padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xs),
-      color: completed ? c.setDoneTint : c.card,
+      color: w.completed ? c.setDoneTint : c.card,
       child: Row(
         children: [
-          _LabelCell(label: label, kind: labelKind, onTap: onLabelTap, semanticLabel: labelSemantics ?? label),
-          if (previousText != null)
+          _LabelCell(label: w.label, kind: w.labelKind, onTap: w.onLabelTap, semanticLabel: w.labelSemantics ?? w.label),
+          if (w.previousText != null)
             Expanded(
               flex: SetRowColumns.previousFlex,
               child: AzmPressable(
-                onTap: onPreviousTap,
+                onTap: w.onPreviousTap,
                 child: Center(
                   child: Text(
-                    previousText!,
+                    w.previousText!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AzmType.secondaryStrong.copyWith(color: c.textTertiary),
@@ -162,52 +194,118 @@ class SetRow extends StatelessWidget {
           Expanded(
             flex: SetRowColumns.valueFlex,
             child: _ValueCell(
-              key: ValueKey('set-weight-$setId'),
-              text: weightText,
-              hint: weightHint,
-              active: activeField == SetField.weight,
-              completed: completed,
-              onTap: onWeightTap,
+              key: ValueKey('set-weight-${w.setId}'),
+              text: w.weightText,
+              hint: w.weightHint,
+              active: w.activeField == SetField.weight,
+              completed: w.completed,
+              onTap: w.onWeightTap,
             ),
           ),
           Expanded(
             flex: SetRowColumns.valueFlex,
             child: _ValueCell(
-              key: ValueKey('set-reps-$setId'),
-              text: repsText,
-              hint: repsHint,
-              active: activeField == SetField.reps,
-              completed: completed,
-              onTap: onRepsTap,
-              badge: isPr ? const PrBadge() : null,
+              key: ValueKey('set-reps-${w.setId}'),
+              text: w.repsText,
+              hint: w.repsHint,
+              active: w.activeField == SetField.reps,
+              completed: w.completed,
+              onTap: w.onRepsTap,
+              badge: w.isPr ? const PrBadge() : null,
             ),
           ),
-          if (onToggleComplete != null)
-            _CheckCell(completed: completed, onTap: onToggleComplete!, semanticLabel: completeLabel ?? ''),
+          if (w.onToggleComplete != null)
+            _CheckCell(completed: w.completed, onTap: w.onToggleComplete!, semanticLabel: w.completeLabel ?? ''),
         ],
       ),
     );
 
-    // Swipe toward the END edge to delete (mirrors in RTL automatically).
+    // Swipe toward the START edge to delete: DismissDirection.endToStart
+    // follows the ambient Directionality, so it mirrors in RTL by itself.
+    // The trash icon sits on the END side, where the row uncovers.
     return Dismissible(
-      key: ValueKey(('set-row', setId)),
-      direction: DismissDirection.startToEnd,
-      onDismissed: (_) => onDelete(),
-      background: Container(
+      key: ValueKey(('set-row', w.setId)),
+      direction: DismissDirection.endToStart,
+      onDismissed: (_) {
+        setState(() => _dismissed = true);
+        w.onDelete();
+      },
+      background: const SizedBox.shrink(),
+      secondaryBackground: Container(
         color: c.destructiveTint,
         padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xl),
-        alignment: AlignmentDirectional.centerStart,
+        alignment: AlignmentDirectional.centerEnd,
         child: Semantics(
-          label: deleteLabel,
+          label: w.deleteLabel,
           child: Icon(Icons.delete_outline_rounded, color: c.destructive),
         ),
       ),
       child: Semantics(
-        customSemanticsActions: {CustomSemanticsAction(label: deleteLabel): onDelete},
-        child: row,
+        customSemanticsActions: {CustomSemanticsAction(label: w.deleteLabel): w.onDelete},
+        child: GestureDetector(
+          key: SetRow.rowKey(w.setId),
+          behavior: HitTestBehavior.opaque,
+          onLongPress: _openMenu,
+          child: row,
+        ),
       ),
     );
   }
+}
+
+/// Long-press menu of a set row: "Delete set" (destructive). Returns true
+/// when the user chose to delete. Shared by every set table.
+Future<bool> showSetMenuSheet(
+  BuildContext context, {
+  required String label,
+  required SetLabelKind kind,
+  required String deleteLabel,
+}) async {
+  unawaited(HapticFeedback.selectionClick());
+  final delete = await showModalBottomSheet<bool>(
+    context: context,
+    useRootNavigator: true,
+    builder: (ctx) {
+      final c = ctx.colors;
+      return SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(AzmSpace.xxl, 0, AzmSpace.xxl, AzmSpace.xs),
+              child: Row(
+                children: [
+                  SetLabelChip(label: label, kind: kind),
+                  const SizedBox(width: AzmSpace.md),
+                  Expanded(child: Text(ctx.l10n.commonSetColSet, style: AzmType.cardTitle.copyWith(color: c.textPrimary))),
+                ],
+              ),
+            ),
+            AzmPressable(
+              key: SetRow.menuDeleteKey,
+              onTap: () => Navigator.pop(ctx, true),
+              semanticLabel: deleteLabel,
+              child: ExcludeSemantics(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.xxl, vertical: AzmSpace.md),
+                  child: Row(
+                    children: [
+                      Icon(Icons.delete_outline_rounded, color: c.destructiveText, size: AzmSize.icon),
+                      const SizedBox(width: AzmSpace.md),
+                      Expanded(child: Text(deleteLabel, style: AzmType.itemLabel.copyWith(color: c.destructiveText))),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: AzmSpace.xs),
+          ],
+        ),
+      );
+    },
+  );
+  return delete ?? false;
 }
 
 class _LabelCell extends StatelessWidget {

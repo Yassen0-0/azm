@@ -16,6 +16,7 @@ import '../../../core/widgets/azm_pressable.dart';
 import '../../../core/widgets/set_keypad.dart';
 import '../../../core/widgets/set_row.dart';
 import '../../../core/widgets/set_type_sheet.dart';
+import '../../../core/widgets/set_undo.dart';
 import '../../../core/widgets/weight_keypad.dart';
 import '../../settings/data/training_settings.dart';
 import '../data/routine_repository.dart';
@@ -301,6 +302,7 @@ class _RoutineEditorScreenState extends ConsumerState<RoutineEditorScreen> {
   void _deleteSet(RoutineSet set) {
     if (_editing?.setId == set.id) _closeKeypad();
     unawaited(_r.deleteSet(set.id));
+    showSetDeletedSnackBar(context, onUndo: () => _r.restoreSet(set));
   }
 
   // ---- Keypad --------------------------------------------------------------------
@@ -577,7 +579,8 @@ class _ExerciseCard extends StatelessWidget {
   }
 
   /// One target set on the shared [SetRow]: no "previous" and no ✓ (a
-  /// routine holds targets, not logged sets); swipe toward the end deletes.
+  /// routine holds targets, not logged sets); swipe toward the start edge or
+  /// long-press → "Delete set" deletes (with Undo).
   Widget _targetRow(AppLocalizations l, RoutineSet set, int? number) {
     final weight = set.targetWeightKg;
     final reps = set.targetReps;

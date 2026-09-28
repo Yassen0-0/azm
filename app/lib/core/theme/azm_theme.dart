@@ -200,6 +200,7 @@ abstract final class AzmTheme {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: c.actionPrimary,
         contentTextStyle: t(AzmType.toastMessage, c.onPrimary),
+        actionTextColor: c.onPrimary,
         elevation: 0,
         behavior: SnackBarBehavior.floating,
       ),

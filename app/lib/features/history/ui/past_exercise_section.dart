@@ -25,7 +25,7 @@ abstract interface class PastSetActions {
 /// One exercise of a past workout: header (thumbnail, names, menu), the same
 /// SetRow table as the live workout without the ✓ column (every set of a
 /// finished workout is done; "previous" = the workout before this one;
-/// 🏆 = PR versus every earlier workout), add set. Delete = swipe only.
+/// 🏆 = PR versus every earlier workout), add set. Delete = swipe or long-press menu (Undo ~4 s).
 class PastExerciseSection extends StatelessWidget {
   const PastExerciseSection({
     super.key,

@@ -125,6 +125,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonMediaCredit => '© Gym visual — https://gymvisual.com/';
 
   @override
+  String get commonSetDeleted => 'السِت اتمسح';
+
+  @override
+  String get commonUndo => 'تراجع';
+
+  @override
   String get exercisesSearchHint => 'ابحث بالعربي أو English';
 
   @override
@@ -708,7 +714,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get historyEditHint =>
-      'التعديلات بتتحفظ على طول. اسحب السِت للآخر عشان تمسحه.';
+      'التعديلات بتتحفظ على طول. اسحب السِت لليمين أو دوس عليه مطوّلًا عشان تمسحه.';
 
   @override
   String get historyNotFound => 'التمرين ده مش موجود';

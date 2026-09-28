@@ -17,6 +17,7 @@ import '../../../core/widgets/lifted_counter.dart';
 import '../../../core/widgets/rest_timer_bar.dart';
 import '../../../core/widgets/set_row.dart';
 import '../../../core/widgets/set_keypad.dart';
+import '../../../core/widgets/set_undo.dart';
 import '../../../core/widgets/weight_keypad.dart';
 import '../data/rest_timer.dart';
 import '../data/workout_models.dart';
@@ -235,6 +236,7 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
 
   Future<void> _leave(Future<void> Function() change, String location) async {
     setState(() => _leaving = true);
+    hideSetDeletedSnackBar(context);
     await ref.read(restTimerProvider.notifier).skip();
     await change();
     if (mounted) context.go(location);
@@ -320,10 +322,15 @@ class _ActiveWorkoutScreenState extends ConsumerState<ActiveWorkoutScreen> imple
     if (await showExactAlarmSheet(context)) await rest.requestExactAlarms();
   }
 
+  /// Swipe or long-press → "Delete set": gone from the DB at once (the
+  /// remaining sets renumber and Lifted/sets/PRs recompute from the stream),
+  /// with ~4 s to undo. Works for any set, ✓ or not, including the last one
+  /// of an exercise (the exercise stays, with "Add set").
   @override
   void onDeleteSet(WorkoutSet set) {
     if (_editing?.setId == set.id) _closeKeypad();
     unawaited(_repo.deleteSet(set.id));
+    showSetDeletedSnackBar(context, onUndo: () => _repo.restoreSet(set, status: WorkoutStatus.active));
   }
 
   @override

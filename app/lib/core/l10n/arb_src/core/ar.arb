@@ -164,5 +164,13 @@
   "commonMediaCredit": "© Gym visual — https://gymvisual.com/",
   "@commonMediaCredit": {
     "description": "Attribution line under exercise media wherever it is shown (preview sheet). Required by docs/LICENSES.md; keep the exact text."
+  },
+  "commonSetDeleted": "السِت اتمسح",
+  "@commonSetDeleted": {
+    "description": "Snackbar after a set was deleted (swipe or long-press menu); shown ~4 s with an Undo action."
+  },
+  "commonUndo": "تراجع",
+  "@commonUndo": {
+    "description": "Snackbar action: undo the last deletion."
   }
 }

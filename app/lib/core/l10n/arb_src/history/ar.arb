@@ -227,9 +227,9 @@
   "@historyRemoveExercise": {
     "description": "Exercise menu action."
   },
-  "historyEditHint": "التعديلات بتتحفظ على طول. اسحب السِت للآخر عشان تمسحه.",
+  "historyEditHint": "التعديلات بتتحفظ على طول. اسحب السِت لليمين أو دوس عليه مطوّلًا عشان تمسحه.",
   "@historyEditHint": {
-    "description": "Hint at the top of a past workout being edited: edits are saved immediately; deleting a set is a swipe toward the end edge (the only way; nothing is removed automatically)."
+    "description": "Hint at the top of a past workout being edited: edits are saved immediately; delete a set by swiping it toward the START edge (right in Arabic, left in English) or long-pressing it (menu → Delete set); Undo shows for ~4 s."
   },
   "historyNotFound": "التمرين ده مش موجود",
   "@historyNotFound": {

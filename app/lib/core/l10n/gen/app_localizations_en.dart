@@ -125,6 +125,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonMediaCredit => '© Gym visual — https://gymvisual.com/';
 
   @override
+  String get commonSetDeleted => 'Set deleted';
+
+  @override
+  String get commonUndo => 'Undo';
+
+  @override
   String get exercisesSearchHint => 'Search exercises';
 
   @override
@@ -701,7 +707,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get historyEditHint =>
-      'Changes save instantly. Swipe a set toward the end to delete it.';
+      'Changes save instantly. Swipe a set left or long-press it to delete it.';
 
   @override
   String get historyNotFound => 'This workout doesn\'t exist';

@@ -34,5 +34,7 @@
   "commonCompactMillion": "{value}M",
   "commonCompactBillion": "{value}B",
   "commonExercisePreview": "Preview {name}",
-  "commonMediaCredit": "© Gym visual — https://gymvisual.com/"
+  "commonMediaCredit": "© Gym visual — https://gymvisual.com/",
+  "commonSetDeleted": "Set deleted",
+  "commonUndo": "Undo"
 }

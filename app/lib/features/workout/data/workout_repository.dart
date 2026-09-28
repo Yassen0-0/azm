@@ -100,8 +100,37 @@ class WorkoutRepository {
         reps: reps == null ? const Value.absent() : Value(reps),
       ));
 
+  /// Deletes a set for good: from here on no total, PR, "previous" or
+  /// history reads it (they all read the DB). Undo = [restoreSet].
   Future<void> deleteSet(String setId) =>
       (db.delete(db.workoutSets)..where((s) => s.id.equals(setId))).go();
+
+  /// Undo of [deleteSet]: puts the exact row back (same id, position,
+  /// values, ✓), shifting later sets down if a new set took its place.
+  /// Returns false and changes nothing when its exercise is gone, or when the
+  /// workout's status is no longer [status] (e.g. the active workout was
+  /// finished or discarded before the user tapped Undo).
+  Future<bool> restoreSet(WorkoutSet set, {WorkoutStatus? status}) => db.transaction(() async {
+        final row = await (db.select(db.workoutExercises).join([
+          innerJoin(db.workouts, db.workouts.id.equalsExp(db.workoutExercises.workoutId)),
+        ])
+              ..where(db.workoutExercises.id.equals(set.workoutExerciseId)))
+            .getSingleOrNull();
+        if (row == null) return false;
+        if (status != null && row.readTable(db.workouts).status != status) return false;
+        final siblings = await (db.select(db.workoutSets)
+              ..where((s) => s.workoutExerciseId.equals(set.workoutExerciseId)))
+            .get();
+        if (siblings.any((s) => s.id == set.id)) return false;
+        if (siblings.any((s) => s.sort == set.sort)) {
+          for (final s in siblings.where((s) => s.sort >= set.sort)) {
+            await (db.update(db.workoutSets)..where((x) => x.id.equals(s.id)))
+                .write(WorkoutSetsCompanion(sort: Value(s.sort + 1)));
+          }
+        }
+        await db.into(db.workoutSets).insert(set);
+        return true;
+      });
 
   Future<void> removeExercise(String workoutExerciseId) =>
       (db.delete(db.workoutExercises)..where((e) => e.id.equals(workoutExerciseId))).go();

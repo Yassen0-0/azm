@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:azm/app.dart';
 import 'package:azm/core/db/app_database.dart';
+import 'package:azm/core/router/app_router.dart';
+import 'package:azm/core/widgets/set_row.dart';
 import 'package:azm/core/utils/units.dart';
 import 'package:azm/features/onboarding/data/onboarding_gate.dart';
 import 'package:azm/features/onboarding/ui/onboarding_screen.dart';
@@ -143,6 +145,48 @@ void main() {
     expect((w.name, w.routineId), ('Push day', routineId));
     await tearDownApp(tester);
   });
+
+  for (final lang in [LanguagePref.en, LanguagePref.ar]) {
+    testWidgets('routine editor: delete a target set by swipe / long-press, renumber, Undo (${lang.name})', (tester) async {
+      await pumpApp(tester, lang);
+      final id = await repo().create(name: 'Push');
+      await repo().addExercises(id, ['0025']);
+      container.read(appRouterProvider).push(AppRoutes.routineEditorFor(id));
+      await settle(tester);
+      Future<List<String>> ids() async => [for (final s in (await repo().loadDetail(id))!.exercises.single.sets) s.id];
+      List<String> labels() => [for (final r in tester.widgetList<SetRow>(find.byType(SetRow))) r.label];
+      final all = await ids();
+      List<String> numbers(int n) => [for (var i = 1; i <= n; i++) '$i'];
+      expect(all.length, greaterThanOrEqualTo(2));
+      expect(labels(), numbers(all.length));
+
+      // Toward the START edge: left in English, right in Arabic.
+      final toStart = lang == LanguagePref.en ? const Offset(-600, 0) : const Offset(600, 0);
+      await tester.drag(find.byKey(ValueKey('set-weight-${all[0]}')), toStart);
+      await settle(tester);
+      expect(await ids(), all.sublist(1));
+      expect(labels(), numbers(all.length - 1));
+      await tester.tap(find.text(lang == LanguagePref.en ? 'Undo' : 'تراجع'));
+      await settle(tester);
+      expect(await ids(), all);
+      expect(labels(), numbers(all.length));
+
+      // Long-press → Delete set, down to the last one.
+      for (final setId in all) {
+        await tester.longPress(find.byKey(SetRow.rowKey(setId)));
+        await settle(tester);
+        await tester.tap(find.byKey(SetRow.menuDeleteKey));
+        await settle(tester);
+      }
+      expect(await ids(), isEmpty);
+      expect(find.byType(SetRow), findsNothing);
+      expect((await repo().loadDetail(id))!.exercises, hasLength(1));
+      await tester.tap(find.text(lang == LanguagePref.en ? 'Undo' : 'تراجع'));
+      await settle(tester);
+      expect(await ids(), [all.last]);
+      await tearDownApp(tester);
+    });
+  }
 
   testWidgets('an untouched new routine leaves nothing behind; delete asks first', (tester) async {
     await pumpApp(tester, LanguagePref.en);

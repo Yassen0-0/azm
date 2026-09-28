@@ -39,7 +39,7 @@
   "historyAddExercise": "Add exercise",
   "historyExerciseOptions": "Exercise options",
   "historyRemoveExercise": "Remove exercise",
-  "historyEditHint": "Changes save instantly. Swipe a set toward the end to delete it.",
+  "historyEditHint": "Changes save instantly. Swipe a set left or long-press it to delete it.",
   "historyNotFound": "This workout doesn't exist",
   "historyStatsTitle": "Stats",
   "historyStatsPerWeek": "Workouts per week",
