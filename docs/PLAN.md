@@ -376,10 +376,22 @@ Owner request after real-phone testing, with 3 Hevy screenshots as the layout re
 - [x] **6. Ready programs hidden** behind `kProgramsEnabled = false` (`core/feature_flags.dart` + `programsEnabledProvider`): no Workout-tab entry, onboarding = 1 screen (unit only, "Let's go"), `/programs` and `/program/:id` redirect to the Workout tab. Code, data and tests kept (tests turn the provider on).
 - [x] **Data:** schema **v3** (`workout_exercises.rest_seconds` 0 = OFF, `workout_sets.prefilled`), routine start copies the rest override and marks targets pre-filled; backup format **v2** (v1 files still import). DATA.md updated.
 - [x] **7a. Checks (cloud):** `flutter analyze` clean, **361** tests green (new: `workout_overhaul_data_test.dart`, `active_workout_overhaul_test.dart`, `history/workout_times_edit_test.dart`, `app_theme_default_test.dart`, routines flow + SetRow additions), `tools/check_directionality.sh` passes.
-- [ ] **7b. Parity screenshots (Mac, both platforms, ar + en, dark theme):** `tools/screenshots.sh workout_ui` (new: Workout tab, routine detail, pre-filled live workout, notes + rest OFF, rest picker, manual timer, start-time sheet, summary + past-workout time sheets), `programs` (new: the hidden screens with the flag on), and re-captures of `workout`, `routines`, `onboarding` (now 2 images: delete the stale `*_03_program*` / `*_04_program_selected*` files), `shell`, `history`, `set_delete`, `exercise_preview`, `exercises`, and the E2E `workout_flow` (onboarding is one screen now; routines are copied from the program data). Put each new screen side by side with the Hevy references and fix any spacing/density difference, then commit the screenshots.
+- [ ] **7b–8 → see "Pending on Mac" below.** 7b. Parity screenshots (Mac, both platforms, ar + en, dark theme): `tools/screenshots.sh workout_ui` (new: Workout tab, routine detail, pre-filled live workout, notes + rest OFF, rest picker, manual timer, start-time sheet, summary + past-workout time sheets), `programs` (new: the hidden screens with the flag on), and re-captures of `workout`, `routines`, `onboarding` (now 2 images: delete the stale `*_03_program*` / `*_04_program_selected*` files), `shell`, `history`, `set_delete`, `exercise_preview`, `exercises`, and the E2E `workout_flow` (onboarding is one screen now; routines are copied from the program data). Put each new screen side by side with the Hevy references and fix any spacing/density difference, then commit the screenshots.
 - [ ] **7c. Device checklist** items in `docs/DEVICE_TEST_CHECKLIST.md` → "Hevy-density UI (2026-09-28)".
 - [ ] **8. Releases (Mac only: signing key in the Keychain):** tester `tools/release_apk.sh` (notes ready: `docs/release_notes/v1.0.0-rc1-b2.md`) and personal `tools/release_personal.sh` (with media). Both need HEAD = `origin/main` and a clean tree.
 - **Later idea (not in this task):** a muscle/body diagram in the live workout's stats row (Hevy shows one at the end of the row), drawn from Azm's own filter-icon silhouettes.
+
+## Pending on Mac
+
+Everything a cloud session built but could not verify (no emulator, simulator or signing key there). One entry per feature commit, with exactly what the Mac session must run. A Mac session ticks an entry after both platforms pass in Arabic and English, commits the screenshots, and flips the feature's PLAN status to `[x]`. Cloud sessions push straight to `main` (pull/rebase first, never force-push), one feature per commit, and run `flutter analyze` + all tests after each feature.
+
+Setup for every entry: `AZM_DEVICE_SET=A` (or B), dark theme (the default), both platforms (`tools/screenshots.sh <suite>` does Android + iOS, ar + en).
+
+- [ ] **§14 Hevy-density UI overhaul** (commits `597bcd2`, `32a0000`, 2026-09-28)
+  - Screenshot suites: `workout_ui` (new), `programs` (new, flag on), `workout`, `routines`, `onboarding` (now 2 images: delete the stale `*_03_program*` / `*_04_program_selected*` PNGs), `shell`, `history`, `set_delete`, `exercise_preview`, `exercises`; E2E `workout_flow`.
+  - Compare the new screens side by side with the owner's Hevy references (re-save them in `.tooling/tmp/reference/` on the Mac; never commit them) and fix any spacing/density difference.
+  - Device checks: `docs/DEVICE_TEST_CHECKLIST.md` → "Hevy-density UI (2026-09-28)" (7 items).
+  - Releases: `tools/release_apk.sh` (notes: `docs/release_notes/v1.0.0-rc1-b2.md`), then `tools/release_personal.sh` (with media).
 
 ## Requests
 
