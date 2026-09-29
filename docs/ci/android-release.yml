@@ -1,0 +1,303 @@
+# INACTIVE while it sits in docs/ci/: move it to .github/workflows/android-release.yml (docs/PLAN.md → Pending on Mac).
+# Android APK releases WITHOUT the Mac (iOS stays Mac-only: CLAUDE.md).
+#
+#   git tag personal-b<N> && git push origin personal-b<N>   → personal flavor (media), release personal-b<N>
+#   git tag v<ver>-b<build> && git push origin v<ver>-b<build> → tester build (never media); the tag must
+#                                                              match app/pubspec.yaml `version: <ver>+<build>`
+#   Actions → "Android release" → Run workflow → flavor       → same, tag chosen automatically
+#
+# Mirrors tools/release_apk.sh (tester) and tools/release_personal.sh (personal):
+#   guard: the repo must be PRIVATE (azm holds unlicensed media, docs/LICENSES.md), checked at the start
+#          and again right before publishing;
+#   checks: tools/audit_history.sh, then tools/cloud_setup.sh (pinned Flutter from that script,
+#           codegen freshness, flutter analyze, dart analyze, directionality, flutter test);
+#   signing: repo secrets AZM_UPLOAD_KEYSTORE_B64 (base64 of the upload .jks) and
+#            AZM_UPLOAD_STORE_PASSWORD, decoded into $RUNNER_TEMP only for the build and deleted
+#            at the end (always). The APK's certificate must equal the keystore's;
+#   tester: refuses media exactly like release_apk.sh; after publishing, bumps pubspec's build
+#           number on main;
+#   personal: bundles media/, installs next to the tester app (app.azm.gym.personal); only the
+#             newest 3 personal releases are kept (older releases deleted, their tags kept).
+# Output: a GitHub PRERELEASE in this repo with the APK (never an Actions artifact).
+name: Android release
+
+on:
+  push:
+    tags:
+      - 'personal-*'
+      - 'v*-b*'
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: 'Which APK to build and release'
+        type: choice
+        options: [personal, tester]
+        default: personal
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+    steps:
+      - name: Guard — repository must be private
+        run: |
+          set -euo pipefail
+          v="$(gh api "repos/$REPO" --jq .private || echo unknown)"
+          [ "$v" = true ] || { echo "ABORT: $REPO is not private (private=$v). It contains unlicensed media (docs/LICENSES.md)."; exit 1; }
+          echo "$REPO is private."
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # tools/audit_history.sh scans every commit of every ref
+
+      - name: Resolve flavor, version and tag
+        id: v
+        run: |
+          set -euo pipefail
+          fail() { echo "FAILED: $*"; exit 1; }
+          if [ "${{ github.event_name }}" = push ]; then
+            TAG="$GITHUB_REF_NAME"
+            case "$TAG" in personal-*) FLAVOR=personal ;; *) FLAVOR=tester ;; esac
+          else
+            TAG=""; FLAVOR="${{ inputs.flavor }}"
+          fi
+          FULL="$(awk '/^version:/{print $2; exit}' app/pubspec.yaml)"
+          VER="${FULL%+*}"; PUB_BUILD="${FULL##*+}"
+          [[ "$PUB_BUILD" =~ ^[0-9]+$ ]] && [ "$VER" != "$FULL" ] || fail "pubspec version must be <name>+<build>, got '$FULL'"
+          git fetch -q origin main
+          git merge-base --is-ancestor HEAD origin/main || fail "$(git rev-parse --short HEAD) is not on main (push it to main first)"
+          RELEASES="$(gh release list --repo "$REPO" --limit 200 --json tagName -q '.[].tagName')"
+          if [ "$FLAVOR" = personal ]; then
+            LAST="$(echo "$RELEASES" | sed -n 's/^personal-b\([0-9][0-9]*\)$/\1/p' | grep -vx "${TAG#personal-b}" | sort -n | tail -1 || true)"
+            if [ -n "$TAG" ]; then
+              [[ "$TAG" =~ ^personal-b([0-9]+)$ ]] || fail "personal tags are personal-b<N>, got $TAG"
+              BUILD="${BASH_REMATCH[1]}"
+              [ "$BUILD" -gt "${LAST:-0}" ] || fail "$TAG must be newer than personal-b${LAST} (versionCode has to grow or the phone refuses the update)"
+            else
+              BUILD=$(( ${LAST:-0} + 1 )); TAG="personal-b$BUILD"
+              git rev-parse -q --verify "refs/tags/$TAG" >/dev/null && fail "tag $TAG already exists without a release: delete it or push a newer personal-b<N>"
+            fi
+            NAME="$VER-personal"; PKG=app.azm.gym.personal
+            APK="dist/azm-personal-$VER-$BUILD.apk"
+          else
+            BUILD="$PUB_BUILD"; NAME="$VER"; PKG=app.azm.gym
+            EXPECTED="v$VER-b$BUILD"
+            if [ -n "$TAG" ]; then
+              [ "$TAG" = "$EXPECTED" ] || fail "tag $TAG does not match pubspec ($FULL → $EXPECTED)"
+            else
+              TAG="$EXPECTED"
+              git rev-parse -q --verify "refs/tags/$TAG" >/dev/null && fail "tag $TAG already exists (bump pubspec)"
+            fi
+            echo "$RELEASES" | grep -qx "$TAG" && fail "release $TAG already exists"
+            [ -f "docs/release_notes/$TAG.md" ] || fail "missing docs/release_notes/$TAG.md (Arabic + English)"
+            APK="dist/azm-$VER-$BUILD.apk"
+          fi
+          { echo "flavor=$FLAVOR"; echo "tag=$TAG"; echo "name=$NAME"; echo "ver=$VER"
+            echo "build=$BUILD"; echo "pkg=$PKG"; echo "apk=$APK"; } >> "$GITHUB_OUTPUT"
+          echo "$FLAVOR build $BUILD, version $NAME, $PKG, tag $TAG, commit $(git rev-parse --short HEAD)"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Cache Flutter SDK, pub and Gradle (.tooling)
+        uses: actions/cache@v4
+        with:
+          path: |
+            .tooling/flutter
+            .tooling/pub-cache
+            .tooling/gradle/caches
+            .tooling/gradle/wrapper
+          key: tooling-${{ runner.os }}-${{ hashFiles('tools/cloud_setup.sh', 'app/pubspec.lock', 'tools/pubspec.lock', 'app/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: tooling-${{ runner.os }}-
+
+      - name: Point the sandbox (.tooling) at the runner's JDK and Android SDK
+        run: |
+          set -euo pipefail
+          mkdir -p .tooling/jdk .tooling/tmp .tooling/home
+          ln -sfn "$JAVA_HOME" .tooling/jdk/current
+          ln -sfn "$ANDROID_HOME" .tooling/android-sdk
+
+      - name: History audit
+        run: tools/audit_history.sh
+
+      - name: Setup + codegen check + analyze + tests (tools/cloud_setup.sh)
+        run: tools/cloud_setup.sh
+
+      - name: Decode the upload keystore (runner temp only)
+        env:
+          KS_B64: ${{ secrets.AZM_UPLOAD_KEYSTORE_B64 }}
+          AZM_UPLOAD_STORE_PASSWORD: ${{ secrets.AZM_UPLOAD_STORE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          [ -n "$KS_B64" ] && [ -n "$AZM_UPLOAD_STORE_PASSWORD" ] || { echo "FAILED: repo secrets AZM_UPLOAD_KEYSTORE_B64 / AZM_UPLOAD_STORE_PASSWORD are not set"; exit 1; }
+          KS="$RUNNER_TEMP/azm-upload.jks"
+          ( umask 077; printf '%s' "$KS_B64" | base64 -d > "$KS" )
+          # Never let the keystore itself end up in history.
+          if git rev-list --objects --all | awk '{print $1}' | grep -qx "$(git hash-object "$KS")"; then
+            echo "FAILED: the upload keystore is in git history"; exit 1
+          fi
+          # Expected signer = the keystore's certificate (lowercase hex, like apksigner prints it).
+          CERT="$(keytool -list -v -keystore "$KS" -storepass:env AZM_UPLOAD_STORE_PASSWORD -alias azm-upload 2>/dev/null \
+            | awk '/SHA256:/{print $2; exit}' | tr -d ':' | tr 'A-F' 'a-f')"
+          [ -n "$CERT" ] || { echo "FAILED: can't read the keystore (wrong password or alias?)"; exit 1; }
+          echo "EXPECTED_CERT=$CERT" >> "$GITHUB_ENV"
+          echo "upload key certificate SHA-256 $CERT"
+
+      - name: Build APK
+        env:
+          AZM_UPLOAD_STORE_PASSWORD: ${{ secrets.AZM_UPLOAD_STORE_PASSWORD }}
+          FLAVOR: ${{ steps.v.outputs.flavor }}
+          NAME: ${{ steps.v.outputs.name }}
+          BUILD: ${{ steps.v.outputs.build }}
+          APK: ${{ steps.v.outputs.apk }}
+        run: |
+          set -euo pipefail
+          export AZM_UPLOAD_KEYSTORE="$RUNNER_TEMP/azm-upload.jks"
+          source ./env.sh
+          mkdir -p dist
+          if [ "$FLAVOR" = personal ]; then
+            git diff --quiet HEAD -- media || { echo "FAILED: media/ differs from HEAD"; exit 1; }
+            find app/assets/media -type f ! -name .gitkeep -delete
+            git ls-files -z 'media/images/*.jpg' | xargs -0 -I{} cp {} app/assets/media/images/
+            git ls-files -z 'media/videos/*.gif' | xargs -0 -I{} cp {} app/assets/media/videos/
+            (cd app && flutter build apk --release --flavor personal --android-project-arg azmPersonal=true \
+              --build-name "$NAME" --build-number "$BUILD")
+            cp app/build/app/outputs/flutter-apk/app-personal-release.apk "$APK"
+          else
+            # Tester builds NEVER contain media (same rule as tools/release_apk.sh).
+            leftover="$(find app/assets/media -type f ! -name .gitkeep | head -3)"
+            [ -z "$leftover" ] || { echo "FAILED: media files in app/assets/media ($leftover)"; exit 1; }
+            (cd app && flutter build apk --release)
+            cp app/build/app/outputs/flutter-apk/app-release.apk "$APK"
+          fi
+
+      - name: Verify signature, version, contents
+        id: verify
+        env:
+          FLAVOR: ${{ steps.v.outputs.flavor }}
+          NAME: ${{ steps.v.outputs.name }}
+          BUILD: ${{ steps.v.outputs.build }}
+          PKG: ${{ steps.v.outputs.pkg }}
+          APK: ${{ steps.v.outputs.apk }}
+        run: |
+          set -euo pipefail
+          fail() { echo "FAILED: $*"; exit 1; }
+          BT="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
+          CERTS="$("$BT/apksigner" verify --print-certs "$APK" 2>/dev/null | awk -F': ' '/certificate SHA-256 digest/{print $NF}' | sort -u)"
+          [ "$(echo "$CERTS" | grep -c .)" = 1 ] || fail "expected exactly one signing certificate, got: ${CERTS:-none}"
+          [ "$CERTS" = "$EXPECTED_CERT" ] || fail "APK is not signed with the upload key (got '$CERTS')"
+          echo "signed with the upload key"
+          BADGING="$("$BT/aapt2" dump badging "$APK")"
+          PKG_LINE="$(echo "$BADGING" | head -1)"; echo "$PKG_LINE"
+          echo "$PKG_LINE" | grep -q "name='$PKG'" || fail "package is not $PKG"
+          echo "$PKG_LINE" | grep -q "versionCode='$BUILD'" || fail "versionCode is not $BUILD"
+          echo "$PKG_LINE" | grep -q "versionName='$NAME'" || fail "versionName is not $NAME"
+          ENTRIES="$(unzip -Z1 "$APK")"
+          if [ "$FLAVOR" = personal ]; then
+            echo "$BADGING" | grep -q "^application-label:'Azm Dev'" || fail "launcher label is not 'Azm Dev'"
+            echo "$BADGING" | grep -q "^application-label-ar:'عزم تجريبي'" || fail "Arabic launcher label is not 'عزم تجريبي'"
+            N_IMG="$(git ls-files 'media/images/*.jpg' | wc -l)"; N_GIF="$(git ls-files 'media/videos/*.gif' | wc -l)"
+            IN_IMG="$(echo "$ENTRIES" | grep -c '^assets/flutter_assets/assets/media/images/.*\.jpg$' || true)"
+            IN_GIF="$(echo "$ENTRIES" | grep -c '^assets/flutter_assets/assets/media/videos/.*\.gif$' || true)"
+            [ "$IN_IMG" = "$N_IMG" ] && [ "$IN_GIF" = "$N_GIF" ] || fail "APK has $IN_IMG images / $IN_GIF GIFs, expected $N_IMG / $N_GIF"
+            echo "bundled media: $IN_IMG images + $IN_GIF GIFs"
+          else
+            BAD="$(echo "$ENTRIES" | grep -Ei '(^|/)media/|\.(gif|mp4|m4v|mov|webm|avi)$' || true)"
+            [ -z "$BAD" ] || { echo "$BAD" | head -20; fail "the tester APK contains media-like files"; }
+            X="$RUNNER_TEMP/apk-extract"; rm -rf "$X"; mkdir -p "$X"; unzip -q "$APK" -d "$X"
+            HITS="$(comm -12 <(find "$X" -type f -print0 | xargs -0 sha256sum | awk '{print $1}' | sort -u) \
+                             <(find media -type f -print0 | xargs -0 sha256sum | awk '{print $1}' | sort -u))"
+            rm -rf "$X"
+            [ -z "$HITS" ] || fail "the tester APK contains $(echo "$HITS" | wc -l) file(s) identical to files in media/"
+            echo "no media: no media-like entries, no file identical to media/"
+          fi
+          SIZE_MB="$(awk -v b="$(stat -c %s "$APK")" 'BEGIN{printf "%.1f", b/1048576}')"
+          MIN_SDK="$(echo "$BADGING" | awk -F"'" '/^minSdkVersion:|^sdkVersion:/{print $2; exit}')"
+          echo "size $SIZE_MB MB, minSdk $MIN_SDK"
+          { echo "size=$SIZE_MB"; echo "minsdk=$MIN_SDK"; } >> "$GITHUB_OUTPUT"
+
+      - name: Publish prerelease
+        env:
+          FLAVOR: ${{ steps.v.outputs.flavor }}
+          TAG: ${{ steps.v.outputs.tag }}
+          NAME: ${{ steps.v.outputs.name }}
+          VER: ${{ steps.v.outputs.ver }}
+          BUILD: ${{ steps.v.outputs.build }}
+          PKG: ${{ steps.v.outputs.pkg }}
+          APK: ${{ steps.v.outputs.apk }}
+          SIZE_MB: ${{ steps.verify.outputs.size }}
+          MIN_SDK: ${{ steps.verify.outputs.minsdk }}
+        run: |
+          set -euo pipefail
+          v="$(gh api "repos/$REPO" --jq .private || echo unknown)"
+          [ "$v" = true ] || { echo "ABORT: $REPO is not private (private=$v); nothing published."; exit 1; }
+          SHA="$(git rev-parse HEAD)"
+          if [ "$FLAVOR" = personal ]; then
+            NOTES="$RUNNER_TEMP/notes.md"
+            cat >"$NOTES" <<EOF
+          **عزم تجريبي (Azm Dev) — للمالك بس / owner only.** Bundled Gym visual media (NOT licensed): never share this APK or link.
+
+          - Version $NAME, build $BUILD, package \`$PKG\` (installs next to the tester app)
+          - azm $(git rev-parse --short HEAD), built by GitHub Actions run ${{ github.run_id }}
+          - $SIZE_MB MB, minSdk $MIN_SDK
+          EOF
+            TITLE="Azm Dev (personal) build $BUILD"
+          else
+            NOTES="docs/release_notes/$TAG.md"
+            TITLE="Azm $VER — tester build $BUILD"
+          fi
+          gh release create "$TAG" "$APK" --repo "$REPO" --target "$SHA" --prerelease \
+            --title "$TITLE" --notes-file "$NOTES"
+          URL="$(gh release view "$TAG" --repo "$REPO" --json url,isPrerelease -q 'select(.isPrerelease) | .url')"
+          [ -n "$URL" ] || { echo "FAILED: release $TAG not found as a prerelease"; exit 1; }
+          echo "Released $TAG: $URL ($SIZE_MB MB)"
+          echo "### $TITLE — $TAG ($SIZE_MB MB, minSdk $MIN_SDK)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Tester — next build number on main
+        if: steps.v.outputs.flavor == 'tester'
+        env:
+          VER: ${{ steps.v.outputs.ver }}
+          BUILD: ${{ steps.v.outputs.build }}
+          TAG: ${{ steps.v.outputs.tag }}
+        run: |
+          set -euo pipefail
+          NEXT=$((BUILD + 1))
+          git fetch -q origin main
+          git checkout -q -B main origin/main
+          if ! grep -qx "version: $VER+$BUILD" app/pubspec.yaml; then
+            echo "main's pubspec is no longer $VER+$BUILD: leaving it alone."; exit 0
+          fi
+          sed -i "s/^version: .*/version: $VER+$NEXT/" app/pubspec.yaml
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -am "Tester build $BUILD released ($TAG); next build $NEXT"
+          git push -q origin main || echo "::warning::couldn't push the pubspec bump to main; set version: $VER+$NEXT by hand"
+
+      - name: Personal — keep only the newest 3 personal releases
+        if: steps.v.outputs.flavor == 'personal'
+        run: |
+          set -euo pipefail
+          OLD="$(gh release list --repo "$REPO" --limit 200 --json tagName -q '.[].tagName' \
+            | sed -n 's/^personal-b\([0-9][0-9]*\)$/\1/p' | sort -n | head -n -3)"
+          for n in $OLD; do
+            echo "deleting release personal-b$n (tag kept)"
+            gh release delete "personal-b$n" --repo "$REPO" --yes
+          done
+
+      - name: Clean up signing material and media
+        if: always()
+        run: |
+          rm -f "$RUNNER_TEMP/azm-upload.jks"
+          find app/assets/media -type f ! -name .gitkeep -delete 2>/dev/null || true
+          (cd app/android && [ -x ./gradlew ] && ./gradlew --stop -q) >/dev/null 2>&1 || true

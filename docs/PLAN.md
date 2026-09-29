@@ -392,6 +392,16 @@ Setup for every entry: `AZM_DEVICE_SET=A` (or B), dark theme (the default), both
   - Compare the new screens side by side with the owner's Hevy references (re-save them in `.tooling/tmp/reference/` on the Mac; never commit them) and fix any spacing/density difference.
   - Device checks: `docs/DEVICE_TEST_CHECKLIST.md` → "Hevy-density UI (2026-09-28)" (7 items).
   - Releases: `tools/release_apk.sh` (notes: `docs/release_notes/v1.0.0-rc1-b2.md`), then `tools/release_personal.sh` (with media).
+- [ ] **Cloud follow-up 2026-09-29: theme first in Settings, avatar 40 pt + tighter notes, Android CI releases** (one commit each, see `git log`)
+  - **Branch:** delete the old session branch (main contains all of it): `./gh_env git push origin --delete ccr-df452b89-wxusuo`.
+  - **Screenshots:** `settings` (Appearance is now the first group, with moon/sun icons), plus the §14 suites above (they now show the 40 pt avatar + tighter notes: `workout_ui`, `workout`, `routines`, `set_delete`, E2E `workout_flow`). Compare `workout_ui` again with the Hevy references (`.tooling/tmp/reference/`).
+  - **Dark default, both devices:** fresh install (uninstall first) with the system set to LIGHT → the app opens dark; Settings → Appearance → Light switches, relaunch keeps it.
+  - **Activate the workflow (the cloud token can't push workflow files):** `mkdir -p .github/workflows && git mv docs/ci/android-release.yml .github/workflows/ && git commit -m "Activate Android release workflow" && ./gh_env git push origin main`.
+  - **Actions secrets (Mac, Keychain; nothing printed):**
+    `./gh_env sh -c 'base64 < .tooling/secrets/azm-upload.jks | gh secret set AZM_UPLOAD_KEYSTORE_B64 --repo Yassen0-0/azm'`
+    `./gh_env sh -c 'security find-generic-password -s azm.android.upload -a keystore -w | gh secret set AZM_UPLOAD_STORE_PASSWORD --repo Yassen0-0/azm'`
+  - **End-to-end test of `.github/workflows/android-release.yml`:** push the next personal tag (`git tag personal-b5 && ./gh_env git push origin personal-b5`), wait for the run, install the APK from the release next to the tester app, and check `aapt2 dump badging` matches a local `tools/release_personal.sh --build-only` (package `app.azm.gym.personal`, versionName `<ver>-personal`, versionCode = N, label "Azm Dev"). Note the run's billable minutes (Actions → run → Usage). Then check older personal releases beyond the newest 3 are gone.
+  - **Releases:** tester via tag `v1.0.0-rc1-b2` (notes ready) or `tools/release_apk.sh`; personal via the tag above or `tools/release_personal.sh`.
 
 ## Requests
 
