@@ -59,7 +59,10 @@ class ExerciseThumbnail extends ConsumerWidget {
       key: ExerciseThumbnail.previewKey(exercise.id),
       onTap: () => showExercisePreview(context, exercise),
       semanticLabel: context.l10n.commonExercisePreview(context.namesOf(exercise).primary),
-      child: thumbnail,
+      // The touch target is at least AzmSize.minTouchTarget; a smaller image
+      // (AzmSize.avatar) keeps its own size at the start of it instead of
+      // being stretched to the touch target.
+      child: Align(alignment: AlignmentDirectional.centerStart, widthFactor: 1, heightFactor: 1, child: thumbnail),
     );
   }
 

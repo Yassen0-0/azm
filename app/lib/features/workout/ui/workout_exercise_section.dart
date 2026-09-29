@@ -69,7 +69,9 @@ class WorkoutExerciseSection extends StatelessWidget {
                 ExerciseThumbnail(exercise: detail.exercise!, size: AzmSize.avatar, round: true)
               else
                 const _UnknownAvatar(),
-              const SizedBox(width: AzmSpace.md),
+              // A real thumbnail sits at the start of a minTouchTarget box (its slack is
+              // part of the gap); the unknown avatar is exactly AzmSize.avatar wide.
+              SizedBox(width: detail.exercise != null ? AzmSpace.xxs : AzmSpace.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,7 +271,7 @@ class _NotesFieldState extends State<_NotesField> {
         border: InputBorder.none,
         enabledBorder: InputBorder.none,
         focusedBorder: InputBorder.none,
-        contentPadding: const EdgeInsetsDirectional.symmetric(vertical: AzmSpace.md),
+        contentPadding: const EdgeInsetsDirectional.symmetric(vertical: AzmSpace.xs),
       ),
     );
   }

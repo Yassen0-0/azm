@@ -519,7 +519,9 @@ class _ExerciseCard extends StatelessWidget {
                   ExerciseThumbnail(exercise: detail.exercise!, size: AzmSize.avatar, round: true)
                 else
                   const RoutineUnknownAvatar(),
-                const SizedBox(width: AzmSpace.md),
+                // A real thumbnail sits at the start of a minTouchTarget box (its slack is
+                // part of the gap); the unknown avatar is exactly AzmSize.avatar wide.
+                SizedBox(width: detail.exercise != null ? AzmSpace.xxs : AzmSpace.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
