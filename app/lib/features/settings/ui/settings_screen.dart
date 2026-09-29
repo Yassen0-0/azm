@@ -112,6 +112,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   AzmSpace.xxxl,
                 ),
                 children: [
+                  // First group: the theme choice is the one people look for.
+                  SettingsGroup(
+                    key: const ValueKey('settings-theme'),
+                    heading: l10n.settingsTheme,
+                    children: [
+                      SettingsOptionRow(
+                        key: const ValueKey('settings-theme-dark'),
+                        icon: Icons.dark_mode_outlined,
+                        label: l10n.settingsThemeDark,
+                        selected: settings.theme == ThemePref.dark,
+                        onTap: () => controller.setTheme(ThemePref.dark),
+                      ),
+                      SettingsOptionRow(
+                        key: const ValueKey('settings-theme-light'),
+                        icon: Icons.light_mode_outlined,
+                        label: l10n.settingsThemeLight,
+                        selected: settings.theme == ThemePref.light,
+                        onTap: () => controller.setTheme(ThemePref.light),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AzmSpace.xxxl),
                   SettingsGroup(
                     heading: l10n.settingsTraining,
                     children: [
@@ -149,22 +171,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         label: l10n.settingsLanguageEnglish,
                         selected: settings.language == LanguagePref.en,
                         onTap: () => controller.setLanguage(LanguagePref.en),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AzmSpace.xxxl),
-                  SettingsGroup(
-                    heading: l10n.settingsTheme,
-                    children: [
-                      SettingsOptionRow(
-                        label: l10n.settingsThemeDark,
-                        selected: settings.theme == ThemePref.dark,
-                        onTap: () => controller.setTheme(ThemePref.dark),
-                      ),
-                      SettingsOptionRow(
-                        label: l10n.settingsThemeLight,
-                        selected: settings.theme == ThemePref.light,
-                        onTap: () => controller.setTheme(ThemePref.light),
                       ),
                     ],
                   ),

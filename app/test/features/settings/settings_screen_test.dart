@@ -104,6 +104,24 @@ void main() {
     await db.writeSetting('onboarding_done', 'true');
   }
 
+  group('appearance', () {
+    testWidgets('theme is the first group; Dark is selected by default; Light applies and persists', (tester) async {
+      await pumpSettings(tester);
+      final theme = tester.getTopLeft(find.byKey(const ValueKey('settings-theme'))).dy;
+      final training = tester.getTopLeft(find.text('Training')).dy;
+      expect(theme, lessThan(training));
+      expect(find.byIcon(Icons.dark_mode_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.light_mode_outlined), findsOneWidget);
+      expect(container.read(appSettingsProvider).theme, ThemePref.dark);
+
+      await tester.tap(find.byKey(const ValueKey('settings-theme-light')));
+      await settle(tester);
+      expect(container.read(appSettingsProvider).theme, ThemePref.light);
+      expect(await db.readSetting(SettingsKeys.theme), '"light"');
+      expect(Theme.of(tester.element(find.byKey(const ValueKey('settings-list')))).brightness, Brightness.light);
+    });
+  });
+
   group('training settings', () {
     testWidgets('unit and default rest are written through the writer and shown live', (tester) async {
       await pumpSettings(tester);

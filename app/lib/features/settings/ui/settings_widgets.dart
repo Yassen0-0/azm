@@ -44,13 +44,16 @@ class SettingsGroup extends StatelessWidget {
   }
 }
 
-/// Single-choice row: label + check when selected.
+/// Single-choice row: optional leading icon, label, check when selected.
 class SettingsOptionRow extends StatelessWidget {
-  const SettingsOptionRow({super.key, required this.label, required this.selected, required this.onTap});
+  const SettingsOptionRow({super.key, required this.label, required this.selected, required this.onTap, this.icon});
 
   final String label;
   final bool selected;
   final VoidCallback onTap;
+
+  /// Leading icon (accent while selected), e.g. the theme choices.
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,10 @@ class SettingsOptionRow extends StatelessWidget {
           padding: const EdgeInsetsDirectional.symmetric(horizontal: AzmSpace.cardPadding, vertical: AzmSpace.md),
           child: Row(
             children: [
+              if (icon != null) ...[
+                Icon(icon, color: selected ? c.accent : c.textSecondary, size: AzmSize.icon),
+                const SizedBox(width: AzmSpace.md),
+              ],
               Expanded(child: Text(label, style: AzmType.listTitle.copyWith(color: c.textPrimary))),
               AnimatedOpacity(
                 opacity: selected ? 1 : 0,

@@ -111,8 +111,8 @@ Each exercise in a workout shows a table of sets. Columns per set: **SET · PREV
 Language follows the device (changeable later in settings).
 
 ### 8. Settings
+- Theme ("Appearance", the **first** group, each choice with a moon/sun icon): **Dark (default on first launch, whatever the phone's own light/dark setting) / Light**
 - Language: **System (default) / العربية / English**
-- Theme: **Dark (default on first launch, whatever the phone's own light/dark setting) / Light**
 - Unit: kg / lb
 - Default rest time
 - Backup: export / import JSON
