@@ -393,6 +393,7 @@ Setup for every entry: `AZM_DEVICE_SET=A` (or B), dark theme (the default), both
   - Device checks: `docs/DEVICE_TEST_CHECKLIST.md` → "Hevy-density UI (2026-09-28)" (7 items).
   - Releases: `tools/release_apk.sh` (notes: `docs/release_notes/v1.0.0-rc1-b2.md`), then `tools/release_personal.sh` (with media).
 - [ ] **Cloud follow-up 2026-09-29: theme first in Settings, avatar 40 pt + tighter notes, Android CI releases** (one commit each, see `git log`)
+  - **Bring it into main first** (the cloud session could not push to main): `./gh_env git fetch origin claude/workout-ui-redesign-y1w877 && git merge --ff-only FETCH_HEAD && ./gh_env git push origin main`, then delete that branch too: `./gh_env git push origin --delete claude/workout-ui-redesign-y1w877`.
   - **Branch:** delete the old session branch (main contains all of it): `./gh_env git push origin --delete ccr-df452b89-wxusuo`.
   - **Screenshots:** `settings` (Appearance is now the first group, with moon/sun icons), plus the §14 suites above (they now show the 40 pt avatar + tighter notes: `workout_ui`, `workout`, `routines`, `set_delete`, E2E `workout_flow`). Compare `workout_ui` again with the Hevy references (`.tooling/tmp/reference/`).
   - **Dark default, both devices:** fresh install (uninstall first) with the system set to LIGHT → the app opens dark; Settings → Appearance → Light switches, relaunch keeps it.
