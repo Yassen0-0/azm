@@ -13,9 +13,12 @@
 # - media/ is committed in azm (since 2026-09-28) and must match HEAD (no local
 #   edits). Its files are copied into app/assets/media/{images,videos}/
 #   (gitignored) for the build and removed again on exit, even on failure.
-# - Version: <pubspec version>-personal; build number = highest personal-b<N>
-#   release in azm + 1 (separate app id, so its own counter; tester releases
-#   are v<ver>-b<N>).
+# - Version (tools/lib/release_version.sh): versionName = pubspec's NUMERIC
+#   name (1.0.0); build number = highest personal-b<N> release in azm + 1
+#   (separate app id, so its own counter; tester releases are
+#   v<ver>-<label>-b<N>). The label of the newest tester tag of that version
+#   (+ "-personal") reaches the app through AZM_RELEASE_LABEL, so About shows
+#   1.0.0-rc1-personal. --label <label> / --final override the label.
 # - Publish: clean tree, HEAD pushed to origin/main; the tag points at HEAD.
 # - Signed with the upload key (tools/upload_key.sh), same as tester builds.
 # - Aborts unless azm is PRIVATE and owner-only (tools/lib/github_guard.sh).
@@ -24,9 +27,19 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "$ROOT"
 source "$ROOT/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
 source "$ROOT/tools/lib/github_guard.sh"
+source "$ROOT/tools/lib/release_version.sh"
 
 MODE=publish
-[ "${1:-}" = "--build-only" ] && MODE=build
+LABEL_OPT=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --build-only) MODE=build ;;
+    --label) LABEL_OPT=(--label "${2:-}"); shift ;;
+    --final) LABEL_OPT=(--final) ;;
+    *) echo "usage: tools/release_personal.sh [--build-only] [--label <label> | --final]"; exit 1 ;;
+  esac
+  shift
+done
 BUILD_TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
 LOG="$TMPDIR/release-personal.log"
 MAX_MB=400
@@ -49,16 +62,19 @@ if [ "$EST_MB" -gt "$MAX_MB" ]; then
   fail "estimated APK ~${EST_MB} MB > ${MAX_MB} MB: downscale the GIFs into .tooling/tmp first (not implemented: at ~200 MB it isn't needed)"
 fi
 
-FULL="$(awk '/^version:/{print $2; exit}' app/pubspec.yaml)"
-NAME="${FULL%+*}-personal"
+azm_gh git fetch -q origin --tags   # the label comes from the newest tester tag
+azm_release_version ${LABEL_OPT[@]+"${LABEL_OPT[@]}"}
+NAME="$AZM_VER_NAME"                                 # numeric versionName (1.0.0)
+LABEL="${AZM_VER_LABEL:+$AZM_VER_LABEL-}personal"    # rc1-personal
+SHOWN="$NAME-$LABEL"                                 # About: 1.0.0-rc1-personal
 LAST="$(azm_gh gh release list --repo "$AZM_REPO" --limit 200 --json tagName -q '.[].tagName' \
   | sed -n 's/^personal-b\([0-9][0-9]*\)$/\1/p' | sort -n | tail -1)"
 BUILD=$(( ${LAST:-0} + 1 ))
 TAG="personal-b$BUILD"
-APK="dist/azm-personal-${NAME%-personal}-$BUILD.apk"
+APK="dist/azm-personal-${NAME}${AZM_VER_LABEL:+-$AZM_VER_LABEL}-$BUILD.apk"
 COMMIT="$(git rev-parse --short HEAD)"
 DIRTY=""; [ -z "$(git status --porcelain)" ] || DIRTY=" (+ uncommitted changes)"
-echo "personal build $BUILD, version $NAME, azm $COMMIT$DIRTY → $APK ($MODE)"
+echo "personal build $BUILD, version $SHOWN (versionName $NAME), azm $COMMIT$DIRTY → $APK ($MODE)"
 if [ "$MODE" = publish ]; then
   [ -z "$DIRTY" ] || fail "working tree not clean (commit first; the tag must match the build)"
   azm_gh git fetch -q origin main
@@ -82,7 +98,7 @@ EXPECTED_CERT="$(tools/upload_key.sh sha256)"
   AZM_UPLOAD_STORE_PASSWORD="$(HOME="$AZM_REAL_HOME" /usr/bin/security find-generic-password -s azm.android.upload -a keystore -w)"
   export AZM_UPLOAD_STORE_PASSWORD
   cd app && flutter build apk --release --flavor personal --android-project-arg azmPersonal=true \
-    --build-name "$NAME" --build-number "$BUILD"
+    --build-name "$NAME" --build-number "$BUILD" --dart-define=AZM_RELEASE_LABEL="$LABEL"
 ) >"$LOG" 2>&1 &
 pid=$!
 for _ in $(seq 1 360); do kill -0 "$pid" 2>/dev/null || break; sleep 5; done
@@ -101,6 +117,7 @@ BADGING="$("$BUILD_TOOLS/aapt2" dump badging "$APK")"
 echo "$BADGING" | head -1
 echo "$BADGING" | head -1 | grep -q "name='app.azm.gym.personal'" || fail "package is not app.azm.gym.personal"
 echo "$BADGING" | head -1 | grep -q "versionCode='$BUILD'" || fail "versionCode is not $BUILD"
+echo "$BADGING" | head -1 | grep -q "versionName='$NAME'" || fail "versionName is not $NAME"
 echo "$BADGING" | grep -E "^application-label(-ar)?:" | head -2
 echo "$BADGING" | grep -q "^application-label:'Azm Dev'" || fail "launcher label is not 'Azm Dev'"
 echo "$BADGING" | grep -q "^application-label-ar:'عزم تجريبي'" || fail "Arabic launcher label is not 'عزم تجريبي'"
@@ -124,7 +141,7 @@ NOTES="$TMPDIR/personal-notes.md"
 cat >"$NOTES" <<EOF
 **عزم تجريبي (Azm Dev) — للمالك بس / owner only.** Bundled Gym visual media (NOT licensed): never share this APK or link.
 
-- Version $NAME, build $BUILD, package \`app.azm.gym.personal\` (installs next to the tester app)
+- Version $SHOWN, build $BUILD, package \`app.azm.gym.personal\` (installs next to the tester app)
 - azm $COMMIT (media committed in azm)
 - $IN_IMG images + $IN_GIF GIFs, works offline; $SIZE_MB MB, minSdk $MIN_SDK
 EOF

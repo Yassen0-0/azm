@@ -1,13 +1,18 @@
 #!/bin/bash
 # Tester APK release (owner only; the GitHub repo is private).
 #
-#   tools/release_apk.sh --build-only   # build + verify dist/azm-<ver>-<build>.apk, publish nothing
-#   tools/release_apk.sh                # build + verify + GitHub prerelease v<ver>-b<build>
+#   tools/release_apk.sh --build-only   # build + verify dist/azm-<ver>[-<label>]-<build>.apk, publish nothing
+#   tools/release_apk.sh                # build + verify + GitHub prerelease v<ver>[-<label>]-b<build>
+#   ... [--label rc2 | --final]         # change the release label (default: the newest tag's)
 #
-# Version: app/pubspec.yaml `version: <ver>+<build>` is the SINGLE source. <build>
-# is the next tester build: this script releases it, tags that commit
-# v<ver>-b<build>, then bumps pubspec to <build>+1 and commits + pushes that.
-# Release notes: docs/release_notes/v<ver>-b<build>.md (Arabic + English, short,
+# Version (tools/lib/release_version.sh): app/pubspec.yaml `version: <ver>+<build>`
+# with a NUMERIC <ver> (1.0.0: iOS rejects anything else). <build> is the next
+# tester build: this script releases it, tags that commit v<ver>-<label>-b<build>
+# (e.g. v1.0.0-rc1-b3; v1.0.0-b3 for a final release), then bumps pubspec to
+# <build>+1 and commits + pushes that. The label ("rc1") lives only in the tag,
+# the release name/notes and the app's AZM_RELEASE_LABEL dart-define (About,
+# backups); by default it is the one of the newest tester tag of <ver>.
+# Release notes: docs/release_notes/<tag>.md (Arabic + English, short,
 # committed BEFORE running; if missing, the script lists the commits since the
 # previous tester release and stops).
 #
@@ -24,9 +29,19 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "$ROOT"
 source "$ROOT/env.sh" || exit 1   # fails fast if flutter is not the sandbox one
 source "$ROOT/tools/lib/github_guard.sh"
+source "$ROOT/tools/lib/release_version.sh"
 
 MODE=publish
-[ "${1:-}" = "--build-only" ] && MODE=build
+LABEL_OPT=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --build-only) MODE=build ;;
+    --label) LABEL_OPT=(--label "${2:-}"); shift ;;
+    --final) LABEL_OPT=(--final) ;;
+    *) echo "usage: tools/release_apk.sh [--build-only] [--label <label> | --final]"; exit 1 ;;
+  esac
+  shift
+done
 REPO="Yassen0-0/azm"
 GH="$ROOT/gh_env"
 BUILD_TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
@@ -35,14 +50,15 @@ LOG="$TMPDIR/release-apk.log"
 fail() { echo "FAILED: $*"; exit 1; }
 step() { echo; echo "==> $*"; }
 
-# ---- Version (single source: pubspec) -----------------------------------------
-FULL="$(awk '/^version:/{print $2; exit}' app/pubspec.yaml)"
-NAME="${FULL%+*}"; BUILD="${FULL##*+}"
-[[ "$BUILD" =~ ^[0-9]+$ ]] && [ "$NAME" != "$FULL" ] || fail "pubspec version must be <name>+<build>, got '$FULL'"
-TAG="v${NAME}-b${BUILD}"
-APK="dist/azm-${NAME}-${BUILD}.apk"
+# ---- Version (numeric name + build from pubspec, label from the tags) -----------
+[ "$MODE" = publish ] && "$GH" git fetch -q origin --tags   # the label comes from the newest tag
+azm_release_version ${LABEL_OPT[@]+"${LABEL_OPT[@]}"}
+NAME="$AZM_VER_NAME"; BUILD="$AZM_VER_BUILD"; LABEL="$AZM_VER_LABEL"
+SHOWN="${NAME}${LABEL:+-$LABEL}"   # what About shows: 1.0.0-rc1
+TAG="v${SHOWN}-b${BUILD}"
+APK="dist/azm-${SHOWN}-${BUILD}.apk"
 NOTES="docs/release_notes/${TAG}.md"
-echo "version $NAME, build $BUILD → $APK ($MODE)"
+echo "version $NAME, label '${LABEL}', build $BUILD → $APK, tag $TAG ($MODE)"
 
 prev_tag() { git tag -l 'v*-b*' --sort=-creatordate | grep -v "^$TAG\$" | head -1; }
 
@@ -77,7 +93,7 @@ EXPECTED_CERT="$(tools/upload_key.sh sha256)"
   export AZM_UPLOAD_KEYSTORE="$AZM_TOOLING/secrets/azm-upload.jks"
   AZM_UPLOAD_STORE_PASSWORD="$(HOME="$AZM_REAL_HOME" /usr/bin/security find-generic-password -s azm.android.upload -a keystore -w)"
   export AZM_UPLOAD_STORE_PASSWORD
-  cd app && flutter build apk --release
+  cd app && flutter build apk --release --dart-define=AZM_RELEASE_LABEL="$LABEL"
 ) >"$LOG" 2>&1 &
 pid=$!
 for _ in $(seq 1 360); do kill -0 "$pid" 2>/dev/null || break; sleep 5; done
@@ -130,10 +146,10 @@ fi
 
 # ---- Publish ----------------------------------------------------------------------
 step "Tag $TAG and publish the GitHub prerelease"
-git tag -a "$TAG" -m "Azm $NAME tester build $BUILD"
+git tag -a "$TAG" -m "Azm $SHOWN tester build $BUILD"
 "$GH" git push -q origin "$TAG"
 "$GH" gh release create "$TAG" "$APK" --repo "$REPO" --verify-tag --prerelease \
-  --title "Azm $NAME — tester build $BUILD" --notes-file "$NOTES" >/dev/null
+  --title "Azm $SHOWN — tester build $BUILD" --notes-file "$NOTES" >/dev/null
 URL="$("$GH" gh release view "$TAG" --repo "$REPO" --json url,isPrerelease -q 'select(.isPrerelease) | .url')"
 [ -n "$URL" ] || fail "release $TAG not found as a prerelease"
 azm_require_private_repo

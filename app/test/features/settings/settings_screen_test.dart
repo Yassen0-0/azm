@@ -6,6 +6,7 @@ import 'package:azm/core/db/app_database.dart';
 import 'package:azm/core/router/app_router.dart';
 import 'package:azm/core/utils/units.dart';
 import 'package:azm/features/settings/data/app_settings.dart';
+import 'package:azm/features/settings/data/app_version.dart';
 import 'package:azm/features/settings/data/backup/backup_codec.dart';
 import 'package:azm/features/settings/data/backup/backup_files.dart';
 import 'package:azm/features/settings/data/license_texts.dart';
@@ -60,7 +61,7 @@ void main() {
         buildSignature: '',
       ));
 
-  Future<void> pumpSettings(WidgetTester tester, {LanguagePref lang = LanguagePref.en, Future<void> Function()? seed}) async {
+  Future<void> pumpSettings(WidgetTester tester, {LanguagePref lang = LanguagePref.en, Future<void> Function()? seed, AppVersion? version}) async {
     tester.view.physicalSize = const Size(1170, 2532);
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
@@ -71,6 +72,8 @@ void main() {
       settingsStoreProvider.overrideWithValue(DbSettingsStore(db)),
       initialAppSettingsProvider.overrideWithValue(AppSettings(language: lang)),
       backupFilesProvider.overrideWithValue(files),
+      // A release build's label comes from --dart-define=AZM_RELEASE_LABEL.
+      if (version != null) appVersionProvider.overrideWith((ref) async => version),
     ]);
     if (seed != null) await seed();
     await tester.pumpWidget(UncontrolledProviderScope(container: container, child: const AzmApp()));
@@ -170,6 +173,15 @@ void main() {
       final list = find.descendant(of: find.byKey(const ValueKey('settings-list')), matching: find.byType(Scrollable));
       await tester.scrollUntilVisible(find.textContaining('7.8.9'), 200, scrollable: list.first);
       expect(find.text('Version \u20667.8.9\u2069'), findsOneWidget); // LTR isolate: never 'rc1-1.0.0' in Arabic
+    });
+
+    testWidgets('a release build shows the tag label (numeric pubspec + rc1) in About and backups', (tester) async {
+      await pumpSettings(tester, version: const AppVersion('1.0.0', '3', label: 'rc1'));
+      final list = find.descendant(of: find.byKey(const ValueKey('settings-list')), matching: find.byType(Scrollable));
+      await tester.scrollUntilVisible(find.textContaining('1.0.0-rc1'), 200, scrollable: list.first);
+      expect(find.text('Version \u20661.0.0-rc1\u2069'), findsOneWidget);
+      await tapKey(tester, 'settings-export');
+      expect(decodeBackup(files.shared.single.text).appVersion, '1.0.0-rc1+3');
     });
   });
 

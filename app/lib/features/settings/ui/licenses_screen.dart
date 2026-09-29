@@ -20,7 +20,7 @@ class LicensesScreen extends ConsumerWidget {
     showLicensePage(
       context: context,
       applicationName: context.l10n.appName,
-      applicationVersion: ref.read(appVersionProvider).value?.version,
+      applicationVersion: ref.read(appVersionProvider).value?.display,
       useRootNavigator: true,
     );
   }

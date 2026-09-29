@@ -118,16 +118,17 @@ The GitHub CLI lives in `.tooling/gh` (on `env.sh`'s PATH). Its login token is s
 
 ## Tester APK releases (owner only)
 
-Private GitHub prereleases on `Yassen0-0/azm`, one universal APK each: `v<version>-b<build>` with `azm-<version>-<build>.apk` attached.
+Private GitHub prereleases on `Yassen0-0/azm`, one universal APK each: `v<version>-<label>-b<build>` (e.g. `v1.0.0-rc1-b3`) with `azm-<version>-<label>-<build>.apk` attached.
 
 ```sh
 # once per release: write docs/release_notes/v1.0.0-rc1-b<build>.md (Arabic + English), commit, push
 source ./env.sh && tools/release_apk.sh --build-only   # build + verify only (dist/, gitignored)
 source ./env.sh && tools/release_apk.sh                # build + verify + tag + prerelease + bump
+source ./env.sh && tools/release_apk.sh --label rc2    # change the label (--final: none)
 ```
 
-- **Version:** `app/pubspec.yaml` `version: 1.0.0-rc1+<build>` is the single source; `<build>` is the next tester build. The script releases it, tags that commit, then bumps it and commits.
-- **Checks before publishing:** signed with the upload key (certificate SHA-256), versionCode/versionName match pubspec, the asset list is printed and contains nothing from `media/` (path, GIF/video type, or SHA-256 match against every file in `media/`). The repo must be private.
+- **Version (since 2026-09-29):** `app/pubspec.yaml` `version: 1.0.0+<build>`: the name is **numeric only** (iOS rejects `1.0.0-rc1`) and `<build>` is the next tester build, which only goes up. The script releases it, tags that commit, then bumps it and commits. The **label** (`rc1`) lives only in git tags and release names/notes: by default the one of the newest tester tag of that version (`--label rc2` / `--final` change it). The script passes it to the app as `--dart-define=AZM_RELEASE_LABEL=rc1`, so About shows `1.0.0-rc1` and backups record `1.0.0-rc1+<build>`; a `flutter run` build shows just `1.0.0`.
+- **Checks before publishing:** signed with the upload key (certificate SHA-256), versionCode/versionName match pubspec (numeric name), the asset list is printed and contains nothing from `media/` (path, GIF/video type, or SHA-256 match against every file in `media/`). The repo must be private.
 - **Install on a phone:** download the APK from the release page (logged in to GitHub), allow "Install unknown apps" for the browser/Files app, open it. Later builds install over it as updates.
 
 ### Upload key: DON'T LOSE IT
@@ -148,6 +149,7 @@ The exercise images/GIFs (© Gym visual, **not licensed**, docs/LICENSES.md) are
 source ./env.sh && tools/release_personal.sh --build-only
 source ./env.sh && tools/release_personal.sh            # prerelease personal-b<N> in azm (clean tree, HEAD pushed)
 ```
+Its versionName is the same numeric pubspec name, its versionCode its own `personal-b<N>` counter, and its label the tester tag's + `-personal` (About: `1.0.0-rc1-personal`).
 The `personal` Android flavor (`app.azm.gym.personal`, "عزم تجريبي / Azm Dev") bundles the media so it works offline at the gym and installs next to the tester app. **It's for the owner's phone only: never share the APK or the release link, never add collaborators to azm, never make it public.** Every script checks that azm is PRIVATE and owner-only and aborts otherwise. Tester/store builds never contain media (`tools/release_apk.sh` aborts); public builds show media only after a Gym visual licence is bought.
 
 ## The app (`app/`)

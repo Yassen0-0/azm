@@ -382,6 +382,15 @@ Owner request after real-phone testing, with 3 Hevy screenshots as the layout re
 - [x] **8. Releases (Mac, 2026-09-29):** tester **v1.0.0-rc1-b2** (`tools/release_apk.sh`, 63.5 MB, no media; pubspec now `1.0.0-rc1+3`) and personal **personal-b5** (`tools/release_personal.sh`, 195.2 MB, 1,324 images + 1,324 GIFs, `app.azm.gym.personal` / "Azm Dev"), both prereleases in the private azm repo.
 - **Later idea (not in this task):** a muscle/body diagram in the live workout's stats row (Hevy shows one at the end of the row), drawn from Azm's own filter-icon silhouettes.
 
+## 15. Numeric version names (owner, 2026-09-29) — [x] done
+
+iOS only accepts digits in `CFBundleShortVersionString` (pubspec `1.0.0-rc1` showed as "1.0.01" on iOS).
+
+- [x] `app/pubspec.yaml` `version: 1.0.0+3`: the name is numeric only, the build number goes up by one per tester release.
+- [x] The label (`rc1`, none for a final release) lives only in git tags (`v1.0.0-rc1-b3`) and release names/notes. `tools/lib/release_version.sh` (shared by `tools/release_apk.sh` + `tools/release_personal.sh`) reads it from the newest tester tag of that version; `--label <x>` / `--final` change it; a non-numeric pubspec name is refused.
+- [x] The scripts pass the label as `--dart-define=AZM_RELEASE_LABEL=<label>` (personal: `<label>-personal`); `AppVersion.display` (About, licence page) = `1.0.0-rc1`, `AppVersion.full` (backup `app_version`) = `1.0.0-rc1+3`; debug builds show `1.0.0`. Tests: `test/features/settings/app_version_test.dart`, settings About + backup with a labelled build.
+- No new release (the next tester release will be `v1.0.0-rc1-b3`).
+
 ## Pending on Mac
 
 Everything a cloud session built but could not verify (no emulator, simulator or signing key there). One entry per feature commit, with exactly what the Mac session must run. A Mac session ticks an entry after both platforms pass in Arabic and English, commits the screenshots, and flips the feature's PLAN status to `[x]`. **Since 2026-09-29 all work happens on the Mac** (CLAUDE.md → *Where work happens*); a cloud session, if ever used, pushes to its own branch and the Mac merges it.
@@ -398,7 +407,7 @@ Setup for every entry: `AZM_DEVICE_SET=A` (or B), dark theme (the default), both
   - **Branch:** delete the old session branch (main contains all of it): `./gh_env git push origin --delete ccr-df452b89-wxusuo`.
   - **Screenshots:** `settings` (Appearance is now the first group, with moon/sun icons), plus the §14 suites above (they now show the 40 pt avatar + tighter notes: `workout_ui`, `workout`, `routines`, `set_delete`, E2E `workout_flow`). Compare `workout_ui` again with the Hevy references (`.tooling/tmp/reference/`).
   - **Dark default, both devices:** fresh install (uninstall first) with the system set to LIGHT → the app opens dark; Settings → Appearance → Light switches, relaunch keeps it.
-  - **For later (not active, owner 2026-09-29): GitHub Actions releases.** `docs/ci/android-release.yml` stays parked in `docs/ci/` as-is. When wanted: move it to `.github/workflows/`, set the two Actions secrets (keystore base64 + store password, from the Keychain through `./gh_env`, nothing printed), then test it end to end with a `personal-b<N>` tag and compare `aapt2 dump badging` with a local `tools/release_personal.sh --build-only`.
+  - **For later (not active, owner 2026-09-29): GitHub Actions releases.** `docs/ci/android-release.yml` stays parked in `docs/ci/` as-is (it still assumes the old `v<pubspec name>-b<build>` tags: adapt it to §15's numeric name + tag label when activating). When wanted: move it to `.github/workflows/`, set the two Actions secrets (keystore base64 + store password, from the Keychain through `./gh_env`, nothing printed), then test it end to end with a `personal-b<N>` tag and compare `aapt2 dump badging` with a local `tools/release_personal.sh --build-only`.
   - **Releases:** tester via tag `v1.0.0-rc1-b2` (notes ready) or `tools/release_apk.sh`; personal via the tag above or `tools/release_personal.sh`.
 
 ## Requests
