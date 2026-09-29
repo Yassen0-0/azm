@@ -363,7 +363,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Arabic "امسح الفلاتر" in both places (result bar / no-results button and the sheet); test.
 - [x] Parity: `exercise_filters` + `exercises` re-captured on both platforms, ar + en. `set_delete` screenshots of the swipe redesign reviewed (no changes needed).
 
-## 14. Hevy-density UI overhaul (main, 2026-09-28) — [x] done (code: cloud 2026-09-28; device verification: Mac 2026-09-29)
+## 14. Hevy-density UI overhaul (main, 2026-09-28) — [x] done (code: cloud 2026-09-28; device verification + releases: Mac 2026-09-29)
 
 Owner request after real-phone testing, with 3 Hevy screenshots as the layout reference (kept only in `.tooling/tmp/reference/`, never committed; the cloud copy is NOT on the Mac: re-save them there). Owns everything it touches on `main` (owner-requested; frozen files included: theme tokens, router, DB schema, `core/media/exercise_media.dart`, `core/widgets/**`, screenshot harness).
 
@@ -379,7 +379,7 @@ Owner request after real-phone testing, with 3 Hevy screenshots as the layout re
 - [x] **7b. Parity screenshots (Mac, 2026-09-29):** all 13 suites re-run on Android (`azm_api37`) + iOS ("Azm iPhone A"), ar + en, dark: `shell`, `onboarding` (2 images; stale program PNGs removed), `exercises`, `exercise_filters`, `exercise_preview`, `routines`, `programs` (new), `workout`, `workout_ui` (new), `set_delete`, `history`, `settings`, E2E `workout_flow` (passes on both). Every image looked at; fixes: shell blank Arabic exercises, Lifted "kg 200" in Arabic (`LiftedCounter` + Stats), cut stat values on iPhone, Arabic version "rc1-1.0.0", summary PR value touching its text, E2E "Add set" tap; stale PNGs removed (DECISIONS_LOG 2026-09-29). Hevy side-by-side not redone: the references aren't on this Mac.
 - [x] **Dark default on devices (2026-09-29):** fresh install with the system in LIGHT on both → splash, onboarding, Workout tab dark; Settings → Light applies and survives a relaunch (Android + iOS).
 - [ ] **7c. Real-phone checklist** `docs/DEVICE_TEST_CHECKLIST.md` → "Hevy-density UI (2026-09-28)": for a tester with real phones.
-- [ ] **8. Releases (Mac only: signing key in the Keychain):** tester `tools/release_apk.sh` (notes `docs/release_notes/v1.0.0-rc1-b2.md`) and personal `tools/release_personal.sh`. Both need HEAD = `origin/main` and a clean tree.
+- [x] **8. Releases (Mac, 2026-09-29):** tester **v1.0.0-rc1-b2** (`tools/release_apk.sh`, 63.5 MB, no media; pubspec now `1.0.0-rc1+3`) and personal **personal-b5** (`tools/release_personal.sh`, 195.2 MB, 1,324 images + 1,324 GIFs, `app.azm.gym.personal` / "Azm Dev"), both prereleases in the private azm repo.
 - **Later idea (not in this task):** a muscle/body diagram in the live workout's stats row (Hevy shows one at the end of the row), drawn from Azm's own filter-icon silhouettes.
 
 ## Pending on Mac
