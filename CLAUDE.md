@@ -41,17 +41,9 @@ grep -qE 'All tests passed|Some tests failed|Exception' "$LOG" || { echo "TIMEOU
 - Anything that can only be verified on a **real iPhone** (haptics, real notification delivery and sound, background/lock-screen behavior, performance, camera, etc.) goes into `docs/DEVICE_TEST_CHECKLIST.md` for a tester with a real device. Do the same for anything that can't be verified on the Android emulator.
 - Devices: set **A** = AVD `azm_api37` (port 5554) + simulator "Azm iPhone A"; set **B** = AVD `azm_api37_b` (port 5556) + "Azm iPhone B". Each parallel window uses its own set (`AZM_DEVICE_SET=A|B`). Never create, erase or change the owner's other simulators.
 
-## Cloud / no devices (Claude Code on the web, CI)
+## Where work happens
 
-- **Sandbox exception for the cloud:** the sandbox rule protects the owner's Mac. A cloud container is ephemeral and not macOS, so **installing system packages there is allowed** (`apt-get`, e.g. `libsqlite3-dev`). `tools/cloud_setup.sh` installs what it needs itself and says so; on the Mac it never installs anything (it stops and asks instead). Still keep the Flutter SDK, pub cache and temp files in `.tooling/` so the Mac and cloud layouts match.
-- **Setup:** `tools/cloud_setup.sh` (installs the pinned Flutter into `.tooling/flutter`, pub get, regenerates l10n + Drift + catalog and fails if the committed copies are stale, then analyze + tests). After it, commands use `source ./env.sh && …` as on the Mac.
-- **Do only:** code, `flutter analyze`, `dart analyze` (tools), unit/widget tests (`flutter test`), `tools/check_directionality.sh`, `tools/build_catalog.sh --check`, `tools/gen_l10n.sh`. No emulators, simulators, `flutter drive`, `tools/screenshots.sh`, `brand/generate.sh` (macOS AppKit) or `./ios_env`.
-- **Never skip the Platform Parity Rule — defer it.** A feature done in the cloud is **not done**: mark it in `docs/PLAN.md` as `[~] code done (cloud, <date>) — device verification pending (Mac)` and list exactly what the Mac session must run (`tools/screenshots.sh <feature>`, E2E, checklist items). Only a Mac session with both platforms may flip it to `[x]`.
-- Don't commit screenshots from the cloud (there are none to take) and don't delete existing ones.
-- **Cloud git workflow (owner's rule, 2026-09-29):** pull/rebase onto `origin/main` before starting (`git pull --rebase origin main`), then **push to `main` directly**, not to a session branch. **Never force-push.** Small commits, **one feature per commit**.
-- **After each feature:** `flutter analyze` + **all** tests (`flutter test`, `tools/check_directionality.sh`). Then add an entry to `docs/PLAN.md` → *Pending on Mac* naming the commit, the screenshot suites (`tools/screenshots.sh <suite>`) and the device checks it needs.
-- **Phone build from the cloud:** push a `personal-b<N>` tag (N = last personal build + 1) → `.github/workflows/android-release.yml` (committed as `docs/ci/android-release.yml` until a Mac session moves it there: the cloud token can't push workflow files) builds the personal APK and publishes it as a prerelease in azm (only the newest 3 personal releases are kept). A `v<ver>-b<build>` tag matching `app/pubspec.yaml` builds the tester APK the same way (notes: `docs/release_notes/<tag>.md`). Both can also be started from Actions → *Android release* → Run workflow.
-- **iOS stays Mac-only** (Xcode signing, `./ios_env`): the workflow builds Android only.
+- **All work happens on the Mac** (owner's rule, 2026-09-29). If a cloud session is ever used, it pushes to **its own branch** (never `main`, never force-push); a Mac session then fast-forwards/merges it into `main`, does the device verification (Platform Parity Rule) and deletes the branch. `tools/cloud_setup.sh` stays for that case. The GitHub Actions release workflow is parked in `docs/ci/android-release.yml` (not active; "for later" in `docs/PLAN.md`).
 
 ## Before any task
 
@@ -86,6 +78,6 @@ Read `docs/SPEC.md`, `docs/DESIGN.md`, `docs/ARCHITECTURE.md` (and `docs/DATA.md
 
 ## Git & licensing
 
-- Commit locally with the repo-local identity. **Mac sessions: never push** unless the owner asks; **cloud sessions push to `main`** (see *Cloud / no devices*). Never rewrite published history.
+- Commit locally with the repo-local identity. **Never push** unless the owner asks (see *Where work happens* for a cloud session). Never rewrite published history.
 - **Never touch the media licensing rules** in `docs/LICENSES.md`. **azm contains the unlicensed Gym visual media (`media/`, committed on 2026-09-28 by the owner's decision): never make azm public and never add a collaborator until the Gym visual licence is bought.** Every GitHub-touching script checks this and aborts (`tools/lib/github_guard.sh`); never work around it. Never copy `media/` to any other repo or upload it anywhere, never ship it except in the owner-only `personal` flavor (`tools/release_personal.sh`, released in azm only; tester/store builds never contain media), never feed it to AI image/animation generation, never commit screenshots that show media.
 - **When the owner asks for a push:** go through `./gh_env git push …` (it runs the privacy guard + `tools/audit_history.sh`). History must never contain secrets, tokens, keystores, `.env` or `.tooling/`; media is allowed.

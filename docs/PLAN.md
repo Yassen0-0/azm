@@ -383,7 +383,7 @@ Owner request after real-phone testing, with 3 Hevy screenshots as the layout re
 
 ## Pending on Mac
 
-Everything a cloud session built but could not verify (no emulator, simulator or signing key there). One entry per feature commit, with exactly what the Mac session must run. A Mac session ticks an entry after both platforms pass in Arabic and English, commits the screenshots, and flips the feature's PLAN status to `[x]`. Cloud sessions push straight to `main` (pull/rebase first, never force-push), one feature per commit, and run `flutter analyze` + all tests after each feature.
+Everything a cloud session built but could not verify (no emulator, simulator or signing key there). One entry per feature commit, with exactly what the Mac session must run. A Mac session ticks an entry after both platforms pass in Arabic and English, commits the screenshots, and flips the feature's PLAN status to `[x]`. **Since 2026-09-29 all work happens on the Mac** (CLAUDE.md → *Where work happens*); a cloud session, if ever used, pushes to its own branch and the Mac merges it.
 
 Setup for every entry: `AZM_DEVICE_SET=A` (or B), dark theme (the default), both platforms (`tools/screenshots.sh <suite>` does Android + iOS, ar + en).
 
@@ -397,11 +397,7 @@ Setup for every entry: `AZM_DEVICE_SET=A` (or B), dark theme (the default), both
   - **Branch:** delete the old session branch (main contains all of it): `./gh_env git push origin --delete ccr-df452b89-wxusuo`.
   - **Screenshots:** `settings` (Appearance is now the first group, with moon/sun icons), plus the §14 suites above (they now show the 40 pt avatar + tighter notes: `workout_ui`, `workout`, `routines`, `set_delete`, E2E `workout_flow`). Compare `workout_ui` again with the Hevy references (`.tooling/tmp/reference/`).
   - **Dark default, both devices:** fresh install (uninstall first) with the system set to LIGHT → the app opens dark; Settings → Appearance → Light switches, relaunch keeps it.
-  - **Activate the workflow (the cloud token can't push workflow files):** `mkdir -p .github/workflows && git mv docs/ci/android-release.yml .github/workflows/ && git commit -m "Activate Android release workflow" && ./gh_env git push origin main`.
-  - **Actions secrets (Mac, Keychain; nothing printed):**
-    `./gh_env sh -c 'base64 < .tooling/secrets/azm-upload.jks | gh secret set AZM_UPLOAD_KEYSTORE_B64 --repo Yassen0-0/azm'`
-    `./gh_env sh -c 'security find-generic-password -s azm.android.upload -a keystore -w | gh secret set AZM_UPLOAD_STORE_PASSWORD --repo Yassen0-0/azm'`
-  - **End-to-end test of `.github/workflows/android-release.yml`:** push the next personal tag (`git tag personal-b5 && ./gh_env git push origin personal-b5`), wait for the run, install the APK from the release next to the tester app, and check `aapt2 dump badging` matches a local `tools/release_personal.sh --build-only` (package `app.azm.gym.personal`, versionName `<ver>-personal`, versionCode = N, label "Azm Dev"). Note the run's billable minutes (Actions → run → Usage). Then check older personal releases beyond the newest 3 are gone.
+  - **For later (not active, owner 2026-09-29): GitHub Actions releases.** `docs/ci/android-release.yml` stays parked in `docs/ci/` as-is. When wanted: move it to `.github/workflows/`, set the two Actions secrets (keystore base64 + store password, from the Keychain through `./gh_env`, nothing printed), then test it end to end with a `personal-b<N>` tag and compare `aapt2 dump badging` with a local `tools/release_personal.sh --build-only`.
   - **Releases:** tester via tag `v1.0.0-rc1-b2` (notes ready) or `tools/release_apk.sh`; personal via the tag above or `tools/release_personal.sh`.
 
 ## Requests
