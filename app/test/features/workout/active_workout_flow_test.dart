@@ -101,7 +101,7 @@ void main() {
     await settle(tester);
 
     // Header stats: Lifted 60×8 + 70×8 = 1,040; 2 sets. PR on the 70 kg set.
-    expect(find.text('1,040'), findsOneWidget);
+    expect(find.textContaining('\u20661,040'), findsOneWidget);
     expect(find.text('🏆'), findsOneWidget);
 
     // Skip the rest.

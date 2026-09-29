@@ -107,7 +107,7 @@ class _Totals extends StatelessWidget {
           HistoryStat(label: l.historyStatSets, value: AzmNumbers.integer(data.setCount)),
           HistoryStat(
             label: l.historyStatLifted,
-            value: lifted <= 0 ? l.historyNoData : l.historyWeightValue(l.compactNumberText(lifted), l.weightUnitLabel(unit)),
+            value: lifted <= 0 ? l.historyNoData : _liftedText(l, lifted, unit),
           ),
         ],
       ),
@@ -222,4 +222,12 @@ class _RecordRow extends StatelessWidget {
       ),
     );
   }
+}
+
+/// "1,440 kg" in an LTR isolate (never "kg 1,440"); the compact Arabic form
+/// ("165 ألف kg") contains a word and stays RTL, like LiftedCounter.
+String _liftedText(AppLocalizations l, double lifted, WeightUnit unit) {
+  final n = l.compactNumberText(lifted);
+  final v = l.historyWeightValue(n, l.weightUnitLabel(unit));
+  return RegExp(r'[\u0600-\u06FF]').hasMatch(n) ? v : ltr(v);
 }

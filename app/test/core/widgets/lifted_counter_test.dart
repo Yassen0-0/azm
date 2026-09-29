@@ -17,7 +17,7 @@ void main() {
     for (final (v, text) in [(84500.0, '84,500'), (450400.0, '450K'), (1234567.0, '1.2M'), (2.46e9, '2.5B')]) {
       await _pump(tester, AzmLocales.en, LiftedCounter(value: v, unit: 'kg', size: LiftedCounterSize.history, compact: true));
       await tester.pumpAndSettle();
-      expect(find.text(text), findsOneWidget, reason: '$v');
+      expect(find.textContaining(text), findsOneWidget, reason: '$v');
     }
   });
 
@@ -25,16 +25,28 @@ void main() {
     for (final (v, text) in [(450000.0, '450 ألف'), (1200000.0, '1.2 مليون'), (3e9, '3 مليار')]) {
       await _pump(tester, AzmLocales.ar, LiftedCounter(value: v, unit: 'kg', size: LiftedCounterSize.history, compact: true));
       await tester.pumpAndSettle();
-      expect(find.text(text), findsOneWidget, reason: '$v');
+      expect(find.textContaining(text), findsOneWidget, reason: '$v');
     }
   });
 
   testWidgets('not compact by default; zeroText replaces 0', (tester) async {
     await _pump(tester, AzmLocales.en, const LiftedCounter(value: 1234567, unit: 'kg'));
     await tester.pumpAndSettle();
-    expect(find.text('1,234,567'), findsOneWidget);
+    expect(find.textContaining('1,234,567'), findsOneWidget);
     await _pump(tester, AzmLocales.en, const LiftedCounter(value: 0, unit: 'kg', compact: true, zeroText: '—'));
     await tester.pumpAndSettle();
-    expect(find.text('—'), findsOneWidget);
+    expect(find.textContaining('—'), findsOneWidget);
+  });
+
+  testWidgets('number before unit in both languages (one LTR isolate, never "kg 200")', (tester) async {
+    for (final locale in [AzmLocales.en, AzmLocales.ar]) {
+      await _pump(tester, locale, const LiftedCounter(value: 200, unit: 'kg'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('\u2066200'), findsOneWidget, reason: '$locale');
+      final plain = tester.widget<Text>(find.textContaining('200')).textSpan!.toPlainText();
+      expect(plain.startsWith('\u2066200'), isTrue, reason: plain);
+      expect(plain.indexOf('kg'), greaterThan(plain.indexOf('200')), reason: plain);
+      expect(plain.endsWith('\u2069'), isTrue, reason: plain);
+    }
   });
 }

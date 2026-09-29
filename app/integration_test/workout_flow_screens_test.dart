@@ -252,8 +252,18 @@ void main() {
       expect(container.read(restTimerProvider), isNull);
 
       // 6. One more bench set (unticked copy of 60 × 8), then Finish.
-      await tester.tap(find.text(l.workoutAddSet).first);
+      // Ticking left the list scrolled down: back to the top, so bench's
+      // "Add set" is built (the list is lazy) and in view (a tap on an
+      // off-screen button silently misses).
+      tester.state<ScrollableState>(workoutList).position.jumpTo(0);
+      await _pump(tester, 300);
+      final addSet = find.text(l.workoutAddSet).first;
+      await tester.ensureVisible(addSet);
+      await _pump(tester, 300);
+      await tester.tap(addSet);
       await _pump(tester);
+      d = (await repo.loadDetail(workoutId))!;
+      expect(d.exercises.first.sets.length, 2, reason: '"Add set" added the unticked copy');
       await tester.tap(find.text(l.workoutFinish));
       await _pump(tester);
       expect(find.text(l.workoutFinishUncheckedBody(1, '1')), findsOneWidget);

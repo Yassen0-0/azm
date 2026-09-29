@@ -52,11 +52,15 @@ class HistoryStat extends StatelessWidget {
         children: [
           Text(label, style: AzmType.statLabel.copyWith(color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
           const SizedBox(height: AzmSpace.opticalInset),
-          Text(
-            value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AzmType.rowNumber.copyWith(color: valueColor ?? c.textPrimary),
+          // A number is never cut off: it shrinks to fit a narrow cell
+          // (4 stats on a 402 pt iPhone: "1,440 kg" was "1,440 …").
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value,
+              maxLines: 1,
+              style: AzmType.rowNumber.copyWith(color: valueColor ?? c.textPrimary),
+            ),
           ),
         ],
       ),

@@ -204,7 +204,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   SettingsGroup(
                     heading: l10n.settingsAbout,
                     footer: switch (ref.watch(appVersionProvider).value) {
-                      final v? => l10n.settingsVersion(v.version),
+                      // LTR isolate: Arabic would reorder "1.0.0-rc1" to "rc1-1.0.0".
+                      final v? => l10n.settingsVersion('\u2066${v.version}\u2069'),
                       null => null,
                     },
                     children: [

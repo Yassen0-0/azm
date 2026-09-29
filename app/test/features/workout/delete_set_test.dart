@@ -78,7 +78,7 @@ void main() {
     await pumpApp(tester, LanguagePref.en);
     final (w, ids) = await startWith(tester, [(100, 10, true), (60, 5, true), (80, 8, false)]);
     expect(labels(tester), ['1', '2', '3']);
-    expect(find.text('1,300'), findsOneWidget); // Lifted: 100×10 + 60×5
+    expect(find.textContaining('\u20661,300'), findsOneWidget); // Lifted: 100×10 + 60×5
     final deleted = (await repo().loadDetail(w))!.exercises.first.sets[1];
 
     // Toward the END edge (right in English): nothing happens.
@@ -92,7 +92,7 @@ void main() {
     await settle(tester); // Lifted counts to its new value (600 ms)
     expect(await dbSetIds(w), [ids[0], ids[2]]);
     expect(labels(tester), ['1', '2']); // renumbered
-    expect(find.text('1,000'), findsOneWidget); // live Lifted
+    expect(find.textContaining('\u20661,000'), findsOneWidget); // live Lifted
     final d = (await repo().loadDetail(w))!;
     expect(d.completedSets, 1);
     expect(d.liftedTotalKg, 1000);
@@ -107,7 +107,7 @@ void main() {
     final back = (await repo().loadDetail(w))!.exercises.first.sets[1];
     expect(back, deleted);
     expect(labels(tester), ['1', '2', '3']);
-    expect(find.text('1,300'), findsOneWidget);
+    expect(find.textContaining('\u20661,300'), findsOneWidget);
     await tearDownApp(tester);
   });
 

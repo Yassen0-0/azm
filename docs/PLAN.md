@@ -363,7 +363,7 @@ Phase 3 acceptance: Drift schema per DATA.md; `build_catalog` produces `catalog.
 - [x] Arabic "امسح الفلاتر" in both places (result bar / no-results button and the sheet); test.
 - [x] Parity: `exercise_filters` + `exercises` re-captured on both platforms, ar + en. `set_delete` screenshots of the swipe redesign reviewed (no changes needed).
 
-## 14. Hevy-density UI overhaul (main, 2026-09-28) — [~] code done (cloud, 2026-09-28) — device verification pending (Mac)
+## 14. Hevy-density UI overhaul (main, 2026-09-28) — [x] done (code: cloud 2026-09-28; device verification: Mac 2026-09-29)
 
 Owner request after real-phone testing, with 3 Hevy screenshots as the layout reference (kept only in `.tooling/tmp/reference/`, never committed; the cloud copy is NOT on the Mac: re-save them there). Owns everything it touches on `main` (owner-requested; frozen files included: theme tokens, router, DB schema, `core/media/exercise_media.dart`, `core/widgets/**`, screenshot harness).
 
@@ -376,9 +376,10 @@ Owner request after real-phone testing, with 3 Hevy screenshots as the layout re
 - [x] **6. Ready programs hidden** behind `kProgramsEnabled = false` (`core/feature_flags.dart` + `programsEnabledProvider`): no Workout-tab entry, onboarding = 1 screen (unit only, "Let's go"), `/programs` and `/program/:id` redirect to the Workout tab. Code, data and tests kept (tests turn the provider on).
 - [x] **Data:** schema **v3** (`workout_exercises.rest_seconds` 0 = OFF, `workout_sets.prefilled`), routine start copies the rest override and marks targets pre-filled; backup format **v2** (v1 files still import). DATA.md updated.
 - [x] **7a. Checks (cloud):** `flutter analyze` clean, **361** tests green (new: `workout_overhaul_data_test.dart`, `active_workout_overhaul_test.dart`, `history/workout_times_edit_test.dart`, `app_theme_default_test.dart`, routines flow + SetRow additions), `tools/check_directionality.sh` passes.
-- [ ] **7b–8 → see "Pending on Mac" below.** 7b. Parity screenshots (Mac, both platforms, ar + en, dark theme): `tools/screenshots.sh workout_ui` (new: Workout tab, routine detail, pre-filled live workout, notes + rest OFF, rest picker, manual timer, start-time sheet, summary + past-workout time sheets), `programs` (new: the hidden screens with the flag on), and re-captures of `workout`, `routines`, `onboarding` (now 2 images: delete the stale `*_03_program*` / `*_04_program_selected*` files), `shell`, `history`, `set_delete`, `exercise_preview`, `exercises`, and the E2E `workout_flow` (onboarding is one screen now; routines are copied from the program data). Put each new screen side by side with the Hevy references and fix any spacing/density difference, then commit the screenshots.
-- [ ] **7c. Device checklist** items in `docs/DEVICE_TEST_CHECKLIST.md` → "Hevy-density UI (2026-09-28)".
-- [ ] **8. Releases (Mac only: signing key in the Keychain):** tester `tools/release_apk.sh` (notes ready: `docs/release_notes/v1.0.0-rc1-b2.md`) and personal `tools/release_personal.sh` (with media). Both need HEAD = `origin/main` and a clean tree.
+- [x] **7b. Parity screenshots (Mac, 2026-09-29):** all 13 suites re-run on Android (`azm_api37`) + iOS ("Azm iPhone A"), ar + en, dark: `shell`, `onboarding` (2 images; stale program PNGs removed), `exercises`, `exercise_filters`, `exercise_preview`, `routines`, `programs` (new), `workout`, `workout_ui` (new), `set_delete`, `history`, `settings`, E2E `workout_flow` (passes on both). Every image looked at; fixes: shell blank Arabic exercises, Lifted "kg 200" in Arabic (`LiftedCounter` + Stats), cut stat values on iPhone, Arabic version "rc1-1.0.0", summary PR value touching its text, E2E "Add set" tap; stale PNGs removed (DECISIONS_LOG 2026-09-29). Hevy side-by-side not redone: the references aren't on this Mac.
+- [x] **Dark default on devices (2026-09-29):** fresh install with the system in LIGHT on both → splash, onboarding, Workout tab dark; Settings → Light applies and survives a relaunch (Android + iOS).
+- [ ] **7c. Real-phone checklist** `docs/DEVICE_TEST_CHECKLIST.md` → "Hevy-density UI (2026-09-28)": for a tester with real phones.
+- [ ] **8. Releases (Mac only: signing key in the Keychain):** tester `tools/release_apk.sh` (notes `docs/release_notes/v1.0.0-rc1-b2.md`) and personal `tools/release_personal.sh`. Both need HEAD = `origin/main` and a clean tree.
 - **Later idea (not in this task):** a muscle/body diagram in the live workout's stats row (Hevy shows one at the end of the row), drawn from Azm's own filter-icon silhouettes.
 
 ## Pending on Mac
@@ -387,12 +388,12 @@ Everything a cloud session built but could not verify (no emulator, simulator or
 
 Setup for every entry: `AZM_DEVICE_SET=A` (or B), dark theme (the default), both platforms (`tools/screenshots.sh <suite>` does Android + iOS, ar + en).
 
-- [ ] **§14 Hevy-density UI overhaul** (commits `597bcd2`, `32a0000`, 2026-09-28)
+- [x] **§14 Hevy-density UI overhaul** (commits `597bcd2`, `32a0000`, 2026-09-28) — done on the Mac 2026-09-29 (see §14; Hevy side-by-side skipped: references not on this Mac)
   - Screenshot suites: `workout_ui` (new), `programs` (new, flag on), `workout`, `routines`, `onboarding` (now 2 images: delete the stale `*_03_program*` / `*_04_program_selected*` PNGs), `shell`, `history`, `set_delete`, `exercise_preview`, `exercises`; E2E `workout_flow`.
   - Compare the new screens side by side with the owner's Hevy references (re-save them in `.tooling/tmp/reference/` on the Mac; never commit them) and fix any spacing/density difference.
   - Device checks: `docs/DEVICE_TEST_CHECKLIST.md` → "Hevy-density UI (2026-09-28)" (7 items).
   - Releases: `tools/release_apk.sh` (notes: `docs/release_notes/v1.0.0-rc1-b2.md`), then `tools/release_personal.sh` (with media).
-- [ ] **Cloud follow-up 2026-09-29: theme first in Settings, avatar 40 pt + tighter notes, Android CI releases** (one commit each, see `git log`)
+- [x] **Cloud follow-up 2026-09-29: theme first in Settings, avatar 40 pt + tighter notes, Android CI releases** (one commit each, see `git log`) — done on the Mac 2026-09-29, except the remote branch deletions (left to the owner) and the Actions workflow (for later)
   - **Bring it into main first** (the cloud session could not push to main): `./gh_env git fetch origin claude/workout-ui-redesign-y1w877 && git merge --ff-only FETCH_HEAD && ./gh_env git push origin main`, then delete that branch too: `./gh_env git push origin --delete claude/workout-ui-redesign-y1w877`.
   - **Branch:** delete the old session branch (main contains all of it): `./gh_env git push origin --delete ccr-df452b89-wxusuo`.
   - **Screenshots:** `settings` (Appearance is now the first group, with moon/sun icons), plus the §14 suites above (they now show the 40 pt avatar + tighter notes: `workout_ui`, `workout`, `routines`, `set_delete`, E2E `workout_flow`). Compare `workout_ui` again with the Hevy references (`.tooling/tmp/reference/`).

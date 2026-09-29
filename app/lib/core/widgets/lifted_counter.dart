@@ -4,6 +4,8 @@ import '../l10n/compact_number.dart';
 import '../l10n/l10n.dart';
 import '../theme/azm_theme.dart';
 
+final _arabicLetter = RegExp(r'[؀-ۿ]');
+
 /// Size variants (DESIGN.md → LiftedCounter).
 enum LiftedCounterSize {
   /// Workout header (`rowNumber`).
@@ -68,22 +70,31 @@ class LiftedCounter extends StatelessWidget {
           tween: Tween(begin: fromZero ? 0 : value, end: value),
           duration: AzmMotion.of(context, AzmMotion.valueDuration),
           curve: AzmMotion.value,
-          builder: (context, v, _) => Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                value <= 0 && zeroText != null
-                    ? zeroText!
-                    : (compact ? context.l10n.compactNumberText(v) : AzmNumbers.integer(v)),
-                maxLines: 1,
-                style: numberStyle.copyWith(color: value <= 0 && zeroText != null ? c.textNoData : c.textPrimary),
+          // Plain numbers go in a left-to-right isolate (U+2066…U+2069) so they
+          // read "200 kg" in both languages: a Row mirrored them to "kg 200" in
+          // Arabic (DECISIONS_LOG 2026-09-26: weights never reorder). The
+          // compact Arabic form ("450 ألف") contains a word and stays RTL.
+          builder: (context, v, _) {
+            final text = value <= 0 && zeroText != null
+                ? zeroText!
+                : (compact ? context.l10n.compactNumberText(v) : AzmNumbers.integer(v));
+            final isolate = !_arabicLetter.hasMatch(text);
+            return Text.rich(
+              TextSpan(
+                text: isolate ? '\u2066' : null,
+                children: [
+                  TextSpan(
+                    text: text,
+                    style: numberStyle.copyWith(color: value <= 0 && zeroText != null ? c.textNoData : c.textPrimary),
+                  ),
+                  const WidgetSpan(child: SizedBox(width: AzmSpace.xxs)),
+                  TextSpan(text: unit, style: unitStyle.copyWith(color: c.textSecondary)),
+                  if (isolate) const TextSpan(text: '\u2069'),
+                ],
               ),
-              const SizedBox(width: AzmSpace.xxs),
-              Text(unit, style: unitStyle.copyWith(color: c.textSecondary)),
-            ],
-          ),
+              maxLines: 1,
+            );
+          },
         ),
         if (comparison != null) ...[
           const SizedBox(height: AzmSpace.xs),

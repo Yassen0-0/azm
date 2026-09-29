@@ -168,8 +168,8 @@ void main() {
     testWidgets('About shows the running build version', (tester) async {
       await pumpSettings(tester);
       final list = find.descendant(of: find.byKey(const ValueKey('settings-list')), matching: find.byType(Scrollable));
-      await tester.scrollUntilVisible(find.text('Version 7.8.9'), 200, scrollable: list.first);
-      expect(find.text('Version 7.8.9'), findsOneWidget);
+      await tester.scrollUntilVisible(find.textContaining('7.8.9'), 200, scrollable: list.first);
+      expect(find.text('Version \u20667.8.9\u2069'), findsOneWidget); // LTR isolate: never 'rc1-1.0.0' in Arabic
     });
   });
 

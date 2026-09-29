@@ -243,6 +243,8 @@ class _PrRow extends StatelessWidget {
               ],
             ),
           ),
+          // Long PR types ("Heaviest weight · Best est. 1RM · …") ran into the value.
+          const SizedBox(width: AzmSpace.md),
           TweenAnimationBuilder<double>(
             tween: Tween(begin: AzmMotion.reduced(context) ? 1 : 0.6, end: 1),
             duration: AzmMotion.of(context, AzmMotion.celebrationDuration),
